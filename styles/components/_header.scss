@@ -1,0 +1,65 @@
+.header {
+  position: relative;
+  background-color: white;
+  border-bottom: 1px solid $light-grey-2;
+  width: 100%;
+  padding-top: 2rem;
+	padding-bottom: 2rem;
+
+  &__content {
+		@include content-container;
+		
+		&--dashboard {
+			@include dashboard-content-container;
+		}
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    // This centering junk is necessary because of position absolute
+    left: 0;
+    right: 0;
+  }
+
+  &__title {
+    margin: 0;
+    font-weight: 500;
+    text-decoration: none;
+    color: white;
+  }
+
+  h3,
+  h4 {
+    padding: 0;
+	}
+	
+	&__left {
+		display: flex;
+	}
+
+  &__right a {
+		font-weight: 300;
+		
+		&:not(:last-child) {
+			margin-right: 2rem;
+			@media (max-width: $desktop-breakpoint) {
+				margin-right: 1rem;
+			}
+		}
+  }
+
+  * {
+    color: black;
+  }
+
+  &--transparent {
+    position: absolute;
+    background-color: transparent;
+    border: none;
+
+    *, a:visited {
+      color: white;
+    }
+  }
+}

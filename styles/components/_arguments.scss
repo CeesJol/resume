@@ -1,0 +1,46 @@
+.arguments {
+  @include gradient2;
+
+  &__content {
+    @include content-container;
+
+    text-align: center;
+    color: white;
+	}
+	
+	p {
+		color: rgba(255, 255, 255, 0.8);
+	}
+
+  &__args {
+		@include responsive;
+		margin-top: 5rem;
+		text-align: left;
+		
+		img {
+			width: 8rem;
+			margin-bottom: 2rem;
+		}
+
+		@media (min-width: $desktop-breakpoint) {
+			align-items: initial; // cancel vertical alignment for arguments
+
+			// div {
+			// 	margin: 0 2rem;
+			// }
+
+			// div:first-of-type {
+			// 	margin-left: 0;
+			// }
+
+			// div:last-of-type {
+			// 	margin-right: 0;
+			// }
+		}
+  }
+
+  footer {
+    margin-top: 3rem;
+    margin-bottom: 5rem;
+  }
+}

@@ -1,0 +1,48 @@
+.login {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+
+  @media (min-width: $login-box-breakpoint) {
+    background-color: inherit;
+  }
+
+  display: flex;
+  align-items: center;
+	justify-content: center;
+	flex-direction: column;
+
+  &__box {
+    position: relative;
+    background-color: white;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 3px;
+    padding: 2rem;
+    width: 100%;
+		height: auto;
+
+    @media (min-width: $login-box-breakpoint) {
+			@include shadow;
+      padding: 2rem;
+      width: $login-box-width;
+      height: auto;
+    }
+		
+		&--subtitle {
+			padding: 2rem 0;
+		}
+
+    &--subtitle {
+      font-weight: 300;
+    }
+	}
+	
+  .button {
+    width: 100%;
+		margin-top: 1rem;
+		text-transform: none;
+		padding: 1.5rem 1rem;
+  }
+}

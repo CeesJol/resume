@@ -1,0 +1,30 @@
+type Field {
+  testField: String!
+}
+
+type Product {
+	imageUrl: String!
+	productUrl: String!
+	user: User
+}
+
+type User {
+	username: String! @unique
+	email: String! @unique
+	products: [Product] @relation
+	confirmed: Boolean
+	website: String
+}
+
+type Query {
+  entries: [Field]
+	users: [User]
+	user(username: String!): User
+	userByEmail(email: String!): User
+	products: [Product]
+}
+
+# type Mutation {
+#   createProduct(input: ProductInput): Product
+#   updateProduct(id: ID!, input: ProductInput): Product
+# }

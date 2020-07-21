@@ -1,0 +1,46 @@
+.button-container {
+	display: inline;
+	margin-right: 1rem;
+	
+	a:hover {
+		opacity: 1;
+	}
+}
+
+.button {
+	background-color: $light-green;
+	border: none;
+	border-radius: 3px;
+	color: white;
+	padding: 1rem 1.5rem;
+	text-transform: uppercase;
+	transition: 0.3s;
+	font-size: $font-size-default;
+
+	&:hover {
+		background-color: lighten($light-green, 7%);
+	}
+
+	&:disabled {
+		background-color: darken($light-green, 30%);
+	}
+
+	&--shadow {
+		@include shadow;
+	}
+
+	&--red {
+		background-color: $light-red;
+
+		&:hover {
+			// display: none;
+			background-color: lighten($light-red, 10%);
+		}
+	}
+
+	a {
+		font-weight: 400;
+	}
+
+	
+}

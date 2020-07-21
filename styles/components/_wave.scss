@@ -1,0 +1,14 @@
+svg {
+	position: relative;
+	top: calc(#{$default-padding - $wave-height-desktop});
+	margin-bottom: -$wave-height-desktop;
+	height: $wave-height-desktop;
+	display: block;
+	width: 100%;
+
+	@media (max-width: $desktop-breakpoint) {
+		top: -$wave-height-mobile;
+		margin-bottom: -$wave-height-mobile;
+		height: $wave-height-mobile;
+	}
+}

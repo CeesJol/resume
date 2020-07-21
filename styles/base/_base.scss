@@ -1,0 +1,75 @@
+* {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 62.5%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin: 0;
+	padding: 0;
+	line-height: 1;
+}
+
+h1 {
+	font-size: 5rem;
+
+	@media (max-width: 30rem) {
+		font-size: 4rem;
+	}
+}
+
+h2 {
+	font-size: 3.5rem;
+}
+
+h3 {
+	font-size: 3rem;
+}
+
+h4 {
+	font-size: 2rem;
+}
+
+a {
+	text-decoration: none;
+	font-weight: 600;
+	transition: 0.3s;
+
+	&:hover {
+		opacity: 0.75;
+	}
+
+	&:visited {
+		color: blue;
+	}
+}
+
+body {
+	font-size: $font-size-default;
+	color: $dark-grey;
+	line-height: 1.6;
+	margin: 0;
+	background-color: rgb(250, 250, 250);
+}
+
+body, .button, input { 
+	font-family: 'Roboto', -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+button, a {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+img {
+	width: 100%;
+	@media (max-width: $desktop-breakpoint) {
+		max-width: 40rem;
+		text-align: center;
+	}
+}

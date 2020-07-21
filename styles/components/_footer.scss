@@ -1,0 +1,18 @@
+.footer {
+	position: relative;
+	padding-top: 2rem;
+	padding-bottom: 2rem;
+	color: $light-grey-2;
+	border-top: 1px solid $light-grey-2;
+	background-color: white;
+
+	&__content {
+		@include content-container;
+	}
+
+	&--fixed {
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+	}
+}

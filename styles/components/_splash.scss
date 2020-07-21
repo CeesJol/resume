@@ -1,0 +1,64 @@
+.splash {
+  @include splash-height;
+  @include gradient;
+	
+	&__workable-content {
+		
+  	
+		display: flex;
+		align-items: center;
+		height: 100%;
+		height: calc(100% - 7rem / 2);
+		// outline: 1px solid red;
+
+		@media (min-width: $desktop-breakpoint) {
+			height: calc(100% - 5rem / 2);
+		}
+	}
+
+  &__content {
+    @include content-container;
+    display: flex;
+		justify-content: space-between;
+		align-items: center;
+    width: 100%;
+    position: relative;
+    color: white;
+
+    &--title {
+      display: block;
+      line-height: 1;
+      padding-bottom: 2rem;
+    }
+  }
+
+  &__left {
+		width: 40rem;
+		min-width: 40rem;
+    margin-right: 5rem;
+		height: auto;
+		
+    @media (max-width: $desktop-breakpoint) {
+			width: 100%;
+			min-width: auto;
+      max-width: 50rem;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+  }
+
+  &__right {
+    width: 40rem;
+		height: auto;
+		
+		@media (max-width: $desktop-breakpoint) {
+      display: none;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}

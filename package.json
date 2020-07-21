@@ -1,0 +1,22 @@
+{
+  "name": "next",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "export": "next export"
+  },
+  "dependencies": {
+    "@sendgrid/mail": "^7.1.1",
+    "browser-image-compression": "^1.0.12",
+    "faunadb": "^2.14.1",
+    "jsonwebtoken": "^8.5.1",
+    "next": "^9.4.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-image-crop": "^8.6.4",
+    "sass": "^1.26.8"
+  }
+}

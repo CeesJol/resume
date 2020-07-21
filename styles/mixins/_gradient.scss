@@ -1,0 +1,28 @@
+@mixin gradient {
+	background: rgba(80,60,245,1);
+	background: linear-gradient(135deg, rgba(80,60,245,1) 0%, rgba(90,160,250,1) 50%, rgba(180,255,205,1) 90%);
+}
+
+@mixin gradient2 {
+	background: rgb(7,0,102);
+	background: linear-gradient(
+		135deg, 
+		rgba(7,0,102,1) 0%, 
+		rgba(101,0,117,1) 100%, 
+
+	);
+}
+
+@mixin gradient3 {
+	background: rgb(119,123,248);
+	background: linear-gradient(90deg, rgba(119,123,248,1) 0%, rgba(114,167,248,1) 100%);
+
+	&:hover {
+		background: lighten(rgb(119,123,248), 4%);
+		background: linear-gradient(90deg, lighten(rgba(119,123,248,1), 4%) 0%, lighten(rgba(114,167,248,1), 4%) 100%);
+	}
+}
+
+// @mixin gradient3-hover {
+	
+// }

@@ -1,17 +1,33 @@
 label {
 	font-size: $font-size-small;
+	display: block;
 }
 
-input, textarea {
-	display: block;
+input, textarea, select {
 	border: 1px solid rgb(220, 225, 230);
 	font-size: $font-size-default;
 	border-radius: 3px;
-	width: 100%;
 	padding: 1rem;
 	margin-bottom: 1rem;
 }
 
+.select-narrow {
+	@media (min-width: $desktop-breakpoint) {
+		width: calc(50% - 10px);
+		display: inline;
+	}
+}
+
+input:not([type='checkbox']), textarea, select {
+	width: 100%;
+	display: block;
+}
+
 textarea {
 	width: 100% !important;
+	height: 10rem;
+}
+
+.select-narrow:nth-child(2n+1) {
+  margin-left: 20px;
 }

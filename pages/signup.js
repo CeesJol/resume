@@ -70,7 +70,6 @@ export default function Signup() {
     setPassword(event.target.value);
   };
   useEffect(() => {
-		console.log('useEffect')
     if (userExists()) {
       // User is already logged in
       Router.push("/dashboard");
@@ -79,7 +78,6 @@ export default function Signup() {
 
   return (
     <div className="login">
-			{console.log('fucking RENDERRRR')}
       <div className="login__box">
         <div className="login__box__content">
           <form>

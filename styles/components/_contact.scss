@@ -34,7 +34,8 @@
   }
 
   input,
-  textarea {
+  textarea,
+  select {
     display: block;
     width: calc(100% - 0rem);
     border: none;
@@ -47,7 +48,8 @@
   }
 
   input:focus,
-  textarea:focus {
+  textarea:focus,
+  select:focus {
     border-bottom: 1px solid $light-green;
   }
 }

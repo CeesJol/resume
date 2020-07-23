@@ -64,10 +64,14 @@ export const getUserItemsByEmail = async (email) => {
  *  |----------------------------
  */
 export const createItem = async (user, data) => {
-	console.log(data)
   return executeQuery(`mutation CreateItem {
 		createItem(data: {
 			title: "${data.title}"
+			type: "${data.type}"
+			location: "${data.location}"
+			from: "${data.from}"
+			to: "${data.to}"
+			description: """${data.description}"""
 			user: { connect: "${user.id}" }
 		}) {
 			title

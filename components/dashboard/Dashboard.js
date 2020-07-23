@@ -3,8 +3,8 @@ import Router from "next/router";
 import DashboardHeader from "./DashboardHeader";
 import Add from "./Add";
 import Edit from "./Edit";
-import Product from "./Product";
-import Products from "./Products";
+import Item from "./Item";
+import Items from "./Items";
 import TopBox from "./TopBox";
 import Settings from "./Settings";
 import Nav from "./Nav";
@@ -15,7 +15,7 @@ import { identity } from "../../pages/api/auth";
 export default function Dashboard(props) {
   const [req, setReq] = useState(false);
   const { auth, setAuth, getUser, clearUser } = useContext(UserContext);
-  const { nav, editingProduct, data, error, getProducts } = useContext(
+  const { nav, editingItem, data, error, getItems } = useContext(
     DashboardContext
   );
 
@@ -37,7 +37,7 @@ export default function Dashboard(props) {
 
     if (!req && user && user.email && !data && !error) {
       setReq(true);
-      getProducts();
+      getItems();
     }
   });
   return (
@@ -51,16 +51,16 @@ export default function Dashboard(props) {
               <div className="dashboard__main">
                 <div className="dashboard__main__content">
                   {nav == 0 &&
-                    (editingProduct !== -1 ? (
+                    (editingItem !== -1 ? (
                       <>
                         <Edit />
-                        <Product />
+                        <Item />
                       </>
                     ) : (
                       <>
                         <TopBox />
                         <Add />
-                        <Products />
+                        <Items />
                       </>
                     ))}
                   {nav == 1 && <Settings />}

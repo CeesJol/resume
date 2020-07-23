@@ -9,8 +9,8 @@ const UserHeader = ({ name }) => {
       <div className="header__content">
         <div className="header__left">
           <h3>
-            {userExists() && getUser().website ? (
-              <a href={getUser().website} className="header__title">
+            {userExists() && getUser().bio ? (
+              <a href={getUser().bio} className="header__title">
                 {name}
               </a>
             ) : (

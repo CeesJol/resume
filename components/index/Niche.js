@@ -4,11 +4,10 @@ const Niche = () => (
   <div className="container niche">
     <div className="niche__content">
       <div className="niche__text">
-        <h4>Instagram</h4>
+        <h4>Multiple resumes</h4>
         <p>
-          Affilas was built to be familiar for Instagram users. Your store
-          is optimized for mobile devices with low loading time and high
-          responsiveness.
+          Create multiple versions of your resume to fit each job offering
+          exactly how you like.
         </p>
       </div>
       <div className="niche__illustration">

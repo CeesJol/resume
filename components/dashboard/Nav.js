@@ -14,7 +14,7 @@ export default function Nav(props) {
           }
           onClick={() => setNav(0)}
         >
-          Products
+          Items
         </div>
         <div
           className={

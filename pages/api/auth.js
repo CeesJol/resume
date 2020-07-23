@@ -44,7 +44,7 @@ export const signup = async (email, username, password) => {
         email,
         username,
         confirmed: false,
-        website: "",
+        bio: "",
       },
     })
   );

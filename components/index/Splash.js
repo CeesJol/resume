@@ -12,11 +12,10 @@ const Splash = () => (
           <div className="splash__left">
             <div>
               <h1 className="splash__content--title">
-                Create an affiliate ecommerce store
+                Create a resume you’re proud of
               </h1>
               <p>
-								Affilas allows you to build a store and start earning with
-                your Instagram page in minutes.
+                Affilas allows you to build a custom resume in minutes.
               </p>
             </div>
             <footer>

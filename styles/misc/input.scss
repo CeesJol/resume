@@ -2,7 +2,7 @@ label {
 	font-size: $font-size-small;
 }
 
-input {
+input, textarea {
 	display: block;
 	border: 1px solid rgb(220, 225, 230);
 	font-size: $font-size-default;
@@ -10,4 +10,8 @@ input {
 	width: 100%;
 	padding: 1rem;
 	margin-bottom: 1rem;
+}
+
+textarea {
+	width: 100% !important;
 }

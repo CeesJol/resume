@@ -9,13 +9,13 @@ export default () => {
       <div className="dashboard__live">
         View{" "}
         <a href={getUser().username} target="_blank">
-          your store
+          your resume
         </a>{" "}
         live
       </div>
     ) : (
       <div className="dashboard__confirm">
-        Confirm your email address to see your store live
+        Confirm your email address to export your resume
       </div>
     ))
   );

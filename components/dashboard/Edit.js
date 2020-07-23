@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useContext } from "react";
 import Button from "../general/Button";
-import { updateProduct, deleteProduct } from "../../pages/api/fauna";
+import { updateItem, deleteItem } from "../../pages/api/fauna";
 import { DashboardContext } from "../../contexts/dashboardContext";
 
 export default function Edit(props) {
-	const [productUrl, setProductUrl] = useState("");
-	const { editingProduct, handleMutation } = useContext(DashboardContext);
-  const handleChangeProductUrl = (event) => {
-    setProductUrl(event.target.value);
+	const [title, setTitle] = useState("");
+	const { editingItem, handleMutation } = useContext(DashboardContext);
+  const handleChangeTitle = (event) => {
+    setTitle(event.target.value);
   };
   const handleSave = async (event) => {
     if (event) event.preventDefault();
-    await updateProduct(editingProduct._id, productUrl, editingProduct.imageUrl).then(
+    await updateItem(editingItem._id, { title }).then(
       () => {
         // Communicate refresh to Dashboard (parent)
         handleMutation();
@@ -23,7 +23,7 @@ export default function Edit(props) {
   };
   const handleDelete = async (event) => {
     if (event) event.preventDefault();
-    await deleteProduct(editingProduct._id).then(
+    await deleteItem(editingItem._id).then(
       () => {
         // Communicate refresh to Dashboard (parent)
         handleMutation();
@@ -34,20 +34,20 @@ export default function Edit(props) {
     );
   };
   useEffect(() => {
-    setProductUrl(editingProduct.productUrl);
+    setTitle(editingItem.title);
   }, []);
   return (
     <>
       <div className="dashboard__create">
-        <h4 className="dashboard__create--title">Edit a product</h4>
+        <h4 className="dashboard__create--title">Edit a item</h4>
         <form>
-          <label>Product URL</label>
+          <label>Title</label>
           <input
             type="text"
-            id="productUrl"
-            name="productUrl"
-            value={productUrl}
-            onChange={handleChangeProductUrl}
+            id="title"
+            name="title"
+            value={title}
+            onChange={handleChangeTitle}
           />
 
           {status && <p>{status}</p>}

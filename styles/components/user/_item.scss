@@ -1,0 +1,14 @@
+// Lots of code here so each image has equal width and height with just css.
+// Source https://codepen.io/ItScofield/pen/PNVZoQ
+
+.item {
+  position: relative;
+  margin-bottom: $items-margin;
+
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+  }
+}

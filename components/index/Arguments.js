@@ -11,23 +11,18 @@ const Arguments = () => (
         <div className="arguments__args">
           <div className="arguments__arg">
             <img src="../images/monitor.svg" />
-            <h4>Set up a referral link</h4>
-            <p>Set up the link anywhere and use it for your products.</p>
+            <h4>Build your resume</h4>
+            <p>Add work experience, education and others to your resume.</p>
           </div>
           <div className="arguments__arg">
             <img src="../images/shop.svg" />
-            <h4>Start an online store</h4>
-            <p>
-              Find products related to your niche and put them on your store.
-            </p>
+            <h4>Pick a theme</h4>
+            <p>Use our theme store to find a theme that suits you.</p>
           </div>
           <div className="arguments__arg">
             <img src="../images/give-money.svg" />
-            <h4>Generate revenue</h4>
-            <p>
-              When people buy from the merchant, you will get a referral fee for
-              each purchase.
-            </p>
+            <h4>Export to PDF</h4>
+            <p>When you are done, export the resume to PDF.</p>
           </div>
         </div>
         <footer>

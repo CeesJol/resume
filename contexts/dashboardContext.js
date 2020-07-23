@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 export const DashboardContext = createContext();
-import { getUserProductsByEmail } from "../pages/api/fauna";
+import { getUserItemsByEmail } from "../pages/api/fauna";
 import { UserContext } from "./userContext";
 
 const DashboardContextProvider = (props) => {
@@ -9,34 +9,34 @@ const DashboardContextProvider = (props) => {
 
 	});
 	const [nav, setNav] = useState(0); // 0 = main, 1 = settings
-	const [editingProduct, setEditingProduct] = useState(-1);
+	const [editingItem, setEditingItem] = useState(-1);
 	const [data, setData] = useState(false);
 	const [error, setError] = useState(false);
-	function getProducts() {
+	function getItems() {
     const user = getUser();
     console.log(`Req for ${user.email}`);
-    getUserProductsByEmail(user.email).then(
+    getUserItemsByEmail(user.email).then(
       (data) => {
         setData(data);
       },
       (error) => {
-        console.log("getproducts error", error);
+        console.log("getitems error", error);
         setError(error);
       }
     );
   }
   function handleMutation() {
-    getProducts();
-    setEditingProduct(-1);
+    getItems();
+    setEditingItem(-1);
   }
   return (
     <DashboardContext.Provider
       value={{
 				nav, setNav,
-				editingProduct, setEditingProduct,
+				editingItem, setEditingItem,
 				data, setData,
 				error, setError,
-				getProducts,
+				getItems,
 				handleMutation
       }}
     >

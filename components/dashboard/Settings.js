@@ -9,7 +9,7 @@ import { validateUpdate, validatePassword } from "../../lib/validate";
 export default () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [website, setWebsite] = useState("");
+  const [bio, setBio] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState("");
   const [status2, setStatus2] = useState("");
@@ -20,21 +20,21 @@ export default () => {
   const handleChangeEmail = (event) => {
     setEmail(event.target.value.toLowerCase());
   };
-  const handleChangeWebsite = (event) => {
-    setWebsite(event.target.value);
+  const handleChangeBio = (event) => {
+    setBio(event.target.value);
   };
   const handleChangePassword = (event) => {
     setPassword(event.target.value);
   };
   const handleSave = async (event) => {
     if (event) event.preventDefault();
-    const validationError = validateUpdate(username, email, website);
+    const validationError = validateUpdate(username, email);
     if (validationError) {
       setStatus(validationError);
       return;
     }
     const user = getUser();
-    await updateUser(user.id, username, email, website).then(
+    await updateUser(user.id, username, email, bio).then(
       (data) => {
         if (data == -1) {
           setStatus("That username or email is already taken");
@@ -53,7 +53,7 @@ export default () => {
         storeUser({
           username: data.updateUser.username,
           email: data.updateUser.email,
-          website: data.updateUser.website,
+          bio: data.updateUser.bio,
         });
 
         setStatus("Updated successfully!");
@@ -85,7 +85,7 @@ export default () => {
       const user = getUser();
       setUsername(user.username);
       setEmail(user.email);
-      setWebsite(user.website ? user.website : "");
+      setBio(user.bio ? user.bio : "");
     }
   });
 
@@ -112,13 +112,13 @@ export default () => {
             onChange={handleChangeEmail}
           />
 
-          <label>Website</label>
-          <input
+          <label>Bio</label>
+          <textarea
             type="text"
-            id="website"
-            name="website"
-            value={website}
-            onChange={handleChangeWebsite}
+            id="bio"
+            name="bio"
+            value={bio}
+            onChange={handleChangeBio}
           />
 
           {status && <p>{status}</p>}

@@ -1,19 +1,22 @@
 import executeQuery from "../../lib/executeQuery";
 
 /** |----------------------------
- *  | GET PRODUCTS BY USERNAME
+ *  | GET ITEMS BY USERNAME
  *  |----------------------------
  */
-export const getUserProducts = async (username) => {
+export const getUserItems = async (username) => {
 	username = username.toLowerCase();
-  return executeQuery(`query FindProductsByID {
-		user(username: "${username}") {
+  return executeQuery(`query FindItemsByID {
+		userByUsername(username: "${username}") {
 			confirmed
-			products {
+			items {
 				data {
 					_id
-					imageUrl
-					productUrl
+					title
+					description
+					location
+					from
+					to
 				}
 			}
 		}
@@ -35,18 +38,21 @@ export const getUserByEmail = async (email) => {
 };
 
 /** |----------------------------
- *  | GET PRODUCTS BY EMAIL
+ *  | GET ITEMS BY EMAIL
  *  |----------------------------
  */
-export const getUserProductsByEmail = async (email) => {
+export const getUserItemsByEmail = async (email) => {
 	email = email.toLowerCase();
-  return executeQuery(`query FindProductsByEmail {
+  return executeQuery(`query FindItemsByEmail {
 		userByEmail(email: "${email}") {
-			products {
+			items {
 				data {
 					_id
-					productUrl
-					imageUrl
+					title
+					description
+					location
+					from
+					to
 				}
 			}
 		}
@@ -54,47 +60,43 @@ export const getUserProductsByEmail = async (email) => {
 };
 
 /** |----------------------------
- *  | CREATE PRODUCT
+ *  | CREATE ITEM
  *  |----------------------------
  */
-export const createProduct = async (user, productUrl, imageUrl) => {
-  return executeQuery(`mutation CreateProduct {
-		createProduct(data: {
-			imageUrl: "${imageUrl}"
-			productUrl: "${productUrl}"
+export const createItem = async (user, data) => {
+	console.log(data)
+  return executeQuery(`mutation CreateItem {
+		createItem(data: {
+			title: "${data.title}"
 			user: { connect: "${user.id}" }
 		}) {
-			imageUrl
-			productUrl
+			title
 		}
 	}`);
 };
 
 /** |----------------------------
- *  | UPDATE PRODUCT
+ *  | UPDATE ITEM
  *  |----------------------------
  */
-export const updateProduct = async (id, productUrl, imageUrl) => {
-  return executeQuery(`mutation UpdateProduct {
-		updateProduct(id: "${id}", data:{
-			imageUrl: "${imageUrl}"
-			productUrl: "${productUrl}"
+export const updateItem = async (id, data) => {
+  return executeQuery(`mutation UpdateItem {
+		updateItem(id: "${id}", data:{
+			title: "${data.title}"
 		}) {
-			imageUrl
-			productUrl
+			title
 		}
 	}`);
 };
 
 /** |----------------------------
- *  | DELETE PRODUCT
+ *  | DELETE ITEM
  *  |----------------------------
  */
-export const deleteProduct = async (id) => {
-  return executeQuery(`mutation DeleteProduct {
-		deleteProduct(id: "${id}") {
-			imageUrl
-			productUrl
+export const deleteItem = async (id) => {
+  return executeQuery(`mutation DeleteItem {
+		deleteItem(id: "${id}") {
+			_id
 		}
 	}`);
 };
@@ -103,18 +105,18 @@ export const deleteProduct = async (id) => {
  *  | UPDATE USER
  *  |----------------------------
  */
-export const updateUser = async (id, username, email, website) => {
+export const updateUser = async (id, username, email, bio) => {
 	email = email.toLowerCase();
 	username = username.toLowerCase();
   return executeQuery(`mutation UpdateUser {
 		updateUser(id: "${id}", data:{
 			username: "${username}"
 			email: "${email}"
-			website: "${website}"
+			bio: """${bio}"""
 		}) {
 			username
 			email
-			website
+			bio
 		}
 	}`);
 };
@@ -129,7 +131,7 @@ export const readUser = async (id) => {
 			username
 			email
 			confirmed
-			website
+			bio
 		}
 	}`);
 };

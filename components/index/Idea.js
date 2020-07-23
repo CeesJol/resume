@@ -1,13 +1,13 @@
-import React from "react"
+import React from "react";
 
 const Idea = () => (
   <div className="container">
     <div className="idea">
       <div className="idea__content">
         <div className="idea__text">
-          <h4>Sell products with a shoppable Instagram feed</h4>
+          <h4>Make a great first impression with a great resume</h4>
           <p>
-            Link images of products to the associated store with your referral link. 
+            Affilas builds your resume as you type and allows you to style it to your liking. Resumes take just minutes to create with Affilas.
           </p>
         </div>
         <div className="idea__preview">
@@ -16,6 +16,6 @@ const Idea = () => (
       </div>
     </div>
   </div>
-)
+);
 
-export default Idea
+export default Idea;

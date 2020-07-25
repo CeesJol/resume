@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import Button from "../general/Button";
-import { createItem } from "../../pages/api/fauna";
+import { createItem, readUser } from "../../pages/api/fauna";
 import { UserContext } from "../../contexts/userContext";
 import { DashboardContext } from "../../contexts/dashboardContext";
 import Monthpicker from "../general/Monthpicker";
@@ -18,7 +18,6 @@ export default function Add(props) {
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
   const { getUser } = useContext(UserContext);
-  const { getItems } = useContext(DashboardContext);
   const handleChangeTitle = (event) => {
     setTitle(event.target.value);
   };
@@ -59,10 +58,17 @@ export default function Add(props) {
   };
   const handleCreate = () => {
     const from = month1 + "/" + year1;
-    const to = isGoing ? "" : month2 + "/" + year2;
-    createItem(getUser(), {
+    const to = isGoing ? "Present" : month2 + "/" + year2;
+    const category = getUser().resumes.data[0].categories.data.find(x => x.name == type);
+    if (!category) {
+      console.log('oh fuck!!11')
+      setStatus('pls select a valid type FUUUUU')
+      return;
+    }
+    const categoryId = category._id;
+    console.log(categoryId);
+    createItem(categoryId, {
       title,
-      type,
       location,
       from,
       to,
@@ -70,7 +76,7 @@ export default function Add(props) {
     }).then(
       () => {
         resetForm();
-        getItems();
+        // readUser();
       },
       (err) => {
         console.log("createItem err:", err);
@@ -99,8 +105,9 @@ export default function Add(props) {
             onChange={handleChangeType}
           >
             <option value="">Type</option>
-            <option value="workExperience">Work experience</option>
-            <option value="education">Education</option>
+            <option value="Work experience">Work experience</option>
+            <option value="Education">Education</option>
+            <option value="Volunteer work">Volunteer work</option>
           </select>
 
           <label>Location</label>

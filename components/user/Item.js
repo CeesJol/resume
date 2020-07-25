@@ -3,7 +3,11 @@ import React from "react";
 const Item = ({ item, handleClick }) => {
   const theItem = (
     <div className="item">
-      <p>{item.title}</p>
+      <h2>{item.type}</h2>
+      <h3>{item.title}</h3>
+      <i>{item.location}</i>
+      <p>{item.from} - {item.to}</p>
+      <p>{item.description}</p>
     </div>
 	);
 	// Dashboard version

@@ -27,12 +27,12 @@ export default function User() {
   function drawItems() {
     console.log("data", data);
     if (!data) return <p>Loading...</p>;
-    if (!data.user) return <p>404 - user not found</p>;
-    if (!data.user.confirmed)
-      return <p>Confirm your email address to export your resume</p>;
+    if (!data.userByUsername) return <p>404 - user not found</p>;
+    // if (!data.userByUsername.confirmed)
+    //   return <p>Confirm your email address to export your resume</p>;
     if (error || data === -1) return <p>Failed to load</p>;
 
-    const items = data.user.items.data;
+    const items = data.userByUsername.items.data;
 
     if (items.length > 0)
       return (
@@ -41,8 +41,7 @@ export default function User() {
           {items.map((item, i) => (
             <Item
               key={i}
-              imageUrl={item.imageUrl}
-              itemUrl={item.itemUrl}
+              item={item}
             />
           ))}
         </>

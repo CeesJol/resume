@@ -23,6 +23,7 @@ export default function Edit(props) {
   };
   const handleDelete = async (event) => {
     if (event) event.preventDefault();
+    console.log('id', editingItem._id)
     await deleteItem(editingItem._id).then(
       () => {
         // Communicate refresh to Dashboard (parent)

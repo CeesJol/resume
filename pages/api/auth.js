@@ -9,6 +9,7 @@ const server = new faunadb.Client({ secret });
  *  |----------------------------
  */
 export const login = async (email, password) => {
+  console.log('login request');
 	email = email.toLowerCase();
   const validationError = validateLogin(email, password);
   if (validationError) return Promise.reject(validationError);
@@ -24,6 +25,7 @@ export const login = async (email, password) => {
  *  |----------------------------
  */
 export const logout = async (secret) => {
+  console.log('logout request');
   const client = new faunadb.Client({ secret });
   return client.query(q.Logout(false));
 };
@@ -33,6 +35,7 @@ export const logout = async (secret) => {
  *  |----------------------------
  */
 export const signup = async (email, username, password) => {
+  console.log('signup request');
 	email = email.toLowerCase();
 	username = username.toLowerCase();
   const validationError = validateSignup(email, username, password);
@@ -55,6 +58,7 @@ export const signup = async (email, username, password) => {
  *  |----------------------------
  */
 export const identity = async (secret) => {
+  console.log('identity request');
   const client = new faunadb.Client({ secret });
   return client.query(q.Identity());
 };
@@ -64,6 +68,7 @@ export const identity = async (secret) => {
  *  |----------------------------
  */
 export const updatePassword = async (id, newPassword) => {
+  console.log('update password request');
   return server.query(
     q.Update(q.Ref(q.Collection("User"), id), {
       credentials: { password: newPassword },

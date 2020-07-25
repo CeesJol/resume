@@ -27,15 +27,18 @@ const UserContextProvider = (props) => {
   useEffect(() => {
     if (user == null) {
       const localUser = JSON.parse(localStorage.getItem("user"));
-      if (localUser != null) {
+      if (localUser != null && localUser.secret != null) {
+        storeUser(localUser);
         identity(localUser.secret).then(
           (data) => {
             // Database confirms that user is logged in!
             storeUser(localUser);
+            setAuth(true);
             // Update user info
             readUser(localUser.id).then(
               (data) => {
                 storeUser(data.findUserByID);
+                console.log('readUser', data.findUserByID);
               },
               (err) => {
                 console.log("Fucked up getting the user data", err);

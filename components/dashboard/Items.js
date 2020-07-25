@@ -1,30 +1,41 @@
-import React, { useContext }from "react";
+import React, { useContext } from "react";
 import Item from "../user/Item";
 import { DashboardContext } from "../../contexts/dashboardContext";
+import { UserContext } from "../../contexts/userContext";
 
 export default (props) => {
-	const { data, error, setEditingItem } = useContext(DashboardContext);
-	function handleClick(e, item) {
+  const { setEditingItem } = useContext(DashboardContext);
+  const { getUser } = useContext(UserContext);
+  function handleClick(e, item) {
     e.preventDefault();
+    console.log('iTEMMM', item);
     setEditingItem(item);
   }
   function drawItems() {
+    console.log("getUser (local)", getUser());
+    const data = getUser();
+    // TODO update the few lines below
     if (!data) return <p>Loading...</p>;
-    if (error || data === -1) return <p>Failed to load</p>;
-    if (!data.userByEmail) return <p>404 - user not found</p>;
+    if (data === -1) return <p>Failed to load</p>;
+    if (!data.resumes) return <p>404 - user not found</p>;
 
-    const items = data.userByEmail.items.data;
+    const categories = data.resumes.data[0].categories.data;
 
-    if (items.length > 0)
+    if (categories.length > 0)
       return (
         <>
           <p>Click on any item to edit it</p>
-          {items.map((item, i) => (
-            <Item
-              key={i}
-              item={item}
-              handleClick={handleClick}
-            />
+          {categories.map((category, i) => (
+            <>
+              <h2>{category.name}</h2>
+              {category.items.data.map((item, j) => (
+                <Item
+                  key={`item-${i}-${j}`}
+                  item={item}
+                  handleClick={handleClick}
+                />
+              ))}
+            </>
           ))}
         </>
       );

@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 export const DashboardContext = createContext();
-import { getUserItemsByEmail } from "../pages/api/fauna";
+import { readUser } from "../pages/api/fauna";
 import { UserContext } from "./userContext";
 
 const DashboardContextProvider = (props) => {
@@ -12,21 +12,8 @@ const DashboardContextProvider = (props) => {
 	const [editingItem, setEditingItem] = useState(-1);
 	const [data, setData] = useState(false);
 	const [error, setError] = useState(false);
-	function getItems() {
-    const user = getUser();
-    console.log(`Req for ${user.email}`);
-    getUserItemsByEmail(user.email).then(
-      (data) => {
-        setData(data);
-      },
-      (error) => {
-        console.log("getitems error", error);
-        setError(error);
-      }
-    );
-  }
   function handleMutation() {
-    getItems();
+    // readUser();
     setEditingItem(-1);
   }
   return (
@@ -36,7 +23,6 @@ const DashboardContextProvider = (props) => {
 				editingItem, setEditingItem,
 				data, setData,
 				error, setError,
-				getItems,
 				handleMutation
       }}
     >

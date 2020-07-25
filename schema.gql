@@ -1,20 +1,25 @@
 type User {
 	username: String! @unique
 	email: String! @unique
-	items: [Item] @relation
-	resumeVariations: [Variation] @relation
+	resumes: [Resume] @relation
 	confirmed: Boolean
 	bio: String
 }
 
-type Variation {
+type Resume {
 	user: User
-	items: [String]
+	title: String! @unique
+	categories: [Category] @relation
+}
+
+type Category {
+	resume: Resume
+	name: String!
+	items: [Item] @relation
 }
 
 type Item {
-	user: User
-	type: String
+	category: Category
 	title: String!
 	location: String
 	description: String
@@ -26,4 +31,5 @@ type Query {
 	users: [User]
 	userByUsername(username: String!): User
 	userByEmail(email: String!): User
+	resumeByTitle(name: String!): Resume
 }

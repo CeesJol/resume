@@ -20,8 +20,6 @@ export default (props) => {
 
       return (
         <Item
-          imageUrl={item.imageUrl}
-          itemUrl={item.itemUrl}
           item={item}
           handleClick={() => {}}
         />

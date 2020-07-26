@@ -34,7 +34,31 @@ export const getUserByEmail = async (email) => {
   return executeQuery(`query FindAUserByEmail {
 		userByEmail(email: "${email}") {
 			username
+			email
 			confirmed
+			bio
+			resumes {
+				data {
+					_id
+					title
+					categories {
+						data {
+							_id
+							name
+							items {
+								data {
+									_id
+									title
+									location
+									from
+									to
+									description
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}`);
 };
@@ -84,13 +108,53 @@ export const createItem = async (categoryId, data) => {
 };
 
 /** |----------------------------
+ *  | CREATE CATEGORY WITH ITEM
+ *  |----------------------------
+ */
+export const createCategoryWithItem = async (resumeId, categoryName, data) => {
+	console.log('createCategoryWithItem request');
+  return executeQuery(`mutation CreateCategoryWithItem {
+		createCategory(data: {
+			name: "${categoryName}"
+			resume: { connect: "${resumeId}" },
+			items: {
+				create: [
+					{ 
+						title: "${data.title}"
+						location: "${data.location}"
+						from: "${data.from}"
+						to: "${data.to}"
+						description: """${data.description}"""
+					}
+				]
+			}
+		}) {
+			_id
+			name
+			items {
+				data {
+					title
+					location
+					from
+					to
+					description
+				}
+			}
+		}
+	}`);
+};
+
+
+/** |----------------------------
  *  | UPDATE ITEM
  *  |----------------------------
  */
-export const updateItem = async (id, data) => {
+export const updateItem = async (categoryId, data) => {
 	console.log('updateItem request');
+	console.log(categoryId);
+	console.log(data);
   return executeQuery(`mutation UpdateItem {
-		updateItem(id: "${id}", data:{
+		updateItem(id: "${data.id}", data:{
 			title: "${data.title}"
 			location: "${data.location}"
 			from: "${data.from}"
@@ -169,6 +233,9 @@ export const readUser = async (id) => {
 									from
 									to
 									description
+									category {
+										_id
+									}
 								}
 							}
 						}

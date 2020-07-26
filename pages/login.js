@@ -27,10 +27,7 @@ export default function Login() {
 				});
         getUserByEmail(email).then((data) => {
 					console.log('getUserByEmail', data);
-          storeUser({
-						username: data.userByEmail.username,
-						confirmed: data.userByEmail.confirmed
-					});
+          storeUser(data.userByEmail);
 					Router.push("/dashboard");
         }, (err) => {
 					setStatus(`Login failed: ${err}`);

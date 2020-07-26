@@ -10,6 +10,7 @@ const DashboardContextProvider = (props) => {
 	});
 	const [nav, setNav] = useState(0); // 0 = main, 1 = settings
 	const [editingItem, setEditingItem] = useState(-1);
+	const [editingResume, setEditingResume] = useState(-1);
 	const [data, setData] = useState(false);
 	const [error, setError] = useState(false);
   function handleMutation() {
@@ -21,6 +22,7 @@ const DashboardContextProvider = (props) => {
       value={{
 				nav, setNav,
 				editingItem, setEditingItem,
+				editingResume, setEditingResume,
 				data, setData,
 				error, setError,
 				handleMutation

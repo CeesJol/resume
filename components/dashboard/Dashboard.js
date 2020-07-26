@@ -6,6 +6,8 @@ import Edit from "./Edit";
 import Item from "./Item";
 import Items from "./Items";
 import TopBox from "./TopBox";
+import Resumes from "./Resumes";
+import Editor from "./Editor";
 import Settings from "./Settings";
 import Nav from "./Nav";
 import { UserContext } from "../../contexts/userContext";
@@ -13,7 +15,7 @@ import { DashboardContext } from "../../contexts/dashboardContext";
 
 export default function Dashboard(props) {
   const { auth } = useContext(UserContext);
-  const { nav, editingItem } = useContext(DashboardContext);
+  const { nav, editingItem, editingResume } = useContext(DashboardContext);
   return (
     <>
       {auth ? (
@@ -25,6 +27,16 @@ export default function Dashboard(props) {
               <div className="dashboard__main">
                 <div className="dashboard__main__content">
                   {nav == 0 &&
+                    (editingResume === -1 ? (
+                      <>
+                        <Resumes />
+                      </>
+                    ) : (
+                      <>
+                        <Editor />
+                      </>
+                    ))}
+                  {nav == 1 &&
                     (editingItem !== -1 ? (
                       <>
                         <Edit />
@@ -37,7 +49,7 @@ export default function Dashboard(props) {
                         <Items />
                       </>
                     ))}
-                  {nav == 1 && <Settings />}
+                  {nav == 2 && <Settings />}
                 </div>
               </div>
             </div>

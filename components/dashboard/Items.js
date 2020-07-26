@@ -26,7 +26,7 @@ export default (props) => {
         <>
           <p>Click on any item to edit it</p>
           {categories.map((category, i) => (
-            <>
+            <div key={`category-${i}`}>
               <h2>{category.name}</h2>
               {category.items.data.map((item, j) => (
                 <Item
@@ -35,7 +35,7 @@ export default (props) => {
                   handleClick={handleClick}
                 />
               ))}
-            </>
+            </div>
           ))}
         </>
       );

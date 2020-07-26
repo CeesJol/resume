@@ -64,6 +64,14 @@
 		overflow: auto;
 	}
 
+	&__resume {
+		background-color: white;
+		border: 1px solid $light-grey-2;
+		padding: 2rem;
+		margin: 2rem 0;
+		overflow: auto;
+	}
+
 	&__confirm {
 		background-color: $light-green;
 		border: none;

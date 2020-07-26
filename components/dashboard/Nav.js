@@ -14,7 +14,7 @@ export default function Nav(props) {
           }
           onClick={() => setNav(0)}
         >
-          Items
+          Resumes
         </div>
         <div
           className={
@@ -22,6 +22,15 @@ export default function Nav(props) {
             (nav === 1 && " dashboard__nav--item-selected")
           }
           onClick={() => setNav(1)}
+        >
+          Items
+        </div>
+        <div
+          className={
+            "dashboard__nav--item " +
+            (nav === 2 && " dashboard__nav--item-selected")
+          }
+          onClick={() => setNav(2)}
         >
           Settings
         </div>

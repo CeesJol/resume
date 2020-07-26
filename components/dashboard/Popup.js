@@ -1,33 +1,36 @@
-import React, { useState, useContext } from "react";
-import Button from "../general/Button";
+import React, { useState, useEffect, useContext } from "react";
 import {
-  createItem,
+	deleteItem,
+	updateItem,
   createCategoryWithItem,
   readUser,
 } from "../../pages/api/fauna";
 import { UserContext } from "../../contexts/userContext";
 import { DashboardContext } from "../../contexts/dashboardContext";
+import NewItem from "./NewItem";
+import Button from "../general/Button";
 import Monthpicker from "../general/Monthpicker";
 import Yearpicker from "../general/Yearpicker";
 
-export default function Add(props) {
-  const [title, setTitle] = useState("");
-  const [type, setType] = useState("");
+export default () => {
+	const { getUser } = useContext(UserContext);
+	const { nav, editingItem, setEditingItem, editingResume } = useContext(DashboardContext);
+  const [title, setTitle] = useState(editingItem.title);
+  // const [type, setType] = useState(editingItem.type);
   const [isGoing, setIsGoing] = useState(true);
-  const [month1, setMonth1] = useState("");
-  const [year1, setYear1] = useState("");
-  const [month2, setMonth2] = useState("");
-  const [year2, setYear2] = useState("");
-  const [location, setLocation] = useState("");
-  const [description, setDescription] = useState("");
+  const [month1, setMonth1] = useState(editingItem.from.substring(0, 2));
+  const [year1, setYear1] = useState(editingItem.from.substring(3));
+  const [month2, setMonth2] = useState(editingItem.to.substring(0, 2));
+  const [year2, setYear2] = useState(editingItem.to.substring(3));
+  const [location, setLocation] = useState(editingItem.location);
+  const [description, setDescription] = useState(editingItem.description);
   const [status, setStatus] = useState("");
-  const { getUser } = useContext(UserContext);
   const handleChangeTitle = (event) => {
     setTitle(event.target.value);
   };
-  const handleChangeType = (event) => {
-    setType(event.target.value);
-  };
+  // const handleChangeType = (event) => {
+  //   setType(event.target.value);
+  // };
   const handleChangeLocation = (event) => {
     setLocation(event.target.value);
   };
@@ -49,65 +52,41 @@ export default function Add(props) {
   const handleChangeDescription = (event) => {
     setDescription(event.target.value);
   };
-  const resetForm = () => {
-    setTitle("");
-    setType("");
-    setLocation("");
-    setMonth1("");
-    setYear1("");
-    setMonth2("");
-    setYear2("");
-    setDescription("");
-    setStatus("");
+  const validateInput = () => {
+    if (!title) return "Please provide a title";
+    // if (!type) return "Please provide a type";
+    if (!location) return "Please provide a location";
+    if (!month1) return "Please provide a starting date month";
+    if (!year1) return "Please provide a starting date year";
+    if (!isGoing && !month2) return "Please provide an ending date month";
+    if (!isGoing && !year2) return "Please provide an ending date year";
+    if (!description) return "Please provide a description";
+    return false;
 	};
-	const validateInput = () => {
-		if (!title) return "Please provide a title"
-		if (!type) return "Please provide a type"
-		if (!location) return "Please provide a location"
-		if (!month1) return "Please provide a starting date month"
-		if (!year1) return "Please provide a starting date year"
-		if (!isGoing && !month2) return "Please provide an ending date month"
-		if (!isGoing && !year2) return "Please provide an ending date year"
-		if (!description) return "Please provide a description"
-		return false
-	}
-  const handleCreate = () => {
-		const validate = validateInput();
-		if (validate) {
-			setStatus(validate);
-			return;
-		}
-		
-    const from = month1 + "/" + year1;
-    const to = isGoing ? "Present" : month2 + "/" + year2;
-    const category = getUser().resumes.data[0].categories.data.find(
-      (x) => x.name == type
+	const handleDelete = async (event) => {
+    if (event) event.preventDefault();
+    await deleteItem(editingItem._id).then(
+      () => {
+        setEditingItem(-1);
+      },
+      (err) => {
+        console.log("err", err);
+      }
     );
-    if (!category) {
-			// If the category doesn't exist yet in the DB, create it 
-			// (along with the item)
-      const resumeId = getUser().resumes.data[0]._id;
-      const categoryName = type;
-      createCategoryWithItem(resumeId, categoryName, {
-        title,
-        location,
-        from,
-        to,
-        description,
-      }).then(
-        () => {
-          resetForm();
-          // readUser();
-        },
-        (err) => {
-          console.log("createCategoryWithItem err:", err);
-        }
-      );
+  };
+  const handleUpdate = () => {
+    const validate = validateInput();
+    if (validate) {
+      setStatus(validate);
       return;
     }
-    const categoryId = category._id;
+
+    const from = month1 + "/" + year1;
+    const to = isGoing ? "Present" : month2 + "/" + year2;
+    const categoryId = editingItem.category._id;
     console.log(categoryId);
-    createItem(categoryId, {
+    updateItem(categoryId, {
+			id: editingItem._id,
       title,
       location,
       from,
@@ -115,18 +94,18 @@ export default function Add(props) {
       description,
     }).then(
       () => {
-        resetForm();
+        // resetForm();
         // readUser();
       },
       (err) => {
-        console.log("createItem err:", err);
+        console.log("updateItem err:", err);
       }
     );
   };
   return (
-    <div className="dashboard__create">
-      <h4 className="dashboard__create--title">Add an item</h4>
-      <form>
+    <div className="popup-container">
+      <div className="popup">
+			<form>
         <div>
           <label>Title</label>
           <input
@@ -137,7 +116,7 @@ export default function Add(props) {
             onChange={handleChangeTitle}
           />
 
-          <label htmlFor="type">Type</label>
+          {/* <label htmlFor="type">Type</label>
           <select
             name="type"
             id="type"
@@ -148,7 +127,7 @@ export default function Add(props) {
             <option value="Work experience">Work experience</option>
             <option value="Education">Education</option>
             <option value="Volunteer work">Volunteer work</option>
-          </select>
+          </select> */}
 
           <label>Location</label>
           <input
@@ -195,9 +174,11 @@ export default function Add(props) {
 
           {status && <p>{status}</p>}
 
-          <Button text="Add" fn={handleCreate} />
+          <Button text="Save" fn={handleUpdate} />
+					<Button text="Delete" color="red" fn={handleDelete} />
         </div>
       </form>
+			</div>
     </div>
   );
-}
+};

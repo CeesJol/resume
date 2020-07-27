@@ -11,17 +11,17 @@ export default function User() {
   const { username } = router.query;
 
   useEffect(() => {
-    if (username && !data && !error) {
-      console.log(`Req for ${username}`);
-      getUserItems(username).then(
-        (data) => {
-          setData(data);
-        },
-        (error) => {
-          setError(error);
-        }
-      );
-    }
+    // if (username && !data && !error) {
+    //   console.log(`Req for ${username}`);
+    //   getUserItems(username).then(
+    //     (data) => {
+    //       setData(data);
+    //     },
+    //     (error) => {
+    //       setError(error);
+    //     }
+    //   );
+    // }
   });
 
   function drawItems() {

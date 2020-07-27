@@ -12,7 +12,6 @@ export default (props) => {
     setEditingResume(resume._id);
   }
   function drawItems() {
-    console.log("getUser (local)", getUser());
     const data = getUser();
     // TODO update the few lines below
     if (!data || !data.resumes) return <p>Loading...</p>;

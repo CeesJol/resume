@@ -14,7 +14,7 @@ import { UserContext } from "../../contexts/userContext";
 import { DashboardContext } from "../../contexts/dashboardContext";
 
 export default function Dashboard(props) {
-  const { auth } = useContext(UserContext);
+  const { auth, getUser } = useContext(UserContext);
   const { nav, editingItem, editingResume } = useContext(DashboardContext);
   return (
     <>
@@ -56,7 +56,18 @@ export default function Dashboard(props) {
           </main>
         </div>
       ) : (
-        <p>Authenticating...</p>
+        <div className="popup-container">
+          <div className="popup popup--small">
+            <p>Authenticating{getUser() && " " + getUser().username}...</p>
+            <div className="loading-animation">
+              <div className="loadingio-spinner-eclipse-osisb6eiupo">
+                <div className="ldio-8w8am58tzjr">
+                  <div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );

@@ -16,7 +16,7 @@ const NewItem = ({ item, handleClick }) => {
         <p>
           {item.from} - {item.to}
         </p>
-        <p>{item.description}</p>
+        <p className="multiline">{item.description}</p>
       </div>
     </a>
   );

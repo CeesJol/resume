@@ -12,7 +12,6 @@ export default (props) => {
     setEditingItem(item);
   }
   function drawItems() {
-    console.log("getUser (local)", getUser());
     const data = getUser();
     // TODO update the few lines below
     if (!data) return <p>Loading...</p>;

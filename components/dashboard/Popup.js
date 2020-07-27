@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import {
-	deleteItem,
-	updateItem,
+  deleteItem,
+  updateItem,
+  createItem,
   createCategoryWithItem,
   readUser,
 } from "../../pages/api/fauna";
@@ -13,15 +14,25 @@ import Monthpicker from "../general/Monthpicker";
 import Yearpicker from "../general/Yearpicker";
 
 export default () => {
-	const { getUser } = useContext(UserContext);
-	const { nav, editingItem, setEditingItem, editingResume } = useContext(DashboardContext);
+  const { getUser, storeUser } = useContext(UserContext);
+  const { nav, editingItem, setEditingItem, editingResume } = useContext(
+    DashboardContext
+  );
   const [title, setTitle] = useState(editingItem.title);
   // const [type, setType] = useState(editingItem.type);
   const [isGoing, setIsGoing] = useState(true);
-  const [month1, setMonth1] = useState(editingItem.from.substring(0, 2));
-  const [year1, setYear1] = useState(editingItem.from.substring(3));
-  const [month2, setMonth2] = useState(editingItem.to.substring(0, 2));
-  const [year2, setYear2] = useState(editingItem.to.substring(3));
+  const [month1, setMonth1] = useState(
+    editingItem.from ? editingItem.from.substring(0, 2) : ""
+  );
+  const [year1, setYear1] = useState(
+    editingItem.from ? editingItem.from.substring(3) : ""
+  );
+  const [month2, setMonth2] = useState(
+    editingItem.to ? editingItem.to.substring(0, 2) : ""
+  );
+  const [year2, setYear2] = useState(
+    editingItem.to ? editingItem.to.substring(3) : ""
+  );
   const [location, setLocation] = useState(editingItem.location);
   const [description, setDescription] = useState(editingItem.description);
   const [status, setStatus] = useState("");
@@ -62,8 +73,8 @@ export default () => {
     if (!isGoing && !year2) return "Please provide an ending date year";
     if (!description) return "Please provide a description";
     return false;
-	};
-	const handleDelete = async (event) => {
+  };
+  const handleDelete = async (event) => {
     if (event) event.preventDefault();
     await deleteItem(editingItem._id).then(
       () => {
@@ -86,7 +97,7 @@ export default () => {
     const categoryId = editingItem.category._id;
     console.log(categoryId);
     updateItem(categoryId, {
-			id: editingItem._id,
+      id: editingItem._id,
       title,
       location,
       from,
@@ -94,29 +105,73 @@ export default () => {
       description,
     }).then(
       () => {
-        // resetForm();
-        // readUser();
+        readUser(getUser().id).then(
+          (res) => {
+						console.log("readUser res", res);
+						storeUser(res.findUserByID);
+            setEditingItem(-1);
+          },
+          (err) => {
+            console.log("readUser res ERR", err);
+          }
+        );
       },
       (err) => {
         console.log("updateItem err:", err);
       }
     );
   };
+  const handleCreate = () => {
+    const validate = validateInput();
+    if (validate) {
+      setStatus(validate);
+      return;
+    }
+
+    const from = month1 + "/" + year1;
+    const to = isGoing ? "Present" : month2 + "/" + year2;
+    const categoryId = editingItem.category._id;
+    console.log(categoryId);
+    createItem(categoryId, {
+      id: editingItem._id,
+      title,
+      location,
+      from,
+      to,
+      description,
+    }).then(
+      () => {
+        readUser(getUser().id).then(
+          (res) => {
+						console.log("readUser res", res);
+						storeUser(res.findUserByID);
+            setEditingItem(-1);
+          },
+          (err) => {
+            console.log("readUser res ERR", err);
+          }
+        );
+      },
+      (err) => {
+        console.log("createItem err:", err);
+      }
+    );
+  };
   return (
     <div className="popup-container">
       <div className="popup">
-			<form>
-        <div>
-          <label>Title</label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            value={title}
-            onChange={handleChangeTitle}
-          />
+        <form>
+          <div>
+            <label>Title</label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value={title}
+              onChange={handleChangeTitle}
+            />
 
-          {/* <label htmlFor="type">Type</label>
+            {/* <label htmlFor="type">Type</label>
           <select
             name="type"
             id="type"
@@ -129,56 +184,62 @@ export default () => {
             <option value="Volunteer work">Volunteer work</option>
           </select> */}
 
-          <label>Location</label>
-          <input
-            type="text"
-            id="location"
-            name="location"
-            value={location}
-            onChange={handleChangeLocation}
-          />
-
-          <label htmlFor="isGoing">
+            <label>Location</label>
             <input
-              name="isGoing"
-              id="isGoing"
-              type="checkbox"
-              checked={isGoing}
-              onChange={handleChangeIsGoing}
+              type="text"
+              id="location"
+              name="location"
+              value={location}
+              onChange={handleChangeLocation}
             />
-            I'm currently working here
-          </label>
 
-          <div>
-            <label>Start date</label>
-            <Monthpicker val={month1} fn={handleChangeMonth1} />
-            <Yearpicker val={year1} fn={handleChangeYear1} />
-          </div>
+            <label htmlFor="isGoing">
+              <input
+                name="isGoing"
+                id="isGoing"
+                type="checkbox"
+                checked={isGoing}
+                onChange={handleChangeIsGoing}
+              />
+              I'm currently working here
+            </label>
 
-          {!isGoing && (
             <div>
-              <label>End date</label>
-              <Monthpicker val={month2} fn={handleChangeMonth2} />
-              <Yearpicker val={year2} fn={handleChangeYear2} />
+              <label>Start date</label>
+              <Monthpicker val={month1} fn={handleChangeMonth1} />
+              <Yearpicker val={year1} fn={handleChangeYear1} />
             </div>
-          )}
 
-          <label>Description</label>
-          <textarea
-            type="text"
-            id="description"
-            name="description"
-            value={description}
-            onChange={handleChangeDescription}
-          />
+            {!isGoing && (
+              <div>
+                <label>End date</label>
+                <Monthpicker val={month2} fn={handleChangeMonth2} />
+                <Yearpicker val={year2} fn={handleChangeYear2} />
+              </div>
+            )}
 
-          {status && <p>{status}</p>}
+            <label>Description</label>
+            <textarea
+              type="text"
+              id="description"
+              name="description"
+              value={description}
+              onChange={handleChangeDescription}
+            />
 
-          <Button text="Save" fn={handleUpdate} />
-					<Button text="Delete" color="red" fn={handleDelete} />
-        </div>
-      </form>
-			</div>
+            {status && <p>{status}</p>}
+
+            {editingItem.title ? (
+              <>
+                <Button text="Save" fn={handleUpdate} />
+                <Button text="Delete" color="red" fn={handleDelete} />
+              </>
+            ) : (
+              <Button text="Add" fn={handleCreate} />
+            )}
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

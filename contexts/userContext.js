@@ -25,6 +25,7 @@ const UserContextProvider = (props) => {
     return user != null;
   };
   useEffect(() => {
+		console.log('new user info', user);
     if (user == null) {
       const localUser = JSON.parse(localStorage.getItem("user"));
       if (localUser != null && localUser.secret != null) {

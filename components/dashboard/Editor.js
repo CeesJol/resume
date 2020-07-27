@@ -11,7 +11,12 @@ export default () => {
   const { getUser } = useContext(UserContext);
   const resume = getUser().resumes.data.find(
     (resume) => resume._id === editingResume
-  );
+	);
+	const handleNewItem = (category) => {
+		setEditingItem({
+			category
+		})
+	}
   function drawItems() {
     const categories = resume.categories.data;
 
@@ -22,6 +27,7 @@ export default () => {
           {categories.map((category, i) => (
             <div key={`category-${i}`}>
               <h2>{category.name}</h2>
+							<a onClick={() => handleNewItem(category)}>Add item</a>
               {category.items.data.map((item, j) => (
                 <NewItem key={`item-${i}-${j}`} item={item} />
               ))}
@@ -37,6 +43,7 @@ export default () => {
       <h4>{resume.title}</h4>
       {drawItems()}
       {editingItem !== -1 && <Popup />}
+			{console.log('draw shit')}
     </div>
   );
 };

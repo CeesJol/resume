@@ -3,12 +3,10 @@ import {
   deleteItem,
   updateItem,
   createItem,
-  createCategoryWithItem,
   readUser,
 } from "../../pages/api/fauna";
 import { UserContext } from "../../contexts/userContext";
 import { DashboardContext } from "../../contexts/dashboardContext";
-import NewItem from "./NewItem";
 import Button from "../general/Button";
 import Monthpicker from "../general/Monthpicker";
 import Yearpicker from "../general/Yearpicker";
@@ -18,30 +16,19 @@ export default () => {
   const { nav, editingItem, setEditingItem, editingResume } = useContext(
     DashboardContext
   );
-  const [title, setTitle] = useState(editingItem.title);
-  // const [type, setType] = useState(editingItem.type);
+  const [filled, setFilled] = useState(false);
+  const [title, setTitle] = useState("");
   const [isGoing, setIsGoing] = useState(true);
-  const [month1, setMonth1] = useState(
-    editingItem.from ? editingItem.from.substring(0, 2) : ""
-  );
-  const [year1, setYear1] = useState(
-    editingItem.from ? editingItem.from.substring(3) : ""
-  );
-  const [month2, setMonth2] = useState(
-    editingItem.to ? editingItem.to.substring(0, 2) : ""
-  );
-  const [year2, setYear2] = useState(
-    editingItem.to ? editingItem.to.substring(3) : ""
-  );
-  const [location, setLocation] = useState(editingItem.location);
-  const [description, setDescription] = useState(editingItem.description);
+  const [month1, setMonth1] = useState("");
+  const [year1, setYear1] = useState("");
+  const [month2, setMonth2] = useState("");
+  const [year2, setYear2] = useState("");
+  const [location, setLocation] = useState("");
+  const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
   const handleChangeTitle = (event) => {
     setTitle(event.target.value);
   };
-  // const handleChangeType = (event) => {
-  //   setType(event.target.value);
-  // };
   const handleChangeLocation = (event) => {
     setLocation(event.target.value);
   };
@@ -65,7 +52,6 @@ export default () => {
   };
   const validateInput = () => {
     if (!title) return "Please provide a title";
-    // if (!type) return "Please provide a type";
     if (!location) return "Please provide a location";
     if (!month1) return "Please provide a starting date month";
     if (!year1) return "Please provide a starting date year";
@@ -77,15 +63,23 @@ export default () => {
   const handleDelete = async (event) => {
     if (event) event.preventDefault();
     await deleteItem(editingItem._id).then(
-      () => {
-        setEditingItem(-1);
+      async () => {
+        await readUser(getUser().id).then(
+          (res) => {
+            storeUser(res.findUserByID);
+            setEditingItem(-1);
+          },
+          (err) => {
+            console.log("readUser res ERR", err);
+          }
+        );
       },
       (err) => {
         console.log("err", err);
       }
     );
   };
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     const validate = validateInput();
     if (validate) {
       setStatus(validate);
@@ -95,8 +89,7 @@ export default () => {
     const from = month1 + "/" + year1;
     const to = isGoing ? "Present" : month2 + "/" + year2;
     const categoryId = editingItem.category._id;
-    console.log(categoryId);
-    updateItem(categoryId, {
+    await updateItem(categoryId, {
       id: editingItem._id,
       title,
       location,
@@ -104,11 +97,10 @@ export default () => {
       to,
       description,
     }).then(
-      () => {
-        readUser(getUser().id).then(
+      async () => {
+        await readUser(getUser().id).then(
           (res) => {
-						console.log("readUser res", res);
-						storeUser(res.findUserByID);
+            storeUser(res.findUserByID);
             setEditingItem(-1);
           },
           (err) => {
@@ -121,7 +113,7 @@ export default () => {
       }
     );
   };
-  const handleCreate = () => {
+  const handleCreate = async () => {
     const validate = validateInput();
     if (validate) {
       setStatus(validate);
@@ -131,8 +123,7 @@ export default () => {
     const from = month1 + "/" + year1;
     const to = isGoing ? "Present" : month2 + "/" + year2;
     const categoryId = editingItem.category._id;
-    console.log(categoryId);
-    createItem(categoryId, {
+    await createItem(categoryId, {
       id: editingItem._id,
       title,
       location,
@@ -140,11 +131,10 @@ export default () => {
       to,
       description,
     }).then(
-      () => {
-        readUser(getUser().id).then(
+      async () => {
+        await readUser(getUser().id).then(
           (res) => {
-						console.log("readUser res", res);
-						storeUser(res.findUserByID);
+            storeUser(res.findUserByID);
             setEditingItem(-1);
           },
           (err) => {
@@ -157,9 +147,26 @@ export default () => {
       }
     );
   };
+  useEffect(() => {
+    if (editingItem.title && !filled) {
+      setFilled(true);
+
+      setTitle(editingItem.title);
+      setIsGoing(editingItem.to == "Present");
+      setMonth1(editingItem.from.substring(0, 2));
+      setYear1(editingItem.from.substring(3));
+      if (editingItem.to != "Present") {
+        setMonth2(editingItem.to.substring(0, 2));
+        setYear2(editingItem.to.substring(3));
+      }
+      setLocation(editingItem.location);
+      setDescription(editingItem.description);
+    }
+  });
   return (
     <div className="popup-container">
       <div className="popup">
+				<h4>{editingItem.title ? "Edit item" : "Create item"}</h4>
         <form>
           <div>
             <label>Title</label>
@@ -170,19 +177,6 @@ export default () => {
               value={title}
               onChange={handleChangeTitle}
             />
-
-            {/* <label htmlFor="type">Type</label>
-          <select
-            name="type"
-            id="type"
-            value={type}
-            onChange={handleChangeType}
-          >
-            <option value="">Type</option>
-            <option value="Work experience">Work experience</option>
-            <option value="Education">Education</option>
-            <option value="Volunteer work">Volunteer work</option>
-          </select> */}
 
             <label>Location</label>
             <input
@@ -231,11 +225,16 @@ export default () => {
 
             {editingItem.title ? (
               <>
-                <Button text="Save" fn={handleUpdate} />
-                <Button text="Delete" color="red" fn={handleDelete} />
+                <Button text="Save" altText="Saving..." fn={handleUpdate} />
+                <Button
+                  text="Delete"
+                  altText="Deleting..."
+                  color="red"
+                  fn={handleDelete}
+                />
               </>
             ) : (
-              <Button text="Add" fn={handleCreate} />
+              <Button text="Add" altText="Adding..." fn={handleCreate} />
             )}
           </div>
         </form>

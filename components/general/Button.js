@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 
-export default ({ text, fn, color }) => {
+export default ({ text, altText, fn, color }) => {
   const [disabled, setDisabled] = useState(false);
   const className = color == "red" ? "button button--red" : "button";
   const handleClick = async (event) => {
@@ -16,7 +16,7 @@ export default ({ text, fn, color }) => {
     <div className="button-container">
       {fn ? (
         <button onClick={handleClick} disabled={disabled} className={className}>
-          <a>{text ? text : "Start now"}</a>
+          <a>{(disabled && altText) ? altText : text}</a>
         </button>
       ) : (
         <Link href="/login">

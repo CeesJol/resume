@@ -43,7 +43,6 @@ export default () => {
       <h4>{resume.title}</h4>
       {drawItems()}
       {editingItem !== -1 && <Popup />}
-			{console.log('draw shit')}
     </div>
   );
 };

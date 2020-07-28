@@ -11,12 +11,12 @@ export default () => {
   const { getUser } = useContext(UserContext);
   const resume = getUser().resumes.data.find(
     (resume) => resume._id === editingResume
-	);
-	const handleNewItem = (category) => {
-		setEditingItem({
-			category
-		})
-	}
+  );
+  const handleNewItem = (category) => {
+    setEditingItem({
+      category,
+    });
+  };
   function drawItems() {
     const categories = resume.categories.data;
 
@@ -25,11 +25,16 @@ export default () => {
         <>
           <p>Click on any item to edit it</p>
           {categories.map((category, i) => (
-            <div key={`category-${i}`}>
+            <div key={category._id}>
               <h2>{category.name}</h2>
-							<a onClick={() => handleNewItem(category)}>Add item</a>
+              <a onClick={() => handleNewItem(category)}>
+                <i>Add item</i>
+              </a>
               {category.items.data.map((item, j) => (
-                <NewItem key={`item-${i}-${j}`} item={item} />
+                <div key={item._id}>
+                  <NewItem item={item} />
+                  <br />
+                </div>
               ))}
             </div>
           ))}

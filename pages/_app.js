@@ -13,7 +13,7 @@ class MyApp extends App {
       <div>
         <div>
           <Head>
-            <title>Free resume builder</title>
+            <title>Affilas</title>
           </Head>
         </div>
 				<UserContextProvider>

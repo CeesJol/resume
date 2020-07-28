@@ -11,11 +11,11 @@ const NewItem = ({ item, handleClick }) => {
   return (
     <a onClick={(e) => handleClick(e, item)} key={item._id}>
       <div className="item">
-        <h3>{item.title}</h3>
-        <i>{item.location}</i>
-        <p>
+        <h3><b>{item.title}</b></h3>
+        <h3>{item.location}</h3>
+        <i>
           {item.from} - {item.to}
-        </p>
+        </i>
         <p className="multiline">{item.description}</p>
       </div>
     </a>

@@ -1,81 +1,86 @@
 .dashboard-container {
-	// @include content-container;
+  // @include content-container;
 
-	height: 100vh;
+  height: 100vh;
 }
 
 .dashboard {
-	form {
-		padding-top: 1.5rem;
-	}
+  form {
+    padding-top: 1.5rem;
+  }
 
-	.button {
-		margin-top: 1rem;
-	}
+  .button {
+    margin-top: 1rem;
+  }
 
-	&__nav {
-		background-color: white;
-		border-bottom: 1px solid $light-grey-2;
+  &__nav {
+    background-color: white;
+    border-bottom: 1px solid $light-grey-2;
 
-		&__content {
-			@include dashboard-content-container;
+    &__content {
+      @include dashboard-content-container;
 
-			display: flex;
-			justify-content: space-around;
-		}
+      display: flex;
+      justify-content: space-around;
+    }
 
-		&--item {
-			position: relative;
-			padding: 1rem 1rem;
-			top: 1px;
-			cursor: pointer;
-			transition: 0.3s;
-			border-bottom: 1px solid rgba(0,0,0,0);
+    &--item {
+      position: relative;
+      padding: 1rem 1rem;
+      top: 1px;
+      cursor: pointer;
+      transition: 0.3s;
+      border-bottom: 1px solid rgba(0, 0, 0, 0);
 
-			&:hover {
-				border-bottom: 1px solid grey;
-			}
-		}
+      &:hover {
+        border-bottom: 1px solid grey;
+      }
+    }
 
-		&--item-selected {
-			border-bottom: 1px solid black;
+    &--item-selected {
+      border-bottom: 1px solid black;
 
-			// Ignore hover effect on selected item
-			&:hover {
-				border-bottom: 1px solid black;
-			}
-		}
-	}
+      // Ignore hover effect on selected item
+      &:hover {
+        border-bottom: 1px solid black;
+      }
+    }
+  }
 
-	&__main {
-		&__content {
-			@include dashboard-content-container;
+  &__main {
+    &__content {
+      @include dashboard-content-container;
 
-			overflow: auto;
-		}
-	}
+      overflow: auto;
+    }
+  }
 
-	&__create, &__preview, &__items, &__settings, &__confirm, &__live {
-		background-color: white;
-		border: 1px solid $light-grey-2;
-		border-radius: 3px;
-		padding: 2rem;
-		margin: 2rem 0;
-		overflow: auto;
-	}
+  &__create,
+  &__preview,
+  &__items,
+  &__settings,
+  &__confirm,
+  &__live {
+    background-color: white;
+    border: 1px solid $light-grey-2;
+    border-radius: 3px;
+    padding: 2rem;
+    margin: 2rem 0;
+    overflow: auto;
+  }
 
-	&__resume {
-		background-color: white;
-		border: 1px solid $light-grey-2;
-		padding: 2rem;
-		margin: 2rem 0;
-		overflow: auto;
-	}
+  &__resume {
+    background-color: white;
+    border: 1px solid $light-grey-2;
+    padding: 2rem;
+    margin: 2rem 0;
+    overflow: auto;
+  }
 
-	&__confirm {
-		background-color: $light-green;
-		border: none;
-		color: white;
-		font-weight: bold;
-	}
+  &__confirm {
+    background-color: $light-green;
+    border: none;
+    color: white;
+    font-weight: bold;
+  }
 }

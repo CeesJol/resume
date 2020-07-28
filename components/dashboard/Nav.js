@@ -14,7 +14,7 @@ export default function Nav(props) {
           }
           onClick={() => setNav(0)}
         >
-          Resumes
+          Editor
         </div>
         <div
           className={

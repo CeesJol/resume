@@ -24,8 +24,8 @@ export default (props) => {
         <>
           <p>Click on a resume to edit it</p>
           {resumes.map((resume, i) => (
-            <div key={`resume-${i}`}>
-              <a onClick={(e) => handleClick(e, resume)} key={resume._id}>
+            <div key={resume._id}>
+              <a onClick={(e) => handleClick(e, resume)}>
                 <h2>{resume.title}</h2>
               </a>
             </div>

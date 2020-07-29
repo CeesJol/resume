@@ -9,7 +9,7 @@ export default (props) => {
   function handleClick(e, resume) {
     e.preventDefault();
     console.log('resume', resume);
-    setEditingResume(resume._id);
+    setEditingResume(resume);
   }
   function drawItems() {
     const data = getUser();
@@ -36,7 +36,7 @@ export default (props) => {
   }
 
   return (
-    <div className="dashboard__items">
+    <div className="dashboard__item">
       <h4>Your resumes</h4>
       <div id="items-container">{drawItems()}</div>
     </div>

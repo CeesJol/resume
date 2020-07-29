@@ -10,6 +10,7 @@ type Resume {
 	user: User
 	title: String! @unique
 	categories: [Category] @relation
+	template: Template! @relation
 }
 
 type Category {
@@ -29,9 +30,15 @@ type Item {
 	priority: Int
 }
 
+type Template {
+	name: String
+	style: String
+}
+
 type Query {
 	users: [User]
 	userByUsername(username: String!): User
 	userByEmail(email: String!): User
 	resumeByTitle(title: String!): Resume
+	templates: [Template]
 }

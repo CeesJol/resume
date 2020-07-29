@@ -41,6 +41,10 @@ export const getUserByEmail = async (email) => {
 				data {
 					_id
 					title
+					template {
+						name
+						style
+					}
 					categories {
 						data {
 							_id
@@ -238,6 +242,10 @@ export const readUser = async (id) => {
 				data {
 					_id
 					title
+					template {
+						name
+						style
+					}
 					categories {
 						data {
 							_id

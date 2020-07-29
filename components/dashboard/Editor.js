@@ -9,22 +9,24 @@ export default () => {
     DashboardContext
   );
   const { getUser } = useContext(UserContext);
-  const resume = getUser().resumes.data.find(
-    (resume) => resume._id === editingResume
-  );
   const handleNewItem = (category) => {
     setEditingItem({
       category,
     });
   };
+  // const css = `* {
+  // 	color: red !important;
+  // }`
+  const templateCSS = editingResume ? editingResume.template.style : "";
   function drawItems() {
-    const categories = resume.categories.data;
+    // if (editingResume != -1) return;
+    const categories = editingResume.categories.data;
 
     if (categories.length > 0)
       return (
         <>
           {categories.map((category, i) => (
-            <div key={category._id}>
+            <div className="resume__item" key={category._id}>
               <h2>{category.name}</h2>
               <a onClick={() => handleNewItem(category)}>
                 <i>Add item</i>
@@ -43,20 +45,22 @@ export default () => {
   }
 
   return (
-		<>
-		<div className="dashboard__item">
-			<i>
-        Editing <b>{resume.title}</b>
-      </i>
-			<p>Click on any item to edit it</p>
-		</div>
-    <div className="dashboard__item dashboard__item--noborder">
-      
-      <h1>{getUser().username}</h1>
-      {drawItems()}
+    <>
+      <div className="dashboard__item">
+        <i>
+          Editing <b>{editingResume.title}</b>
+        </i>
+        <p>Click on any item to edit it</p>
+      </div>
+      <div className="resume">
+				<style>{templateCSS}</style>
+        <div className="resume__item">
+          <h1>{getUser().username}</h1>
+        </div>
+        {drawItems()}
 
-      {editingItem !== -1 && <Popup />}
-    </div>
-		</>
+        {editingItem !== -1 && <Popup />}
+      </div>
+    </>
   );
 };

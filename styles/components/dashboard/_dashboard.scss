@@ -76,3 +76,14 @@
 		}
 	}
 }
+
+.resume {
+	background-color: white;
+	margin: 2rem 0;
+	overflow: auto;
+
+	&__item {
+		padding: 2rem;
+		border: 1px solid red;
+	}
+}

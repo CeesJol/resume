@@ -53,6 +53,7 @@ export const getUserByEmail = async (email) => {
 									from
 									to
 									description
+									priority
 									category {
 										_id
 									}
@@ -154,10 +155,8 @@ export const createCategoryWithItem = async (resumeId, categoryName, data) => {
  */
 export const updateItem = async (categoryId, data) => {
 	console.log('updateItem request');
-	console.log(categoryId);
-	console.log(data);
   return executeQuery(`mutation UpdateItem {
-		updateItem(id: "${data.id}", data:{
+		updateItem(id: "${data.id}", data: {
 			title: "${data.title}"
 			location: "${data.location}"
 			from: "${data.from}"
@@ -170,6 +169,21 @@ export const updateItem = async (categoryId, data) => {
 			from
 			to
 			description
+		}
+	}`);
+};
+
+/** |----------------------------
+ *  | UPDATE ITEM'S PRIORITY
+ *  |----------------------------
+ */
+export const updateItemPriority = async (itemId, priority) => {
+	console.log('updateItem request');
+  return executeQuery(`mutation UpdateItem {
+		updateItem(id: "${itemId}", data: {
+			priority: ${priority}
+		}) {
+			priority
 		}
 	}`);
 };
@@ -236,6 +250,7 @@ export const readUser = async (id) => {
 									from
 									to
 									description
+									priority
 									category {
 										_id
 									}

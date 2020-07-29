@@ -23,7 +23,6 @@ export default () => {
     if (categories.length > 0)
       return (
         <>
-          <p>Click on any item to edit it</p>
           {categories.map((category, i) => (
             <div key={category._id}>
               <h2>{category.name}</h2>
@@ -44,10 +43,20 @@ export default () => {
   }
 
   return (
-    <div className="dashboard__resume">
-      <h4>{resume.title}</h4>
+		<>
+		<div className="dashboard__item">
+			<i>
+        Editing <b>{resume.title}</b>
+      </i>
+			<p>Click on any item to edit it</p>
+		</div>
+    <div className="dashboard__item dashboard__item--noborder">
+      
+      <h1>{getUser().username}</h1>
       {drawItems()}
+
       {editingItem !== -1 && <Popup />}
     </div>
+		</>
   );
 };

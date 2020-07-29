@@ -55,32 +55,24 @@
     }
   }
 
-  &__create,
-  &__preview,
-  &__items,
-  &__settings,
-  &__confirm,
-  &__live {
+  &__item {
     background-color: white;
     border: 1px solid $light-grey-2;
     border-radius: 3px;
     padding: 2rem;
     margin: 2rem 0;
-    overflow: auto;
-  }
+		overflow: auto;
+		
+		&--noborder {
+			border: none;
+			border-radius: 0;
+		}
 
-  &__resume {
-    background-color: white;
-    border: 1px solid $light-grey-2;
-    padding: 2rem;
-    margin: 2rem 0;
-    overflow: auto;
-  }
-
-  &__confirm {
-    background-color: $light-green;
-    border: none;
-    color: white;
-    font-weight: bold;
-  }
+		&--green {
+			background-color: $light-green;
+			border: none;
+			color: white;
+			font-weight: bold;
+		}
+	}
 }

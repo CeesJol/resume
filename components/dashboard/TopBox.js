@@ -6,7 +6,7 @@ export default () => {
   return (
     getUser() &&
     (getUser().confirmed ? (
-      <div className="dashboard__live">
+      <div className="dashboard__item dashboard__item--green">
         View{" "}
         <a href={getUser().username} target="_blank">
           your resume
@@ -14,7 +14,7 @@ export default () => {
         live
       </div>
     ) : (
-      <div className="dashboard__confirm">
+      <div className="dashboard__item dashboard__item--green">
         Confirm your email address to export your resume
       </div>
     ))

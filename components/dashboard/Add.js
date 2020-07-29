@@ -124,8 +124,8 @@ export default function Add(props) {
     );
   };
   return (
-    <div className="dashboard__create">
-      <h4 className="dashboard__create--title">Add an item</h4>
+    <div className="dashboard__item">
+      <h4 className="dashboard__item--title">Add an item</h4>
       <form>
         <div>
           <label>Title</label>

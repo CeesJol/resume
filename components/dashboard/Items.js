@@ -42,7 +42,7 @@ export default (props) => {
   }
 
   return (
-    <div className="dashboard__items">
+    <div className="dashboard__item">
       <h4>Your resume</h4>
       <div id="items-container">{drawItems()}</div>
     </div>

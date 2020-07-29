@@ -21,7 +21,7 @@ type Category {
 
 type Item {
 	category: Category
-	title: String!
+	title: String
 	location: String
 	description: String
 	from: String
@@ -33,5 +33,5 @@ type Query {
 	users: [User]
 	userByUsername(username: String!): User
 	userByEmail(email: String!): User
-	resumeByTitle(name: String!): Resume
+	resumeByTitle(title: String!): Resume
 }

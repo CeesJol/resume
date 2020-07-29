@@ -91,8 +91,8 @@ export default () => {
 
   return (
     <>
-      <div className="dashboard__settings">
-        <h4 className="dashboard__settings--title">Your information</h4>
+      <div className="dashboard__item">
+        <h4 className="dashboard__item--title">Your information</h4>
         <form>
           <label>Username</label>
           <input
@@ -127,8 +127,8 @@ export default () => {
         </form>
       </div>
 
-      <div className="dashboard__settings">
-        <h4 className="dashboard__settings--title">Change password</h4>
+      <div className="dashboard__item">
+        <h4 className="dashboard__item--title">Change password</h4>
         <form>
           <label>New Password</label>
           <input

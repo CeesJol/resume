@@ -39,8 +39,8 @@ export default function Edit(props) {
   }, []);
   return (
     <>
-      <div className="dashboard__create">
-        <h4 className="dashboard__create--title">Edit a item</h4>
+      <div className="dashboard__item">
+        <h4 className="dashboard__item--title">Edit a item</h4>
         <form>
           <label>Title</label>
           <input

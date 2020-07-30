@@ -15,7 +15,7 @@ export default () => {
   const [status2, setStatus2] = useState("");
   const { storeUser, getUser } = useContext(UserContext);
   const handleChangeUsername = (event) => {
-    setUsername(event.target.value.toLowerCase());
+    setUsername(event.target.value);
   };
   const handleChangeEmail = (event) => {
     setEmail(event.target.value.toLowerCase());

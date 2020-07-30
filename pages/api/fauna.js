@@ -49,6 +49,7 @@ export const getUserByEmail = async (email) => {
 						data {
 							_id
 							name
+							priority
 							items {
 								data {
 									_id
@@ -212,7 +213,6 @@ export const deleteItem = async (id) => {
 export const updateUser = async (id, username, email, bio) => {
 	console.log('updateUser request');
   email = email.toLowerCase();
-  username = username.toLowerCase();
   return executeQuery(`mutation UpdateUser {
 		updateUser(id: "${id}", data:{
 			username: "${username}"
@@ -250,6 +250,7 @@ export const readUser = async (id) => {
 						data {
 							_id
 							name
+							priority
 							items {
 								data {
 									_id

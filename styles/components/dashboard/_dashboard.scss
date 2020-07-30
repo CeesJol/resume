@@ -82,8 +82,12 @@
 	margin: 2rem 0;
 	overflow: auto;
 
-	&__item {
+	&__container {
 		padding: 2rem;
 		border: 1px solid red;
+	}
+
+	&__item {
+		border: 1px solid blue;
 	}
 }

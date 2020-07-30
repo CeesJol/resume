@@ -61,7 +61,7 @@ export default function Signup() {
     setEmail(event.target.value.toLowerCase());
   };
   const handleChangeUsername = (event) => {
-    setUsername(event.target.value.toLowerCase());
+    setUsername(event.target.value);
   };
   const handleChangePassword = (event) => {
     setPassword(event.target.value);

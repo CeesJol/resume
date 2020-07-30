@@ -37,7 +37,6 @@ export const logout = async (secret) => {
 export const signup = async (email, username, password) => {
   console.log('signup request');
 	email = email.toLowerCase();
-	username = username.toLowerCase();
   const validationError = validateSignup(email, username, password);
   if (validationError) return Promise.reject(validationError);
   return server.query(

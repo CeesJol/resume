@@ -14,34 +14,52 @@ export default () => {
       category,
     });
   };
-  // const css = `* {
-  // 	color: red !important;
-  // }`
   const templateCSS = editingResume ? editingResume.template.style : "";
+  const drawCategory = (category) => {
+    return (
+      <div key={category._id}>
+        <h2>{category.name}</h2>
+        <a onClick={() => handleNewItem(category)}>
+          <i>Add item</i>
+        </a>
+        {category.items.data.map((item) => (
+          <div className="resume__item" key={item._id}>
+            <NewItem item={item} />
+            <br />
+          </div>
+        ))}
+      </div>
+    );
+  };
   function drawItems() {
-    // if (editingResume != -1) return;
-    const categories = editingResume.categories.data;
+    const categories = editingResume.categories.data.sort((cat1, cat2) =>
+      cat1.priority < cat2.priority ? 1 : -1
+    );
+    if (editingResume.template.sidebar) {
+      const mainCategories = categories.filter(
+        (category) => category.priority < 1000
+      );
+      const sidebarCategories = categories.filter(
+        (category) => category.priority >= 1000
+      );
 
-    if (categories.length > 0)
       return (
         <>
-          {categories.map((category, i) => (
-            <div className="resume__item" key={category._id}>
-              <h2>{category.name}</h2>
-              <a onClick={() => handleNewItem(category)}>
-                <i>Add item</i>
-              </a>
-              {category.items.data.map((item, j) => (
-                <div key={item._id}>
-                  <NewItem item={item} />
-                  <br />
-                </div>
-              ))}
-            </div>
-          ))}
+          <div className="resume__container">
+            {mainCategories.map((category) => drawCategory(category))}
+          </div>
+          <div className="resume__container">
+            {sidebarCategories.map((category) => drawCategory(category))}
+          </div>
         </>
       );
-    return <p>Nothing yet say what</p>;
+    } else {
+      return (
+        <div className="resume__container">
+          {categories.map((category) => drawCategory(category))}
+        </div>
+      );
+    }
   }
 
   return (
@@ -53,8 +71,8 @@ export default () => {
         <p>Click on any item to edit it</p>
       </div>
       <div className="resume">
-				<style>{templateCSS}</style>
-        <div className="resume__item">
+        <style>{templateCSS}</style>
+        <div className="resume__container resume__container--header">
           <h1>{getUser().username}</h1>
         </div>
         {drawItems()}

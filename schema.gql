@@ -8,7 +8,9 @@ type User {
 
 type Resume {
 	user: User
-	title: String! @unique
+	jobTitle: String
+	bio: String
+	title: String @unique
 	categories: [Category] @relation
 	template: Template! @relation
 }

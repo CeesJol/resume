@@ -1,4 +1,42 @@
 import executeQuery from "../../lib/executeQuery";
+import stringifyObject from "../../lib/stringifyObject";
+
+const userData = `username
+email
+confirmed
+bio
+resumes {
+	data {
+		_id
+		title
+		jobTitle
+		bio
+		template {
+			name
+			style
+		}
+		categories {
+			data {
+				_id
+				name
+				priority
+				items {
+					data {
+						_id
+						title
+						location
+						from
+						to
+						description
+						priority
+						category {
+							_id
+						}
+					}
+				}
+			}
+		}
+	}`;
 
 /** |----------------------------
  *  | GET ITEMS BY USERNAME
@@ -29,45 +67,11 @@ import executeQuery from "../../lib/executeQuery";
  *  |----------------------------
  */
 export const getUserByEmail = async (email) => {
-	console.log('getUserByEmail request');
+  console.log("getUserByEmail request");
   email = email.toLowerCase();
   return executeQuery(`query FindAUserByEmail {
 		userByEmail(email: "${email}") {
-			username
-			email
-			confirmed
-			bio
-			resumes {
-				data {
-					_id
-					title
-					template {
-						name
-						style
-					}
-					categories {
-						data {
-							_id
-							name
-							priority
-							items {
-								data {
-									_id
-									title
-									location
-									from
-									to
-									description
-									priority
-									category {
-										_id
-									}
-								}
-							}
-						}
-					}
-				}
-			}
+			${userData}
 		}
 	}`);
 };
@@ -101,7 +105,7 @@ export const getUserByEmail = async (email) => {
  *  |----------------------------
  */
 export const createItem = async (categoryId, data) => {
-	console.log('createItem request');
+  console.log("createItem request");
   return executeQuery(`mutation CreateItem {
 		createItem(data: {
 			title: "${data.title}"
@@ -121,7 +125,7 @@ export const createItem = async (categoryId, data) => {
  *  |----------------------------
  */
 export const createCategoryWithItem = async (resumeId, categoryName, data) => {
-	console.log('createCategoryWithItem request');
+  console.log("createCategoryWithItem request");
   return executeQuery(`mutation CreateCategoryWithItem {
 		createCategory(data: {
 			name: "${categoryName}"
@@ -153,13 +157,27 @@ export const createCategoryWithItem = async (resumeId, categoryName, data) => {
 	}`);
 };
 
+/** |----------------------------
+ *  | UPDATE RESUME
+ *  |----------------------------
+ */
+export const updateResume = async (resumeId, data) => {
+  console.log("updateResume request");
+  return executeQuery(`mutation UpdateResume {
+		updateResume(id: "${resumeId}", data: {
+			${stringifyObject(data)}
+		}) {
+			_id
+		}
+	}`);
+};
 
 /** |----------------------------
  *  | UPDATE ITEM
  *  |----------------------------
  */
 export const updateItem = async (categoryId, data) => {
-	console.log('updateItem request');
+  console.log("updateItem request");
   return executeQuery(`mutation UpdateItem {
 		updateItem(id: "${data.id}", data: {
 			title: "${data.title}"
@@ -183,7 +201,7 @@ export const updateItem = async (categoryId, data) => {
  *  |----------------------------
  */
 export const updateItemPriority = async (itemId, priority) => {
-	console.log('updateItem request');
+  console.log("updateItem request");
   return executeQuery(`mutation UpdateItem {
 		updateItem(id: "${itemId}", data: {
 			priority: ${priority}
@@ -198,7 +216,7 @@ export const updateItemPriority = async (itemId, priority) => {
  *  |----------------------------
  */
 export const deleteItem = async (id) => {
-	console.log('deleteItem request');
+  console.log("deleteItem request");
   return executeQuery(`mutation DeleteItem {
 		deleteItem(id: "${id}") {
 			_id
@@ -211,7 +229,7 @@ export const deleteItem = async (id) => {
  *  |----------------------------
  */
 export const updateUser = async (id, username, email, bio) => {
-	console.log('updateUser request');
+  console.log("updateUser request");
   email = email.toLowerCase();
   return executeQuery(`mutation UpdateUser {
 		updateUser(id: "${id}", data:{
@@ -231,44 +249,10 @@ export const updateUser = async (id, username, email, bio) => {
  *  |----------------------------
  */
 export const readUser = async (id) => {
-	console.log('readUser request');
+  console.log("readUser request");
   return executeQuery(`query FindAUserByID {
 		findUserByID(id: "${id}") {
-			username
-			email
-			confirmed
-			bio
-			resumes {
-				data {
-					_id
-					title
-					template {
-						name
-						style
-					}
-					categories {
-						data {
-							_id
-							name
-							priority
-							items {
-								data {
-									_id
-									title
-									location
-									from
-									to
-									description
-									priority
-									category {
-										_id
-									}
-								}
-							}
-						}
-					}
-				}
-			}
+			${userData}
 		}
 	}`);
 };

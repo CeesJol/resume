@@ -3,9 +3,10 @@ import { UserContext } from "../../contexts/userContext";
 import React, { useState, useEffect, useContext } from "react";
 import NewItem from "./NewItem";
 import Popup from "./Popup";
+import UserPopup from "./UserPopup";
 
 export default () => {
-  const { setEditingItem, editingItem, editingResume } = useContext(
+  const { setEditingItem, editingItem, setEditingResume, editingResume } = useContext(
     DashboardContext
   );
   const { getUser } = useContext(UserContext);
@@ -13,7 +14,10 @@ export default () => {
     setEditingItem({
       category,
     });
-  };
+	};
+	const handleChangeInfo = () => {
+		setEditingResume({...editingResume, changingInfo: true})
+	}
   const templateCSS = editingResume ? editingResume.template.style : "";
   const drawCategory = (category) => {
     return (
@@ -72,12 +76,15 @@ export default () => {
       </div>
       <div className="resume">
         <style>{templateCSS}</style>
-        <div className="resume__container resume__container--header">
+        <div className="resume__container resume__container--header" onClick={handleChangeInfo}>
           <h1>{getUser().username}</h1>
+					<p className="resume__job-title">{editingResume.jobTitle || "Job title"}</p>
+					<p className="resume__bio">{editingResume.bio || "Bio"}</p>
         </div>
         {drawItems()}
 
         {editingItem !== -1 && <Popup />}
+				{editingResume.changingInfo && <UserPopup />}
       </div>
     </>
   );

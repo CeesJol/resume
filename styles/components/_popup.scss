@@ -22,6 +22,11 @@
 	margin: 0 auto;
 	height: auto;
 
+	&--medium {
+		width: 40rem;
+		text-align: center;
+	}
+
 	&--small {
 		width: 25rem;
 		text-align: center;

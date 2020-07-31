@@ -10,7 +10,9 @@ const DashboardContextProvider = (props) => {
   const [editingItem, setEditingItem] = useState(-1);
   const [editingResume, setEditingResume] = useState(-1);
   const [data, setData] = useState(false);
-  const [error, setError] = useState(false);
+	const [error, setError] = useState(false);
+	const [warning, setWarning] = useState(false);
+	const [changingInfo, setChangingInfo] = useState(false);
   const handleMutation = () => {
     // readUser();
     setEditingItem(-1);
@@ -31,7 +33,11 @@ const DashboardContextProvider = (props) => {
         data,
         setData,
         error,
-        setError,
+				setError,
+				warning,
+				setWarning,
+				changingInfo,
+				setChangingInfo,
 				handleMutation,
 				handleMove
       }}

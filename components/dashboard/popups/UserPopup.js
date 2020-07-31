@@ -2,16 +2,16 @@ import React, { useState, useEffect, useContext } from "react";
 import {
 	updateResume,
   readUser,
-} from "../../pages/api/fauna";
-import { UserContext } from "../../contexts/userContext";
-import { DashboardContext } from "../../contexts/dashboardContext";
-import Button from "../general/Button";
-import Monthpicker from "../general/Monthpicker";
-import Yearpicker from "../general/Yearpicker";
+} from "../../../pages/api/fauna";
+import { UserContext } from "../../../contexts/userContext";
+import { DashboardContext } from "../../../contexts/dashboardContext";
+import Button from "../../general/Button";
+import Monthpicker from "../../general/Monthpicker";
+import Yearpicker from "../../general/Yearpicker";
 
 export default () => {
   const { getUser, storeUser } = useContext(UserContext);
-  const { editingResume, setEditingResume } = useContext(
+  const { editingResume, setEditingResume, warning, setWarning } = useContext(
     DashboardContext
   );
   const [filled, setFilled] = useState(false);
@@ -45,7 +45,7 @@ export default () => {
         await readUser(getUser().id).then(
           (res) => {
             storeUser(res.findUserByID);
-            setEditingResume({ ...editingResume, changingInfo: false });
+            setChangingInfo(false);
           },
           (err) => {
             console.log("readUser res ERR", err);
@@ -56,7 +56,12 @@ export default () => {
         console.log("updateResume err:", err);
       }
     );
-  };
+	};
+	const handleCancel = () => {
+		setWarning({
+			text: "Are you sure you want to cancel editing? All unsaved changes will be lost."
+		})
+	}
   useEffect(() => {
     if (!filled) {
       setFilled(true);
@@ -66,7 +71,7 @@ export default () => {
     }
   });
   return (
-    <div className="popup-container">
+    <div className="popup-container" onClick={handleCancel}>
       <div className="popup">
 				<h4>Update info</h4>
         <form>

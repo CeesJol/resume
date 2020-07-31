@@ -1,43 +1,6 @@
 import executeQuery from "../../lib/executeQuery";
 import stringifyObject from "../../lib/stringifyObject";
 
-const userData = `username
-email
-confirmed
-bio
-resumes {
-	data {
-		_id
-		title
-		jobTitle
-		bio
-		template {
-			name
-			style
-		}
-		categories {
-			data {
-				_id
-				name
-				priority
-				items {
-					data {
-						_id
-						title
-						location
-						from
-						to
-						description
-						priority
-						category {
-							_id
-						}
-					}
-				}
-			}
-		}
-	}`;
-
 /** |----------------------------
  *  | GET ITEMS BY USERNAME
  *  |----------------------------
@@ -71,7 +34,43 @@ export const getUserByEmail = async (email) => {
   email = email.toLowerCase();
   return executeQuery(`query FindAUserByEmail {
 		userByEmail(email: "${email}") {
-			${userData}
+			username
+			email
+			confirmed
+			bio
+			resumes {
+				data {
+					_id
+					title
+					jobTitle
+					bio
+					template {
+						name
+						style
+					}
+					categories {
+						data {
+							_id
+							name
+							priority
+							items {
+								data {
+									_id
+									title
+									location
+									from
+									to
+									description
+									priority
+									category {
+										_id
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}`);
 };
@@ -252,7 +251,43 @@ export const readUser = async (id) => {
   console.log("readUser request");
   return executeQuery(`query FindAUserByID {
 		findUserByID(id: "${id}") {
-			${userData}
+			username
+			email
+			confirmed
+			bio
+			resumes {
+				data {
+					_id
+					title
+					jobTitle
+					bio
+					template {
+						name
+						style
+					}
+					categories {
+						data {
+							_id
+							name
+							priority
+							items {
+								data {
+									_id
+									title
+									location
+									from
+									to
+									description
+									priority
+									category {
+										_id
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}`);
 };

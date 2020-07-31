@@ -4,16 +4,16 @@ import {
   updateItem,
   createItem,
   readUser,
-} from "../../pages/api/fauna";
-import { UserContext } from "../../contexts/userContext";
-import { DashboardContext } from "../../contexts/dashboardContext";
-import Button from "../general/Button";
-import Monthpicker from "../general/Monthpicker";
-import Yearpicker from "../general/Yearpicker";
+} from "../../../pages/api/fauna";
+import { UserContext } from "../../../contexts/userContext";
+import { DashboardContext } from "../../../contexts/dashboardContext";
+import Button from "../../general/Button";
+import Monthpicker from "../../general/Monthpicker";
+import Yearpicker from "../../general/Yearpicker";
 
 export default () => {
   const { getUser, storeUser } = useContext(UserContext);
-  const { nav, editingItem, setEditingItem, editingResume } = useContext(
+  const { nav, editingItem, setEditingItem, editingResume, setWarning } = useContext(
     DashboardContext
   );
   const [filled, setFilled] = useState(false);
@@ -146,7 +146,12 @@ export default () => {
         console.log("createItem err:", err);
       }
     );
-  };
+	};
+	const handleCancel = () => {
+		setWarning({
+			text: "Are you sure you want to cancel editing? All unsaved changes will be lost."
+		})
+	}
   useEffect(() => {
     if (editingItem.title && !filled) {
       setFilled(true);
@@ -164,7 +169,7 @@ export default () => {
     }
   });
   return (
-    <div className="popup-container">
+    <div className="popup-container" onClick={handleCancel}>
       <div className="popup">
 				<h4>{editingItem.title ? "Edit item" : "Create item"}</h4>
         <form>

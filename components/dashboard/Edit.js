@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import Button from "../general/Button";
 import { updateItem, deleteItem } from "../../pages/api/fauna";
-import { DashboardContext } from "../../contexts/dashboardContext";
+import { UserContext } from "../../contexts/userContext";
 
 export default function Edit(props) {
 	const [title, setTitle] = useState("");
-	const { editingItem, handleMutation } = useContext(DashboardContext);
+	const { editingItem, handleMutation } = useContext(UserContext);
   const handleChangeTitle = (event) => {
     setTitle(event.target.value);
   };

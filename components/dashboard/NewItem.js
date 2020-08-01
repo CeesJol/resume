@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
-import { DashboardContext } from "../../contexts/dashboardContext";
+import { UserContext } from "../../contexts/userContext";
 
 const NewItem = ({ item }) => {
-  const { setEditingItem, editingResume, handleMove } = useContext(DashboardContext);
+  const { setEditingItem, editingResume, handleMove } = useContext(UserContext);
   const handleClick = (e, item) => {
     e.preventDefault();
     console.log("item", item);

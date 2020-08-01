@@ -11,11 +11,9 @@ import Editor from "./Editor";
 import Settings from "./Settings";
 import Nav from "./Nav";
 import { UserContext } from "../../contexts/userContext";
-import { DashboardContext } from "../../contexts/dashboardContext";
 
 export default function Dashboard(props) {
-  const { auth, getUser } = useContext(UserContext);
-	const { nav, editingItem, editingResume } = useContext(DashboardContext);
+  const { auth, getUser, nav, editingItem, editingResume } = useContext(UserContext);
 	useEffect(() => {
 		if (!getUser()) {
 			Router.push("/login");

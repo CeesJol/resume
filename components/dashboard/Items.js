@@ -1,14 +1,12 @@
 import React, { useContext } from "react";
 import Item from "../user/Item";
-import { DashboardContext } from "../../contexts/dashboardContext";
 import { UserContext } from "../../contexts/userContext";
 
 export default (props) => {
-  const { setEditingItem } = useContext(DashboardContext);
-  const { getUser } = useContext(UserContext);
+  const { getUser, setEditingItem } = useContext(UserContext);
   function handleClick(e, item) {
     e.preventDefault();
-    console.log('iTEMMM', item);
+    console.log("iTEMMM", item);
     setEditingItem(item);
   }
   function drawItems() {

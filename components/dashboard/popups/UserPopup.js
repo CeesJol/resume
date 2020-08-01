@@ -1,20 +1,20 @@
 import React, { useState, useEffect, useContext } from "react";
 import { updateResume, readUser } from "../../../pages/api/fauna";
 import { UserContext } from "../../../contexts/userContext";
-import { DashboardContext } from "../../../contexts/dashboardContext";
 import Button from "../../general/Button";
 import Monthpicker from "../../general/Monthpicker";
 import Yearpicker from "../../general/Yearpicker";
 
 export default () => {
-  const { getUser, storeUser } = useContext(UserContext);
   const {
+    getUser,
+    storeUser,
     editingResume,
     setEditingResume,
     warning,
     setWarning,
     setChangingInfo,
-  } = useContext(DashboardContext);
+  } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [jobTitle, setJobTitle] = useState("");
   const [bio, setBio] = useState("");

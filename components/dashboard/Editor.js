@@ -1,4 +1,3 @@
-import { DashboardContext } from "../../contexts/dashboardContext";
 import { UserContext } from "../../contexts/userContext";
 import React, { useState, useEffect, useContext } from "react";
 import NewItem from "./NewItem";
@@ -8,6 +7,7 @@ import Warning from "./popups/Warning";
 
 export default () => {
   const {
+    getUser,
     setEditingItem,
     editingItem,
     setEditingResume,
@@ -16,8 +16,7 @@ export default () => {
     setWarning,
     changingInfo,
     setChangingInfo,
-  } = useContext(DashboardContext);
-  const { getUser } = useContext(UserContext);
+  } = useContext(UserContext);
   const handleNewItem = (category) => {
     setEditingItem({
       category,
@@ -93,7 +92,9 @@ export default () => {
             <p className="resume__job-title">
               {editingResume.jobTitle || "Job title"}
             </p>
-            <p className="resume__bio multiline">{editingResume.bio || "Bio"}</p>
+            <p className="resume__bio multiline">
+              {editingResume.bio || "Bio"}
+            </p>
           </div>
         </a>
         {drawItems()}

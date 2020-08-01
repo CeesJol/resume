@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 
-import { DashboardContext } from "../../contexts/dashboardContext";
+import { UserContext } from "../../contexts/userContext";
 
 export default function Nav(props) {
-  const { nav, setNav } = useContext(DashboardContext);
+  const { nav, setNav } = useContext(UserContext);
   return (
     <div className="dashboard__nav">
       <div className="dashboard__nav__content">

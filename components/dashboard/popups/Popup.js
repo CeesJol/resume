@@ -6,16 +6,20 @@ import {
   readUser,
 } from "../../../pages/api/fauna";
 import { UserContext } from "../../../contexts/userContext";
-import { DashboardContext } from "../../../contexts/dashboardContext";
 import Button from "../../general/Button";
 import Monthpicker from "../../general/Monthpicker";
 import Yearpicker from "../../general/Yearpicker";
 
 export default () => {
-  const { getUser, storeUser } = useContext(UserContext);
-  const { nav, editingItem, setEditingItem, editingResume, setWarning } = useContext(
-    DashboardContext
-  );
+  const {
+    getUser,
+    storeUser,
+    nav,
+    editingItem,
+    setEditingItem,
+    editingResume,
+    setWarning,
+  } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [title, setTitle] = useState("");
   const [isGoing, setIsGoing] = useState(true);
@@ -61,29 +65,29 @@ export default () => {
     return false;
   };
   const handleDelete = async (event) => {
-		if (event) event.preventDefault();
-		console.log('id', editingItem._id)
-		setWarning({
-			text: "Are you sure you want to delete this item?",
-			fn: async () => {
-				await deleteItem(editingItem._id).then(
-					async () => {
-						await readUser(getUser().id).then(
-							(res) => {
-								storeUser(res.findUserByID);
-								setEditingItem(-1);
-							},
-							(err) => {
-								console.log("readUser res ERR", err);
-							}
-						);
-					},
-					(err) => {
-						console.log("err", err);
-					}
-				);
-			}
-		})
+    if (event) event.preventDefault();
+    console.log("id", editingItem._id);
+    setWarning({
+      text: "Are you sure you want to delete this item?",
+      fn: async () => {
+        await deleteItem(editingItem._id).then(
+          async () => {
+            await readUser(getUser().id).then(
+              (res) => {
+                storeUser(res.findUserByID);
+                setEditingItem(-1);
+              },
+              (err) => {
+                console.log("readUser res ERR", err);
+              }
+            );
+          },
+          (err) => {
+            console.log("err", err);
+          }
+        );
+      },
+    });
   };
   const handleUpdate = async () => {
     const validate = validateInput();
@@ -103,16 +107,11 @@ export default () => {
       to,
       description,
     }).then(
-      async () => {
-        await readUser(getUser().id).then(
-          (res) => {
-            storeUser(res.findUserByID);
-            setEditingItem(-1);
-          },
-          (err) => {
-            console.log("readUser res ERR", err);
-          }
-        );
+      async (data) => {
+        // storeUser(res.findUserByID);
+        console.log(getUser());
+        console.log(data);
+        setEditingItem(-1);
       },
       (err) => {
         console.log("updateItem err:", err);
@@ -152,12 +151,13 @@ export default () => {
         console.log("createItem err:", err);
       }
     );
-	};
-	const handleCancel = () => {
-		setWarning({
-			text: "Are you sure you want to cancel editing? All unsaved changes will be lost."
-		})
-	}
+  };
+  const handleCancel = () => {
+    setWarning({
+      text:
+        "Are you sure you want to cancel editing? All unsaved changes will be lost.",
+    });
+  };
   useEffect(() => {
     if (editingItem.title && !filled) {
       setFilled(true);
@@ -177,7 +177,7 @@ export default () => {
   return (
     <div className="popup-container" onClick={handleCancel}>
       <div className="popup" onClick={(e) => e.stopPropagation()}>
-				<h4>{editingItem.title ? "Edit item" : "Create item"}</h4>
+        <h4>{editingItem.title ? "Edit item" : "Create item"}</h4>
         <form>
           <div>
             <label>Title</label>

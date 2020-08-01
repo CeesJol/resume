@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect } from "react";
 export const UserContext = createContext();
 
 import { identity } from "../pages/api/auth";
-import { readUser } from "../pages/api/fauna";
+import { readUser, updateItemPriority } from "../pages/api/fauna";
 
 const UserContextProvider = (props) => {
 	const [user, setUser] = useState(null);
@@ -10,7 +10,13 @@ const UserContextProvider = (props) => {
   const storeUser = (data) => {
     // Set state
     setUser((prevUser) => ({ ...prevUser, ...data }));
-  };
+	};
+	const storeItem = (itemData) => {
+		// setUser((prevUser) => ({ 
+		// 	...prevUser, 
+		// 	...data 
+		// }));
+	}
   const getUser = () => {
     return user;
   };
@@ -23,6 +29,22 @@ const UserContextProvider = (props) => {
   };
   const userExists = () => {
     return user != null;
+	};
+  useEffect(() => {});
+  const [nav, setNav] = useState(0); // 0 = main, 1 = settings
+  const [editingItem, setEditingItem] = useState(-1);
+  const [editingResume, setEditingResume] = useState(-1);
+  const [data, setData] = useState(false);
+	const [error, setError] = useState(false);
+	const [warning, setWarning] = useState(false);
+	const [changingInfo, setChangingInfo] = useState(false);
+  const handleMutation = () => {
+    // readUser();
+    setEditingItem(-1);
+  };
+  const handleMove = (amount) => {
+    // item.category.
+    // updateItemPriority(item._id, item.priority - amount);
   };
   useEffect(() => {
 		// console.log('new user info', user);
@@ -69,7 +91,23 @@ const UserContextProvider = (props) => {
         getUser,
         clearUser,
 				userExists,
-				auth, setAuth
+				auth, setAuth,
+				nav,
+        setNav,
+        editingItem,
+        setEditingItem,
+        editingResume,
+        setEditingResume,
+        data,
+        setData,
+        error,
+				setError,
+				warning,
+				setWarning,
+				changingInfo,
+				setChangingInfo,
+				handleMutation,
+				handleMove
       }}
     >
       {props.children}

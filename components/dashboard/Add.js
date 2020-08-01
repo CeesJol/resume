@@ -6,7 +6,6 @@ import {
   readUser,
 } from "../../pages/api/fauna";
 import { UserContext } from "../../contexts/userContext";
-import { DashboardContext } from "../../contexts/dashboardContext";
 import Monthpicker from "../general/Monthpicker";
 import Yearpicker from "../general/Yearpicker";
 

@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import Item from "../user/Item";
-import { DashboardContext } from "../../contexts/dashboardContext";
+import { UserContext } from "../../contexts/userContext";
 
 export default (props) => {
-  const { editingItem, data, error } = useContext(DashboardContext);
+  const { editingItem, data, error } = useContext(UserContext);
   function drawItem(drawItem) {
     if (!data) return <p>Loading...</p>;
     if (error || data === -1) return <p>Failed to load</p>;

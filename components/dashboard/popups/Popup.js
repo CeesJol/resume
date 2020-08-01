@@ -19,6 +19,9 @@ export default () => {
     setEditingItem,
     editingResume,
     setWarning,
+    storeItem,
+    userMadeChanges,
+    setUserMadeChanges,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [title, setTitle] = useState("");
@@ -32,27 +35,35 @@ export default () => {
   const [status, setStatus] = useState("");
   const handleChangeTitle = (event) => {
     setTitle(event.target.value);
+    setUserMadeChanges(true);
   };
   const handleChangeLocation = (event) => {
     setLocation(event.target.value);
+    setUserMadeChanges(true);
   };
   const handleChangeIsGoing = (event) => {
     setIsGoing(!isGoing);
+    setUserMadeChanges(true);
   };
   const handleChangeMonth1 = (event) => {
     setMonth1(event.target.value);
+    setUserMadeChanges(true);
   };
   const handleChangeYear1 = (event) => {
     setYear1(event.target.value);
+    setUserMadeChanges(true);
   };
   const handleChangeMonth2 = (event) => {
     setMonth2(event.target.value);
+    setUserMadeChanges(true);
   };
   const handleChangeYear2 = (event) => {
     setYear2(event.target.value);
+    setUserMadeChanges(true);
   };
   const handleChangeDescription = (event) => {
     setDescription(event.target.value);
+    setUserMadeChanges(true);
   };
   const validateInput = () => {
     if (!title) return "Please provide a title";
@@ -110,7 +121,8 @@ export default () => {
       async (data) => {
         // storeUser(res.findUserByID);
         console.log(getUser());
-        console.log(data);
+        console.log("DATA.UPDATEITEM", data.updateItem);
+        storeItem(data.updateItem);
         setEditingItem(-1);
       },
       (err) => {
@@ -153,10 +165,11 @@ export default () => {
     );
   };
   const handleCancel = () => {
-    setWarning({
-      text:
-        "Are you sure you want to cancel editing? All unsaved changes will be lost.",
-    });
+    if (userMadeChanges)
+      setWarning({
+        text:
+          "Are you sure you want to cancel editing? All unsaved changes will be lost.",
+      });
   };
   useEffect(() => {
     if (editingItem.title && !filled) {

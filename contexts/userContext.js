@@ -5,18 +5,59 @@ import { identity } from "../pages/api/auth";
 import { readUser, updateItemPriority } from "../pages/api/fauna";
 
 const UserContextProvider = (props) => {
-	const [user, setUser] = useState(null);
-	const [auth, setAuth] = useState(false);
+  const [user, setUser] = useState(null);
+  const [auth, setAuth] = useState(false);
+  const [nav, setNav] = useState(0);
+  const [editingItem, setEditingItem] = useState(-1);
+  const [editingResume, setEditingResume] = useState(-1);
+  const [data, setData] = useState(false);
+  const [error, setError] = useState(false);
+  const [warning, setWarning] = useState(false);
+  const [changingInfo, setChangingInfo] = useState(false);
+  const [userMadeChanges, setUserMadeChanges] = useState(false);
   const storeUser = (data) => {
     // Set state
     setUser((prevUser) => ({ ...prevUser, ...data }));
-	};
-	const storeItem = (itemData) => {
-		// setUser((prevUser) => ({ 
-		// 	...prevUser, 
-		// 	...data 
-		// }));
-	}
+  };
+  const storeItem = (itemData) => {
+    var user = getUser();
+
+    // jr developer: the code isnt that bad
+    // the code:
+    user.resumes.data.forEach((resume, r) => {
+      if (resume._id === editingResume._id)
+        resume.categories.data.forEach((category, c) => {
+          if (category._id === editingItem.category._id)
+            category.items.data.forEach((item, i) => {
+              if (item._id === editingItem._id)
+                user.resumes.data[r].categories.data[c].items.data[i] = {
+                  ...item,
+                  ...itemData,
+                };
+            });
+        });
+    });
+
+    setUser(() => user);
+  };
+  const storeResume = (resumeData) => {
+    var user = getUser();
+
+    console.log("resumeData", resumeData);
+
+    user.resumes.data.forEach((resume, r) => {
+      if (resume._id === editingResume._id) {
+        var newResume = { ...resume, ...resumeData };
+        user.resumes.data[r] = newResume;
+        setEditingResume(newResume);
+        console.log("welp", user.resumes.data[r]);
+      }
+    });
+
+    console.log("uSER", user);
+
+    setUser(() => user);
+  };
   const getUser = () => {
     return user;
   };
@@ -29,15 +70,7 @@ const UserContextProvider = (props) => {
   };
   const userExists = () => {
     return user != null;
-	};
-  useEffect(() => {});
-  const [nav, setNav] = useState(0); // 0 = main, 1 = settings
-  const [editingItem, setEditingItem] = useState(-1);
-  const [editingResume, setEditingResume] = useState(-1);
-  const [data, setData] = useState(false);
-	const [error, setError] = useState(false);
-	const [warning, setWarning] = useState(false);
-	const [changingInfo, setChangingInfo] = useState(false);
+  };
   const handleMutation = () => {
     // readUser();
     setEditingItem(-1);
@@ -47,7 +80,7 @@ const UserContextProvider = (props) => {
     // updateItemPriority(item._id, item.priority - amount);
   };
   useEffect(() => {
-		// console.log('new user info', user);
+    // console.log('new user info', user);
     if (user == null) {
       const localUser = JSON.parse(localStorage.getItem("user"));
       if (localUser != null && localUser.secret != null) {
@@ -61,7 +94,7 @@ const UserContextProvider = (props) => {
             readUser(localUser.id).then(
               (data) => {
                 storeUser(data.findUserByID);
-                console.log('readUser', data.findUserByID);
+                console.log("readUser", data.findUserByID);
               },
               (err) => {
                 console.log("Fucked up getting the user data", err);
@@ -90,9 +123,10 @@ const UserContextProvider = (props) => {
         storeUser,
         getUser,
         clearUser,
-				userExists,
-				auth, setAuth,
-				nav,
+        userExists,
+        auth,
+        setAuth,
+        nav,
         setNav,
         editingItem,
         setEditingItem,
@@ -101,13 +135,17 @@ const UserContextProvider = (props) => {
         data,
         setData,
         error,
-				setError,
-				warning,
-				setWarning,
-				changingInfo,
-				setChangingInfo,
-				handleMutation,
-				handleMove
+        setError,
+        warning,
+        setWarning,
+        changingInfo,
+        setChangingInfo,
+        handleMutation,
+        handleMove,
+        storeItem,
+        storeResume,
+        userMadeChanges,
+        setUserMadeChanges,
       }}
     >
       {props.children}

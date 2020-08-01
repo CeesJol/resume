@@ -167,6 +167,8 @@ export const updateResume = async (resumeId, data) => {
 			${stringifyObject(data)}
 		}) {
 			_id
+			jobTitle
+			bio
 		}
 	}`);
 };
@@ -186,11 +188,15 @@ export const updateItem = async (categoryId, data) => {
 			description: """${data.description}"""
 			category: { connect: "${categoryId}" }
 		}) {
+			_id
 			title
 			location
 			from
 			to
 			description
+			category {
+				_id
+			}
 		}
 	}`);
 };

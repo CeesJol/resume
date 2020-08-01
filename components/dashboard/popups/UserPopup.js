@@ -14,6 +14,9 @@ export default () => {
     warning,
     setWarning,
     setChangingInfo,
+    userMadeChanges,
+		setUserMadeChanges,
+		storeResume
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [jobTitle, setJobTitle] = useState("");
@@ -21,9 +24,11 @@ export default () => {
   const [status, setStatus] = useState("");
   const handleChangeJobTitle = (event) => {
     setJobTitle(event.target.value);
+    setUserMadeChanges(true);
   };
   const handleChangeBio = (event) => {
     setBio(event.target.value);
+    setUserMadeChanges(true);
   };
   const validateInput = () => {
     if (!jobTitle) return "Please provide a job title";
@@ -42,16 +47,10 @@ export default () => {
       jobTitle,
       bio,
     }).then(
-      async () => {
-        await readUser(getUser().id).then(
-          (res) => {
-            storeUser(res.findUserByID);
-            setChangingInfo(false);
-          },
-          (err) => {
-            console.log("readUser res ERR", err);
-          }
-        );
+      (data) => {
+        storeResume(data.updateResume);
+        // storeUser(res.findUserByID);
+        setChangingInfo(false);
       },
       (err) => {
         console.log("updateResume err:", err);
@@ -59,10 +58,11 @@ export default () => {
     );
   };
   const handleCancel = () => {
-    setWarning({
-      text:
-        "Are you sure you want to cancel editing? All unsaved changes will be lost.",
-    });
+    if (userMadeChanges)
+      setWarning({
+        text:
+          "Are you sure you want to cancel editing? All unsaved changes will be lost.",
+      });
   };
   useEffect(() => {
     if (!filled) {

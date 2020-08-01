@@ -15,7 +15,12 @@ import { DashboardContext } from "../../contexts/dashboardContext";
 
 export default function Dashboard(props) {
   const { auth, getUser } = useContext(UserContext);
-  const { nav, editingItem, editingResume } = useContext(DashboardContext);
+	const { nav, editingItem, editingResume } = useContext(DashboardContext);
+	useEffect(() => {
+		if (!getUser()) {
+			Router.push("/login");
+		}
+	})
   return (
     <>
       {auth ? (

@@ -61,23 +61,29 @@ export default () => {
     return false;
   };
   const handleDelete = async (event) => {
-    if (event) event.preventDefault();
-    await deleteItem(editingItem._id).then(
-      async () => {
-        await readUser(getUser().id).then(
-          (res) => {
-            storeUser(res.findUserByID);
-            setEditingItem(-1);
-          },
-          (err) => {
-            console.log("readUser res ERR", err);
-          }
-        );
-      },
-      (err) => {
-        console.log("err", err);
-      }
-    );
+		if (event) event.preventDefault();
+		console.log('id', editingItem._id)
+		setWarning({
+			text: "Are you sure you want to delete this item?",
+			fn: async () => {
+				await deleteItem(editingItem._id).then(
+					async () => {
+						await readUser(getUser().id).then(
+							(res) => {
+								storeUser(res.findUserByID);
+								setEditingItem(-1);
+							},
+							(err) => {
+								console.log("readUser res ERR", err);
+							}
+						);
+					},
+					(err) => {
+						console.log("err", err);
+					}
+				);
+			}
+		})
   };
   const handleUpdate = async () => {
     const validate = validateInput();
@@ -170,7 +176,7 @@ export default () => {
   });
   return (
     <div className="popup-container" onClick={handleCancel}>
-      <div className="popup">
+      <div className="popup" onClick={(e) => e.stopPropagation()}>
 				<h4>{editingItem.title ? "Edit item" : "Create item"}</h4>
         <form>
           <div>

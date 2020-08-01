@@ -9,7 +9,7 @@ export default () => {
     DashboardContext
   );
   const handleYes = async () => {
-    if (warning.fn) await fn();
+    if (warning.fn) await warning.fn();
     setChangingInfo(false);
     setEditingItem(-1);
     setWarning(false);
@@ -18,12 +18,12 @@ export default () => {
     setWarning(false);
   };
   return (
-    <div className="popup-container">
-      <div className="popup popup--medium">
-        <h4>{warning.text}</h4>
+    <div className="popup-container"onClick={handleCancel}>
+			<div className="popup popup--medium" onClick={(e) => e.stopPropagation()}>
+        <p><b>{warning.text}</b></p>
         <form>
-          <Button text="Yes" color="red" altText="Updating..." fn={handleYes} />
-          <Button text="Cancel" altText="Updating..." fn={handleCancel} />
+          <Button text="Yes" fn={handleYes} />
+          <Button text="Cancel" color="red" fn={handleCancel} />
         </form>
       </div>
     </div>

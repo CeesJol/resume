@@ -8,7 +8,7 @@ const DashboardHeader = () => {
   const { userExists, getUser, clearUser } = useContext(UserContext);
   const handleLogout = () => {
     logout(getUser().secret);
-		clearUser();
+    clearUser();
     Router.push("/login");
   };
   return (
@@ -18,7 +18,7 @@ const DashboardHeader = () => {
           <div className="icon-container">
             <h3>
               <a className="header__title" onClick={Router.reload}>
-								<img className="icon--large" src="../images/icon-small.png" />
+                <img className="icon--large" src="../images/icon-small.png" />
                 {userExists() ? getUser().username : "Loading..."}
               </a>
             </h3>

@@ -89,11 +89,11 @@ export default () => {
             className="resume__container resume__container--header"
             onClick={handleChangeInfo}
           >
-            <h1>{getUser().username}</h1>
+            <h1>{getUser() && getUser().username}</h1>
             <p className="resume__job-title">
               {editingResume.jobTitle || "Job title"}
             </p>
-            <p className="resume__bio">{editingResume.bio || "Bio"}</p>
+            <p className="resume__bio multiline">{editingResume.bio || "Bio"}</p>
           </div>
         </a>
         {drawItems()}

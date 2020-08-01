@@ -1,8 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import {
-	updateResume,
-  readUser,
-} from "../../../pages/api/fauna";
+import { updateResume, readUser } from "../../../pages/api/fauna";
 import { UserContext } from "../../../contexts/userContext";
 import { DashboardContext } from "../../../contexts/dashboardContext";
 import Button from "../../general/Button";
@@ -11,9 +8,13 @@ import Yearpicker from "../../general/Yearpicker";
 
 export default () => {
   const { getUser, storeUser } = useContext(UserContext);
-  const { editingResume, setEditingResume, warning, setWarning } = useContext(
-    DashboardContext
-  );
+  const {
+    editingResume,
+    setEditingResume,
+    warning,
+    setWarning,
+    setChangingInfo,
+  } = useContext(DashboardContext);
   const [filled, setFilled] = useState(false);
   const [jobTitle, setJobTitle] = useState("");
   const [bio, setBio] = useState("");
@@ -36,10 +37,10 @@ export default () => {
       return;
     }
 
-		console.log('editingResume', editingResume)
+    console.log("editingResume", editingResume);
     await updateResume(editingResume._id, {
-			jobTitle,
-			bio
+      jobTitle,
+      bio,
     }).then(
       async () => {
         await readUser(getUser().id).then(
@@ -56,12 +57,13 @@ export default () => {
         console.log("updateResume err:", err);
       }
     );
-	};
-	const handleCancel = () => {
-		setWarning({
-			text: "Are you sure you want to cancel editing? All unsaved changes will be lost."
-		})
-	}
+  };
+  const handleCancel = () => {
+    setWarning({
+      text:
+        "Are you sure you want to cancel editing? All unsaved changes will be lost.",
+    });
+  };
   useEffect(() => {
     if (!filled) {
       setFilled(true);
@@ -72,8 +74,8 @@ export default () => {
   });
   return (
     <div className="popup-container" onClick={handleCancel}>
-      <div className="popup">
-				<h4>Update info</h4>
+      <div className="popup" onClick={(e) => e.stopPropagation()}>
+        <h4>Update info</h4>
         <form>
           <div>
             <label>Job title</label>
@@ -86,7 +88,7 @@ export default () => {
             />
 
             <label>Bio</label>
-            <input
+            <textarea
               type="text"
               id="bio"
               name="bio"

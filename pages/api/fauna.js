@@ -114,7 +114,15 @@ export const createItem = async (categoryId, data) => {
 			description: """${data.description}"""
 			category: { connect: "${categoryId}" }
 		}) {
+			_id
 			title
+			location
+			from
+			to
+			description
+			category {
+				_id
+			}
 		}
 	}`);
 };

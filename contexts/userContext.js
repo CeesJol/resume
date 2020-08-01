@@ -19,23 +19,46 @@ const UserContextProvider = (props) => {
     // Set state
     setUser((prevUser) => ({ ...prevUser, ...data }));
   };
-  const storeItem = (itemData) => {
+  const storeItem = (itemData, del) => {
     var user = getUser();
 
     // jr developer: the code isnt that bad
     // the code:
-    user.resumes.data.forEach((resume, r) => {
-      if (resume._id === editingResume._id)
-        resume.categories.data.forEach((category, c) => {
-          if (category._id === editingItem.category._id)
-            category.items.data.forEach((item, i) => {
-              if (item._id === editingItem._id)
-                user.resumes.data[r].categories.data[c].items.data[i] = {
-                  ...item,
-                  ...itemData,
-                };
+    user.resumes.data.some((resume, r) => {
+      if (resume._id === editingResume._id) {
+        resume.categories.data.some((category, c) => {
+          if (category._id === editingItem.category._id) {
+            category.items.data.some((item, i) => {
+              if (item._id === editingItem._id) {
+                if (del) {
+                  // Delete item
+                  user.resumes.data[r].categories.data[
+                    c
+                  ].items.data = user.resumes.data[r].categories.data[
+                    c
+                  ].items.data.filter((x) => x._id !== itemData._id);
+                } else {
+                  // Update item
+                  var newItem = { ...item, ...itemData };
+                  user.resumes.data[r].categories.data[c].items.data[
+                    i
+                  ] = newItem;
+                  setEditingItem(newItem);
+                }
+                return true; // break the loop
+              } else if (i === category.items.data.length - 1) {
+                // Add item
+                user.resumes.data[r].categories.data[c].items.data.push(
+                  itemData
+                );
+                setEditingItem(itemData);
+              }
             });
+            return true; // break the loop
+          }
         });
+        return true; // break the loop
+      }
     });
 
     setUser(() => user);
@@ -43,18 +66,13 @@ const UserContextProvider = (props) => {
   const storeResume = (resumeData) => {
     var user = getUser();
 
-    console.log("resumeData", resumeData);
-
     user.resumes.data.forEach((resume, r) => {
       if (resume._id === editingResume._id) {
         var newResume = { ...resume, ...resumeData };
         user.resumes.data[r] = newResume;
         setEditingResume(newResume);
-        console.log("welp", user.resumes.data[r]);
       }
     });
-
-    console.log("uSER", user);
 
     setUser(() => user);
   };

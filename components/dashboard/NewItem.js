@@ -5,7 +5,6 @@ const NewItem = ({ item }) => {
   const { setEditingItem, editingResume, handleMove } = useContext(UserContext);
   const handleClick = (e, item) => {
     e.preventDefault();
-    console.log("item", item);
     setEditingItem(item);
   };
   return (

@@ -42,7 +42,6 @@ export default () => {
       return;
     }
 
-    console.log("editingResume", editingResume);
     await updateResume(editingResume._id, {
       jobTitle,
       bio,

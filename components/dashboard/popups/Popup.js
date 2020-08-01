@@ -77,26 +77,18 @@ export default () => {
   };
   const handleDelete = async (event) => {
     if (event) event.preventDefault();
-    console.log("id", editingItem._id);
     setWarning({
       text: "Are you sure you want to delete this item?",
       fn: async () => {
         await deleteItem(editingItem._id).then(
-          async () => {
-            await readUser(getUser().id).then(
-              (res) => {
-                storeUser(res.findUserByID);
-                setEditingItem(-1);
-              },
-              (err) => {
-                console.log("readUser res ERR", err);
-              }
-            );
-          },
-          (err) => {
-            console.log("err", err);
-          }
-        );
+					async (data) => {
+						storeItem(data.deleteItem, true);
+						setEditingItem(-1);
+					},
+					(err) => {
+						console.log("deleteItem err:", err);
+					}
+				);
       },
     });
   };
@@ -119,9 +111,6 @@ export default () => {
       description,
     }).then(
       async (data) => {
-        // storeUser(res.findUserByID);
-        console.log(getUser());
-        console.log("DATA.UPDATEITEM", data.updateItem);
         storeItem(data.updateItem);
         setEditingItem(-1);
       },
@@ -148,16 +137,9 @@ export default () => {
       to,
       description,
     }).then(
-      async () => {
-        await readUser(getUser().id).then(
-          (res) => {
-            storeUser(res.findUserByID);
-            setEditingItem(-1);
-          },
-          (err) => {
-            console.log("readUser res ERR", err);
-          }
-        );
+      async (data) => {
+        storeItem(data.createItem);
+        setEditingItem(-1);
       },
       (err) => {
         console.log("createItem err:", err);

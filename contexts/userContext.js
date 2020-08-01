@@ -97,6 +97,12 @@ const UserContextProvider = (props) => {
     // item.category.
     // updateItemPriority(item._id, item.priority - amount);
   };
+  const resetPopups = () => {
+    setChangingInfo(false);
+    setEditingItem(-1);
+    setWarning(false);
+    setUserMadeChanges(false);
+  };
   useEffect(() => {
     // console.log('new user info', user);
     if (user == null) {
@@ -164,6 +170,7 @@ const UserContextProvider = (props) => {
         storeResume,
         userMadeChanges,
         setUserMadeChanges,
+        resetPopups,
       }}
     >
       {props.children}

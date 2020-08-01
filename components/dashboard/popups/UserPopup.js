@@ -15,8 +15,9 @@ export default () => {
     setWarning,
     setChangingInfo,
     userMadeChanges,
-		setUserMadeChanges,
-		storeResume
+    setUserMadeChanges,
+    storeResume,
+    resetPopups,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [jobTitle, setJobTitle] = useState("");
@@ -57,11 +58,14 @@ export default () => {
     );
   };
   const handleCancel = () => {
-    if (userMadeChanges)
+    if (userMadeChanges) {
       setWarning({
         text:
           "Are you sure you want to cancel editing? All unsaved changes will be lost.",
       });
+    } else {
+      resetPopups();
+    }
   };
   useEffect(() => {
     if (!filled) {

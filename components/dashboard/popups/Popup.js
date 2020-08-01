@@ -22,6 +22,7 @@ export default () => {
     storeItem,
     userMadeChanges,
     setUserMadeChanges,
+    resetPopups,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [title, setTitle] = useState("");
@@ -81,14 +82,14 @@ export default () => {
       text: "Are you sure you want to delete this item?",
       fn: async () => {
         await deleteItem(editingItem._id).then(
-					async (data) => {
-						storeItem(data.deleteItem, true);
-						setEditingItem(-1);
-					},
-					(err) => {
-						console.log("deleteItem err:", err);
-					}
-				);
+          async (data) => {
+            storeItem(data.deleteItem, true);
+            setEditingItem(-1);
+          },
+          (err) => {
+            console.log("deleteItem err:", err);
+          }
+        );
       },
     });
   };
@@ -147,11 +148,14 @@ export default () => {
     );
   };
   const handleCancel = () => {
-    if (userMadeChanges)
+    if (userMadeChanges) {
       setWarning({
         text:
           "Are you sure you want to cancel editing? All unsaved changes will be lost.",
       });
+    } else {
+      resetPopups();
+    }
   };
   useEffect(() => {
     if (editingItem.title && !filled) {

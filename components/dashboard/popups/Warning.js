@@ -10,12 +10,12 @@ export default () => {
     setChangingInfo,
     warning,
     setWarning,
+    setUserMadeChanges,
+    resetPopups,
   } = useContext(UserContext);
   const handleYes = async () => {
     if (warning.fn) await warning.fn();
-    setChangingInfo(false);
-    setEditingItem(-1);
-    setWarning(false);
+    resetPopups();
   };
   const handleCancel = () => {
     setWarning(false);

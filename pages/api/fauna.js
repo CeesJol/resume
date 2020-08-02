@@ -235,6 +235,12 @@ export const deleteItem = async (id) => {
   return executeQuery(`mutation DeleteItem {
 		deleteItem(id: "${id}") {
 			_id
+			title
+			location
+			from
+			to
+			description
+			priority
 			category {
 				_id
 			}

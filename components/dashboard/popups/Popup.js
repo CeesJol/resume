@@ -4,6 +4,7 @@ import {
   updateItem,
   createItem,
   readUser,
+  updateItemPriority,
 } from "../../../pages/api/fauna";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
@@ -84,8 +85,17 @@ export default () => {
       fn: async () => {
         await deleteItem(editingItem._id).then(
           async (data) => {
-            storeItem(data.deleteItem, { del: true });
-            resetPopups();
+						storeItem(data.deleteItem, { del: true });
+						resetPopups();
+            // Propagate priority updates
+            const category = getCategory(data.deleteItem.category._id);
+            for (var item of category.items.data) {
+              if (item.priority > data.deleteItem.priority) {
+								const newPriority = item.priority - 1;
+								updateItemPriority(item._id, newPriority);
+                storeItem({ ...item, priority: newPriority }, {});
+              }
+            }
           },
           (err) => {
             console.log("deleteItem err:", err);

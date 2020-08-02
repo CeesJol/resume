@@ -1,15 +1,28 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 
 const NewItem = ({ item }) => {
-  const { setEditingItem, editingResume, handleMove } = useContext(UserContext);
+  const { setEditingItem, editingResume, moveItem, forceRender } = useContext(
+    UserContext
+  );
   const handleClick = (e, item) => {
     e.preventDefault();
     setEditingItem(item);
-  };
+	};
+	const handleMove = (item, amount) => {
+		moveItem(item, amount);
+		forceRender();
+	}
   return (
     <>
-      <a><i onClick={() => handleMove(-1)} style={{cursor: "pointer"}}>Move up</i></a>
+      <a>
+        <i
+          onClick={() => handleMove(item, -1)}
+          style={{ cursor: "pointer" }}
+        >
+          Move up
+        </i>
+      </a>
       <a onClick={(e) => handleClick(e, item)} key={item._id}>
         <div className="item">
           <h3>

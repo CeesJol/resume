@@ -49,8 +49,7 @@ export default () => {
     }).then(
       (data) => {
         storeResume(data.updateResume);
-        // storeUser(res.findUserByID);
-        setChangingInfo(false);
+        resetPopups();
       },
       (err) => {
         console.log("updateResume err:", err);

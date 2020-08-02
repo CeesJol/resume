@@ -22,7 +22,8 @@ export default () => {
     storeItem,
     userMadeChanges,
     setUserMadeChanges,
-    resetPopups,
+		resetPopups,
+		getCategory,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [title, setTitle] = useState("");
@@ -84,7 +85,7 @@ export default () => {
         await deleteItem(editingItem._id).then(
           async (data) => {
             storeItem(data.deleteItem, true);
-            setEditingItem(-1);
+            resetPopups();
           },
           (err) => {
             console.log("deleteItem err:", err);
@@ -113,7 +114,7 @@ export default () => {
     }).then(
       async (data) => {
         storeItem(data.updateItem);
-        setEditingItem(-1);
+        resetPopups();
       },
       (err) => {
         console.log("updateItem err:", err);
@@ -136,11 +137,12 @@ export default () => {
       location,
       from,
       to,
-      description,
+			description,
+			priority: getCategory(categoryId).items.data.length + 1
     }).then(
       async (data) => {
         storeItem(data.createItem);
-        setEditingItem(-1);
+        resetPopups();
       },
       (err) => {
         console.log("createItem err:", err);

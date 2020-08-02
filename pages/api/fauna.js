@@ -112,6 +112,7 @@ export const createItem = async (categoryId, data) => {
 			from: "${data.from}"
 			to: "${data.to}"
 			description: """${data.description}"""
+			priority: ${data.priority}
 			category: { connect: "${categoryId}" }
 		}) {
 			_id
@@ -120,6 +121,7 @@ export const createItem = async (categoryId, data) => {
 			from
 			to
 			description
+			priority
 			category {
 				_id
 			}
@@ -233,6 +235,9 @@ export const deleteItem = async (id) => {
   return executeQuery(`mutation DeleteItem {
 		deleteItem(id: "${id}") {
 			_id
+			category {
+				_id
+			}
 		}
 	}`);
 };

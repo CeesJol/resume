@@ -5,16 +5,21 @@ import { identity } from "../pages/api/auth";
 import { readUser, updateItemPriority } from "../pages/api/fauna";
 
 const UserContextProvider = (props) => {
+	const [dummy, setDummy] = useState(false);
   const [user, setUser] = useState(null);
   const [auth, setAuth] = useState(false);
   const [nav, setNav] = useState(0);
-  const [editingItem, setEditingItem] = useState(-1);
+	const [editingItem, setEditingItem] = useState(-1);
+	const [editingCategory, setEditingCategory] = useState(-1);
   const [editingResume, setEditingResume] = useState(-1);
   const [data, setData] = useState(false);
   const [error, setError] = useState(false);
   const [warning, setWarning] = useState(false);
   const [changingInfo, setChangingInfo] = useState(false);
-  const [userMadeChanges, setUserMadeChanges] = useState(false);
+	const [userMadeChanges, setUserMadeChanges] = useState(false);
+	const forceRender = () => {
+		setDummy(!dummy);
+	}
   const storeUser = (data) => {
     // Set state
     setUser((prevUser) => ({ ...prevUser, ...data }));
@@ -27,9 +32,9 @@ const UserContextProvider = (props) => {
     user.resumes.data.some((resume, r) => {
       if (resume._id === editingResume._id) {
         resume.categories.data.some((category, c) => {
-          if (category._id === editingItem.category._id) {
+          if (category._id === itemData.category._id) {
             category.items.data.some((item, i) => {
-              if (item._id === editingItem._id) {
+              if (item._id === itemData._id) {
                 if (del) {
                   // Delete item
                   user.resumes.data[r].categories.data[
@@ -62,7 +67,10 @@ const UserContextProvider = (props) => {
     });
 
     setUser(() => user);
-  };
+	};
+	const getCategory = (categoryId) => {
+		return editingResume.categories.data.find(category => category._id === categoryId)
+	}
   const storeResume = (resumeData) => {
     var user = getUser();
 
@@ -89,17 +97,28 @@ const UserContextProvider = (props) => {
   const userExists = () => {
     return user != null;
   };
-  const handleMutation = () => {
-    // readUser();
-    setEditingItem(-1);
-  };
-  const handleMove = (amount) => {
-    // item.category.
-    // updateItemPriority(item._id, item.priority - amount);
+  const moveItem = (item, amount) => {
+    // Find item with priority p - 1
+		const p = item.priority + amount;
+		console.log('asdf', getCategory(item.category._id).items.data);
+		var otherItem = getCategory(item.category._id).items.data.find(item => item.priority === p);
+		
+		// Update priority
+		otherItem.priority -= amount;
+		item.priority += amount;
+		storeItem(otherItem);
+		storeItem(item);
+
+		resetPopups();
+
+		// Send to fauna
+		updateItemPriority(item._id, item.priority);
+		updateItemPriority(otherItem._id, otherItem.priority);
   };
   const resetPopups = () => {
     setChangingInfo(false);
-    setEditingItem(-1);
+		setEditingItem(-1);
+		setEditingCategory(-1);
     setWarning(false);
     setUserMadeChanges(false);
   };
@@ -144,6 +163,7 @@ const UserContextProvider = (props) => {
   return (
     <UserContext.Provider
       value={{
+				forceRender,
         storeUser,
         getUser,
         clearUser,
@@ -153,7 +173,9 @@ const UserContextProvider = (props) => {
         nav,
         setNav,
         editingItem,
-        setEditingItem,
+				setEditingItem,
+				editingCategory,
+        setEditingCategory,
         editingResume,
         setEditingResume,
         data,
@@ -164,13 +186,13 @@ const UserContextProvider = (props) => {
         setWarning,
         changingInfo,
         setChangingInfo,
-        handleMutation,
-        handleMove,
+        moveItem,
         storeItem,
         storeResume,
         userMadeChanges,
         setUserMadeChanges,
-        resetPopups,
+				resetPopups,
+				getCategory,
       }}
     >
       {props.children}

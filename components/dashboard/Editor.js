@@ -1,6 +1,6 @@
 import { UserContext } from "../../contexts/userContext";
 import React, { useState, useEffect, useContext } from "react";
-import NewItem from "./NewItem";
+import Category from "./Category";
 import Popup from "./popups/Popup";
 import UserPopup from "./popups/UserPopup";
 import Warning from "./popups/Warning";
@@ -17,29 +17,13 @@ export default () => {
     changingInfo,
     setChangingInfo,
   } = useContext(UserContext);
-  const handleNewItem = (category) => {
-    setEditingItem({
-      category,
-    });
-  };
   const handleChangeInfo = () => {
     setChangingInfo(true);
   };
   const templateCSS = editingResume ? editingResume.template.style : "";
   const drawCategory = (category) => {
     return (
-      <div key={category._id}>
-        <h2>{category.name}</h2>
-        <a onClick={() => handleNewItem(category)}>
-          <i>Add item</i>
-        </a>
-        {category.items.data.map((item) => (
-          <div className="resume__item" key={item._id}>
-            <NewItem item={item} />
-            <br />
-          </div>
-        ))}
-      </div>
+      <Category key={category._id} category={category} />
     );
   };
   function drawItems() {

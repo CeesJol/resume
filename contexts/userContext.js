@@ -5,26 +5,26 @@ import { identity } from "../pages/api/auth";
 import { readUser, updateItemPriority } from "../pages/api/fauna";
 
 const UserContextProvider = (props) => {
-	const [dummy, setDummy] = useState(false);
+  const [dummy, setDummy] = useState(false);
   const [user, setUser] = useState(null);
   const [auth, setAuth] = useState(false);
   const [nav, setNav] = useState(0);
-	const [editingItem, setEditingItem] = useState(-1);
-	const [editingCategory, setEditingCategory] = useState(-1);
+  const [editingItem, setEditingItem] = useState(-1);
+  const [editingCategory, setEditingCategory] = useState(-1);
   const [editingResume, setEditingResume] = useState(-1);
   const [data, setData] = useState(false);
   const [error, setError] = useState(false);
   const [warning, setWarning] = useState(false);
   const [changingInfo, setChangingInfo] = useState(false);
-	const [userMadeChanges, setUserMadeChanges] = useState(false);
-	const forceRender = () => {
-		setDummy(!dummy);
-	}
+  const [userMadeChanges, setUserMadeChanges] = useState(false);
+  const forceRender = () => {
+    setDummy(!dummy);
+  };
   const storeUser = (data) => {
     // Set state
     setUser((prevUser) => ({ ...prevUser, ...data }));
   };
-  const storeItem = (itemData, del) => {
+  const storeItem = (itemData, { del, add }) => {
     var user = getUser();
 
     // jr developer: the code isnt that bad
@@ -33,6 +33,12 @@ const UserContextProvider = (props) => {
       if (resume._id === editingResume._id) {
         resume.categories.data.some((category, c) => {
           if (category._id === itemData.category._id) {
+            if (add) {
+              // Add item
+              user.resumes.data[r].categories.data[c].items.data.push(itemData);
+              // setEditingItem(itemData);
+              return true; // break the loop
+            }
             category.items.data.some((item, i) => {
               if (item._id === itemData._id) {
                 if (del) {
@@ -48,15 +54,9 @@ const UserContextProvider = (props) => {
                   user.resumes.data[r].categories.data[c].items.data[
                     i
                   ] = newItem;
-                  setEditingItem(newItem);
+                  // setEditingItem(newItem);
                 }
                 return true; // break the loop
-              } else if (i === category.items.data.length - 1) {
-                // Add item
-                user.resumes.data[r].categories.data[c].items.data.push(
-                  itemData
-                );
-                setEditingItem(itemData);
               }
             });
             return true; // break the loop
@@ -67,10 +67,12 @@ const UserContextProvider = (props) => {
     });
 
     setUser(() => user);
-	};
-	const getCategory = (categoryId) => {
-		return editingResume.categories.data.find(category => category._id === categoryId)
-	}
+  };
+  const getCategory = (categoryId) => {
+    return editingResume.categories.data.find(
+      (category) => category._id === categoryId
+    );
+  };
   const storeResume = (resumeData) => {
     var user = getUser();
 
@@ -99,26 +101,28 @@ const UserContextProvider = (props) => {
   };
   const moveItem = (item, amount) => {
     // Find item with priority p - 1
-		const p = item.priority + amount;
-		console.log('asdf', getCategory(item.category._id).items.data);
-		var otherItem = getCategory(item.category._id).items.data.find(item => item.priority === p);
-		
-		// Update priority
-		otherItem.priority -= amount;
-		item.priority += amount;
-		storeItem(otherItem);
-		storeItem(item);
+    const p = item.priority + amount;
+    console.log("asdf", getCategory(item.category._id).items.data);
+    var otherItem = getCategory(item.category._id).items.data.find(
+      (item) => item.priority === p
+    );
 
-		resetPopups();
+    // Update priority
+    otherItem.priority -= amount;
+    item.priority += amount;
+    storeItem(otherItem, {});
+    storeItem(item, {});
 
-		// Send to fauna
-		updateItemPriority(item._id, item.priority);
-		updateItemPriority(otherItem._id, otherItem.priority);
+    resetPopups();
+
+    // Send to fauna
+    updateItemPriority(item._id, item.priority);
+    updateItemPriority(otherItem._id, otherItem.priority);
   };
   const resetPopups = () => {
     setChangingInfo(false);
-		setEditingItem(-1);
-		setEditingCategory(-1);
+    setEditingItem(-1);
+    setEditingCategory(-1);
     setWarning(false);
     setUserMadeChanges(false);
   };
@@ -163,7 +167,7 @@ const UserContextProvider = (props) => {
   return (
     <UserContext.Provider
       value={{
-				forceRender,
+        forceRender,
         storeUser,
         getUser,
         clearUser,
@@ -173,8 +177,8 @@ const UserContextProvider = (props) => {
         nav,
         setNav,
         editingItem,
-				setEditingItem,
-				editingCategory,
+        setEditingItem,
+        editingCategory,
         setEditingCategory,
         editingResume,
         setEditingResume,
@@ -191,8 +195,8 @@ const UserContextProvider = (props) => {
         storeResume,
         userMadeChanges,
         setUserMadeChanges,
-				resetPopups,
-				getCategory,
+        resetPopups,
+        getCategory,
       }}
     >
       {props.children}

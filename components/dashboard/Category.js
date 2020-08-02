@@ -3,7 +3,7 @@ import { UserContext } from "../../contexts/userContext";
 import NewItem from "./NewItem";
 
 const Category = ({ category, index }) => {
-  const { setEditingCategory, setEditingItem } = useContext(UserContext);
+  const { setEditingCategory, setEditingItem, moveCategory, forceRender } = useContext(UserContext);
   const handleClick = (e, category) => {
     e.preventDefault();
 		setEditingCategory(category);
@@ -18,9 +18,9 @@ const Category = ({ category, index }) => {
 			return (item1.priority < item2.priority) ? -1 : 1
 		})
 	}
-	const handleMove = (item, amount) => {
-    // moveItem(item, amount);
-    // forceRender();
+	const handleMove = (category, amount) => {
+    moveCategory(category, amount);
+    forceRender();
   };
   return (
 		<>

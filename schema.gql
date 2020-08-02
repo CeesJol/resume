@@ -17,7 +17,7 @@ type Resume {
 
 type Category {
 	resume: Resume
-	name: String!
+	name: String
 	priority: Int
 	items: [Item] @relation
 }

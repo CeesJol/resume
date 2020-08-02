@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect } from "react";
 export const UserContext = createContext();
 
 import { identity } from "../pages/api/auth";
-import { readUser, updateItem } from "../pages/api/fauna";
+import { readUser, updateItem, updateCategory } from "../pages/api/fauna";
 
 const UserContextProvider = (props) => {
   const [dummy, setDummy] = useState(false);
@@ -16,7 +16,8 @@ const UserContextProvider = (props) => {
   const [error, setError] = useState(false);
   const [warning, setWarning] = useState(false);
   const [changingInfo, setChangingInfo] = useState(false);
-  const [userMadeChanges, setUserMadeChanges] = useState(false);
+	const [userMadeChanges, setUserMadeChanges] = useState(false);
+	const [moving, setMoving] = useState(false);
   const forceRender = () => {
     setDummy(!dummy);
   };
@@ -99,10 +100,13 @@ const UserContextProvider = (props) => {
   const userExists = () => {
     return user != null;
   };
-  const moveItem = (item, amount) => {
-    // Find item with priority p - 1
+  const moveItem = async (item, amount) => {
+		if (moving) return false;
+		setMoving(true);
+
+    // Find item with priority p
     const p = item.priority + amount;
-    console.log("asdf", getCategory(item.category._id).items.data);
+    console.log("moveItem category", getCategory(item.category._id).items.data);
     var otherItem = getCategory(item.category._id).items.data.find(
       (item) => item.priority === p
     );
@@ -113,12 +117,43 @@ const UserContextProvider = (props) => {
     storeItem(otherItem, {});
     storeItem(item, {});
 
-    resetPopups();
+		resetPopups();
 
     // Send to fauna
-    updateItem(item._id, { priority: item.priority });
-    updateItem(otherItem._id, { priority: otherItem.priority });
+    await updateItem(item._id, { priority: item.priority });
+		await updateItem(otherItem._id, { priority: otherItem.priority });
+		
+		setMoving(false);
   };
+  const moveCategory = async (category, amount) => {
+		if (moving) return false;
+		setMoving(true);
+
+    // Find category with priority p
+    const p = category.priority + amount;
+    var otherCategory = editingResume.categories.data.find(
+      (cat) => cat.priority === p
+    );
+
+    // Update priority
+    var user = getUser();
+    user.resumes.data
+      .find((resume) => resume._id === editingResume._id)
+      .categories.data.find(
+        (cat) => cat._id === otherCategory._id
+      ).priority += 1;
+    user.resumes.data
+      .find((resume) => resume._id === editingResume._id)
+      .categories.data.find((cat) => cat._id === category._id).priority -= 1;
+
+		resetPopups();
+
+    // Send to fauna
+    await updateCategory(category._id, { priority: category.priority });
+    await updateCategory(otherCategory._id, { priority: otherCategory.priority });
+	
+		setMoving(false);
+	};
   const resetPopups = () => {
     setChangingInfo(false);
     setEditingItem(-1);
@@ -127,7 +162,6 @@ const UserContextProvider = (props) => {
     setUserMadeChanges(false);
   };
   useEffect(() => {
-    // console.log('new user info', user);
     if (user == null) {
       const localUser = JSON.parse(localStorage.getItem("user"));
       if (localUser != null && localUser.secret != null) {
@@ -191,6 +225,7 @@ const UserContextProvider = (props) => {
         changingInfo,
         setChangingInfo,
         moveItem,
+        moveCategory,
         storeItem,
         storeResume,
         userMadeChanges,

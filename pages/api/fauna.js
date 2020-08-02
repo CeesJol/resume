@@ -207,6 +207,22 @@ export const updateItem = async (itemId, data) => {
 };
 
 /** |----------------------------
+ *  | UPDATE CATEGORY
+ *  |----------------------------
+ */
+export const updateCategory = async (categoryId, data) => {
+  console.log("updateCategory request");
+  return executeQuery(`mutation UpdateCategory {
+		updateCategory(id: "${categoryId}", data: {
+			${stringifyObject(data)}
+		}) {
+			name
+			priority
+		}
+	}`);
+};
+
+/** |----------------------------
  *  | UPDATE ITEM'S PRIORITY
  *  |----------------------------
  */

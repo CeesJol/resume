@@ -1,5 +1,5 @@
 @mixin content-container {
-	max-width: 80rem;
+	max-width: $max-width;
 	margin: 0 auto;
 	padding: 0 $l-size;
 	@media (max-width: $desktop-breakpoint) {
@@ -9,14 +9,14 @@
 }
 
 @mixin dashboard-content-container {
-	max-width: 80rem;
+	max-width: $max-width;
 	margin: 0 auto;
 	padding: 0 $m-size;
 	height: auto;
 }
 
 @mixin user-content-container {
-	max-width: 80rem;
+	max-width: $max-width;
 	margin: 0 auto;
 	height: auto;
 }

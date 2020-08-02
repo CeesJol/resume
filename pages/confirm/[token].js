@@ -11,7 +11,7 @@ export default function Token() {
     if (token) {
       confirm(token).then(
         (data) => {
-					console.log("data", data);
+					console.log("data [token]", data);
 					setStatus("Email confirmed successfully! You can close this tab now.");
         },
         (err) => {

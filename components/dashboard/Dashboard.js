@@ -1,13 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import Router from "next/router";
 import DashboardHeader from "./DashboardHeader";
-import Add from "./Add";
-import Edit from "./Edit";
-import Item from "./Item";
-import Items from "./Items";
-import TopBox from "./TopBox";
 import Resumes from "./Resumes";
 import Editor from "./Editor";
+import Layout from "./Layout";
 import Settings from "./Settings";
 import Nav from "./Nav";
 import { UserContext } from "../../contexts/userContext";
@@ -39,19 +35,7 @@ export default function Dashboard(props) {
                         <Editor />
                       </>
                     ))}
-                  {nav == 1 &&
-                    (editingItem !== -1 ? (
-                      <>
-                        <Edit />
-                        <Item />
-                      </>
-                    ) : (
-                      <>
-                        <TopBox />
-                        <Add />
-                        <Items />
-                      </>
-                    ))}
+									{nav == 1 && <Layout />}
                   {nav == 2 && <Settings />}
                 </div>
               </div>

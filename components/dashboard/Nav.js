@@ -23,7 +23,7 @@ export default function Nav(props) {
           }
           onClick={() => setNav(1)}
         >
-          Items
+          Layout
         </div>
         <div
           className={

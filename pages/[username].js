@@ -24,7 +24,7 @@ export default function User() {
     // }
   });
 
-  function drawItems() {
+  const drawItems = () => {
     console.log("data [username]", data);
     if (!data) return <p>Loading...</p>;
     if (!data.userByUsername) return <p>404 - user not found</p>;

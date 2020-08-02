@@ -26,7 +26,7 @@ export default () => {
       <Category key={category._id} category={category} />
     );
   };
-  function drawItems() {
+  const drawItems = () => {
     const categories = editingResume.categories.data.sort((cat1, cat2) =>
       cat1.priority < cat2.priority ? 1 : -1
     );

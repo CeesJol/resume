@@ -4,12 +4,12 @@ import { UserContext } from "../../contexts/userContext";
 
 export default (props) => {
   const { getUser, setEditingItem, setEditingResume } = useContext(UserContext);
-  function handleClick(e, resume) {
+  const handleClick = (e, resume) => {
     e.preventDefault();
     console.log("resume", resume);
     setEditingResume(resume);
   }
-  function drawItems() {
+  const drawItems = () => {
     const data = getUser();
     // TODO update the few lines below
     if (!data || !data.resumes) return <p>Loading...</p>;

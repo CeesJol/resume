@@ -4,7 +4,6 @@ import {
   updateItem,
   createItem,
   readUser,
-  updateItemPriority,
 } from "../../../pages/api/fauna";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
@@ -24,7 +23,8 @@ export default () => {
     userMadeChanges,
     setUserMadeChanges,
     resetPopups,
-    getCategory,
+		getCategory,
+		forceRender,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [title, setTitle] = useState("");
@@ -85,15 +85,16 @@ export default () => {
       fn: async () => {
         await deleteItem(editingItem._id).then(
           async (data) => {
-						storeItem(data.deleteItem, { del: true });
-						resetPopups();
+            storeItem(data.deleteItem, { del: true });
+            resetPopups();
             // Propagate priority updates
             const category = getCategory(data.deleteItem.category._id);
             for (var item of category.items.data) {
               if (item.priority > data.deleteItem.priority) {
-								const newPriority = item.priority - 1;
-								updateItemPriority(item._id, newPriority);
+                const newPriority = item.priority - 1;
+                updateItem(item._id, { priority: newPriority });
                 storeItem({ ...item, priority: newPriority }, {});
+                forceRender();
               }
             }
           },
@@ -114,8 +115,7 @@ export default () => {
     const from = month1 + "/" + year1;
     const to = isGoing ? "Present" : month2 + "/" + year2;
     const categoryId = editingItem.category._id;
-    await updateItem(categoryId, {
-      id: editingItem._id,
+    await updateItem(editingItem._id, {
       title,
       location,
       from,

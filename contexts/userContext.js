@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect } from "react";
 export const UserContext = createContext();
 
 import { identity } from "../pages/api/auth";
-import { readUser, updateItemPriority } from "../pages/api/fauna";
+import { readUser, updateItem } from "../pages/api/fauna";
 
 const UserContextProvider = (props) => {
   const [dummy, setDummy] = useState(false);
@@ -116,8 +116,8 @@ const UserContextProvider = (props) => {
     resetPopups();
 
     // Send to fauna
-    updateItemPriority(item._id, item.priority);
-    updateItemPriority(otherItem._id, otherItem.priority);
+    updateItem(item._id, { priority: item.priority });
+    updateItem(otherItem._id, { priority: otherItem.priority });
   };
   const resetPopups = () => {
     setChangingInfo(false);

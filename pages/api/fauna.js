@@ -187,16 +187,11 @@ export const updateResume = async (resumeId, data) => {
  *  | UPDATE ITEM
  *  |----------------------------
  */
-export const updateItem = async (categoryId, data) => {
+export const updateItem = async (itemId, data) => {
   console.log("updateItem request");
   return executeQuery(`mutation UpdateItem {
-		updateItem(id: "${data.id}", data: {
-			title: "${data.title}"
-			location: "${data.location}"
-			from: "${data.from}"
-			to: "${data.to}"
-			description: """${data.description}"""
-			category: { connect: "${categoryId}" }
+		updateItem(id: "${itemId}", data: {
+			${stringifyObject(data)}
 		}) {
 			_id
 			title
@@ -215,16 +210,16 @@ export const updateItem = async (categoryId, data) => {
  *  | UPDATE ITEM'S PRIORITY
  *  |----------------------------
  */
-export const updateItemPriority = async (itemId, priority) => {
-  console.log("updateItem request");
-  return executeQuery(`mutation UpdateItem {
-		updateItem(id: "${itemId}", data: {
-			priority: ${priority}
-		}) {
-			priority
-		}
-	}`);
-};
+// export const updateItemPriority = async (itemId, priority) => {
+//   console.log("updateItem request");
+//   return executeQuery(`mutation UpdateItem {
+// 		updateItem(id: "${itemId}", data: {
+// 			priority: ${priority}
+// 		}) {
+// 			priority
+// 		}
+// 	}`);
+// };
 
 /** |----------------------------
  *  | DELETE ITEM

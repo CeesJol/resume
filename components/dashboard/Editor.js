@@ -20,16 +20,19 @@ export default () => {
   const handleChangeInfo = () => {
     setChangingInfo(true);
   };
-  const templateCSS = editingResume ? editingResume.template.style : "";
-  const drawCategory = (category) => {
+	const templateCSS = editingResume ? editingResume.template.style : "";
+	const sortByPriority = (list) => {
+		return list.sort((item1, item2) => {
+			return (item1.priority < item2.priority) ? -1 : 1
+		})
+	}
+  const drawCategory = (category, index) => {
     return (
-      <Category key={category._id} category={category} />
+      <Category key={category._id} category={category} index={index} />
     );
   };
   const drawItems = () => {
-    const categories = editingResume.categories.data.sort((cat1, cat2) =>
-      cat1.priority < cat2.priority ? 1 : -1
-    );
+    const categories = sortByPriority(editingResume.categories.data);
     if (editingResume.template.sidebar) {
       const mainCategories = categories.filter(
         (category) => category.priority < 1000
@@ -41,17 +44,17 @@ export default () => {
       return (
         <>
           <div className="resume__container">
-            {mainCategories.map((category) => drawCategory(category))}
+            {mainCategories.map((category, index) => drawCategory(category, index))}
           </div>
           <div className="resume__container">
-            {sidebarCategories.map((category) => drawCategory(category))}
+            {sidebarCategories.map((category, index) => drawCategory(category, index))}
           </div>
         </>
       );
     } else {
       return (
         <div className="resume__container">
-          {categories.map((category) => drawCategory(category))}
+          {categories.map((category, index) => drawCategory(category, index))}
         </div>
       );
     }

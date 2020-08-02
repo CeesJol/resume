@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { UserContext } from "../../contexts/userContext";
 import NewItem from "./NewItem";
 
-const Category = ({ category }) => {
+const Category = ({ category, index }) => {
   const { setEditingCategory, setEditingItem } = useContext(UserContext);
   const handleClick = (e, category) => {
     e.preventDefault();
@@ -18,19 +18,32 @@ const Category = ({ category }) => {
 			return (item1.priority < item2.priority) ? -1 : 1
 		})
 	}
+	const handleMove = (item, amount) => {
+    // moveItem(item, amount);
+    // forceRender();
+  };
   return (
+		<>
+		{index > 0 && (
+        <a>
+          <i onClick={() => handleMove(category, -1)} style={{ cursor: "pointer" }}>
+            Move up
+          </i>
+        </a>
+      )}
     <div onClick={(e) => handleClick(e, category)}>
       <h2>{category.name}</h2>
       <a onClick={() => handleNewItem(category)}>
         <i>Add item</i>
       </a>
-      {sortByPriority(category.items.data).map((item) => (
+      {sortByPriority(category.items.data).map((item, index) => (
         <div className="resume__item" key={item._id}>
-          <NewItem item={item} />
+          <NewItem item={item} index={index} />
           <br />
         </div>
       ))}
     </div>
+		</>
   );
 };
 

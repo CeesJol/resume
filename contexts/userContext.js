@@ -16,8 +16,8 @@ const UserContextProvider = (props) => {
   const [error, setError] = useState(false);
   const [warning, setWarning] = useState(false);
   const [changingInfo, setChangingInfo] = useState(false);
-	const [userMadeChanges, setUserMadeChanges] = useState(false);
-	const [moving, setMoving] = useState(false);
+  const [userMadeChanges, setUserMadeChanges] = useState(false);
+  const [moving, setMoving] = useState(false);
   const forceRender = () => {
     setDummy(!dummy);
   };
@@ -51,7 +51,7 @@ const UserContextProvider = (props) => {
                   ].items.data.filter((x) => x._id !== itemData._id);
                 } else {
                   // Update item
-                  var newItem = { ...item, ...itemData };
+                  const newItem = { ...item, ...itemData };
                   user.resumes.data[r].categories.data[c].items.data[
                     i
                   ] = newItem;
@@ -79,9 +79,22 @@ const UserContextProvider = (props) => {
 
     user.resumes.data.forEach((resume, r) => {
       if (resume._id === editingResume._id) {
-        var newResume = { ...resume, ...resumeData };
+        const newResume = { ...resume, ...resumeData };
         user.resumes.data[r] = newResume;
         setEditingResume(newResume);
+      }
+    });
+
+    setUser(() => user);
+  };
+  const storeTemplate = (templateData) => {
+    var user = getUser();
+
+    user.resumes.data.forEach((resume, r) => {
+      if (resume._id === editingResume._id) {
+        const newTemplate = { ...resume.template, ...templateData };
+        user.resumes.data[r].template = newTemplate;
+        setEditingResume(user.resumes.data[r]);
       }
     });
 
@@ -101,8 +114,8 @@ const UserContextProvider = (props) => {
     return user != null;
   };
   const moveItem = async (item, amount) => {
-		if (moving) return false;
-		setMoving(true);
+    if (moving) return false;
+    setMoving(true);
 
     // Find item with priority p
     const p = item.priority + amount;
@@ -117,17 +130,17 @@ const UserContextProvider = (props) => {
     storeItem(otherItem, {});
     storeItem(item, {});
 
-		resetPopups();
+    resetPopups();
 
     // Send to fauna
     await updateItem(item._id, { priority: item.priority });
-		await updateItem(otherItem._id, { priority: otherItem.priority });
-		
-		setMoving(false);
+    await updateItem(otherItem._id, { priority: otherItem.priority });
+
+    setMoving(false);
   };
   const moveCategory = async (category, amount) => {
-		if (moving) return false;
-		setMoving(true);
+    if (moving) return false;
+    setMoving(true);
 
     // Find category with priority p
     const p = category.priority + amount;
@@ -146,14 +159,16 @@ const UserContextProvider = (props) => {
       .find((resume) => resume._id === editingResume._id)
       .categories.data.find((cat) => cat._id === category._id).priority -= 1;
 
-		resetPopups();
+    resetPopups();
 
     // Send to fauna
     await updateCategory(category._id, { priority: category.priority });
-    await updateCategory(otherCategory._id, { priority: otherCategory.priority });
-	
-		setMoving(false);
-	};
+    await updateCategory(otherCategory._id, {
+      priority: otherCategory.priority,
+    });
+
+    setMoving(false);
+  };
   const resetPopups = () => {
     setChangingInfo(false);
     setEditingItem(-1);
@@ -228,6 +243,7 @@ const UserContextProvider = (props) => {
         moveCategory,
         storeItem,
         storeResume,
+        storeTemplate,
         userMadeChanges,
         setUserMadeChanges,
         resetPopups,

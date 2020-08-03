@@ -11,6 +11,9 @@
 		
 		&--dashboard {
 			@include dashboard-content-container;
+
+			padding-left: 3.5rem;
+			padding-right: 3.5rem;
 		}
 
     display: flex;

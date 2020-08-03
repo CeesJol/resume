@@ -23,15 +23,13 @@ const NewItem = ({ item, index }) => {
         </a>
       )}
       <a onClick={(e) => handleClick(e, item)} key={item._id}>
-        <div className="item">
-          <h3>
-            <b>{item.title}</b>
-          </h3>
-          <h3>{item.location}</h3>
-          <i>
+        <div>
+          <h3 className="resume__item--title">{item.title}</h3>
+          <h3 className="resume__item--location">{item.location}</h3>
+          <p className="resume__item--date">
             {item.from} - {item.to}
-          </i>
-          <p className="multiline">{item.description}</p>
+          </p>
+          <p className="resume__item--description multiline">{item.description}</p>
         </div>
       </a>
     </>

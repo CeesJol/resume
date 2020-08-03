@@ -45,6 +45,7 @@ export const getUserByEmail = async (email) => {
 					jobTitle
 					bio
 					template {
+						_id
 						name
 						style
 					}
@@ -223,6 +224,23 @@ export const updateCategory = async (categoryId, data) => {
 };
 
 /** |----------------------------
+ *  | UPDATE TEMPLATE
+ *  |----------------------------
+ */
+export const updateTemplate = async (templateId, data) => {
+  console.log("updateTemplate request");
+  return executeQuery(`mutation UpdateTemplate {
+		updateTemplate(id: "${templateId}", data: {
+			${stringifyObject(data)}
+		}) {
+			_id
+			name
+			style
+		}
+	}`);
+};
+
+/** |----------------------------
  *  | UPDATE ITEM'S PRIORITY
  *  |----------------------------
  */
@@ -298,6 +316,7 @@ export const readUser = async (id) => {
 					jobTitle
 					bio
 					template {
+						_id
 						name
 						style
 					}

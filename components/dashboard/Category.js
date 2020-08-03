@@ -44,12 +44,19 @@ const Category = ({ category, index }) => {
         <a onClick={() => handleNewItem(category)}>
           <i>Add item</i>
         </a>
-        {sortByPriority(category.items.data).map((item, index) => (
-          <div key={item._id}>
-            <NewItem item={item} index={index} />
-            <br />
-          </div>
-        ))}
+        {category.items.data.length > 0 ? (
+          sortByPriority(category.items.data).map((item, index) => (
+            <div key={item._id}>
+              <NewItem item={item} index={index} />
+              <br />
+            </div>
+          ))
+        ) : (
+					<>
+						<p>No items yet</p>
+						<br />
+					</>
+        )}
       </div>
     </div>
   );

@@ -100,6 +100,39 @@ const UserContextProvider = (props) => {
 
     setUser(() => user);
   };
+  const storeCategory = (categoryData, { add, del }) => {
+    var user = getUser();
+
+    user.resumes.data.some((resume, r) => {
+      if (resume._id === editingResume._id) {
+        if (add) {
+          // Add category
+          user.resumes.data[r].categories.push(categoryData);
+          // setEditingCategory(categoryData);
+          return true; // break the loop
+        }
+        resume.categories.data.some((category, c) => {
+          if (category._id === categoryData._id) {
+            if (del) {
+              // Delete category
+              user.resumes.data[r].categories.data = user.resumes.data[
+                r
+              ].categories.data.filter((x) => x._id !== categoryData._id);
+            } else {
+              // Update category
+              const newCategory = { ...category, ...categoryData };
+              user.resumes.data[r].categories.data[c] = newCategory;
+              // setEditingCategory(newCategory);
+            }
+            return true; // break the loop
+          }
+        });
+        return true; // break the loop
+      }
+    });
+
+    setUser(() => user);
+  };
   const getUser = () => {
     return user;
   };
@@ -244,6 +277,7 @@ const UserContextProvider = (props) => {
         storeItem,
         storeResume,
         storeTemplate,
+        storeCategory,
         userMadeChanges,
         setUserMadeChanges,
         resetPopups,

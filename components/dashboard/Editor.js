@@ -2,6 +2,7 @@ import { UserContext } from "../../contexts/userContext";
 import React, { useState, useEffect, useContext } from "react";
 import Category from "./Category";
 import Popup from "./popups/Popup";
+import CategoryPopup from "./popups/CategoryPopup";
 import UserPopup from "./popups/UserPopup";
 import Warning from "./popups/Warning";
 
@@ -9,7 +10,8 @@ export default () => {
   const {
     getUser,
     setEditingItem,
-    editingItem,
+		editingItem,
+		editingCategory,
     setEditingResume,
     editingResume,
     warning,
@@ -72,7 +74,7 @@ export default () => {
         <style>{templateCSS}</style>
         <a>
           <div
-            className="resume__container resume__container--header"
+            className="resume__header resume__container"
             onClick={handleChangeInfo}
           >
             <h1 className="resume__header--name">{getUser() && getUser().username}</h1>
@@ -87,6 +89,7 @@ export default () => {
         {drawItems()}
 
         {editingItem !== -1 && <Popup />}
+				{editingCategory !== -1 && editingItem === -1 && <CategoryPopup />}
         {changingInfo && <UserPopup />}
         {warning && <Warning />}
       </div>

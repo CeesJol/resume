@@ -217,6 +217,7 @@ export const updateCategory = async (categoryId, data) => {
 		updateCategory(id: "${categoryId}", data: {
 			${stringifyObject(data)}
 		}) {
+			_id
 			name
 			priority
 		}

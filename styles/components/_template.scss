@@ -31,7 +31,8 @@
 	}
 
   &__item {
-    position: relative;
+		position: relative;
+		@include hover;
 		
 		&--title {
 			font-weight: bold;

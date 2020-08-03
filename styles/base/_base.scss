@@ -39,13 +39,11 @@ h4 {
 
 a {
   text-decoration: none;
-	// font-weight: 600;
-	transition: 0.3s;
-
-  &:hover, &:hover > * {
-    transition: 0.3s;
-    opacity: 0.75;
-  }
+	transition: $default-transition-duration;
+	
+	&:hover {
+		opacity: $hover-opacity;
+	}
 
   &:visited {
     color: blue;

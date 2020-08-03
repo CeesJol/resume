@@ -22,16 +22,20 @@ const NewItem = ({ item, index }) => {
           </i>
         </a>
       )}
-      <a onClick={(e) => handleClick(e, item)} key={item._id}>
-        <div>
-          <h3 className="resume__item--title">{item.title}</h3>
-          <h3 className="resume__item--location">{item.location}</h3>
-          <p className="resume__item--date">
-            {item.from} - {item.to}
-          </p>
-          <p className="resume__item--description multiline">{item.description}</p>
-        </div>
-      </a>
+      <div
+        className="resume__item"
+        onClick={(e) => handleClick(e, item)}
+        key={item._id}
+      >
+        <h3 className="resume__item--title">{item.title}</h3>
+        <h3 className="resume__item--location">{item.location}</h3>
+        <p className="resume__item--date">
+          {item.from} - {item.to}
+        </p>
+        <p className="resume__item--description multiline">
+          {item.description}
+        </p>
+      </div>
     </>
   );
 };

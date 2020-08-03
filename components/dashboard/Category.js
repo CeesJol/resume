@@ -45,7 +45,7 @@ const Category = ({ category, index }) => {
           <i>Add item</i>
         </a>
         {sortByPriority(category.items.data).map((item, index) => (
-          <div className="resume__item" key={item._id}>
+          <div key={item._id}>
             <NewItem item={item} index={index} />
             <br />
           </div>

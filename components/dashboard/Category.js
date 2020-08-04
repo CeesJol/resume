@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { UserContext } from "../../contexts/userContext";
 import NewItem from "./NewItem";
+import DummyItem from "./DummyItem";
 
 const Category = ({ category, index }) => {
   const {
@@ -53,7 +54,7 @@ const Category = ({ category, index }) => {
           ))
         ) : (
 					<>
-						<p>No items yet</p>
+						<DummyItem category={category} />
 						<br />
 					</>
         )}

@@ -1,6 +1,6 @@
 .popup-container {
 	position: fixed;
-	background-color: rgba(black, 0.3);
+	background-color: rgba(black, 0.4);
 	width: 100vw;
 	height: 100%;
 	top: 0;
@@ -15,11 +15,10 @@
 	border: 1px solid $light-grey-2;
 	border-radius: 3px;
 	padding: 2rem;
-	margin: 2rem 0;
+	margin: 2rem 1.5rem;
 	overflow: auto;
 	width: 100%;
-	max-width: $max-width;
-	margin: 0 auto;
+	max-width: calc(#{$max-width} - 3rem);
 	height: auto;
 
 	&--medium {

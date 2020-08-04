@@ -9,7 +9,8 @@ const NewItem = ({ item, index }) => {
     e.preventDefault();
     setEditingItem(item);
   };
-  const handleMove = (item, amount) => {
+  const handleMove = (e, item, amount) => {
+		e.stopPropagation();
     moveItem(item, amount);
     forceRender();
   };
@@ -17,7 +18,7 @@ const NewItem = ({ item, index }) => {
     <>
       {index > 0 && (
         <a>
-          <i onClick={() => handleMove(item, -1)} style={{ cursor: "pointer" }}>
+          <i onClick={(e) => handleMove(e, item, -1)} style={{ cursor: "pointer" }}>
             Move up
           </i>
         </a>

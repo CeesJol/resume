@@ -221,6 +221,7 @@ const UserContextProvider = (props) => {
     setCreatingResume(-1);
     setWarning(false);
     setUserMadeChanges(false);
+    setSelectedTemplateId(0);
   };
   useEffect(() => {
     if (user == null) {

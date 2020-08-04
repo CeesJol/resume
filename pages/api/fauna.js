@@ -1,5 +1,6 @@
 import executeQuery from "../../lib/executeQuery";
 import stringifyObject from "../../lib/stringifyObject";
+import { defaultCategories } from "../../lib/constants";
 
 /** |----------------------------
  *  | GET ITEMS BY USERNAME
@@ -173,14 +174,31 @@ export const createCategoryWithItem = async (resumeId, categoryName, data) => {
  */
 export const createResume = async (userId, templateId, data) => {
   console.log("createResume request");
-  return executeQuery(`mutation CreateResume {
+  var query = `mutation CreateResume {
 		createResume(data: {
 			${stringifyObject(data)}
+			categories: {
+				create: [
+					${defaultCategories.map((category, index) => 
+						`{ 
+							name: "${category}" 
+							priority: ${index}
+						}`
+					)}
+				]
+			}
 			template: { connect: "${templateId}" }
 			user: { connect: "${userId}" }
 		}) {
 			_id
 			title
+			categories {
+				data {
+					_id
+					name
+					priority
+				}
+			}
 			user {
 				_id
 			}
@@ -190,7 +208,9 @@ export const createResume = async (userId, templateId, data) => {
 				style
 			}
 		}
-	}`);
+	}`;
+  console.log(query);
+  return executeQuery(query);
 };
 
 /** |----------------------------

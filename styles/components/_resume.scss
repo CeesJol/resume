@@ -1,0 +1,53 @@
+.resume {
+  background-color: white;
+  margin: 2rem 0;
+	overflow: auto;
+	box-shadow: 0px 8px 13px -4px rgba(0,0,0,0.75);
+	
+	p {
+		margin: 0;
+		// line-height: 110%;
+	}
+
+  &__container {
+    padding: 2rem;
+  }
+
+  &__header {
+		@include hover;
+		
+		&--name {
+			font-weight: 400;
+		}
+
+		&--job-title {
+			color: grey;
+			font-weight: 400;
+		}
+	}
+	
+	&__category {
+		&--name {
+			text-transform: uppercase;
+			@include hover;
+		}
+	}
+
+  &__item {
+		position: relative;
+		@include hover;
+		
+		&--title {
+			font-weight: bold;
+		}
+
+		&--location {
+			font-weight: 300;
+		}
+
+		&--date {
+			font-style: italic;
+			color: grey;
+		}
+  }
+}

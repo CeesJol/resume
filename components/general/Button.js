@@ -19,7 +19,7 @@ export default ({ text, altText, fn, color }) => {
           <a>{(disabled && altText) ? altText : text}</a>
         </button>
       ) : (
-        <Link href="/login">
+        <Link href="/signup">
           <button className={className}>
             <a>{text ? text : "Start now"}</a>
           </button>

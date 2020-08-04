@@ -1,53 +1,27 @@
-.resume {
-  background-color: white;
-  margin: 2rem 0;
-	overflow: auto;
-	box-shadow: 0px 8px 13px -4px rgba(0,0,0,0.75);
-	
-	p {
-		margin: 0;
-		// line-height: 110%;
+.template {
+	background-color: $light-grey;
+	border: 1px solid $light-grey-2;
+	width: 30%;
+	border-radius: 5px;
+	overflow: hidden;
+	@include hover;
+	display: inline-block;
+
+	&:not(:nth-child(3n)) {
+		margin-right: 5%;
 	}
 
-  &__container {
-    padding: 2rem;
-  }
-
-  &__header {
-		@include hover;
-		
-		&--name {
-			font-weight: 400;
-		}
-
-		&--job-title {
-			color: grey;
-			font-weight: 400;
-		}
-	}
-	
-	&__category {
-		&--name {
-			text-transform: uppercase;
-			@include hover;
-		}
+	&--title {
+		margin: 1rem;
+		margin-top: .5rem;
 	}
 
-  &__item {
-		position: relative;
-		@include hover;
-		
-		&--title {
-			font-weight: bold;
-		}
+	&--img {
+		width: 100%;
+	}
 
-		&--location {
-			font-weight: 300;
-		}
-
-		&--date {
-			font-style: italic;
-			color: grey;
-		}
-  }
+	&--selected {
+		background-color: $light-green;
+		color: white;
+	}
 }

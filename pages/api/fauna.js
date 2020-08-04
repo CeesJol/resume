@@ -168,6 +168,49 @@ export const createCategoryWithItem = async (resumeId, categoryName, data) => {
 };
 
 /** |----------------------------
+ *  | CREATE RESUME
+ *  |----------------------------
+ */
+export const createResume = async (userId, templateId, data) => {
+  console.log("createResume request");
+  return executeQuery(`mutation CreateResume {
+		createResume(data: {
+			${stringifyObject(data)}
+			template: { connect: "${templateId}" }
+			user: { connect: "${userId}" }
+		}) {
+			_id
+			title
+			user {
+				_id
+			}
+			template {
+				_id
+				name
+				style
+			}
+		}
+	}`);
+};
+
+/** |----------------------------
+ *  | GET TEMPLATES
+ *  |----------------------------
+ */
+export const getTemplates = () => {
+  console.log("getTemplates request");
+  return executeQuery(`query GetTemplates {
+		templates {
+			data {
+				_id
+				name
+				style
+			}
+		}
+	}`);
+};
+
+/** |----------------------------
  *  | UPDATE RESUME
  *  |----------------------------
  */

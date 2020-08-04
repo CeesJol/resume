@@ -12,12 +12,14 @@ const UserContextProvider = (props) => {
   const [editingItem, setEditingItem] = useState(-1);
   const [editingCategory, setEditingCategory] = useState(-1);
   const [editingResume, setEditingResume] = useState(-1);
+  const [creatingResume, setCreatingResume] = useState(-1);
   const [data, setData] = useState(false);
   const [error, setError] = useState(false);
   const [warning, setWarning] = useState(false);
   const [changingInfo, setChangingInfo] = useState(false);
   const [userMadeChanges, setUserMadeChanges] = useState(false);
   const [moving, setMoving] = useState(false);
+  const [selectedTemplateId, setSelectedTemplateId] = useState(0);
   const forceRender = () => {
     setDummy(!dummy);
   };
@@ -39,24 +41,21 @@ const UserContextProvider = (props) => {
               user.resumes.data[r].categories.data[c].items.data.push(itemData);
               // setEditingItem(itemData);
               return true; // break the loop
+            } else if (del) {
+              // Delete item
+              user.resumes.data[r].categories.data[
+                c
+              ].items.data = user.resumes.data[r].categories.data[
+                c
+              ].items.data.filter((x) => x._id !== itemData._id);
+              return true; // break the loop
             }
             category.items.data.some((item, i) => {
               if (item._id === itemData._id) {
-                if (del) {
-                  // Delete item
-                  user.resumes.data[r].categories.data[
-                    c
-                  ].items.data = user.resumes.data[r].categories.data[
-                    c
-                  ].items.data.filter((x) => x._id !== itemData._id);
-                } else {
-                  // Update item
-                  const newItem = { ...item, ...itemData };
-                  user.resumes.data[r].categories.data[c].items.data[
-                    i
-                  ] = newItem;
-                  // setEditingItem(newItem);
-                }
+                // Update item
+                const newItem = { ...item, ...itemData };
+                user.resumes.data[r].categories.data[c].items.data[i] = newItem;
+                // setEditingItem(newItem);
                 return true; // break the loop
               }
             });
@@ -74,8 +73,21 @@ const UserContextProvider = (props) => {
       (category) => category._id === categoryId
     );
   };
-  const storeResume = (resumeData) => {
+  const storeResume = (resumeData, { add, del }) => {
     var user = getUser();
+
+    if (del) {
+      // Delete resume
+      user.resumes.data = user.resumes.data.filter(
+        (x) => x._id !== resumeData._id
+      );
+      return;
+    } else if (add) {
+      // Add resume
+      user.resumes.data.push(resumeData);
+      setEditingResume(resumeData);
+      return;
+    }
 
     user.resumes.data.forEach((resume, r) => {
       if (resume._id === editingResume._id) {
@@ -206,6 +218,7 @@ const UserContextProvider = (props) => {
     setChangingInfo(false);
     setEditingItem(-1);
     setEditingCategory(-1);
+    setCreatingResume(-1);
     setWarning(false);
     setUserMadeChanges(false);
   };
@@ -264,6 +277,8 @@ const UserContextProvider = (props) => {
         setEditingCategory,
         editingResume,
         setEditingResume,
+        creatingResume,
+        setCreatingResume,
         data,
         setData,
         error,
@@ -282,6 +297,8 @@ const UserContextProvider = (props) => {
         setUserMadeChanges,
         resetPopups,
         getCategory,
+        selectedTemplateId,
+        setSelectedTemplateId,
       }}
     >
       {props.children}

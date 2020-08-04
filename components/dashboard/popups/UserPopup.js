@@ -48,7 +48,7 @@ export default () => {
       bio,
     }).then(
       (data) => {
-        storeResume(data.updateResume);
+        storeResume(data.updateResume, {});
         resetPopups();
       },
       (err) => {

@@ -4,7 +4,6 @@ import Category from "./Category";
 import Popup from "./popups/Popup";
 import CategoryPopup from "./popups/CategoryPopup";
 import UserPopup from "./popups/UserPopup";
-import Warning from "./popups/Warning";
 
 export default () => {
   const {
@@ -22,7 +21,7 @@ export default () => {
   const handleChangeInfo = () => {
     setChangingInfo(true);
   };
-	const templateCSS = editingResume ? editingResume.template.style : "";
+	const templateCSS = editingResume.template.style;
 	const sortByPriority = (list) => {
 		return list.sort((item1, item2) => {
 			return (item1.priority < item2.priority) ? -1 : 1
@@ -34,6 +33,10 @@ export default () => {
     );
   };
   const drawItems = () => {
+		if (!editingResume.categories) return (
+			<p>Nothing here yet</p>
+		)
+
     const categories = sortByPriority(editingResume.categories.data);
     if (editingResume.template.sidebar) {
       const mainCategories = categories.filter(
@@ -61,7 +64,9 @@ export default () => {
       );
     }
   }
-
+	const handleGoBack = () => {
+		setEditingResume(-1);
+	}
   return (
     <>
       <div className="dashboard__item">
@@ -69,6 +74,7 @@ export default () => {
           Editing <b>{editingResume.title}</b>
         </i>
         <p>Click on any item to edit it</p>
+				<a onClick={handleGoBack}>Back to your resumes</a>
       </div>
       <div className="resume">
         <style>{templateCSS}</style>
@@ -91,7 +97,6 @@ export default () => {
         {editingItem !== -1 && <Popup />}
 				{editingCategory !== -1 && editingItem === -1 && <CategoryPopup />}
         {changingInfo && <UserPopup />}
-        {warning && <Warning />}
       </div>
     </>
   );

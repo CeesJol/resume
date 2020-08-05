@@ -30,6 +30,7 @@ export default function Login() {
           storeUser(data.userByEmail);
 					Router.push("/dashboard");
         }, (err) => {
+					console.error("login err", err)
 					setStatus(`Login failed: ${err}`);
 				});
       },

@@ -32,7 +32,7 @@ export default () => {
         resetPopups();
       },
       (err) => {
-        console.log("updateTemplate err:", err);
+        console.error("updateTemplate err:", err);
       }
     );
 	};

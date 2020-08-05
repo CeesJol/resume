@@ -48,7 +48,7 @@ export default () => {
         forceRender();
       },
       (err) => {
-        console.log("createCategory err:", err);
+        console.error("createCategory err:", err);
       }
     );
   };
@@ -69,7 +69,7 @@ export default () => {
         forceRender();
       },
       (err) => {
-        console.log("updateCategory err:", err);
+        console.error("updateCategory err:", err);
       }
     );
 	};
@@ -92,7 +92,7 @@ export default () => {
             }
           },
           (err) => {
-            console.log("deleteCategory err:", err);
+            console.error("deleteCategory err:", err);
           }
         );
       },

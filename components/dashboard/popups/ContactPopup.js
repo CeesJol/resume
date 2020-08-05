@@ -51,7 +51,7 @@ export default () => {
         resetPopups();
       },
       (err) => {
-        console.log("createContactInfo err:", err);
+        console.error("createContactInfo err:", err);
       }
     );
   };
@@ -71,7 +71,7 @@ export default () => {
         resetPopups();
       },
       (err) => {
-        console.log("updateContactInfo err:", err);
+        console.error("updateContactInfo err:", err);
       }
     );
   };
@@ -94,7 +94,7 @@ export default () => {
             }
           },
           (err) => {
-            console.log("deleteContactInfo err:", err);
+            console.error("deleteContactInfo err:", err);
           }
         );
       },

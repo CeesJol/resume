@@ -36,11 +36,13 @@ export default function Signup() {
             Router.push("/dashboard");
           },
           (err) => {
+						console.error("signup err", err)
             setStatus(`Login failed: ${err}`);
           }
         );
       },
       (err) => {
+				console.error("(Signup) login err", err)
         setStatus(`Login failed: ${err}`);
       }
     );

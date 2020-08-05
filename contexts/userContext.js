@@ -274,7 +274,7 @@ const UserContextProvider = (props) => {
                 console.log("readUser", data.findUserByID);
               },
               (err) => {
-                console.log("Fucked up getting the user data", err);
+                console.error("Fucked up getting the user data", err);
               }
             );
           },

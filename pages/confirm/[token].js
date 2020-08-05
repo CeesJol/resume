@@ -15,7 +15,7 @@ export default function Token() {
 					setStatus("Email confirmed successfully! You can close this tab now.");
         },
         (err) => {
-          console.log("err", err);
+          console.error("err", err);
           setStatus("Something went wrong. Please contact us for help. " + err);
         }
       );

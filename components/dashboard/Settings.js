@@ -59,7 +59,7 @@ export default () => {
         setStatus("Updated successfully!");
       },
       (err) => {
-        console.log("err", err);
+        console.error("err", err);
       }
     );
   };
@@ -76,7 +76,7 @@ export default () => {
       },
       (err) => {
         setStatus2("Something went wrong at our side. Please try again later!");
-        console.log("err", err);
+        console.error("err", err);
       }
     );
   };

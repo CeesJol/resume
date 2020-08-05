@@ -22,7 +22,7 @@ export default async function(req, res) {
 		res.status(200).send('Message sent successfully.')
 		console.log('Message sent successfully.')
   } catch (error) {
-    console.log('send ERROR', error)
+    console.error('send ERROR', error)
     res.status(400).send('Message not sent.')
   }
 }

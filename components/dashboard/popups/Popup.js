@@ -98,7 +98,7 @@ export default () => {
             }
           },
           (err) => {
-            console.log("deleteItem err:", err);
+            console.error("deleteItem err:", err);
           }
         );
       },
@@ -126,7 +126,7 @@ export default () => {
         resetPopups();
       },
       (err) => {
-        console.log("updateItem err:", err);
+        console.error("updateItem err:", err);
       }
     );
   };
@@ -154,7 +154,7 @@ export default () => {
         resetPopups();
       },
       (err) => {
-        console.log("createItem err:", err);
+        console.error("createItem err:", err);
       }
     );
   };

@@ -6,7 +6,6 @@
 	
 	p {
 		margin: 0;
-		// line-height: 110%;
 	}
 
   &__container {
@@ -24,6 +23,28 @@
 			color: grey;
 			font-weight: 400;
 		}
+	}
+
+	&__contact-info {
+		background-color: rgb(239, 240, 241);
+		padding: .5rem;
+
+    &__content {
+      display: flex;
+      justify-content: center;
+    }
+
+    &--item {
+      position: relative;
+      margin: 0 1rem;
+      cursor: pointer;
+      transition: $default-transition-duration;
+      border-bottom: 1px solid rgba(0, 0, 0, 0);
+
+      &:hover {
+        border-bottom: 1px solid grey;
+      }
+    }
 	}
 	
 	&__category {

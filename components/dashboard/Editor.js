@@ -1,27 +1,17 @@
+import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
-import React, { useState, useEffect, useContext } from "react";
 import Category from "./Category";
+import ContactItem from "./ContactItem";
 
 export default () => {
   const {
     getUser,
-    setEditingItem,
-    editingItem,
-    editingCategory,
     setEditingCategory,
     setEditingResume,
     editingResume,
-    warning,
-    setWarning,
-    changingInfo,
-    setEditingInfo,
-    setEditingContactInfo,
   } = useContext(UserContext);
   const handleChangeInfo = () => {
     setChangingInfo(true);
-  };
-  const handleChangeContactInfo = (c) => {
-    setEditingContactInfo(c);
   };
   const templateCSS = editingResume.template.style;
   const sortByPriority = (list) => {
@@ -52,21 +42,12 @@ export default () => {
   };
   const drawContactInfo = () => {
     return (
-      <div className="resume__contact-info resume__container">
-        {sortByPriority(editingResume.contactInfo.data).map((c) => (
-          <div
-            key={`${c.name}-${c.value}`}
-            onClick={() => handleChangeContactInfo(c)}
-          >
-            <p>
-              {c.name}: {c.value}
-            </p>
-          </div>
-        ))}
-        <div onClick={() => handleChangeContactInfo({})}>
-          <p>
-            Add contact info
-          </p>
+      <div className="resume__contact-info">
+        <div className="resume__contact-info__content">
+          {sortByPriority(editingResume.contactInfo.data).map((item) => (
+            <ContactItem item={item} />
+          ))}
+          <ContactItem item={{}} txt={"Add contact info"} />
         </div>
       </div>
     );

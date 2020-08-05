@@ -16,8 +16,8 @@ const UserContextProvider = (props) => {
   const [data, setData] = useState(false);
   const [error, setError] = useState(false);
   const [warning, setWarning] = useState(false);
-	const [changingInfo, setChangingInfo] = useState(false);
-	const [editingContactInfo, setEditingContactInfo] = useState(-1);
+  const [changingInfo, setChangingInfo] = useState(false);
+  const [editingContactInfo, setEditingContactInfo] = useState(-1);
   const [userMadeChanges, setUserMadeChanges] = useState(false);
   const [moving, setMoving] = useState(false);
   const [selectedTemplateId, setSelectedTemplateId] = useState(0);
@@ -26,7 +26,10 @@ const UserContextProvider = (props) => {
   };
   const storeUser = (data) => {
     // Set state
-    setUser((prevUser) => ({ ...prevUser, ...data }));
+    setUser((prevUser) => {
+			console.log('STORE USER', { ...prevUser, ...data })
+      return { ...prevUser, ...data };
+    });
   };
   const storeItem = (itemData, { del, add }) => {
     var user = getUser();
@@ -73,10 +76,10 @@ const UserContextProvider = (props) => {
     return editingResume.categories.data.find(
       (category) => category._id === categoryId
     );
-	};
-	const getCategories = () => {
-		return editingResume.categories.data;
-	}
+  };
+  const getCategories = () => {
+    return editingResume.categories.data;
+  };
   const storeResume = (resumeData, { add, del }) => {
     var user = getUser();
 
@@ -102,8 +105,8 @@ const UserContextProvider = (props) => {
     });
 
     setUser(() => user);
-	};
-	const storeContactInfo = (contactInfoData, { add, del }) => {
+  };
+  const storeContactInfo = (contactInfoData, { add, del }) => {
     var user = getUser();
 
     user.resumes.data.some((resume, r) => {
@@ -121,7 +124,7 @@ const UserContextProvider = (props) => {
                 r
               ].contactInfo.data.filter((x) => x._id !== contactInfoData._id);
             } else {
-							// Update contactInfo
+              // Update contactInfo
               const newContactInfo = { ...contactInfo, ...contactInfoData };
               user.resumes.data[r].contactInfo.data[c] = newContactInfo;
             }
@@ -220,13 +223,17 @@ const UserContextProvider = (props) => {
   };
   const moveCategory = async (category, amount) => {
     if (moving) return false;
-    setMoving(true);
+		setMoving(true);
+		
+		console.log('moving category...')
 
     // Find category with priority p
     const p = category.priority + amount;
     var otherCategory = editingResume.categories.data.find(
       (cat) => cat.priority === p
-    );
+		);
+		
+		console.log('otherCategory', otherCategory);
 
     // Update priority
     var user = getUser();
@@ -237,7 +244,17 @@ const UserContextProvider = (props) => {
       ).priority += 1;
     user.resumes.data
       .find((resume) => resume._id === editingResume._id)
-      .categories.data.find((cat) => cat._id === category._id).priority -= 1;
+			.categories.data.find((cat) => cat._id === category._id).priority -= 1;
+			
+			console.log('cat1', user.resumes.data
+      .find((resume) => resume._id === editingResume._id)
+      .categories.data.find(
+        (cat) => cat._id === otherCategory._id
+			))
+			
+			console.log('cat2', user.resumes.data
+      .find((resume) => resume._id === editingResume._id)
+			.categories.data.find((cat) => cat._id === category._id))
 
     resetPopups();
 
@@ -250,14 +267,14 @@ const UserContextProvider = (props) => {
     setMoving(false);
   };
   const resetPopups = () => {
-		setChangingInfo(false);
-		setEditingContactInfo(-1);
+    setChangingInfo(false);
+    setEditingContactInfo(-1);
     setEditingItem(-1);
     setEditingCategory(-1);
     setCreatingResume(-1);
     setWarning(false);
     setUserMadeChanges(false);
-		setSelectedTemplateId(0);
+    setSelectedTemplateId(0);
   };
   useEffect(() => {
     if (user == null) {
@@ -323,8 +340,8 @@ const UserContextProvider = (props) => {
         warning,
         setWarning,
         changingInfo,
-				setChangingInfo,
-				editingContactInfo,
+        setChangingInfo,
+        editingContactInfo,
         setEditingContactInfo,
         moveItem,
         moveCategory,
@@ -337,9 +354,9 @@ const UserContextProvider = (props) => {
         resetPopups,
         getCategory,
         selectedTemplateId,
-				setSelectedTemplateId,
-				getCategories,
-				storeContactInfo
+        setSelectedTemplateId,
+        getCategories,
+        storeContactInfo,
       }}
     >
       {props.children}

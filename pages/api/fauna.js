@@ -159,6 +159,11 @@ export const createCategory = async (resumeId, data) => {
 			_id
 			name
 			priority
+			items {
+				data {
+					_id
+				}
+			}
 			resume {
 				_id
 			}
@@ -192,6 +197,7 @@ export const createCategoryWithItem = async (resumeId, categoryName, data) => {
 			name
 			items {
 				data {
+					_id
 					title
 					location
 					from
@@ -242,6 +248,17 @@ export const createResume = async (userId, templateId, data) => {
 				_id
 				name
 				style
+			}
+			contactInfo {
+				data {
+					_id
+					name
+					value
+					priority
+					resume {
+						_id
+					}
+				}
 			}
 		}
 	}`;

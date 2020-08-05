@@ -3,7 +3,6 @@ import React from "react";
 export default ({ val, fn }) => (
   <>
     <select
-      className="select-narrow"
       name={val}
       id={val}
       value={val}

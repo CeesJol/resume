@@ -61,18 +61,18 @@
     border-radius: 3px;
     padding: 2rem;
     margin: 2rem 0;
-		overflow: auto;
-		
-		&--noborder {
-			border: none;
-			border-radius: 0;
-		}
+    overflow: auto;
 
-		&--green {
-			background-color: $light-green;
-			border: none;
-			color: white;
-			font-weight: bold;
-		}
-	}
+    &--noborder {
+      border: none;
+      border-radius: 0;
+    }
+
+    &--green {
+      background-color: $light-green;
+      border: none;
+      color: white;
+      font-weight: bold;
+    }
+  }
 }

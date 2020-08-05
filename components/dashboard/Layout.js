@@ -24,8 +24,6 @@ export default () => {
     }
   });
   const handleUpdate = async () => {
-		console.log(editingResume);
-		console.log(style);
     await updateTemplate(editingResume.template._id, {
       style
     }).then(

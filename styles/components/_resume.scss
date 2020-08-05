@@ -1,87 +1,89 @@
 .resume {
   background-color: white;
   margin: 2rem 0;
-	overflow: auto;
-	box-shadow: 0px 8px 13px -4px rgba(0,0,0,0.75);
-	
-	p {
-		margin: 0;
-	}
+  overflow: auto;
+  box-shadow: 0px 8px 13px -4px rgba(0, 0, 0, 0.75);
+  font-family: Helvetica, Arial, sans-serif;
+
+  p {
+    margin: 0;
+  }
 
   &__container {
     padding: 2rem;
   }
 
   &__header {
-		@include hover;
-		
-		&--name {
-			font-weight: 400;
-		}
+    @include hover;
 
-		&--job-title {
-			color: grey;
-			font-weight: 400;
-		}
-	}
+    &--name {
+      font-weight: 400;
+    }
 
-	&__contact-info {
-		background-color: rgb(239, 240, 241);
-		padding: .5rem;
+    &--job-title {
+      color: grey;
+      font-weight: 400;
+    }
+  }
+
+  &__contact-info {
+    background-color: rgb(239, 240, 241);
+    padding: 0.5rem;
 
     &__content {
       display: flex;
-      justify-content: center;
+      justify-content: space-evenly;
     }
 
     &--item {
       position: relative;
       margin: 0 1rem;
       cursor: pointer;
-			display: flex;
-			align-items: center;
+      display: flex;
+      align-items: center;
+      vertical-align: middle;
 
-			// Put the border only on the text, not the icon
-			p {
-				transition: $default-transition-duration;
-				border-bottom: 1px solid rgba(0, 0, 0, 0);
-			}
+      // Put the border only on the text, not the icon
+      p {
+        transition: $default-transition-duration;
+        border-bottom: 1px solid transparent;
+      }
 
       &:hover {
-				p {
-					border-bottom: 1px solid grey;
-				}
+        p {
+          border-bottom: 1px solid $dark-grey;
+        }
       }
-		}
-		
-		&--icon {
-			color: red;
-			padding-right: .5rem;
-		}
-	}
-	
-	&__category {
-		&--name {
-			text-transform: uppercase;
-			@include hover;
-		}
-	}
+    }
+
+    &--icon {
+      padding-right: 0.5rem;
+      margin-top: -0.5rem; // beun solution to get the icon aligned with the text
+    }
+  }
+
+  &__category {
+    &--name {
+      text-transform: uppercase;
+      @include hover;
+    }
+  }
 
   &__item {
-		position: relative;
-		@include hover;
-		
-		&--title {
-			font-weight: bold;
-		}
+    position: relative;
+    @include hover;
 
-		&--location {
-			font-weight: 300;
-		}
+    &--title {
+      font-weight: bold;
+    }
 
-		&--date {
-			font-style: italic;
-			color: grey;
-		}
+    &--location {
+      font-weight: 300;
+    }
+
+    &--date {
+      font-style: italic;
+      color: grey;
+    }
   }
 }

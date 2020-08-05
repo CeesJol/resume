@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
-// var FA = require('react-fontawesome')
+import { contactpickerOptions } from "../../lib/constants"
 
 const ContactItem = ({ item, txt }) => {
   const { setEditingContactInfo } = useContext(UserContext);
@@ -12,7 +12,9 @@ const ContactItem = ({ item, txt }) => {
       onClick={() => handleChangeContactInfo(item)}
       className="resume__contact-info--item"
     >
-			<i className="fa fa-rocket resume__contact-info--icon"></i>
+			{item.value && contactpickerOptions[item.value] && (
+				<i className={`fa fa-${contactpickerOptions[item.value]} resume__contact-info--icon`}></i>
+			)}
       <p>{item.name ? item.name : txt}</p>
     </div>
   );

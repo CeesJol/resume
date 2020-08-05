@@ -198,7 +198,6 @@ const UserContextProvider = (props) => {
 
     // Find item with priority p
     const p = item.priority + amount;
-    console.log("moveItem category", getCategory(item.category._id).items.data);
     var otherItem = getCategory(item.category._id).items.data.find(
       (item) => item.priority === p
     );
@@ -221,15 +220,11 @@ const UserContextProvider = (props) => {
     if (moving) return false;
     setMoving(true);
 
-    console.log("moving category...");
-
     // Find category with priority p
     const p = category.priority + amount;
     var otherCategory = editingResume.categories.data.find(
       (cat) => cat.priority === p
     );
-
-    console.log("otherCategory", otherCategory);
 
     // Update priority
     var user = getUser();
@@ -241,20 +236,6 @@ const UserContextProvider = (props) => {
     user.resumes.data
       .find((resume) => resume._id === editingResume._id)
       .categories.data.find((cat) => cat._id === category._id).priority -= 1;
-
-    console.log(
-      "cat1",
-      user.resumes.data
-        .find((resume) => resume._id === editingResume._id)
-        .categories.data.find((cat) => cat._id === otherCategory._id)
-    );
-
-    console.log(
-      "cat2",
-      user.resumes.data
-        .find((resume) => resume._id === editingResume._id)
-        .categories.data.find((cat) => cat._id === category._id)
-    );
 
     resetPopups();
 

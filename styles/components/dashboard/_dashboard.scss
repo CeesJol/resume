@@ -30,7 +30,7 @@
       top: 1px;
       cursor: pointer;
       transition: 0.3s;
-      border-bottom: 1px solid rgba(0, 0, 0, 0);
+      border-bottom: 1px solid transparent;
 
       &:hover {
         border-bottom: 1px solid grey;
@@ -38,11 +38,11 @@
     }
 
     &--item-selected {
-      border-bottom: 1px solid black;
+      border-bottom: 1px solid $dark-grey;
 
       // Ignore hover effect on selected item
       &:hover {
-        border-bottom: 1px solid black;
+        border-bottom: 1px solid $dark-grey;
       }
     }
   }

@@ -2,16 +2,20 @@ import React, { useContext } from "react";
 import Item from "../user/Item";
 import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
-import ResumePopup from "./popups/ResumePopup";
 
 export default (props) => {
-  const { getUser, setEditingItem, setEditingResume, creatingResume, setCreatingResume } = useContext(UserContext);
+  const {
+    getUser,
+    setEditingItem,
+    setEditingResume,
+    creatingResume,
+    setCreatingResume,
+  } = useContext(UserContext);
   const handleClick = (e, resume) => {
     e.preventDefault();
-    console.log("resume", resume);
     setEditingResume(resume);
-	}
-	const handleCreate = (category) => {
+  };
+  const handleCreate = () => {
     setCreatingResume({});
   };
   const drawItems = () => {
@@ -34,14 +38,13 @@ export default (props) => {
         </>
       );
     return <p>Get started by creating your resume</p>;
-  }
+  };
 
   return (
     <div className="dashboard__item">
       <h4>Your resumes</h4>
       <div id="items-container">{drawItems()}</div>
-			<Button text="Create a resume" fn={handleCreate} />
-			{creatingResume !== -1 && <ResumePopup />}
+      <Button text="Create a resume" fn={handleCreate} />
     </div>
   );
 };

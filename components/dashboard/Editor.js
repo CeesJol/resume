@@ -8,7 +8,8 @@ export default () => {
     getUser,
     setEditingCategory,
     setEditingResume,
-    editingResume,
+		editingResume,
+		setChangingInfo,
   } = useContext(UserContext);
   const handleChangeInfo = () => {
     setChangingInfo(true);

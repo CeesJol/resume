@@ -16,7 +16,8 @@ const UserContextProvider = (props) => {
   const [data, setData] = useState(false);
   const [error, setError] = useState(false);
   const [warning, setWarning] = useState(false);
-  const [changingInfo, setChangingInfo] = useState(false);
+	const [changingInfo, setChangingInfo] = useState(false);
+	const [editingContactInfo, setEditingContactInfo] = useState(-1);
   const [userMadeChanges, setUserMadeChanges] = useState(false);
   const [moving, setMoving] = useState(false);
   const [selectedTemplateId, setSelectedTemplateId] = useState(0);
@@ -97,6 +98,37 @@ const UserContextProvider = (props) => {
         const newResume = { ...resume, ...resumeData };
         user.resumes.data[r] = newResume;
         setEditingResume(newResume);
+      }
+    });
+
+    setUser(() => user);
+	};
+	const storeContactInfo = (contactInfoData, { add, del }) => {
+    var user = getUser();
+
+    user.resumes.data.some((resume, r) => {
+      if (resume._id === editingResume._id) {
+        if (add) {
+          // Add contactInfo
+          user.resumes.data[r].contactInfo.data.push(contactInfoData);
+          return true; // break the loop
+        }
+        resume.contactInfo.data.some((contactInfo, c) => {
+          if (contactInfo._id === contactInfoData._id) {
+            if (del) {
+              // Delete contactInfo
+              user.resumes.data[r].contactInfo.data = user.resumes.data[
+                r
+              ].contactInfo.data.filter((x) => x._id !== contactInfoData._id);
+            } else {
+							// Update contactInfo
+              const newContactInfo = { ...contactInfo, ...contactInfoData };
+              user.resumes.data[r].contactInfo.data[c] = newContactInfo;
+            }
+            return true; // break the loop
+          }
+        });
+        return true; // break the loop
       }
     });
 
@@ -218,13 +250,14 @@ const UserContextProvider = (props) => {
     setMoving(false);
   };
   const resetPopups = () => {
-    setChangingInfo(false);
+		setChangingInfo(false);
+		setEditingContactInfo(-1);
     setEditingItem(-1);
     setEditingCategory(-1);
     setCreatingResume(-1);
     setWarning(false);
     setUserMadeChanges(false);
-    setSelectedTemplateId(0);
+		setSelectedTemplateId(0);
   };
   useEffect(() => {
     if (user == null) {
@@ -290,7 +323,9 @@ const UserContextProvider = (props) => {
         warning,
         setWarning,
         changingInfo,
-        setChangingInfo,
+				setChangingInfo,
+				editingContactInfo,
+        setEditingContactInfo,
         moveItem,
         moveCategory,
         storeItem,
@@ -303,7 +338,8 @@ const UserContextProvider = (props) => {
         getCategory,
         selectedTemplateId,
 				setSelectedTemplateId,
-				getCategories
+				getCategories,
+				storeContactInfo
       }}
     >
       {props.children}

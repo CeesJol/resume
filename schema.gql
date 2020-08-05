@@ -13,6 +13,7 @@ type Resume {
 	title: String @unique
 	categories: [Category] @relation
 	template: Template! @relation
+	contactInfo: [ContactInfo] @relation
 }
 
 type Category {
@@ -30,6 +31,12 @@ type Item {
 	from: String
 	to: String
 	priority: Int
+}
+
+type ContactInfo {
+	resume: Resume
+	name: String
+	value: String
 }
 
 type Template {

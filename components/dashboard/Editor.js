@@ -14,10 +14,15 @@ export default () => {
     warning,
     setWarning,
     changingInfo,
-    setChangingInfo,
+    setEditingInfo,
+    setEditingContactInfo,
   } = useContext(UserContext);
   const handleChangeInfo = () => {
     setChangingInfo(true);
+  };
+  const handleChangeContactInfo = (c) => {
+		console.log('c', c);
+    setEditingContactInfo(c);
   };
   const templateCSS = editingResume.template.style;
   const sortByPriority = (list) => {
@@ -45,14 +50,24 @@ export default () => {
         </p>
       </div>
     );
-	};
-	const drawContactInfo = () => {
+  };
+  const drawContactInfo = () => {
     return (
-      <div
-        className="resume__contact-info resume__container"
-        onClick={handleChangeInfo}
-      >
-        contact enfoo
+      <div className="resume__contact-info resume__container">
+        {editingResume.contactInfo.data.length > 0 ? (
+          editingResume.contactInfo.data.map((c) => (
+            <div
+              key={`${c.name}-${c.value}`}
+              onClick={() => handleChangeContactInfo(c)}
+            >
+              <p>
+                {c.name}: {c.value}
+              </p>
+            </div>
+          ))
+        ) : (
+          <p>no contact EEENFFOO</p>
+        )}
       </div>
     );
   };
@@ -107,7 +122,7 @@ export default () => {
       <div className="resume">
         <style>{templateCSS}</style>
         {drawHeader()}
-				{drawContactInfo()}
+        {drawContactInfo()}
         {drawItems()}
       </div>
     </>

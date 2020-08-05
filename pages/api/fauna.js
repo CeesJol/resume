@@ -2,6 +2,53 @@ import executeQuery from "../../lib/executeQuery";
 import stringifyObject from "../../lib/stringifyObject";
 import { defaultCategories } from "../../lib/constants";
 
+// User data request data used by getUserByEmail and readUser
+const userData = `username
+email
+confirmed
+bio
+resumes {
+	data {
+		_id
+		title
+		jobTitle
+		bio
+		contactInfo {
+			data {
+				_id
+				name
+				value
+			}
+		}
+		template {
+			_id
+			name
+			style
+		}
+		categories {
+			data {
+				_id
+				name
+				priority
+				items {
+					data {
+						_id
+						title
+						location
+						from
+						to
+						description
+						priority
+						category {
+							_id
+						}
+					}
+				}
+			}
+		}
+	}
+}`;
+
 /** |----------------------------
  *  | GET ITEMS BY USERNAME
  *  |----------------------------
@@ -35,44 +82,7 @@ export const getUserByEmail = async (email) => {
   email = email.toLowerCase();
   return executeQuery(`query FindAUserByEmail {
 		userByEmail(email: "${email}") {
-			username
-			email
-			confirmed
-			bio
-			resumes {
-				data {
-					_id
-					title
-					jobTitle
-					bio
-					template {
-						_id
-						name
-						style
-					}
-					categories {
-						data {
-							_id
-							name
-							priority
-							items {
-								data {
-									_id
-									title
-									location
-									from
-									to
-									description
-									priority
-									category {
-										_id
-									}
-								}
-							}
-						}
-					}
-				}
-			}
+			${userData}
 		}
 	}`);
 };
@@ -200,12 +210,13 @@ export const createResume = async (userId, templateId, data) => {
 			${stringifyObject(data)}
 			categories: {
 				create: [
-					${defaultCategories.map((category, index) => 
-						`{ 
+					${defaultCategories.map(
+            (category, index) =>
+              `{ 
 							name: "${category}" 
 							priority: ${index + 1}
 						}`
-					)}
+          )}
 				]
 			}
 			template: { connect: "${templateId}" }
@@ -264,6 +275,26 @@ export const updateResume = async (resumeId, data) => {
 			_id
 			jobTitle
 			bio
+		}
+	}`);
+};
+
+/** |----------------------------
+ *  | UPDATE CONTACT INFO
+ *  |----------------------------
+ */
+export const updateContactInfo = async (contactInfoId, data) => {
+  console.log("updateContactInfo request");
+  return executeQuery(`mutation UpdateContactInfo {
+		updateContactInfo(id: "${contactInfoId}", data: {
+			${stringifyObject(data)}
+		}) {
+			_id
+			name
+			value
+			resume {
+				_id
+			}
 		}
 	}`);
 };
@@ -408,44 +439,7 @@ export const readUser = async (id) => {
   console.log("readUser request");
   return executeQuery(`query FindAUserByID {
 		findUserByID(id: "${id}") {
-			username
-			email
-			confirmed
-			bio
-			resumes {
-				data {
-					_id
-					title
-					jobTitle
-					bio
-					template {
-						_id
-						name
-						style
-					}
-					categories {
-						data {
-							_id
-							name
-							priority
-							items {
-								data {
-									_id
-									title
-									location
-									from
-									to
-									description
-									priority
-									category {
-										_id
-									}
-								}
-							}
-						}
-					}
-				}
-			}
+			${userData}
 		}
 	}`);
 };

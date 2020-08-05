@@ -12,6 +12,8 @@ import ResumePopup from "./popups/ResumePopup";
 import Popup from "./popups/Popup";
 import CategoryPopup from "./popups/CategoryPopup";
 import UserPopup from "./popups/UserPopup";
+import ContactPopup from "./popups/ContactPopup";
+import LoadingPopup from "./popups/LoadingPopup";
 
 export default function Dashboard(props) {
   const {
@@ -24,6 +26,7 @@ export default function Dashboard(props) {
     creatingResume,
     editingCategory,
     changingInfo,
+    editingContactInfo,
   } = useContext(UserContext);
   useEffect(() => {
     if (!getUser()) {
@@ -61,21 +64,11 @@ export default function Dashboard(props) {
           {editingItem !== -1 && <Popup />}
           {editingCategory !== -1 && editingItem === -1 && <CategoryPopup />}
           {changingInfo && <UserPopup />}
-					{warning && <Warning />}
+          {editingContactInfo !== -1 && <ContactPopup />}
+          {warning && <Warning />}
         </div>
       ) : (
-        <div className="popup-container">
-          <div className="popup popup--small">
-            <p>Authenticating{getUser() && " " + getUser().username}...</p>
-            <div className="loading-animation">
-              <div className="loadingio-spinner-eclipse-osisb6eiupo">
-                <div className="ldio-8w8am58tzjr">
-                  <div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <LoadingPopup user={getUser()} />
       )}
     </>
   );

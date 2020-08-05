@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { updateCategory } from "../../../pages/api/fauna";
+import { updateCategory, createCategory, deleteCategory } from "../../../pages/api/fauna";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 
@@ -15,8 +15,9 @@ export default () => {
     setUserMadeChanges,
     resetPopups,
     getCategory,
-		forceRender,
-		editingCategory,
+    forceRender,
+    editingCategory,
+		getCategories,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [name, setName] = useState("");
@@ -28,6 +29,28 @@ export default () => {
   const validateInput = () => {
     if (!name) return "Please provide a name";
     return false;
+  };
+  const handleCreate = async () => {
+    const validate = validateInput();
+    if (validate) {
+      setStatus(validate);
+      return;
+    }
+
+    const resumeId = editingResume._id;
+    await createCategory(resumeId, {
+      name,
+      priority: getCategories().length + 1,
+    }).then(
+      async (data) => {
+        storeCategory(data.createCategory, { add: true });
+        resetPopups();
+        forceRender();
+      },
+      (err) => {
+        console.log("createCategory err:", err);
+      }
+    );
   };
   const handleUpdate = async () => {
     const validate = validateInput();
@@ -42,13 +65,39 @@ export default () => {
     }).then(
       async (data) => {
         storeCategory(data.updateCategory, {});
-				resetPopups();
-				forceRender();
+        resetPopups();
+        forceRender();
       },
       (err) => {
         console.log("updateCategory err:", err);
       }
     );
+	};
+	const handleDelete = async (event) => {
+    if (event) event.preventDefault();
+    setWarning({
+      text: "Are you sure you want to delete this category? All the items in it will be lost.",
+      fn: async () => {
+        await deleteCategory(editingCategory._id).then(
+          async (data) => {
+            storeCategory(data.deleteCategory, { del: true });
+            resetPopups();
+            // Propagate priority updates
+            for (var category of getCategories()) {
+              if (category.priority > data.deleteCategory.priority) {
+                const newPriority = category.priority - 1;
+                updateCategory(category._id, { priority: newPriority });
+                storeCategory({ ...category, priority: newPriority }, {});
+                forceRender();
+              }
+            }
+          },
+          (err) => {
+            console.log("deleteCategory err:", err);
+          }
+        );
+      },
+    });
   };
   const handleCancel = () => {
     if (userMadeChanges) {
@@ -84,7 +133,14 @@ export default () => {
 
             {status && <p>{status}</p>}
 
-            <Button text="Update" altText="Updating..." fn={handleUpdate} />
+            {editingCategory.name ? (
+              <>
+                <Button text="Update" altText="Updating..." fn={handleUpdate} />
+                <Button text="Delete" altText="Deleting..." color="red" fn={handleDelete} />
+              </>
+            ) : (
+              <Button text="Add" altText="Adding..." fn={handleCreate} />
+            )}
           </div>
         </form>
       </div>

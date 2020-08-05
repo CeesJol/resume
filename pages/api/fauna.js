@@ -132,6 +132,27 @@ export const createItem = async (categoryId, data) => {
 };
 
 /** |----------------------------
+ *  | CREATE CATEGORY
+ *  |----------------------------
+ */
+export const createCategory = async (resumeId, data) => {
+  console.log("createCategory request");
+  return executeQuery(`mutation CreateCategory {
+		createCategory(data: {
+			${stringifyObject(data)}
+			resume: { connect: "${resumeId}" }
+		}) {
+			_id
+			name
+			priority
+			resume {
+				_id
+			}
+		}
+	}`);
+};
+
+/** |----------------------------
  *  | CREATE CATEGORY WITH ITEM
  *  |----------------------------
  */
@@ -182,7 +203,7 @@ export const createResume = async (userId, templateId, data) => {
 					${defaultCategories.map((category, index) => 
 						`{ 
 							name: "${category}" 
-							priority: ${index}
+							priority: ${index + 1}
 						}`
 					)}
 				]
@@ -283,6 +304,24 @@ export const updateCategory = async (categoryId, data) => {
 			_id
 			name
 			priority
+		}
+	}`);
+};
+
+/** |----------------------------
+ *  | DELETE CATEGORY
+ *  |----------------------------
+ */
+export const deleteCategory = async (id) => {
+  console.log("deleteCategory request");
+  return executeQuery(`mutation DeleteCategory {
+		deleteCategory(id: "${id}") {
+			_id
+			name
+			priority
+			resume {
+				_id
+			}
 		}
 	}`);
 };

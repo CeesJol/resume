@@ -72,7 +72,10 @@ const UserContextProvider = (props) => {
     return editingResume.categories.data.find(
       (category) => category._id === categoryId
     );
-  };
+	};
+	const getCategories = () => {
+		return editingResume.categories.data;
+	}
   const storeResume = (resumeData, { add, del }) => {
     var user = getUser();
 
@@ -119,7 +122,7 @@ const UserContextProvider = (props) => {
       if (resume._id === editingResume._id) {
         if (add) {
           // Add category
-          user.resumes.data[r].categories.push(categoryData);
+          user.resumes.data[r].categories.data.push(categoryData);
           // setEditingCategory(categoryData);
           return true; // break the loop
         }
@@ -299,7 +302,8 @@ const UserContextProvider = (props) => {
         resetPopups,
         getCategory,
         selectedTemplateId,
-        setSelectedTemplateId,
+				setSelectedTemplateId,
+				getCategories
       }}
     >
       {props.children}

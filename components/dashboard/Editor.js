@@ -11,6 +11,7 @@ export default () => {
     setEditingItem,
 		editingItem,
 		editingCategory,
+		setEditingCategory,
     setEditingResume,
     editingResume,
     warning,
@@ -38,34 +39,38 @@ export default () => {
 		)
 
     const categories = sortByPriority(editingResume.categories.data);
-    if (editingResume.template.sidebar) {
-      const mainCategories = categories.filter(
-        (category) => category.priority < 1000
-      );
-      const sidebarCategories = categories.filter(
-        (category) => category.priority >= 1000
-      );
+    // if (editingResume.template.sidebar) {
+    //   const mainCategories = categories.filter(
+    //     (category) => category.priority < 1000
+    //   );
+    //   const sidebarCategories = categories.filter(
+    //     (category) => category.priority >= 1000
+    //   );
 
-      return (
-        <>
-          <div className="resume__container">
-            {mainCategories.map((category, index) => drawCategory(category, index))}
-          </div>
-          <div className="resume__container">
-            {sidebarCategories.map((category, index) => drawCategory(category, index))}
-          </div>
-        </>
-      );
-    } else {
+    //   return (
+    //     <>
+    //       <div className="resume__container">
+    //         {mainCategories.map((category, index) => drawCategory(category, index))}
+    //       </div>
+    //       <div className="resume__container">
+    //         {sidebarCategories.map((category, index) => drawCategory(category, index))}
+    //       </div>
+    //     </>
+    //   );
+    // } else {
       return (
         <div className="resume__container">
           {categories.map((category, index) => drawCategory(category, index))}
+					<a onClick={handleNewCategory}><i>Create category</i></a>
         </div>
       );
-    }
+    // }
   }
 	const handleGoBack = () => {
 		setEditingResume(-1);
+	}
+	const handleNewCategory = () => {
+		setEditingCategory({});
 	}
   return (
     <>

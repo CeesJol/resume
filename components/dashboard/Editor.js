@@ -45,7 +45,7 @@ export default () => {
       <div className="resume__contact-info">
         <div className="resume__contact-info__content">
           {sortByPriority(editingResume.contactInfo.data).map((item) => (
-            <ContactItem item={item} />
+            <ContactItem item={item} key={`${item.name}-${item.value}`} />
           ))}
           <ContactItem item={{}} txt={"Add contact info"} />
         </div>

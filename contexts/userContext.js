@@ -25,11 +25,7 @@ const UserContextProvider = (props) => {
     setDummy(!dummy);
   };
   const storeUser = (data) => {
-    // Set state
-    setUser((prevUser) => {
-			console.log('STORE USER', { ...prevUser, ...data })
-      return { ...prevUser, ...data };
-    });
+    setUser((prevUser) => ({ ...prevUser, ...data }));
   };
   const storeItem = (itemData, { del, add }) => {
     var user = getUser();
@@ -223,17 +219,17 @@ const UserContextProvider = (props) => {
   };
   const moveCategory = async (category, amount) => {
     if (moving) return false;
-		setMoving(true);
-		
-		console.log('moving category...')
+    setMoving(true);
+
+    console.log("moving category...");
 
     // Find category with priority p
     const p = category.priority + amount;
     var otherCategory = editingResume.categories.data.find(
       (cat) => cat.priority === p
-		);
-		
-		console.log('otherCategory', otherCategory);
+    );
+
+    console.log("otherCategory", otherCategory);
 
     // Update priority
     var user = getUser();
@@ -244,17 +240,21 @@ const UserContextProvider = (props) => {
       ).priority += 1;
     user.resumes.data
       .find((resume) => resume._id === editingResume._id)
-			.categories.data.find((cat) => cat._id === category._id).priority -= 1;
-			
-			console.log('cat1', user.resumes.data
-      .find((resume) => resume._id === editingResume._id)
-      .categories.data.find(
-        (cat) => cat._id === otherCategory._id
-			))
-			
-			console.log('cat2', user.resumes.data
-      .find((resume) => resume._id === editingResume._id)
-			.categories.data.find((cat) => cat._id === category._id))
+      .categories.data.find((cat) => cat._id === category._id).priority -= 1;
+
+    console.log(
+      "cat1",
+      user.resumes.data
+        .find((resume) => resume._id === editingResume._id)
+        .categories.data.find((cat) => cat._id === otherCategory._id)
+    );
+
+    console.log(
+      "cat2",
+      user.resumes.data
+        .find((resume) => resume._id === editingResume._id)
+        .categories.data.find((cat) => cat._id === category._id)
+    );
 
     resetPopups();
 

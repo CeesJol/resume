@@ -4,6 +4,7 @@ import Head from "next/head";
 import UserContextProvider from "../contexts/userContext";
 
 import "../styles/index.scss";
+import '../node_modules/font-awesome/css/font-awesome.min.css'; 
 import 'react-image-crop/lib/ReactCrop.scss';
 
 class MyApp extends App {

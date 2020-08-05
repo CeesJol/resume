@@ -38,13 +38,26 @@
       position: relative;
       margin: 0 1rem;
       cursor: pointer;
-      transition: $default-transition-duration;
-      border-bottom: 1px solid rgba(0, 0, 0, 0);
+			display: flex;
+			align-items: center;
+
+			// Put the border only on the text, not the icon
+			p {
+				transition: $default-transition-duration;
+				border-bottom: 1px solid rgba(0, 0, 0, 0);
+			}
 
       &:hover {
-        border-bottom: 1px solid grey;
+				p {
+					border-bottom: 1px solid grey;
+				}
       }
-    }
+		}
+		
+		&--icon {
+			color: red;
+			padding-right: .5rem;
+		}
 	}
 	
 	&__category {

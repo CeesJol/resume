@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
+// var FA = require('react-fontawesome')
 
 const ContactItem = ({ item, txt }) => {
   const { setEditingContactInfo } = useContext(UserContext);
@@ -8,10 +9,10 @@ const ContactItem = ({ item, txt }) => {
   };
   return (
     <div
-      key={`${item.name}-${item.value}`}
       onClick={() => handleChangeContactInfo(item)}
       className="resume__contact-info--item"
     >
+			<i className="fa fa-rocket resume__contact-info--icon"></i>
       <p>{item.name ? item.name : txt}</p>
     </div>
   );

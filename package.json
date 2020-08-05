@@ -12,6 +12,7 @@
     "@sendgrid/mail": "^7.1.1",
     "browser-image-compression": "^1.0.12",
     "faunadb": "^2.14.1",
+    "font-awesome": "^4.7.0",
     "jsonwebtoken": "^8.5.1",
     "next": "^9.4.2",
     "react": "^16.13.1",

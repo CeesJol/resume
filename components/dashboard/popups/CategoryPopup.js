@@ -88,7 +88,6 @@ export default () => {
                 const newPriority = category.priority - 1;
                 updateCategory(category._id, { priority: newPriority });
                 storeCategory({ ...category, priority: newPriority }, {});
-                forceRender();
               }
             }
           },

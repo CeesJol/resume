@@ -21,7 +21,6 @@ export default () => {
     setChangingInfo(true);
   };
   const handleChangeContactInfo = (c) => {
-		console.log('c', c);
     setEditingContactInfo(c);
   };
   const templateCSS = editingResume.template.style;
@@ -54,20 +53,21 @@ export default () => {
   const drawContactInfo = () => {
     return (
       <div className="resume__contact-info resume__container">
-        {editingResume.contactInfo.data.length > 0 ? (
-          editingResume.contactInfo.data.map((c) => (
-            <div
-              key={`${c.name}-${c.value}`}
-              onClick={() => handleChangeContactInfo(c)}
-            >
-              <p>
-                {c.name}: {c.value}
-              </p>
-            </div>
-          ))
-        ) : (
-          <p>no contact EEENFFOO</p>
-        )}
+        {sortByPriority(editingResume.contactInfo.data).map((c) => (
+          <div
+            key={`${c.name}-${c.value}`}
+            onClick={() => handleChangeContactInfo(c)}
+          >
+            <p>
+              {c.name}: {c.value}
+            </p>
+          </div>
+        ))}
+        <div onClick={() => handleChangeContactInfo({})}>
+          <p>
+            Add contact info
+          </p>
+        </div>
       </div>
     );
   };

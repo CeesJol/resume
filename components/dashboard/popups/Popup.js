@@ -94,7 +94,6 @@ export default () => {
                 const newPriority = item.priority - 1;
                 updateItem(item._id, { priority: newPriority });
                 storeItem({ ...item, priority: newPriority }, {});
-                forceRender();
               }
             }
           },

@@ -1,24 +1,22 @@
 import React, { useState, useEffect, useContext } from "react";
-import { updateContactInfo, readUser } from "../../../pages/api/fauna";
+import {
+  createContactInfo,
+  updateContactInfo,
+  deleteContactInfo,
+} from "../../../pages/api/fauna";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import Contactpicker from "../../general/Contactpicker";
 
 export default () => {
   const {
-    getUser,
-    storeUser,
     editingResume,
-    setEditingResume,
-    warning,
     setWarning,
-    setChangingInfo,
     userMadeChanges,
     setUserMadeChanges,
     storeContactInfo,
     resetPopups,
     editingContactInfo,
-    setEditingContactInfo,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [name, setName] = useState("");
@@ -35,6 +33,27 @@ export default () => {
   const validateInput = () => {
     if (!name) return "Please provide a job title";
     return false;
+  };
+  const handleCreate = async () => {
+    const validate = validateInput();
+    if (validate) {
+      setStatus(validate);
+      return;
+    }
+
+    await createContactInfo(editingResume._id, {
+      name,
+      value,
+      priority: editingResume.contactInfo.data.length + 1,
+    }).then(
+      (data) => {
+        storeContactInfo(data.createContactInfo, { add: true });
+        resetPopups();
+      },
+      (err) => {
+        console.log("createContactInfo err:", err);
+      }
+    );
   };
   const handleUpdate = async () => {
     const validate = validateInput();
@@ -55,6 +74,31 @@ export default () => {
         console.log("updateContactInfo err:", err);
       }
     );
+  };
+  const handleDelete = async (event) => {
+    if (event) event.preventDefault();
+    setWarning({
+      text: "Are you sure you want to delete this item?",
+      fn: async () => {
+        await deleteContactInfo(editingContactInfo._id).then(
+          async (data) => {
+            storeContactInfo(data.deleteContactInfo, { del: true });
+            resetPopups();
+            // Propagate priority updates
+            for (var item of editingResume.contactInfo.data) {
+              if (item.priority > data.deleteContactInfo.priority) {
+                const newPriority = item.priority - 1;
+                updateContactInfo(item._id, { priority: newPriority });
+                storeContactInfo({ ...item, priority: newPriority }, {});
+              }
+            }
+          },
+          (err) => {
+            console.log("deleteContactInfo err:", err);
+          }
+        );
+      },
+    });
   };
   const handleCancel = () => {
     if (userMadeChanges) {
@@ -94,7 +138,19 @@ export default () => {
 
             {status && <p>{status}</p>}
 
-            <Button text="Update" altText="Updating..." fn={handleUpdate} />
+            {editingContactInfo.name ? (
+              <>
+                <Button text="Update" altText="Updating..." fn={handleUpdate} />
+                <Button
+                  text="Delete"
+                  altText="Deleting..."
+                  color="red"
+                  fn={handleDelete}
+                />
+              </>
+            ) : (
+              <Button text="Add" altText="Adding..." fn={handleCreate} />
+            )}
           </div>
         </form>
       </div>

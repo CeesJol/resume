@@ -18,6 +18,10 @@ resumes {
 				_id
 				name
 				value
+				priority
+				resume {
+					_id
+				}
 			}
 		}
 		template {
@@ -280,6 +284,28 @@ export const updateResume = async (resumeId, data) => {
 };
 
 /** |----------------------------
+ *  | CREATE CONTACT INFO
+ *  |----------------------------
+ */
+export const createContactInfo = async (resumeId, data) => {
+  console.log("createContactInfo request");
+  return executeQuery(`mutation UpdateContactInfo {
+		createContactInfo(data: {
+			${stringifyObject(data)}
+			resume: { connect: "${resumeId}" }
+		}) {
+			_id
+			name
+			value
+			priority
+			resume {
+				_id
+			}
+		}
+	}`);
+};
+
+/** |----------------------------
  *  | UPDATE CONTACT INFO
  *  |----------------------------
  */
@@ -292,6 +318,26 @@ export const updateContactInfo = async (contactInfoId, data) => {
 			_id
 			name
 			value
+			priority
+			resume {
+				_id
+			}
+		}
+	}`);
+};
+
+/** |----------------------------
+ *  | DELETE CONTACT INFO
+ *  |----------------------------
+ */
+export const deleteContactInfo = async (id) => {
+  console.log("deleteContactInfo request");
+  return executeQuery(`mutation DeleteContactInfo {
+		deleteContactInfo(id: "${id}") {
+			_id
+			name
+			value
+			priority
 			resume {
 				_id
 			}

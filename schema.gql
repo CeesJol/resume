@@ -37,6 +37,7 @@ type ContactInfo {
 	resume: Resume
 	name: String
 	value: String
+	priority: Int
 }
 
 type Template {

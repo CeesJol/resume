@@ -1,0 +1,15 @@
+html {
+  font-size: 14px;
+  color: #333;
+}
+
+h1 {
+  font-size: 20px;
+  padding-bottom: 10px;
+	border-bottom: 1px solid #333;
+	color: red;
+}
+
+p {
+  line-height: 18px;
+}

@@ -15,10 +15,12 @@
 
   &__nav {
     background-color: white;
-    border-bottom: 1px solid $light-grey-2;
+		border-bottom: 1px solid $light-grey-2;
+		transition: 0.3s;
 
     &__content {
-      @include dashboard-content-container;
+			@include dashboard-content-container;
+			transition: 0.3s;
 
       display: flex;
       justify-content: space-around;

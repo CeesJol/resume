@@ -21,6 +21,7 @@ const UserContextProvider = (props) => {
   const [userMadeChanges, setUserMadeChanges] = useState(false);
   const [moving, setMoving] = useState(false);
   const [selectedTemplateId, setSelectedTemplateId] = useState(0);
+  const [preview, setPreview] = useState(false);
   const forceRender = () => {
     setDummy(!dummy);
   };
@@ -271,7 +272,8 @@ const UserContextProvider = (props) => {
             readUser(localUser.id).then(
               (data) => {
                 storeUser(data.findUserByID);
-                console.log("readUser", data.findUserByID);
+                console.log("readUser");
+                console.table(data.findUserByID);
               },
               (err) => {
                 console.error("Fucked up getting the user data", err);
@@ -280,8 +282,9 @@ const UserContextProvider = (props) => {
           },
           (err) => {
             // Database denies that user is logged in!
-            console.log("localUser", localUser);
-            console.log("Your secret is fake news", err);
+            console.log("localUser:");
+            console.table(localUser);
+            console.warn("Your secret is fake news", err);
             clearUser();
           }
         );
@@ -338,6 +341,8 @@ const UserContextProvider = (props) => {
         setSelectedTemplateId,
         getCategories,
         storeContactInfo,
+        preview,
+        setPreview,
       }}
     >
       {props.children}

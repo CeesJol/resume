@@ -8,13 +8,16 @@ const Category = ({ category, index }) => {
     setEditingCategory,
     setEditingItem,
     moveCategory,
-    forceRender,
+		forceRender,
+		preview
   } = useContext(UserContext);
   const handleClick = (e, category) => {
-    e.preventDefault();
+		e.preventDefault();
+		if (preview) return false;
     setEditingCategory(category);
   };
   const handleNewItem = (category) => {
+		if (preview) return false;
     setEditingItem({
       category,
     });
@@ -25,12 +28,13 @@ const Category = ({ category, index }) => {
     });
   };
   const handleMove = (category, amount) => {
+		if (preview) return false;
     moveCategory(category, amount);
     forceRender();
   };
   return (
     <div className="resume__category">
-      {index > 0 && (
+      {index > 0 && !preview && (
         <a>
           <i
             onClick={() => handleMove(category, -1)}
@@ -41,21 +45,19 @@ const Category = ({ category, index }) => {
         </a>
       )}
       <div onClick={(e) => handleClick(e, category)}>
-        <h3 className="resume__category--name">{category.name}</h3>
-        <a onClick={() => handleNewItem(category)}>
+        <h3 className={`resume__category--name ${!preview ? "resume--hoverable" : ""}`}>{category.name}</h3>
+        {!preview && <a onClick={() => handleNewItem(category)}>
           <i>Add item</i>
-        </a>
+        </a>}
         {category.items && category.items.data.length > 0 ? (
           sortByPriority(category.items.data).map((item, index) => (
             <div key={item._id}>
               <NewItem item={item} index={index} />
-              <br />
             </div>
           ))
         ) : (
 					<>
 						<DummyItem category={category} />
-						<br />
 					</>
         )}
       </div>

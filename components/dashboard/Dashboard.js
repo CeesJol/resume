@@ -4,6 +4,7 @@ import DashboardHeader from "./DashboardHeader";
 import Resumes from "./Resumes";
 import Editor from "./Editor";
 import Layout from "./Layout";
+import Preview from "./Preview";
 import Settings from "./Settings";
 import Nav from "./Nav";
 import { UserContext } from "../../contexts/userContext";
@@ -54,7 +55,8 @@ export default function Dashboard(props) {
                       </>
                     ))}
                   {nav == 1 && <Layout />}
-                  {nav == 2 && <Settings />}
+                  {nav == 2 && <Preview />}
+									{nav == 3 && <Settings />}
                 </div>
               </div>
             </div>

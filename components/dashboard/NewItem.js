@@ -2,29 +2,38 @@ import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 
 const NewItem = ({ item, index }) => {
-  const { setEditingItem, editingResume, moveItem, forceRender } = useContext(
-    UserContext
-  );
+  const {
+    setEditingItem,
+    editingResume,
+    moveItem,
+    forceRender,
+    preview,
+  } = useContext(UserContext);
   const handleClick = (e, item) => {
-    e.preventDefault();
+		e.preventDefault();
+		if (preview) return false;
     setEditingItem(item);
   };
   const handleMove = (e, item, amount) => {
 		e.stopPropagation();
+		if (preview) return false;
     moveItem(item, amount);
     forceRender();
   };
   return (
     <>
-      {index > 0 && (
+      {index > 0 && !preview && (
         <a>
-          <i onClick={(e) => handleMove(e, item, -1)} style={{ cursor: "pointer" }}>
+          <i
+            onClick={(e) => handleMove(e, item, -1)}
+            style={{ cursor: "pointer" }}
+          >
             Move up
           </i>
         </a>
       )}
       <div
-        className="resume__item"
+        className={`resume__item ${!preview ? "resume--hoverable" : ""}`}
         onClick={(e) => handleClick(e, item)}
         key={item._id}
       >

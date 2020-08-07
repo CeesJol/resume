@@ -3,7 +3,11 @@
   margin: 2rem 0;
   overflow: auto;
   box-shadow: 0px 8px 13px -4px rgba(0, 0, 0, 0.75);
-  font-family: Helvetica, Arial, sans-serif;
+	font-family: Helvetica, Arial, sans-serif;
+	
+	&--hoverable {
+		@include hover;
+	}
 
   p {
     margin: 0;
@@ -14,8 +18,6 @@
   }
 
   &__header {
-    @include hover;
-
     &--name {
       font-weight: 400;
     }
@@ -38,22 +40,9 @@
     &--item {
       position: relative;
       margin: 0 1rem;
-      cursor: pointer;
       display: flex;
       align-items: center;
       vertical-align: middle;
-
-      // Put the border only on the text, not the icon
-      p {
-        transition: $default-transition-duration;
-        border-bottom: 1px solid transparent;
-      }
-
-      &:hover {
-        p {
-          border-bottom: 1px solid $dark-grey;
-        }
-      }
     }
 
     &--icon {
@@ -65,13 +54,14 @@
   &__category {
     &--name {
       text-transform: uppercase;
-      @include hover;
+      // @include hover;
     }
   }
 
   &__item {
-    position: relative;
-    @include hover;
+		position: relative;
+		padding-bottom: $font-size-default;
+    // @include hover;
 
     &--title {
       font-weight: bold;

@@ -5,7 +5,8 @@ import { getDummyItem } from "../../lib/constants";
 const DummyItem = ({ category }) => {
   const { setEditingItem } = useContext(UserContext);
   const handleClick = (e) => {
-    e.preventDefault();
+		e.preventDefault();
+		if (preview) return false;
     setEditingItem({
       category,
     });

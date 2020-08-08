@@ -29,11 +29,6 @@ export default function Dashboard(props) {
     changingInfo,
     editingContactInfo,
   } = useContext(UserContext);
-  useEffect(() => {
-    if (!getUser()) {
-      Router.push("/login");
-    }
-  });
   return auth ? (
     <div className="dashboard-container">
       <DashboardHeader />

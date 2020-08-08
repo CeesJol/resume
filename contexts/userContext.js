@@ -4,6 +4,8 @@ export const UserContext = createContext();
 import { identity } from "../pages/api/auth";
 import { readUser, updateItem, updateCategory } from "../pages/api/fauna";
 
+import Router from 'next/router'
+
 const UserContextProvider = (props) => {
   const [dummy, setDummy] = useState(false);
   const [user, setUser] = useState(null);
@@ -189,7 +191,12 @@ const UserContextProvider = (props) => {
     localStorage.removeItem("user");
 
     // Reset state
-    setUser(null);
+		setUser(null);
+		
+		// Get user away from dashboard
+		if (Router.pathname.startsWith("/dashboard")) {
+      Router.push("/login");
+    }
   };
   const userExists = () => {
     return user != null;

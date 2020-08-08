@@ -30,9 +30,9 @@ export default function Dashboard(props) {
     editingContactInfo,
   } = useContext(UserContext);
   useEffect(() => {
-    if (!getUser()) {
-      Router.push("/login");
-    }
+    // if (!getUser()) {
+    //   Router.push("/login");
+    // }
   });
   return (
     <>

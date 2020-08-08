@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Dashboard from "../components/dashboard/Dashboard";
 
 import Resume from "../components/dashboard/Resume";
+import Article from "../components/pdf/Article";
 import PDFLayout from "../components/pdf/PDFLayout";
 import pdfHelper from "../lib/pdfHelper";
 
@@ -17,21 +18,21 @@ class DashboardPage extends Component {
   }
 }
 
-function getCookie(cname, location) {
-  var name = cname + "=";
-  var decodedCookie = decodeURIComponent(location);
-  var ca = decodedCookie.split(';');
-  for(var i = 0; i <ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
-}
+// function getCookie(cname, location) {
+//   var name = cname + "=";
+//   var decodedCookie = decodeURIComponent(location);
+//   var ca = decodedCookie.split(';');
+//   for(var i = 0; i <ca.length; i++) {
+//     var c = ca[i];
+//     while (c.charAt(0) == ' ') {
+//       c = c.substring(1);
+//     }
+//     if (c.indexOf(name) == 0) {
+//       return c.substring(name.length, c.length);
+//     }
+//   }
+//   return "";
+// }
 
 // export async function getServerSideProps({ req, res, query }) {
 DashboardPage.getInitialProps = async function({ req, res, query }) {
@@ -41,19 +42,25 @@ DashboardPage.getInitialProps = async function({ req, res, query }) {
 	console.log('exportPdf', exportPDF, 'isServer', isServer);
 
   if (isServer && exportPDF) {
-		const resumeId  = getCookie('resumeId', req.headers.cookie)
-		console.log('resumeId', resumeId);
+		// const resumeId  = getCookie('resumeId', req.headers.cookie)
+		// console.log('resumeId', resumeId);
 
-		const resumeData = await getResume(resumeId);
-		console.log('resumeData style:', resumeData.findResumeByID.template.style)
+		// const resumeData = await getResume(resumeId);
+		// console.log('resumeData style:', resumeData.findResumeByID.template.style)
 		
-    const buffer = await pdfHelper.componentToPDFBuffer(
-      <PDFLayout style={resumeData.findResumeByID.template.style}>
-				<UserContextProvider>
-        	<Resume data={resumeData.findResumeByID} />
-				</UserContextProvider>
-      </PDFLayout>
-    );
+    // const buffer = await pdfHelper.componentToPDFBuffer(
+    //   <PDFLayout style={resumeData.findResumeByID.template.style}>
+		// 		<UserContextProvider>
+    //     	<Resume data={resumeData.findResumeByID} />
+		// 		</UserContextProvider>
+    //   </PDFLayout>
+		// );
+		
+		const buffer = await pdfHelper.componentToPDFBuffer(
+			  <PDFLayout>
+					<Article />
+			  </PDFLayout>
+			);
 
     // with this header, your browser will prompt you to download the file
     // without this header, your browse will open the pdf directly
@@ -66,9 +73,7 @@ DashboardPage.getInitialProps = async function({ req, res, query }) {
     res.end(buffer);
   }
 
-  return {
-    props: {}, // will be passed to the page component as props
-  }
+  return {};
 };
 
 export default DashboardPage;

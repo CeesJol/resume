@@ -17,11 +17,11 @@ const PDFLayout = ({ children, style }) => (
   <html>
     <head>
       <meta charSet="utf8" />
-			<link rel="stylesheet" href="http://localhost:3000/static/font-awesome-4.7.0/css/font-awesome.min.css" />
-      <link rel="stylesheet" href="http://localhost:3000/static/pdf.css" />
-			<style>
+			{/* <link rel="stylesheet" href="http://localhost:3000/static/font-awesome-4.7.0/css/font-awesome.min.css" />
+      <link rel="stylesheet" href="http://localhost:3000/static/pdf.css" /> */}
+			{/* <style>
 				{`${style}`}
-			</style>
+			</style> */}
     </head>
     <body>
       {children}

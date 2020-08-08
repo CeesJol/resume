@@ -40,10 +40,10 @@ DashboardPage.getInitialProps = async function({ req, res, query }) {
 	const isServer = !!req;
 	console.log('exportPdf', exportPDF, 'isServer', isServer);
 
-	const resumeId  = getCookie('resumeId', req.headers.cookie)
-	console.log('resumeId', resumeId);
-
   if (isServer && exportPDF) {
+		const resumeId  = getCookie('resumeId', req.headers.cookie)
+		console.log('resumeId', resumeId);
+
 		const resumeData = await getResume(resumeId);
 		console.log('resumeData style:', resumeData.findResumeByID.template.style)
 		

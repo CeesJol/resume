@@ -2,15 +2,9 @@ import React, { useContext, useState } from "react";
 import { UserContext } from "../../contexts/userContext";
 import Category from "./Category";
 import ContactItem from "./ContactItem";
-
 import { PDFExport } from "@progress/kendo-react-pdf";
 
 export default ({ data }) => {
-  const resume = () => {
-    // console.log('data', data, !!data)
-    if (data) return data;
-    return editingResume;
-  };
   const {
     getUser,
     setEditingCategory,
@@ -18,17 +12,15 @@ export default ({ data }) => {
     setChangingInfo,
     preview,
   } = useContext(UserContext);
-
   const [res, setRes] = useState(null);
   const exportPDF = () => {
     res.save();
   };
-
   const handleChangeInfo = () => {
     if (preview) return false;
     setChangingInfo(true);
   };
-  const templateCSS = resume().template.style;
+  const templateCSS = editingResume.template.style;
   const sortByPriority = (list) => {
     return list.sort((item1, item2) => {
       return item1.priority < item2.priority ? -1 : 1;
@@ -49,9 +41,11 @@ export default ({ data }) => {
           {getUser() && getUser().username}
         </h1>
         <h3 className="resume__header--job-title">
-          {resume().jobTitle || "Job title"}
+          {editingResume.jobTitle || "Job title"}
         </h3>
-        <p className="resume__header--bio multiline">{resume().bio || "Bio"}</p>
+        <p className="resume__header--bio multiline">
+          {editingResume.bio || "Bio"}
+        </p>
       </div>
     );
   };
@@ -59,7 +53,7 @@ export default ({ data }) => {
     return (
       <div className="resume__contact-info">
         <div className="resume__contact-info__content">
-          {sortByPriority(resume().contactInfo.data).map((item) => (
+          {sortByPriority(editingResume.contactInfo.data).map((item) => (
             <ContactItem item={item} key={`${item.name}-${item.value}`} />
           ))}
           {!preview && <ContactItem item={{}} txt={"Add contact info"} />}
@@ -68,9 +62,9 @@ export default ({ data }) => {
     );
   };
   const drawItems = () => {
-    if (!resume().categories) return <p>Nothing here yet</p>;
+    if (!editingResume.categories) return <p>Nothing here yet</p>;
 
-    const categories = sortByPriority(resume().categories.data);
+    const categories = sortByPriority(editingResume.categories.data);
     // if (editingResume.template.sidebar) {
     //   const mainCategories = categories.filter(
     //     (category) => category.priority < 1000
@@ -109,18 +103,30 @@ export default ({ data }) => {
   return (
     <>
       <PDFExport
-        paperSize={"Letter"}
+        paperSize={"A4"}
         fileName="_____.pdf"
         title=""
         subject=""
         keywords=""
         ref={(r) => setRes(r)}
       >
-        <div className="resume">
-          <style>{templateCSS}</style>
-          {drawHeader()}
-          {drawContactInfo()}
-          {drawItems()}
+        <div
+          style={{
+            height: 842,
+            width: 595,
+            padding: "none",
+            backgroundColor: "white",
+            margin: "auto",
+            overflowX: "hidden",
+            // overflowY: "hidden",
+          }}
+        >
+          <div className="resume">
+            <style>{templateCSS}</style>
+            {drawHeader()}
+            {drawContactInfo()}
+            {drawItems()}
+          </div>
         </div>
       </PDFExport>
       <button onClick={exportPDF}>download</button>

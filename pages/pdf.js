@@ -20,8 +20,8 @@ const Pdf = () => {
       >
         <div
           style={{
-            height: 792,
-            width: 612,
+            height: 792*2,
+            width: 612*2,
             padding: "none",
             backgroundColor: "white",
             boxShadow: "5px 5px 5px black",

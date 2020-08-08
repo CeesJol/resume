@@ -53,6 +53,55 @@ resumes {
 	}
 }`;
 
+export const getResume = async (resumeId) => {
+	console.log('getResume request');
+  return executeQuery(`query GetResume {
+		findResumeByID(id: "${resumeId}") {
+			_id
+			title
+			jobTitle
+			bio
+			contactInfo {
+				data {
+					_id
+					name
+					value
+					priority
+					resume {
+						_id
+					}
+				}
+			}
+			template {
+				_id
+				name
+				style
+			}
+			categories {
+				data {
+					_id
+					name
+					priority
+					items {
+						data {
+							_id
+							title
+							location
+							from
+							to
+							description
+							priority
+							category {
+								_id
+							}
+						}
+					}
+				}
+			}
+		}
+	}`);
+};
+
 /** |----------------------------
  *  | GET ITEMS BY USERNAME
  *  |----------------------------

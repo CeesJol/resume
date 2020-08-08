@@ -3,19 +3,24 @@ import { UserContext } from "../../contexts/userContext";
 import Category from "./Category";
 import ContactItem from "./ContactItem";
 
-export default () => {
+export default ({ data }) => {
+	const resume = () => {
+		// console.log('data', data, !!data)
+		if (data) return data;
+		return editingResume;
+	}
   const {
     getUser,
     setEditingCategory,
     editingResume,
     setChangingInfo,
     preview,
-  } = useContext(UserContext);
+	} = useContext(UserContext);
   const handleChangeInfo = () => {
 		if (preview) return false;
     setChangingInfo(true);
-  };
-  const templateCSS = editingResume.template.style;
+	};
+  const templateCSS = resume().template.style;
   const sortByPriority = (list) => {
     return list.sort((item1, item2) => {
       return item1.priority < item2.priority ? -1 : 1;
@@ -34,10 +39,10 @@ export default () => {
           {getUser() && getUser().username}
         </h1>
         <h3 className="resume__header--job-title">
-          {editingResume.jobTitle || "Job title"}
+          {resume().jobTitle || "Job title"}
         </h3>
         <p className="resume__header--bio multiline">
-          {editingResume.bio || "Bio"}
+          {resume().bio || "Bio"}
         </p>
       </div>
     );
@@ -46,7 +51,7 @@ export default () => {
     return (
       <div className="resume__contact-info">
         <div className="resume__contact-info__content">
-          {sortByPriority(editingResume.contactInfo.data).map((item) => (
+          {sortByPriority(resume().contactInfo.data).map((item) => (
             <ContactItem item={item} key={`${item.name}-${item.value}`} />
           ))}
           {!preview && <ContactItem item={{}} txt={"Add contact info"} />}
@@ -55,9 +60,9 @@ export default () => {
     );
   };
   const drawItems = () => {
-    if (!editingResume.categories) return <p>Nothing here yet</p>;
+    if (!resume().categories) return <p>Nothing here yet</p>;
 
-    const categories = sortByPriority(editingResume.categories.data);
+    const categories = sortByPriority(resume().categories.data);
     // if (editingResume.template.sidebar) {
     //   const mainCategories = categories.filter(
     //     (category) => category.priority < 1000

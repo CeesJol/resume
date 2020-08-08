@@ -1,36 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from "react";
 
-import Article from '../components/pdf/Article';
-import PDFLayout from '../components/pdf/PDFLayout';
-import pdfHelper from '../lib/pdfHelper';
+import Resume from "../components/dashboard/Resume";
+import PDFLayout from "../components/pdf/PDFLayout";
+import pdfHelper from "../lib/pdfHelper";
 
-class IndexPage extends React.Component {
-  static async getInitialProps({ req, res, query }) {
-    const exportPDF = query.exportPDF === 'true';
-    const isServer = !!req;
+import UserContextProvider from "../contexts/userContext";
 
-    if (isServer && exportPDF) {
-      const buffer = await pdfHelper.componentToPDFBuffer(
-        <PDFLayout><Article/></PDFLayout>
-			);
+const IndexPage = () => {
+  useEffect(() => {
+    console.log("fucker");
+  });
+  return <Resume />;
+};
 
-      // with this header, your browser will prompt you to download the file
-      // without this header, your browse will open the pdf directly
-      // res.setHeader('Content-disposition', 'attachment; filename="article.pdf');
-      
-      // set content type
-      res.setHeader('Content-Type', 'application/pdf');
+export async function getServerSideProps({ req, res, query }) {
+	console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>WOIJEGIOWEG!!!!!!')
+  const exportPDF = query.exportPDF === "true";
+  const isServer = !!req;
 
-      // output the pdf buffer. once res.end is triggered, it won't trigger the render method
-      res.end(buffer);
-    }
+  if (isServer && exportPDF) {
+    const buffer = await pdfHelper.componentToPDFBuffer(
+      <PDFLayout>
+        <Resume />
+      </PDFLayout>
+    );
 
-    return {};
+    // with this header, your browser will prompt you to download the file
+    // without this header, your browse will open the pdf directly
+    res.setHeader("Content-disposition", 'attachment; filename="article.pdf');
+
+    // set content type
+    res.setHeader("Content-Type", "application/pdf");
+
+    // output the pdf buffer. once res.end is triggered, it won't trigger the render method
+    res.end(buffer);
   }
 
-  render() {
-		return (<Article/>)
+  return {
+    props: {}, // will be passed to the page component as props
   }
-}
+};
 
 export default IndexPage;

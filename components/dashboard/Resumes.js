@@ -12,8 +12,10 @@ export default (props) => {
     setCreatingResume,
   } = useContext(UserContext);
   const handleClick = (e, resume) => {
-    e.preventDefault();
-    setEditingResume(resume);
+		e.preventDefault();
+		setEditingResume(resume);
+		document.cookie = `resumeId=${resume._id}`
+		console.log('%c Cookie ', 'background-color: green; color: white', document.cookie);
   };
   const handleCreate = () => {
     setCreatingResume({});

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { UserContext } from "../../contexts/userContext";
-import Resume from "./Resume";
+import ResumeWrapper from "./ResumeWrapper";
 
 export default () => {
   const {
@@ -23,7 +23,7 @@ export default () => {
         <p>Click on any item to edit it</p>
         <a onClick={handleGoBack}>Back to your resumes</a>
       </div>
-      <Resume />
+      <ResumeWrapper />
     </>
   );
 };

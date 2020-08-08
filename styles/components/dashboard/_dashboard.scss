@@ -76,5 +76,10 @@
       color: white;
       font-weight: bold;
     }
-  }
+	}
+	
+	&__resume-wrapper {
+		margin: 2rem 0;
+		box-shadow: 0px 8px 13px -4px rgba(0, 0, 0, 0.75);
+	}
 }

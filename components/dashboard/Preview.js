@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { UserContext } from "../../contexts/userContext";
-import Resume from "./Resume";
+import ResumeWrapper from "./ResumeWrapper";
 
 const Preview = () => {
   const { setPreview, editingResume } = useContext(UserContext);
@@ -10,7 +10,7 @@ const Preview = () => {
   return editingResume === -1 ? (
     <p>Select a resume to preview it</p>
   ) : (
-    <Resume />
+    <ResumeWrapper />
   );
 };
 

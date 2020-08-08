@@ -81,5 +81,22 @@
 	&__resume-wrapper {
 		margin: 2rem 0;
 		box-shadow: 0px 8px 13px -4px rgba(0, 0, 0, 0.75);
+		zoom: 1.45;
+		width: inherit;
+		margin-left: auto;
+		margin-right: auto;
+		display: inline-block;
+
+		@media (max-width: 57rem) {
+			zoom: 1.25;
+		}
+
+		@media (max-width: 49rem) {
+			zoom: 1.05;
+		}
+
+		@media (max-width: 41rem) {
+			zoom: 0.85;
+		}
 	}
 }

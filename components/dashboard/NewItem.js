@@ -23,14 +23,14 @@ const NewItem = ({ item, index }) => {
   return (
     <>
       {index > 0 && !preview && (
-        <a>
+        <p className="resume--hoverable">
           <i
             onClick={(e) => handleMove(e, item, -1)}
             style={{ cursor: "pointer" }}
           >
             Move up
           </i>
-        </a>
+        </p>
       )}
       <div
         className={`resume__item ${!preview ? "resume--hoverable" : ""}`}

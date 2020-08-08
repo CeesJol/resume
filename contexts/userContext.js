@@ -22,6 +22,7 @@ const UserContextProvider = (props) => {
   const [moving, setMoving] = useState(false);
   const [selectedTemplateId, setSelectedTemplateId] = useState(0);
   const [preview, setPreview] = useState(false);
+  const [pdf, setPdf] = useState(null);
   const forceRender = () => {
     setDummy(!dummy);
   };
@@ -343,6 +344,8 @@ const UserContextProvider = (props) => {
         storeContactInfo,
         preview,
         setPreview,
+        pdf,
+        setPdf,
       }}
     >
       {props.children}

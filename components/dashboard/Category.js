@@ -8,16 +8,16 @@ const Category = ({ category, index }) => {
     setEditingCategory,
     setEditingItem,
     moveCategory,
-		forceRender,
-		preview
+    forceRender,
+    preview,
   } = useContext(UserContext);
   const handleClick = (e, category) => {
-		e.preventDefault();
-		if (preview) return false;
+    e.preventDefault();
+    if (preview) return false;
     setEditingCategory(category);
   };
   const handleNewItem = (category) => {
-		if (preview) return false;
+    if (preview) return false;
     setEditingItem({
       category,
     });
@@ -28,27 +28,37 @@ const Category = ({ category, index }) => {
     });
   };
   const handleMove = (category, amount) => {
-		if (preview) return false;
+    if (preview) return false;
     moveCategory(category, amount);
     forceRender();
   };
   return (
     <div className="resume__category">
       {index > 0 && !preview && (
-        <a>
+        <p className="resume--hoverable">
           <i
             onClick={() => handleMove(category, -1)}
             style={{ cursor: "pointer" }}
           >
             Move up
           </i>
-        </a>
+        </p>
       )}
       <div onClick={(e) => handleClick(e, category)}>
-        <h3 className={`resume__category--name ${!preview ? "resume--hoverable" : ""}`}>{category.name}</h3>
-        {!preview && <a onClick={() => handleNewItem(category)}>
-          <i>Add item</i>
-        </a>}
+        <h3
+          className={`resume__category--name ${
+            !preview ? "resume--hoverable" : ""
+          }`}
+        >
+          {category.name}
+        </h3>
+        {!preview && (
+          <a onClick={() => handleNewItem(category)}>
+            <p className="resume--hoverable">
+              <i>Add item</i>
+            </p>
+          </a>
+        )}
         {category.items && category.items.data.length > 0 ? (
           sortByPriority(category.items.data).map((item, index) => (
             <div key={item._id}>
@@ -56,9 +66,9 @@ const Category = ({ category, index }) => {
             </div>
           ))
         ) : (
-					<>
-						<DummyItem category={category} />
-					</>
+          <>
+            <DummyItem category={category} />
+          </>
         )}
       </div>
     </div>

@@ -4,18 +4,16 @@ import Category from "./Category";
 import ContactItem from "./ContactItem";
 import { PDFExport } from "@progress/kendo-react-pdf";
 
-export default ({ data }) => {
+export default () => {
   const {
     getUser,
     setEditingCategory,
     editingResume,
     setChangingInfo,
-    preview,
+		preview,
+		pdf, 
+		setPdf,
   } = useContext(UserContext);
-  const [res, setRes] = useState(null);
-  const exportPDF = () => {
-    res.save();
-  };
   const handleChangeInfo = () => {
     if (preview) return false;
     setChangingInfo(true);
@@ -89,7 +87,9 @@ export default ({ data }) => {
         {categories.map((category, index) => drawCategory(category, index))}
         {!preview && (
           <a onClick={handleNewCategory}>
-            <i>Create category</i>
+            <p>
+              <i className="resume--hoverable">Create category</i>
+            </p>
           </a>
         )}
       </div>
@@ -108,11 +108,11 @@ export default ({ data }) => {
         title=""
         subject=""
         keywords=""
-        ref={(r) => setRes(r)}
+        ref={(r) => setPdf(r)}
       >
         <div
           style={{
-            height: 842,
+            maxHeight: 842,
             width: 595,
             padding: "none",
             backgroundColor: "white",
@@ -129,7 +129,6 @@ export default ({ data }) => {
           </div>
         </div>
       </PDFExport>
-      <button onClick={exportPDF}>download</button>
     </>
   );
 };

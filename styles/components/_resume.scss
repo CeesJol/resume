@@ -1,4 +1,20 @@
 .resume {
+	h1 {
+		font-size: 3rem;
+	}
+	
+	h2 {
+		font-size: 2rem;
+	}
+	
+	h3 {
+		font-size: 1.5rem;
+	}
+	
+	h4 {
+		font-size: 1.2rem;
+	}
+
 	background-color: white;
 	overflow: auto;
 	font-family: Helvetica, Arial, sans-serif;
@@ -7,8 +23,9 @@
 		@include hover;
 	}
 
-  p {
-    margin: 0;
+  p, i, a {
+		margin: 0;
+		font-size: 1rem;
   }
 
   &__container {
@@ -44,8 +61,8 @@
     }
 
     &--icon {
-      padding-right: 0.5rem;
-      margin-top: -0.5rem; // beun solution to get the icon aligned with the text
+      padding-right: 1rem !important;
+      margin-top: -0.3rem !important; // beun solution to get the icon aligned with the text
     }
   }
 

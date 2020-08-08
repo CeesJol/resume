@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import Router from "next/router";
 import DashboardHeader from "./DashboardHeader";
 import Resumes from "./Resumes";
@@ -30,48 +30,35 @@ export default function Dashboard(props) {
     editingContactInfo,
   } = useContext(UserContext);
   useEffect(() => {
-    // if (!getUser()) {
-    //   Router.push("/login");
-    // }
+    if (!getUser()) {
+      Router.push("/login");
+    }
   });
-  return (
-    <>
-      {auth ? (
-        <div className="dashboard-container">
-          <DashboardHeader />
-          <main>
-            <div className="dashboard">
-              <Nav />
-              <div className="dashboard__main">
-                <div className="dashboard__main__content">
-                  {nav == 0 &&
-                    (editingResume === -1 ? (
-                      <>
-                        <Resumes />
-                      </>
-                    ) : (
-                      <>
-                        <Editor />
-                      </>
-                    ))}
-                  {nav == 1 && <Layout />}
-                  {nav == 2 && <Preview />}
-									{nav == 3 && <Settings />}
-                </div>
-              </div>
+  return auth ? (
+    <div className="dashboard-container">
+      <DashboardHeader />
+      <main>
+        <div className="dashboard">
+          <Nav />
+          <div className="dashboard__main">
+            <div className="dashboard__main__content">
+              {nav == 0 && (editingResume === -1 ? <Resumes /> : <Editor />)}
+              {nav == 1 && <Layout />}
+              {nav == 2 && <Preview />}
+              {nav == 3 && <Settings />}
             </div>
-          </main>
-          {/* Draw popups */}
-          {creatingResume !== -1 && <ResumePopup />}
-          {editingItem !== -1 && <Popup />}
-          {editingCategory !== -1 && editingItem === -1 && <CategoryPopup />}
-          {changingInfo && <UserPopup />}
-          {editingContactInfo !== -1 && <ContactPopup />}
-          {warning && <Warning />}
+          </div>
         </div>
-      ) : (
-        <LoadingPopup user={getUser()} />
-      )}
-    </>
+      </main>
+      {/* Draw popups */}
+      {creatingResume !== -1 && <ResumePopup />}
+      {editingItem !== -1 && <Popup />}
+      {editingCategory !== -1 && editingItem === -1 && <CategoryPopup />}
+      {changingInfo && <UserPopup />}
+      {editingContactInfo !== -1 && <ContactPopup />}
+      {warning && <Warning />}
+    </div>
+  ) : (
+    <LoadingPopup user={getUser()} />
   );
 }

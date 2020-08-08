@@ -12,6 +12,8 @@
     "html-pdf": false
   },
   "dependencies": {
+    "@progress/kendo-drawing": "^1.8.1",
+    "@progress/kendo-react-pdf": "^3.15.0",
     "@react-pdf/renderer": "^1.6.10",
     "@sendgrid/mail": "^7.1.1",
     "browser-image-compression": "^1.0.12",

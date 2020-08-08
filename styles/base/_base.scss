@@ -30,7 +30,7 @@ h2 {
 }
 
 h3 {
-	font-size: 3rem;
+  font-size: 3rem;
 }
 
 h4 {
@@ -39,11 +39,11 @@ h4 {
 
 a {
   text-decoration: none;
-	transition: $default-transition-duration;
-	
-	&:hover {
-		opacity: $hover-opacity;
-	}
+  transition: $default-transition-duration;
+
+  &:hover {
+    opacity: $hover-opacity;
+  }
 
   &:visited {
     color: blue;

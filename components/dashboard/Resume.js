@@ -1,25 +1,33 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { UserContext } from "../../contexts/userContext";
 import Category from "./Category";
 import ContactItem from "./ContactItem";
 
+import { PDFExport } from "@progress/kendo-react-pdf";
+
 export default ({ data }) => {
-	const resume = () => {
-		// console.log('data', data, !!data)
-		if (data) return data;
-		return editingResume;
-	}
+  const resume = () => {
+    // console.log('data', data, !!data)
+    if (data) return data;
+    return editingResume;
+  };
   const {
     getUser,
     setEditingCategory,
     editingResume,
     setChangingInfo,
     preview,
-	} = useContext(UserContext);
+  } = useContext(UserContext);
+
+  const [res, setRes] = useState(null);
+  const exportPDF = () => {
+    res.save();
+  };
+
   const handleChangeInfo = () => {
-		if (preview) return false;
+    if (preview) return false;
     setChangingInfo(true);
-	};
+  };
   const templateCSS = resume().template.style;
   const sortByPriority = (list) => {
     return list.sort((item1, item2) => {
@@ -32,7 +40,9 @@ export default ({ data }) => {
   const drawHeader = () => {
     return (
       <div
-        className={`resume__header resume__container ${!preview ? "resume--hoverable" : ""}`} 
+        className={`resume__header resume__container ${
+          !preview ? "resume--hoverable" : ""
+        }`}
         onClick={handleChangeInfo}
       >
         <h1 className="resume__header--name">
@@ -41,9 +51,7 @@ export default ({ data }) => {
         <h3 className="resume__header--job-title">
           {resume().jobTitle || "Job title"}
         </h3>
-        <p className="resume__header--bio multiline">
-          {resume().bio || "Bio"}
-        </p>
+        <p className="resume__header--bio multiline">{resume().bio || "Bio"}</p>
       </div>
     );
   };
@@ -95,15 +103,27 @@ export default ({ data }) => {
     // }
   };
   const handleNewCategory = () => {
-		if (preview) return false;
+    if (preview) return false;
     setEditingCategory({});
   };
   return (
-    <div className="resume">
-      <style>{templateCSS}</style>
-      {drawHeader()}
-      {drawContactInfo()}
-      {drawItems()}
-    </div>
+    <>
+      <PDFExport
+        paperSize={"Letter"}
+        fileName="_____.pdf"
+        title=""
+        subject=""
+        keywords=""
+        ref={(r) => setRes(r)}
+      >
+        <div className="resume">
+          <style>{templateCSS}</style>
+          {drawHeader()}
+          {drawContactInfo()}
+          {drawItems()}
+        </div>
+      </PDFExport>
+      <button onClick={exportPDF}>download</button>
+    </>
   );
 };

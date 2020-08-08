@@ -1,18 +1,22 @@
+import React, { useState } from "react";
+
 import { PDFExport } from "@progress/kendo-react-pdf";
 
-class Pdf extends React.Component {
-  exportPDF = () => {
-    this.resume.save();
+// class Pdf extends React.Component {
+const Pdf = () => {
+  const [resume, setResume] = useState(null);
+  const exportPDF = () => {
+    resume.save();
   };
-  render() {
-    return (
+  return (
+    <>
       <PDFExport
         paperSize={"Letter"}
         fileName="_____.pdf"
         title=""
         subject=""
         keywords=""
-        ref={(r) => (this.resume = r)}
+        ref={(r) => (setResume(r))}
       >
         <div
           style={{
@@ -26,12 +30,13 @@ class Pdf extends React.Component {
             overflowY: "hidden",
           }}
         >
-          content
+          <p>content</p>
+          {/* <i className={`fa fa-rocket`}></i> */}
         </div>
-        <button onClick={this.exportPDF}>download</button>
       </PDFExport>
-    );
-  }
-}
+      <button onClick={exportPDF}>download</button>
+    </>
+  );
+};
 
 export default Pdf;

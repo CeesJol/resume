@@ -13,8 +13,10 @@ const ContactItem = ({ item, txt }) => {
       onClick={() => handleChangeContactInfo(item)}
       className={`resume__contact-info--item ${!preview ? "resume--hoverable" : ""}`} 
     >
-			{item.value && contactpickerOptions[item.value] && (
+			{item.value ? (contactpickerOptions[item.value] && (
 				<i className={`fa fa-${contactpickerOptions[item.value]} resume__contact-info--icon`}></i>
+			)) : (
+				<i className={`fa fa-plus-square resume__contact-info--icon`}></i>
 			)}
       <p>{item.name ? item.name : txt}</p>
     </div>

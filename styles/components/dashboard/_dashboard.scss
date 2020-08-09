@@ -79,7 +79,7 @@
 	}
 	
 	&__resume-wrapper {
-		margin: 2rem 0;
+		margin: 0 0 2rem 0;
 		box-shadow: 0px 8px 13px -4px rgba(0, 0, 0, 0.75);
 		zoom: 1.45;
 		width: inherit;
@@ -97,6 +97,10 @@
 
 		@media (max-width: 41rem) {
 			zoom: 0.85;
+		}
+
+		@media (max-width: 33rem) {
+			zoom: 0.65;
 		}
 	}
 }

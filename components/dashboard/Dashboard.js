@@ -54,6 +54,6 @@ export default function Dashboard(props) {
       {warning && <Warning />}
     </div>
   ) : (
-    <LoadingPopup user={getUser()} />
+    <LoadingPopup text={`Authenticating${getUser() && " " + getUser().username}...`} />
   );
 }

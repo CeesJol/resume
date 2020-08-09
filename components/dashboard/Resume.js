@@ -4,6 +4,9 @@ import Category from "./Category";
 import ContactItem from "./ContactItem";
 import { PDFExport } from "@progress/kendo-react-pdf";
 
+// PDF Export source
+// https://blog.usejournal.com/lets-make-a-resume-in-react-2c9c5540f51a
+
 const Resume = () => {
   const {
     getUser,
@@ -11,7 +14,6 @@ const Resume = () => {
     editingResume,
     setChangingInfo,
 		preview,
-		pdf, 
 		setPdf,
   } = useContext(UserContext);
   const handleChangeInfo = () => {

@@ -1,5 +1,4 @@
 import React, { useEffect, useContext } from "react";
-import Router from "next/router";
 import DashboardHeader from "./DashboardHeader";
 import Resumes from "./Resumes";
 import Editor from "./Editor";

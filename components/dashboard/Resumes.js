@@ -1,19 +1,14 @@
 import React, { useContext } from "react";
-import Item from "../user/Item";
 import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
 
-export default (props) => {
-  const {
-    getUser,
-    setEditingItem,
-    setEditingResume,
-    creatingResume,
-    setCreatingResume,
-  } = useContext(UserContext);
+export default () => {
+  const { getUser, setEditingResume, setCreatingResume } = useContext(
+    UserContext
+  );
   const handleClick = (e, resume) => {
-		e.preventDefault();
-		setEditingResume(resume);
+    e.preventDefault();
+    setEditingResume(resume);
   };
   const handleCreate = () => {
     setCreatingResume({});

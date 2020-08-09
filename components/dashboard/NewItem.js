@@ -4,7 +4,6 @@ import { UserContext } from "../../contexts/userContext";
 const NewItem = ({ item, index }) => {
   const {
     setEditingItem,
-    editingResume,
     moveItem,
     forceRender,
     preview,

@@ -3,17 +3,15 @@ import { UserContext } from "../../contexts/userContext";
 import ResumeWrapper from "./ResumeWrapper";
 
 const Editor = () => {
-  const {
-		editingResume,
-		setEditingResume,
-		setPreview
-  } = useContext(UserContext);
+  const { editingResume, setEditingResume, setPreview } = useContext(
+    UserContext
+  );
   const handleGoBack = () => {
     setEditingResume(-1);
-	};
-	useEffect(() => {
-		setPreview(false);
-	})
+  };
+  useEffect(() => {
+    setPreview(false);
+  });
   return (
     <>
       <div className="dashboard__item">

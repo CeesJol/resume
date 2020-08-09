@@ -2,19 +2,12 @@ import React, { useState, useEffect, useContext } from "react";
 import { updateResume, readUser } from "../../../pages/api/fauna";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
-import Monthpicker from "../../general/Monthpicker";
-import Yearpicker from "../../general/Yearpicker";
 import { toast } from "react-toastify";
 
 const UserPopup = () => {
   const {
-    getUser,
-    storeUser,
     editingResume,
-    setEditingResume,
-    warning,
     setWarning,
-    setChangingInfo,
     userMadeChanges,
     setUserMadeChanges,
     storeResume,
@@ -52,7 +45,7 @@ const UserPopup = () => {
         resetPopups();
       },
       (err) => {
-				toast.error(`⚠️ ${err}`);
+        toast.error(`⚠️ ${err}`);
         console.log("updateResume err:", err);
       }
     );

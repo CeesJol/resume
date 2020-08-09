@@ -5,7 +5,7 @@ import Button from "../general/Button";
 import { toast } from 'react-toastify';
 
 const Layout = () => {
-  const { getUser, editingResume, storeTemplate, resetPopups } = useContext(UserContext);
+  const { editingResume, storeTemplate, resetPopups } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [name, setName] = useState("");
   const [style, setStyle] = useState("");

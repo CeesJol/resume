@@ -13,19 +13,13 @@ import { toast } from "react-toastify";
 
 const Popup = () => {
   const {
-    getUser,
-    storeUser,
-    nav,
     editingItem,
-    setEditingItem,
-    editingResume,
     setWarning,
     storeItem,
     userMadeChanges,
     setUserMadeChanges,
     resetPopups,
     getCategory,
-    forceRender,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [title, setTitle] = useState("");
@@ -98,7 +92,7 @@ const Popup = () => {
             }
           },
           (err) => {
-						toast.error(`⚠️ ${err}`);
+            toast.error(`⚠️ ${err}`);
             console.error("deleteItem err:", err);
           }
         );
@@ -127,7 +121,7 @@ const Popup = () => {
         resetPopups();
       },
       (err) => {
-				toast.error(`⚠️ ${err}`);
+        toast.error(`⚠️ ${err}`);
         console.error("updateItem err:", err);
       }
     );
@@ -156,7 +150,7 @@ const Popup = () => {
         resetPopups();
       },
       (err) => {
-				toast.error(`⚠️ ${err}`);
+        toast.error(`⚠️ ${err}`);
         console.error("createItem err:", err);
       }
     );

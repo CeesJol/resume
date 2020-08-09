@@ -1,18 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 
 const Warning = () => {
-  const {
-    getUser,
-    storeUser,
-    setEditingItem,
-    setChangingInfo,
-    warning,
-    setWarning,
-    setUserMadeChanges,
-    resetPopups,
-  } = useContext(UserContext);
+  const { warning, setWarning, resetPopups } = useContext(UserContext);
   const handleYes = async () => {
     if (warning.fn) await warning.fn();
     resetPopups();

@@ -4,7 +4,7 @@ import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import Template from "../Template";
 
-export default () => {
+const ResumePopup = () => {
   const {
     getUser,
     storeUser,
@@ -98,3 +98,5 @@ export default () => {
     </div>
   );
 };
+
+export default ResumePopup;

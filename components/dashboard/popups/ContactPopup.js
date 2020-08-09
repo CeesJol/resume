@@ -8,7 +8,7 @@ import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import Contactpicker from "../../general/Contactpicker";
 
-export default () => {
+const ContactPopup = () => {
   const {
     editingResume,
     setWarning,
@@ -157,3 +157,5 @@ export default () => {
     </div>
   );
 };
+
+export default ContactPopup;

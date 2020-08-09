@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 
-export default () => {
+const TopBox = () => {
   const { getUser } = useContext(UserContext);
   return (
     getUser() &&
@@ -20,3 +20,5 @@ export default () => {
     ))
   );
 };
+
+export default TopBox;

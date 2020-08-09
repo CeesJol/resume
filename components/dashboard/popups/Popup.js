@@ -10,7 +10,7 @@ import Button from "../../general/Button";
 import Monthpicker from "../../general/Monthpicker";
 import Yearpicker from "../../general/Yearpicker";
 
-export default () => {
+const Popup = () => {
   const {
     getUser,
     storeUser,
@@ -263,3 +263,5 @@ export default () => {
     </div>
   );
 };
+
+export default Popup;

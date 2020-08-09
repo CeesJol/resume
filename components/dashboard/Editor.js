@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { UserContext } from "../../contexts/userContext";
 import ResumeWrapper from "./ResumeWrapper";
 
-export default () => {
+const Editor = () => {
   const {
 		editingResume,
 		setEditingResume,
@@ -27,3 +27,5 @@ export default () => {
     </>
   );
 };
+
+export default Editor;

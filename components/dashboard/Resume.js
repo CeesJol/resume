@@ -4,7 +4,7 @@ import Category from "./Category";
 import ContactItem from "./ContactItem";
 import { PDFExport } from "@progress/kendo-react-pdf";
 
-export default () => {
+const Resume = () => {
   const {
     getUser,
     setEditingCategory,
@@ -132,3 +132,5 @@ export default () => {
     </>
   );
 };
+
+export default Resume;

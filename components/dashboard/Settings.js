@@ -6,7 +6,7 @@ import { disconfirmUser, sendConfirmationEmail } from "../../pages/api/confirm";
 import { UserContext } from "../../contexts/userContext";
 import { validateUpdate, validatePassword } from "../../lib/validate";
 
-export default () => {
+const Settings = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [bio, setBio] = useState("");
@@ -41,8 +41,8 @@ export default () => {
           return;
         }
 
-				// If email changed, set confirmed to false and 
-				// send a new confirmation email
+        // If email changed, set confirmed to false and
+        // send a new confirmation email
         if (email !== user.email) {
           disconfirmUser(user.id);
           sendConfirmationEmail(user.id, email);
@@ -147,3 +147,5 @@ export default () => {
     </>
   );
 };
+
+export default Settings;

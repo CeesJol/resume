@@ -5,7 +5,7 @@ import Button from "../../general/Button";
 import Monthpicker from "../../general/Monthpicker";
 import Yearpicker from "../../general/Yearpicker";
 
-export default () => {
+const UserPopup = () => {
   const {
     getUser,
     storeUser,
@@ -107,3 +107,5 @@ export default () => {
     </div>
   );
 };
+
+export default UserPopup;

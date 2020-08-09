@@ -3,7 +3,7 @@ import { updateTemplate } from "../../pages/api/fauna";
 import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
 
-export default () => {
+const Layout = () => {
   const { getUser, editingResume, storeTemplate, resetPopups } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [name, setName] = useState("");
@@ -75,3 +75,5 @@ export default () => {
     </div>
   );
 };
+
+export default Layout;

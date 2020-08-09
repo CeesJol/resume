@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
-import { updateCategory, createCategory, deleteCategory } from "../../../pages/api/fauna";
+import {
+  updateCategory,
+  createCategory,
+  deleteCategory,
+} from "../../../pages/api/fauna";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 
-export default () => {
+const CategoryPopup = () => {
   const {
     getUser,
     storeUser,
@@ -17,7 +21,7 @@ export default () => {
     getCategory,
     forceRender,
     editingCategory,
-		getCategories,
+    getCategories,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [name, setName] = useState("");
@@ -72,11 +76,12 @@ export default () => {
         console.error("updateCategory err:", err);
       }
     );
-	};
-	const handleDelete = async (event) => {
+  };
+  const handleDelete = async (event) => {
     if (event) event.preventDefault();
     setWarning({
-      text: "Are you sure you want to delete this category? All the items in it will be lost.",
+      text:
+        "Are you sure you want to delete this category? All the items in it will be lost.",
       fn: async () => {
         await deleteCategory(editingCategory._id).then(
           async (data) => {
@@ -135,7 +140,12 @@ export default () => {
             {editingCategory.name ? (
               <>
                 <Button text="Update" altText="Updating..." fn={handleUpdate} />
-                <Button text="Delete" altText="Deleting..." color="red" fn={handleDelete} />
+                <Button
+                  text="Delete"
+                  altText="Deleting..."
+                  color="red"
+                  fn={handleDelete}
+                />
               </>
             ) : (
               <Button text="Add" altText="Adding..." fn={handleCreate} />
@@ -146,3 +156,5 @@ export default () => {
     </div>
   );
 };
+
+export default CategoryPopup;

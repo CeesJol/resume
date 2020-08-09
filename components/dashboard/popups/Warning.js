@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 
-export default () => {
+const Warning = () => {
   const {
     getUser,
     storeUser,
@@ -34,3 +34,5 @@ export default () => {
     </div>
   );
 };
+
+export default Warning;

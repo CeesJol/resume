@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import Router from "next/router";
 import { UserContext } from "../../contexts/userContext";
-
+import LoadingPopup from "./popups/LoadingPopup";
 import { logout } from "../../pages/api/auth";
 
 const DashboardHeader = () => {
@@ -10,7 +10,6 @@ const DashboardHeader = () => {
   const handleLogout = async () => {
     setLoggingOut(true);
     await logout(getUser().secret);
-    Router.push("/login");
     clearUser();
     setLoggingOut(false);
   };

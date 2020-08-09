@@ -188,16 +188,16 @@ const UserContextProvider = (props) => {
     return user;
   };
   const clearUser = () => {
+		// Get user away from dashboard
+		if (Router.pathname.startsWith("/dashboard")) {
+      Router.push("/login");
+		}
+		
     // Reset localstorage
     localStorage.removeItem("user");
 
     // Reset state
 		setUser(null);
-		
-		// Get user away from dashboard
-		if (Router.pathname.startsWith("/dashboard")) {
-      Router.push("/login");
-    }
   };
   const userExists = () => {
     return user != null;

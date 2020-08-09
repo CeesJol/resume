@@ -32,9 +32,7 @@ export default function Dashboard(props) {
   } = useContext(UserContext);
   return auth ? (
     loggingOut ? (
-      <LoadingPopup
-        text={`Logging out${getUser() && " " + getUser().username}...`}
-      />
+      <LoadingPopup text={`Logging out...`} />
     ) : (
       <div className="dashboard-container">
         <DashboardHeader />

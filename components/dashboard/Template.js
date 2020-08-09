@@ -7,7 +7,6 @@ const Template = ({ template }) => {
   );
   const handleClick = (e, templateId) => {
     e.preventDefault();
-    console.log(templateId);
 		setSelectedTemplateId(templateId);
   };
   return (

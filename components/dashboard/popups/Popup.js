@@ -98,6 +98,7 @@ const Popup = () => {
             }
           },
           (err) => {
+						toast.error(`⚠️ ${err}`);
             console.error("deleteItem err:", err);
           }
         );
@@ -126,6 +127,7 @@ const Popup = () => {
         resetPopups();
       },
       (err) => {
+				toast.error(`⚠️ ${err}`);
         console.error("updateItem err:", err);
       }
     );
@@ -154,6 +156,7 @@ const Popup = () => {
         resetPopups();
       },
       (err) => {
+				toast.error(`⚠️ ${err}`);
         console.error("createItem err:", err);
       }
     );

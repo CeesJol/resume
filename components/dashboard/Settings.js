@@ -58,6 +58,7 @@ const Settings = () => {
 				toast.success("💾 Updated successfully!");
       },
       (err) => {
+				toast.error(`⚠️ ${err}`);
         console.error("err", err);
       }
     );

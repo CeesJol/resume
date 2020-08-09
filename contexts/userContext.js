@@ -285,6 +285,7 @@ const UserContextProvider = (props) => {
                 console.table(data.findUserByID);
               },
               (err) => {
+								toast.error(`⚠️ ${err}`);
                 console.error("Fucked up getting the user data", err);
               }
             );
@@ -293,7 +294,8 @@ const UserContextProvider = (props) => {
             // Database denies that user is logged in!
             console.log("localUser:");
             console.table(localUser);
-            console.warn("Your secret is fake news", err);
+						console.warn("Your secret is fake news", err);
+						toast.error(`⚠️ ${err}`);
             clearUser();
           }
         );

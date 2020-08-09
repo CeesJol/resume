@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { updateTemplate } from "../../pages/api/fauna";
 import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
+import { toast } from 'react-toastify';
 
 const Layout = () => {
   const { getUser, editingResume, storeTemplate, resetPopups } = useContext(UserContext);
@@ -31,6 +32,7 @@ const Layout = () => {
         resetPopups();
       },
       (err) => {
+				toast.error(`⚠️ ${err}`);
         console.error("updateTemplate err:", err);
       }
     );

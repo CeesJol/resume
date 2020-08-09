@@ -51,6 +51,7 @@ const ContactPopup = () => {
         resetPopups();
       },
       (err) => {
+				toast.error(`⚠️ ${err}`);
         console.error("createContactInfo err:", err);
       }
     );
@@ -71,6 +72,7 @@ const ContactPopup = () => {
         resetPopups();
       },
       (err) => {
+				toast.error(`⚠️ ${err}`);
         console.error("updateContactInfo err:", err);
       }
     );
@@ -94,6 +96,7 @@ const ContactPopup = () => {
             }
           },
           (err) => {
+						toast.error(`⚠️ ${err}`);
             console.error("deleteContactInfo err:", err);
           }
         );

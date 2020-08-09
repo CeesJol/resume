@@ -52,6 +52,7 @@ const CategoryPopup = () => {
         forceRender();
       },
       (err) => {
+				toast.error(`⚠️ ${err}`);
         console.error("createCategory err:", err);
       }
     );
@@ -73,6 +74,7 @@ const CategoryPopup = () => {
         forceRender();
       },
       (err) => {
+				toast.error(`⚠️ ${err}`);
         console.error("updateCategory err:", err);
       }
     );
@@ -97,6 +99,7 @@ const CategoryPopup = () => {
             }
           },
           (err) => {
+						toast.error(`⚠️ ${err}`);
             console.error("deleteCategory err:", err);
           }
         );

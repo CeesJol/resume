@@ -311,7 +311,6 @@ export const createResume = async (userId, templateId, data) => {
 			}
 		}
 	}`;
-  console.log(query);
   return executeQuery(query);
 };
 

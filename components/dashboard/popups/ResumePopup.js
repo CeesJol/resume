@@ -46,6 +46,7 @@ const ResumePopup = () => {
         resetPopups();
       },
       (err) => {
+				toast.error(`⚠️ ${err}`);
         console.log("createResume err:", err);
       }
     );

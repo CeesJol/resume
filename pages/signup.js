@@ -26,7 +26,6 @@ export default function Signup() {
           secret: res.secret,
           email,
         });
-        console.log("conf", id, email);
         sendConfirmationEmail(id, email);
         getUserByEmail(email).then(
           (data) => {

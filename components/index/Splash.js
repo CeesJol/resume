@@ -21,12 +21,8 @@ const Splash = () => {
                   Create a professional resume in minutes
                 </h1>
 								<p>Affilas is an online resume builder that creates resumes quickly.</p>
-                {/* <p>
-                Affilas allows you to build a custom resume in minutes.
-              </p> */}
               </div>
               <footer>
-                {/* <Button /> */}
                 <form style={{ display: "flex" }}>
                   <input
                     type="text"
@@ -39,8 +35,10 @@ const Splash = () => {
                       minWidth: "0px",
                       width: "auto",
                       display: "inline-block",
-                      marginRight: "1rem",
-                      flexGrow: "1",
+                      marginRight: "1.5rem",
+											flexGrow: "1",
+											fontSize: "2rem",
+											marginBottom: "0",
                     }}
                   />
                   <Button

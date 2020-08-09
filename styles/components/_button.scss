@@ -1,5 +1,7 @@
 .button-container {
-	display: inline;
+	// display: flex;
+	flex-shrink: 0;
+	flex-direction: column; // Prevents height change by parent (display: flex)
 	margin-right: 1rem;
 	
 	a:hover {

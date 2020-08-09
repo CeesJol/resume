@@ -1,55 +1,55 @@
-.contact {
-  @include gradient3;
-  position: relative;
-  margin-top: 5rem;
-  padding-bottom: 0 !important;
+// .contact {
+//   @include gradient3;
+//   position: relative;
+//   margin-top: 5rem;
+//   padding-bottom: 0 !important;
 
-  &__content {
-    @include content-container;
-  }
+//   &__content {
+//     @include content-container;
+//   }
 
-  &__form {
-    position: relative;
-    background-color: white;
-    top: -10rem;
-    // @media (min-width: $desktop-breakpoint) {
-    -webkit-box-shadow: 0px 0px 48px -18px rgba(99, 99, 99, 0.75);
-    -moz-box-shadow: 0px 0px 48px -18px rgba(99, 99, 99, 0.75);
-    box-shadow: 0px 0px 48px -18px rgba(99, 99, 99, 0.75);
-    // }
-    padding: 2rem;
-    padding-left: 5rem;
-    padding-right: 5rem;
-    border-radius: 1px;
-  }
+//   &__form {
+//     position: relative;
+//     background-color: white;
+//     top: -10rem;
+//     // @media (min-width: $desktop-breakpoint) {
+//     -webkit-box-shadow: 0px 0px 48px -18px rgba(99, 99, 99, 0.75);
+//     -moz-box-shadow: 0px 0px 48px -18px rgba(99, 99, 99, 0.75);
+//     box-shadow: 0px 0px 48px -18px rgba(99, 99, 99, 0.75);
+//     // }
+//     padding: 2rem;
+//     padding-left: 5rem;
+//     padding-right: 5rem;
+//     border-radius: 1px;
+//   }
 
-  &__alt {
-    position: relative;
-    color: white;
-    top: -5rem;
+//   &__alt {
+//     position: relative;
+//     color: white;
+//     top: -5rem;
 
-    a {
-      color: white;
-    }
-  }
+//     a {
+//       color: white;
+//     }
+//   }
 
-  input,
-  textarea,
-  select {
-    display: block;
-    width: calc(100% - 0rem);
-    border: none;
-    border-bottom: 1px solid $light-grey-2;
-    margin-bottom: 3rem;
-    outline: none;
-    transition: 0.3s;
-    padding: 0.75rem 1.5rem;
-    font-size: $font-size-default;
-  }
+//   // input,
+//   // textarea,
+//   // select {
+//   //   display: block;
+//   //   width: calc(100% - 0rem);
+//   //   border: none;
+//   //   border-bottom: 1px solid $light-grey-2;
+//   //   margin-bottom: 3rem;
+//   //   outline: none;
+//   //   transition: 0.3s;
+//   //   padding: 0.75rem 1.5rem;
+//   //   font-size: $font-size-default;
+//   // }
 
-  input:focus,
-  textarea:focus,
-  select:focus {
-    border-bottom: 1px solid $light-green;
-  }
-}
+//   input:focus,
+//   textarea:focus,
+//   select:focus {
+//     border-bottom: 1px solid $light-green;
+//   }
+// }

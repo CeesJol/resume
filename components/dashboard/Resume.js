@@ -106,7 +106,7 @@ const Resume = () => {
     <>
       <PDFExport
         paperSize={"A4"}
-        fileName="_____.pdf"
+        fileName="resume.pdf"
         title=""
         subject=""
         keywords=""

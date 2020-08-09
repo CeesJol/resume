@@ -5,13 +5,13 @@ const Idea = () => (
     <div className="idea">
       <div className="idea__content">
         <div className="idea__text">
-          <h4>Make a great first impression with a great resume</h4>
+          <h4>Build a professional resume</h4>
           <p>
-            Affilas builds your resume as you type and allows you to style it to your liking. Resumes take just minutes to create with Affilas.
+            Pick a template, add your items, and export to PDF. It's that easy.
           </p>
         </div>
         <div className="idea__preview">
-          <img src="../images/undraw_transfer_money_rywa.svg" />
+          <img src="../images/undraw_updated_resume_u4fy.svg" />
         </div>
       </div>
     </div>

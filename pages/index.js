@@ -17,8 +17,8 @@ const IndexPage = () => {
         <Splash />
         <Intro />
         <Idea />
-        <Arguments />
         <Niche />
+				<Arguments />
         <CTA />
       </main>
       <Footer />

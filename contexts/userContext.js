@@ -1,10 +1,9 @@
 import React, { createContext, useState, useEffect } from "react";
 export const UserContext = createContext();
-
 import { identity } from "../pages/api/auth";
 import { readUser, updateItem, updateCategory } from "../pages/api/fauna";
-
-import Router from 'next/router'
+import { toast } from "react-toastify";
+import Router from "next/router";
 
 const UserContextProvider = (props) => {
   const [dummy, setDummy] = useState(false);
@@ -24,8 +23,8 @@ const UserContextProvider = (props) => {
   const [moving, setMoving] = useState(false);
   const [selectedTemplateId, setSelectedTemplateId] = useState(0);
   const [preview, setPreview] = useState(false);
-	const [pdf, setPdf] = useState(null);
-	const [loggingOut, setLoggingOut] = useState(null);
+  const [pdf, setPdf] = useState(null);
+  const [loggingOut, setLoggingOut] = useState(null);
   const forceRender = () => {
     setDummy(!dummy);
   };
@@ -188,16 +187,16 @@ const UserContextProvider = (props) => {
     return user;
   };
   const clearUser = () => {
-		// Get user away from dashboard
-		if (Router.pathname.startsWith("/dashboard")) {
+    // Get user away from dashboard
+    if (Router.pathname.startsWith("/dashboard")) {
       Router.push("/login");
-		}
-		
+    }
+
     // Reset localstorage
     localStorage.removeItem("user");
 
     // Reset state
-		setUser(null);
+    setUser(null);
   };
   const userExists = () => {
     return user != null;
@@ -285,8 +284,8 @@ const UserContextProvider = (props) => {
                 console.table(data.findUserByID);
               },
               (err) => {
-								toast.error(`⚠️ ${err}`);
-                console.error("Fucked up getting the user data", err);
+                toast.error(`⚠️ ${err}`);
+                console.error("Failed getting the user data", err);
               }
             );
           },
@@ -294,8 +293,8 @@ const UserContextProvider = (props) => {
             // Database denies that user is logged in!
             console.log("localUser:");
             console.table(localUser);
-						console.warn("Your secret is fake news", err);
-						toast.error(`⚠️ ${err}`);
+            console.warn("Your secret is fake news", err);
+            toast.error(`⚠️ ${err}`);
             clearUser();
           }
         );
@@ -355,9 +354,9 @@ const UserContextProvider = (props) => {
         preview,
         setPreview,
         pdf,
-				setPdf,
-				loggingOut,
-				setLoggingOut,
+        setPdf,
+        loggingOut,
+        setLoggingOut,
       }}
     >
       {props.children}

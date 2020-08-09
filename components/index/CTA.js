@@ -6,7 +6,7 @@ const CTA = () => (
     <div className="cta">
       <div className="cta__content">
         <h3>Ready to try Affilas?</h3>
-        <p>Set up a resume in 2 minutes.</p>
+        <p>Set up a resume in 10 minutes.</p>
         <Button text="Get started for free" />
         {/* <p>Questions? <a href="mailto:contact@affilas.com">Contact us</a></p> */}
       </div>

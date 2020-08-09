@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
 
-export default () => {
+const Resumes = () => {
   const { getUser, setEditingResume, setCreatingResume } = useContext(
     UserContext
   );
@@ -43,3 +43,5 @@ export default () => {
     </div>
   );
 };
+
+export default Resumes;

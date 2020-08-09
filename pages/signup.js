@@ -17,7 +17,6 @@ export default function Signup() {
     if (event) event.preventDefault();
     login(email, password).then(
       (res) => {
-        toast.success("✅ Signup succeeded!");
         setAuth(true);
         console.log("res.instance.value", res.instance.value);
         const id = res.instance.value.id;
@@ -67,6 +66,9 @@ export default function Signup() {
     setPassword(event.target.value);
   };
   useEffect(() => {
+		if (Router.query["email"]) {
+			setEmail(Router.query["email"]);
+		}
     if (userExists()) {
       // User is already logged in
       Router.push("/dashboard");

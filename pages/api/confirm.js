@@ -59,8 +59,8 @@ export const generateToken = (id) => {
 };
 
 export const sendConfirmationEmail = async (id, email) => {
-	email = email.toLowerCase();
-	
+  email = email.toLowerCase();
+
   const token = generateToken(id);
   const message = Email(token);
 
@@ -75,5 +75,5 @@ export const sendConfirmationEmail = async (id, email) => {
       message: `${message}`,
     }),
   });
-	const text = await res.text();
+  const text = await res.text();
 };

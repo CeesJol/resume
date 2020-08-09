@@ -15,7 +15,6 @@ export default function Login() {
     if (event) event.preventDefault();
     await login(email, password).then(
       (res) => {
-				toast.success("✅ Login succeeded!");
 				console.log('res.instance.value', res.instance.value);
 				setAuth(true);
 				const id = res.instance.value.id;

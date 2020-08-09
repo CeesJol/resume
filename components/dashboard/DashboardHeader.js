@@ -1,23 +1,16 @@
 import React, { useContext, useState } from "react";
 import Router from "next/router";
 import { UserContext } from "../../contexts/userContext";
-import LoadingPopup from "./popups/LoadingPopup";
 import { logout } from "../../pages/api/auth";
 
 const DashboardHeader = () => {
-  const { userExists, getUser, clearUser } = useContext(UserContext);
-  const [loggingOut, setLoggingOut] = useState(false);
+  const { userExists, getUser, clearUser, setLoggingOut } = useContext(UserContext);
   const handleLogout = async () => {
     setLoggingOut(true);
     await logout(getUser().secret);
     clearUser();
-    setLoggingOut(false);
   };
-  return loggingOut ? (
-    <LoadingPopup
-      text={`Logging out${getUser() && " " + getUser().username}...`}
-    />
-  ) : (
+  return (
     <header className="header">
       <div className="header__content header__content--dashboard">
         <div className="header__left">

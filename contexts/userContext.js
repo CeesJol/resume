@@ -24,7 +24,8 @@ const UserContextProvider = (props) => {
   const [moving, setMoving] = useState(false);
   const [selectedTemplateId, setSelectedTemplateId] = useState(0);
   const [preview, setPreview] = useState(false);
-  const [pdf, setPdf] = useState(null);
+	const [pdf, setPdf] = useState(null);
+	const [loggingOut, setLoggingOut] = useState(null);
   const forceRender = () => {
     setDummy(!dummy);
   };
@@ -352,7 +353,9 @@ const UserContextProvider = (props) => {
         preview,
         setPreview,
         pdf,
-        setPdf,
+				setPdf,
+				loggingOut,
+				setLoggingOut,
       }}
     >
       {props.children}

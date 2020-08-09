@@ -10,7 +10,7 @@ export default function Login() {
   const [status, setStatus] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { userExists, storeUser, setAuth } = useContext(UserContext);
+  const { userExists, storeUser, setAuth, setLoggingOut } = useContext(UserContext);
   const handleLogin = async (event) => {
     if (event) event.preventDefault();
     setStatus("Authenticating...");
@@ -46,6 +46,7 @@ export default function Login() {
     setPassword(event.target.value);
   };
   useEffect(() => {
+		setLoggingOut(false);
     if (userExists()) {
       // User is already logged in
       Router.push("/dashboard");

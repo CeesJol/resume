@@ -28,32 +28,41 @@ export default function Dashboard(props) {
     editingCategory,
     changingInfo,
     editingContactInfo,
+    loggingOut,
   } = useContext(UserContext);
   return auth ? (
-    <div className="dashboard-container">
-      <DashboardHeader />
-      <main>
-        <div className="dashboard">
-          <Nav />
-          <div className="dashboard__main">
-            <div className="dashboard__main__content">
-              {nav == 0 && (editingResume === -1 ? <Resumes /> : <Editor />)}
-              {nav == 1 && <Layout />}
-              {nav == 2 && <Preview />}
-              {nav == 3 && <Settings />}
+    loggingOut ? (
+      <LoadingPopup
+        text={`Logging out${getUser() && " " + getUser().username}...`}
+      />
+    ) : (
+      <div className="dashboard-container">
+        <DashboardHeader />
+        <main>
+          <div className="dashboard">
+            <Nav />
+            <div className="dashboard__main">
+              <div className="dashboard__main__content">
+                {nav == 0 && (editingResume === -1 ? <Resumes /> : <Editor />)}
+                {nav == 1 && <Layout />}
+                {nav == 2 && <Preview />}
+                {nav == 3 && <Settings />}
+              </div>
             </div>
           </div>
-        </div>
-      </main>
-      {/* Draw popups */}
-      {creatingResume !== -1 && <ResumePopup />}
-      {editingItem !== -1 && <Popup />}
-      {editingCategory !== -1 && editingItem === -1 && <CategoryPopup />}
-      {changingInfo && <UserPopup />}
-      {editingContactInfo !== -1 && <ContactPopup />}
-      {warning && <Warning />}
-    </div>
+        </main>
+        {/* Draw popups */}
+        {creatingResume !== -1 && <ResumePopup />}
+        {editingItem !== -1 && <Popup />}
+        {editingCategory !== -1 && editingItem === -1 && <CategoryPopup />}
+        {changingInfo && <UserPopup />}
+        {editingContactInfo !== -1 && <ContactPopup />}
+        {warning && <Warning />}
+      </div>
+    )
   ) : (
-    <LoadingPopup text={`Authenticating${getUser() && " " + getUser().username}...`} />
+    <LoadingPopup
+      text={`Authenticating${getUser() && " " + getUser().username}...`}
+    />
   );
 }

@@ -8,7 +8,6 @@ const Layout = () => {
   const [filled, setFilled] = useState(false);
   const [name, setName] = useState("");
   const [style, setStyle] = useState("");
-  const [status, setStatus] = useState("");
   const handleChangeName = (event) => {
     setName(event.target.value);
   };
@@ -61,8 +60,6 @@ const Layout = () => {
                   value={style}
                   onChange={handleChangeStyle}
                 />
-
-                {status && <p>{status}</p>}
 
                 <Button text="Update" altText="Updating..." fn={handleUpdate} />
               </div>

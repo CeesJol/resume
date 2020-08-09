@@ -3,6 +3,7 @@ import { createResume, getTemplates } from "../../../pages/api/fauna";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import Template from "../Template";
+import { toast } from "react-toastify";
 
 const ResumePopup = () => {
   const {
@@ -21,7 +22,6 @@ const ResumePopup = () => {
   } = useContext(UserContext);
   const [title, setTitle] = useState("");
   const [templates, setTemplates] = useState(false);
-  const [status, setStatus] = useState("");
   const handleChangeTitle = (event) => {
     setTitle(event.target.value);
     setUserMadeChanges(true);
@@ -32,9 +32,9 @@ const ResumePopup = () => {
     return false;
   };
   const handleCreate = async () => {
-    const validate = validateInput();
-    if (validate) {
-      setStatus(validate);
+    const validationError = validateInput();
+    if (validationError) {
+      toast.error(`⚠️ ${validationError}`);
       return;
     }
 
@@ -88,8 +88,6 @@ const ResumePopup = () => {
             ) : (
               <p>Loading templates...</p>
             )}
-
-            {status && <p>{status}</p>}
             <br />
             <Button text="Create" altText="Creating..." fn={handleCreate} />
           </div>

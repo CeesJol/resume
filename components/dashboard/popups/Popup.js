@@ -9,6 +9,7 @@ import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import Monthpicker from "../../general/Monthpicker";
 import Yearpicker from "../../general/Yearpicker";
+import { toast } from "react-toastify";
 
 const Popup = () => {
   const {
@@ -23,8 +24,8 @@ const Popup = () => {
     userMadeChanges,
     setUserMadeChanges,
     resetPopups,
-		getCategory,
-		forceRender,
+    getCategory,
+    forceRender,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [title, setTitle] = useState("");
@@ -35,7 +36,6 @@ const Popup = () => {
   const [year2, setYear2] = useState("");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("");
   const handleChangeTitle = (event) => {
     setTitle(event.target.value);
     setUserMadeChanges(true);
@@ -105,9 +105,9 @@ const Popup = () => {
     });
   };
   const handleUpdate = async () => {
-    const validate = validateInput();
-    if (validate) {
-      setStatus(validate);
+    const validationError = validateInput();
+    if (validationError) {
+      toast.error(`⚠️ ${validationError}`);
       return;
     }
 
@@ -131,9 +131,9 @@ const Popup = () => {
     );
   };
   const handleCreate = async () => {
-    const validate = validateInput();
-    if (validate) {
-      setStatus(validate);
+    const validationError = validateInput();
+    if (validationError) {
+      toast.error(`⚠️ ${validationError}`);
       return;
     }
 
@@ -241,8 +241,6 @@ const Popup = () => {
               value={description}
               onChange={handleChangeDescription}
             />
-
-            {status && <p>{status}</p>}
 
             {editingItem.title ? (
               <>

@@ -5,18 +5,17 @@ import Button from "../components/general/Button";
 import { login } from "./api/auth";
 import { getUserByEmail } from "./api/fauna";
 import { UserContext } from "../contexts/userContext";
+import { toast } from 'react-toastify';
 
 export default function Login() {
-  const [status, setStatus] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { userExists, storeUser, setAuth, setLoggingOut } = useContext(UserContext);
   const handleLogin = async (event) => {
     if (event) event.preventDefault();
-    setStatus("Authenticating...");
     await login(email, password).then(
       (res) => {
-				setStatus("Login succeeded!");
+				toast.success("✅ Login succeeded!");
 				console.log('res.instance.value', res.instance.value);
 				setAuth(true);
 				const id = res.instance.value.id;
@@ -31,11 +30,12 @@ export default function Login() {
 					Router.push("/dashboard");
         }, (err) => {
 					console.error("login err", err)
-					setStatus(`Login failed: ${err}`);
+					toast.error("⚠️ Login failed")
 				});
       },
       (err) => {
-        setStatus(`Login failed: ${err}`);
+				console.error("login err 2", err)
+				toast.error("⚠️ Login failed")
       }
     );
   };
@@ -83,9 +83,7 @@ export default function Login() {
               onChange={handleChangePassword}
             />
 
-            {status && <p>{status}</p>}
-
-            <Button fn={handleLogin} text="Log in" />
+            <Button fn={handleLogin} text="Log in" altText="Logging in..." />
           </form>
         </div>
       </div>

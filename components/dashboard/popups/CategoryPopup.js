@@ -6,6 +6,7 @@ import {
 } from "../../../pages/api/fauna";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
+import { toast } from "react-toastify";
 
 const CategoryPopup = () => {
   const {
@@ -25,7 +26,6 @@ const CategoryPopup = () => {
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [name, setName] = useState("");
-  const [status, setStatus] = useState("");
   const handleChangeName = (event) => {
     setName(event.target.value);
     setUserMadeChanges(true);
@@ -35,9 +35,9 @@ const CategoryPopup = () => {
     return false;
   };
   const handleCreate = async () => {
-    const validate = validateInput();
-    if (validate) {
-      setStatus(validate);
+    const validationError = validateInput();
+    if (validationError) {
+      toast.error(`⚠️ ${validationError}`);
       return;
     }
 
@@ -57,9 +57,9 @@ const CategoryPopup = () => {
     );
   };
   const handleUpdate = async () => {
-    const validate = validateInput();
-    if (validate) {
-      setStatus(validate);
+    const validationError = validateInput();
+    if (validationError) {
+      toast.error(`⚠️ ${validationError}`);
       return;
     }
 
@@ -134,8 +134,6 @@ const CategoryPopup = () => {
               value={name}
               onChange={handleChangeName}
             />
-
-            {status && <p>{status}</p>}
 
             {editingCategory.name ? (
               <>

@@ -2,10 +2,12 @@ import React from "react";
 import App from "next/app";
 import Head from "next/head";
 import UserContextProvider from "../contexts/userContext";
+import { ToastContainer } from 'react-toastify';
 
 import "../styles/index.scss";
 import 'font-awesome/css/font-awesome.min.css'
 import 'react-image-crop/lib/ReactCrop.scss';
+import 'react-toastify/dist/ReactToastify.css';
 
 class MyApp extends App {
   render() {
@@ -18,6 +20,7 @@ class MyApp extends App {
           </Head>
         </div>
 				<UserContextProvider>
+					<ToastContainer />
           <Component {...pageProps} />
 				</UserContextProvider>
       </div>

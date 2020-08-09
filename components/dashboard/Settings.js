@@ -5,14 +5,13 @@ import { updatePassword } from "../../pages/api/auth";
 import { disconfirmUser, sendConfirmationEmail } from "../../pages/api/confirm";
 import { UserContext } from "../../contexts/userContext";
 import { validateUpdate, validatePassword } from "../../lib/validate";
+import { toast } from 'react-toastify';
 
 const Settings = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [bio, setBio] = useState("");
   const [password, setPassword] = useState("");
-  const [status, setStatus] = useState("");
-  const [status2, setStatus2] = useState("");
   const { storeUser, getUser } = useContext(UserContext);
   const handleChangeUsername = (event) => {
     setUsername(event.target.value);
@@ -30,14 +29,14 @@ const Settings = () => {
     if (event) event.preventDefault();
     const validationError = validateUpdate(username, email);
     if (validationError) {
-      setStatus(validationError);
+			toast.error(`⚠️ ${validationError}`);
       return;
     }
     const user = getUser();
     await updateUser(user.id, username, email, bio).then(
       (data) => {
         if (data == -1) {
-          setStatus("That username or email is already taken");
+					toast.error("⚠️ That username or email is already taken");
           return;
         }
 
@@ -56,7 +55,7 @@ const Settings = () => {
           bio: data.updateUser.bio,
         });
 
-        setStatus("Updated successfully!");
+				toast.success("💾 Updated successfully!");
       },
       (err) => {
         console.error("err", err);
@@ -67,15 +66,15 @@ const Settings = () => {
     if (event) event.preventDefault();
     const validationError = validatePassword(password);
     if (validationError) {
-      setStatus2(validationError);
+      toast.error(`⚠️ ${validationError}`);
       return false;
     }
     await updatePassword(getUser().id, password).then(
       (data) => {
-        setStatus2("Updated successfully!");
+        toast.success("💾 Updated successfully!");
       },
       (err) => {
-        setStatus2("Something went wrong at our side. Please try again later!");
+        toast.error("⚠️ Something went wrong at our side. Please try again later!");
         console.error("err", err);
       }
     );
@@ -121,9 +120,7 @@ const Settings = () => {
             onChange={handleChangeBio}
           />
 
-          {status && <p>{status}</p>}
-
-          <Button text="Save" fn={handleSave} />
+          <Button text="Save" altText="Saving..." fn={handleSave} />
         </form>
       </div>
 
@@ -139,9 +136,7 @@ const Settings = () => {
             onChange={handleChangePassword}
           />
 
-          {status2 && <p>{status2}</p>}
-
-          <Button text="Save" fn={handleSavePassword} />
+          <Button text="Save" altText="Saving..." fn={handleSavePassword} />
         </form>
       </div>
     </>

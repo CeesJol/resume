@@ -7,6 +7,7 @@ import {
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import Contactpicker from "../../general/Contactpicker";
+import { toast } from "react-toastify";
 
 const ContactPopup = () => {
   const {
@@ -21,7 +22,6 @@ const ContactPopup = () => {
   const [filled, setFilled] = useState(false);
   const [name, setName] = useState("");
   const [value, setValue] = useState("");
-  const [status, setStatus] = useState("");
   const handleChangeName = (event) => {
     setName(event.target.value);
     setUserMadeChanges(true);
@@ -35,9 +35,9 @@ const ContactPopup = () => {
     return false;
   };
   const handleCreate = async () => {
-    const validate = validateInput();
-    if (validate) {
-      setStatus(validate);
+    const validationError = validateInput();
+    if (validationError) {
+      toast.error(`⚠️ ${validationError}`);
       return;
     }
 
@@ -56,9 +56,9 @@ const ContactPopup = () => {
     );
   };
   const handleUpdate = async () => {
-    const validate = validateInput();
-    if (validate) {
-      setStatus(validate);
+    const validationError = validateInput();
+    if (validationError) {
+      toast.error(`⚠️ ${validationError}`);
       return;
     }
 
@@ -135,8 +135,6 @@ const ContactPopup = () => {
               value={name}
               onChange={handleChangeName}
             />
-
-            {status && <p>{status}</p>}
 
             {editingContactInfo.name ? (
               <>

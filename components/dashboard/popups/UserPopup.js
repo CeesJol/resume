@@ -4,6 +4,7 @@ import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import Monthpicker from "../../general/Monthpicker";
 import Yearpicker from "../../general/Yearpicker";
+import { toast } from "react-toastify";
 
 const UserPopup = () => {
   const {
@@ -22,7 +23,6 @@ const UserPopup = () => {
   const [filled, setFilled] = useState(false);
   const [jobTitle, setJobTitle] = useState("");
   const [bio, setBio] = useState("");
-  const [status, setStatus] = useState("");
   const handleChangeJobTitle = (event) => {
     setJobTitle(event.target.value);
     setUserMadeChanges(true);
@@ -37,9 +37,9 @@ const UserPopup = () => {
     return false;
   };
   const handleUpdate = async () => {
-    const validate = validateInput();
-    if (validate) {
-      setStatus(validate);
+    const validationError = validateInput();
+    if (validationError) {
+      toast.error(`⚠️ ${validationError}`);
       return;
     }
 
@@ -97,8 +97,6 @@ const UserPopup = () => {
               value={bio}
               onChange={handleChangeBio}
             />
-
-            {status && <p>{status}</p>}
 
             <Button text="Update" altText="Updating..." fn={handleUpdate} />
           </div>

@@ -6,19 +6,18 @@ import { login, signup } from "./api/auth";
 import { getUserByEmail } from "./api/fauna";
 import { sendConfirmationEmail } from "./api/confirm";
 import { UserContext } from "../contexts/userContext";
+import { toast } from "react-toastify";
 
 export default function Signup() {
-  const [status, setStatus] = useState(null);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { userExists, storeUser, setAuth } = useContext(UserContext);
   const handleLogin = (event) => {
     if (event) event.preventDefault();
-    setStatus("Authenticating...");
     login(email, password).then(
       (res) => {
-        setStatus("Login succeeded!");
+        toast.success("✅ Signup succeeded!");
         setAuth(true);
         console.log("res.instance.value", res.instance.value);
         const id = res.instance.value.id;
@@ -36,26 +35,26 @@ export default function Signup() {
             Router.push("/dashboard");
           },
           (err) => {
-						console.error("signup err", err)
-            setStatus(`Login failed: ${err}`);
+            console.error("signup err", err);
+            toast.error("⚠️ Login failed");
           }
         );
       },
       (err) => {
-				console.error("(Signup) login err", err)
-        setStatus(`Login failed: ${err}`);
+        console.error("(Signup) login err", err);
+        toast.error("⚠️ Login failed");
       }
     );
   };
   const handleSignUp = (event) => {
     if (event) event.preventDefault();
-    setStatus("Creating account...");
     signup(email, username, password).then(
       (res) => {
         handleLogin();
       },
       (err) => {
-        setStatus(`Signup failed: ${err}`);
+        toast.error("⚠️ Signup failed");
+        console.log("signup err", err);
       }
     );
   };
@@ -114,9 +113,7 @@ export default function Signup() {
               onChange={handleChangePassword}
             />
 
-            {status && <p>{status}</p>}
-
-            <Button fn={handleSignUp} text="Sign up" />
+            <Button fn={handleSignUp} text="Sign up" altText="Signing up..." />
           </form>
         </div>
       </div>

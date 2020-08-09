@@ -3,10 +3,10 @@ import { UserContext } from "../../contexts/userContext";
 import { getDummyItem } from "../../lib/constants";
 
 const DummyItem = ({ category }) => {
-  const { setEditingItem } = useContext(UserContext);
+  const { setEditingItem, preview } = useContext(UserContext);
   const handleClick = (e) => {
-		e.preventDefault();
-		if (preview) return false;
+    e.preventDefault();
+    if (preview) return false;
     setEditingItem({
       category,
     });
@@ -16,7 +16,11 @@ const DummyItem = ({ category }) => {
     if (!item) setItem(getDummyItem(category.name.toLowerCase()));
   });
   return item ? (
-    <div className="resume__item" onClick={(e) => handleClick(e)}>
+    <div
+      className={`resume__item ${!preview ? "resume--hoverable" : ""}`}
+      onClick={(e) => handleClick(e)}
+      key={item._id}
+    >
       <h3 className="resume__item--title">{item.title}</h3>
       <h3 className="resume__item--location">{item.location}</h3>
       <p className="resume__item--date">

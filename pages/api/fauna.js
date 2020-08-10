@@ -103,30 +103,6 @@ export const getResume = async (resumeId) => {
 };
 
 /** |----------------------------
- *  | GET ITEMS BY USERNAME
- *  |----------------------------
- */
-// export const getUserItems = async (username) => {
-// 	console.log('getUserItems request');
-//   username = username.toLowerCase();
-//   return executeQuery(`query FindItemsByID {
-// 		userByUsername(username: "${username}") {
-// 			confirmed
-// 			items {
-// 				data {
-// 					_id
-// 					title
-// 					description
-// 					location
-// 					from
-// 					to
-// 				}
-// 			}
-// 		}
-// 	}`);
-// };
-
-/** |----------------------------
  *  | GET USERNAME BY EMAIL
  *  |----------------------------
  */
@@ -139,30 +115,6 @@ export const getUserByEmail = async (email) => {
 		}
 	}`);
 };
-
-/** |----------------------------
- *  | GET ITEMS BY EMAIL
- *  |----------------------------
- */
-// export const getUserItemsByEmail = async (email) => {
-// 	console.log('getUserItemsByEmail request');
-//   email = email.toLowerCase();
-//   return executeQuery(`query FindItemsByEmail {
-// 		userByEmail(email: "${email}") {
-// 			items {
-// 				data {
-// 					_id
-// 					title
-// 					type
-// 					location
-// 					from
-// 					to
-// 					description
-// 				}
-// 			}
-// 		}
-// 	}`);
-// };
 
 /** |----------------------------
  *  | CREATE ITEM

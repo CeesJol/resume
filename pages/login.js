@@ -5,36 +5,41 @@ import Button from "../components/general/Button";
 import { login } from "./api/auth";
 import { getUserByEmail } from "./api/fauna";
 import { UserContext } from "../contexts/userContext";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
-export default function Login() {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { userExists, storeUser, setAuth, setLoggingOut } = useContext(UserContext);
+  const { userExists, storeUser, setAuth, setLoggingOut } = useContext(
+    UserContext
+  );
   const handleLogin = async (event) => {
     if (event) event.preventDefault();
     await login(email, password).then(
       (res) => {
-				console.log('res.instance.value', res.instance.value);
-				setAuth(true);
-				const id = res.instance.value.id;
+        console.log("res.instance.value", res.instance.value);
+        setAuth(true);
+        const id = res.instance.value.id;
         storeUser({
           id,
-					secret: res.secret,
-					email
-				});
-        getUserByEmail(email).then((data) => {
-					console.log('getUserByEmail', data);
-          storeUser(data.userByEmail);
-					Router.push("/dashboard");
-        }, (err) => {
-					console.error("login err", err)
-					toast.error("⚠️ Login failed")
-				});
+          secret: res.secret,
+          email,
+        });
+        getUserByEmail(email).then(
+          (data) => {
+            console.log("getUserByEmail", data);
+            storeUser(data.userByEmail);
+            Router.push("/dashboard");
+          },
+          (err) => {
+            console.error("login err", err);
+            toast.error("⚠️ Login failed");
+          }
+        );
       },
       (err) => {
-				console.error("login err 2", err)
-				toast.error("⚠️ Login failed")
+        console.error("login err 2", err);
+        toast.error("⚠️ Login failed");
       }
     );
   };
@@ -45,7 +50,7 @@ export default function Login() {
     setPassword(event.target.value);
   };
   useEffect(() => {
-		setLoggingOut(false);
+    setLoggingOut(false);
     if (userExists()) {
       // User is already logged in
       Router.push("/dashboard");
@@ -57,10 +62,10 @@ export default function Login() {
       <div className="login__box">
         <div className="login__box__content">
           <form>
-						<div className="icon-container">
-							<img className="icon--large" src="../images/icon-small.png" />
-							<h3 className="login__box--title">Affilas</h3>
-						</div>
+            <div className="icon-container">
+              <img className="icon--large" src="../images/icon-small.png" />
+              <h3 className="login__box--title">Affilas</h3>
+            </div>
             <h4 className="login__box--subtitle">
               Log in with your email address and password
             </h4>
@@ -86,7 +91,14 @@ export default function Login() {
           </form>
         </div>
       </div>
-			<p>Don't have an account yet? <Link href="/signup"><a>Sign up</a></Link></p>
+      <p>
+        Don't have an account yet?{" "}
+        <Link href="/signup">
+          <a>Sign up</a>
+        </Link>
+      </p>
     </div>
   );
-}
+};
+
+export default Login;

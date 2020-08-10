@@ -1,5 +1,5 @@
 type User {
-	username: String! @unique
+	username: String!
 	email: String! @unique
 	resumes: [Resume] @relation
 	confirmed: Boolean
@@ -47,7 +47,6 @@ type Template {
 
 type Query {
 	users: [User]
-	userByUsername(username: String!): User
 	userByEmail(email: String!): User
 	resumeByTitle(title: String!): Resume
 	templates: [Template]

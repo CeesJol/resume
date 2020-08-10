@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import DashboardHeader from "./DashboardHeader";
 import Resumes from "./Resumes";
 import Editor from "./Editor";
@@ -15,10 +15,11 @@ import UserPopup from "./popups/UserPopup";
 import ContactPopup from "./popups/ContactPopup";
 import LoadingPopup from "./popups/LoadingPopup";
 
-export default function Dashboard(props) {
+const Dashboard = () => {
   const {
     auth,
-    getUser,
+		getUser,
+		userExists,
     nav,
     editingItem,
     editingResume,
@@ -59,7 +60,9 @@ export default function Dashboard(props) {
     )
   ) : (
     <LoadingPopup
-      text={`Authenticating${getUser() && " " + getUser().username}...`}
+      text={`Authenticating${userExists() ? " " + getUser().username : ""}...`}
     />
   );
 }
+
+export default Dashboard;

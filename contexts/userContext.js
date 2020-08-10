@@ -199,7 +199,7 @@ const UserContextProvider = (props) => {
     setUser(null);
   };
   const userExists = () => {
-    return user != null;
+    return !!user && user.username;
   };
   const moveItem = async (item, amount) => {
     if (moving) return false;
@@ -281,7 +281,8 @@ const UserContextProvider = (props) => {
               (data) => {
                 storeUser(data.findUserByID);
                 console.log("readUser");
-                console.table(data.findUserByID);
+								console.table(data.findUserByID);
+								forceRender();
               },
               (err) => {
                 toast.error(`⚠️ ${err}`);

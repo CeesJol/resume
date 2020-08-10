@@ -2,17 +2,19 @@ import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import { confirm } from "../api/confirm";
 
-export default function Token() {
+const Token = () => {
   const router = useRouter();
   const { token } = router.query;
-	const [status, setStatus] = useState("Confirming...");
+  const [status, setStatus] = useState("Confirming...");
 
   useEffect(() => {
     if (token) {
       confirm(token).then(
         (data) => {
-					console.log("data [token]", data);
-					setStatus("Email confirmed successfully! You can close this tab now.");
+          console.log("data [token]", data);
+          setStatus(
+            "Email confirmed successfully! You can close this tab now."
+          );
         },
         (err) => {
           console.error("err", err);
@@ -23,4 +25,6 @@ export default function Token() {
   }, [token]);
 
   return <>{status}</>;
-}
+};
+
+export default Token;

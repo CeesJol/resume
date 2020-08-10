@@ -18,7 +18,8 @@ const Editor = () => {
         <i>
           Editing <b>{editingResume.title}</b>
         </i>
-        <p>Click on any item to edit it</p>
+        <br />
+        <br />
         <a onClick={handleGoBack}>Back to your resumes</a>
       </div>
       <ResumeWrapper />

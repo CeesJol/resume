@@ -96,11 +96,11 @@ const Settings = () => {
       <div className="dashboard__item">
         <h4 className="dashboard__item--title">Your information</h4>
         <form>
-          <label>Username</label>
+          <label>Name</label>
           <input
             type="text"
             id="username"
-            name="username"
+            name="name"
             value={username}
             onChange={handleChangeUsername}
           />

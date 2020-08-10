@@ -8,7 +8,7 @@ import { sendConfirmationEmail } from "./api/confirm";
 import { UserContext } from "../contexts/userContext";
 import { toast } from "react-toastify";
 
-export default function Signup() {
+const Signup = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -66,9 +66,9 @@ export default function Signup() {
     setPassword(event.target.value);
   };
   useEffect(() => {
-		if (Router.query["email"]) {
-			setEmail(Router.query["email"]);
-		}
+    if (Router.query["email"]) {
+      setEmail(Router.query["email"]);
+    }
     if (userExists()) {
       // User is already logged in
       Router.push("/dashboard");
@@ -96,11 +96,11 @@ export default function Signup() {
               onChange={handleChangeEmail}
             />
 
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username">Name</label>
             <input
               type="text"
               id="username"
-              name="username"
+              name="user"
               value={username}
               onChange={handleChangeUsername}
             />
@@ -126,4 +126,6 @@ export default function Signup() {
       </p>
     </div>
   );
-}
+};
+
+export default Signup;

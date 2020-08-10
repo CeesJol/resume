@@ -101,35 +101,33 @@ const Resume = () => {
     setEditingCategory({});
   };
   return (
-    <>
-      <PDFExport
-        paperSize={"A4"}
-        fileName="resume.pdf"
-        title=""
-        subject=""
-        keywords=""
-        ref={(r) => setPdf(r)}
+    <PDFExport
+      paperSize={"A4"}
+      fileName={editingResume.title + ".pdf"}
+      title={editingResume.title}
+      subject=""
+      keywords=""
+      ref={(r) => setPdf(r)}
+    >
+      <div
+        style={{
+          maxHeight: 842,
+          width: 595,
+          padding: "none",
+          backgroundColor: "white",
+          margin: "auto",
+          overflowX: "hidden",
+          // overflowY: "hidden",
+        }}
       >
-        <div
-          style={{
-            maxHeight: 842,
-            width: 595,
-            padding: "none",
-            backgroundColor: "white",
-            margin: "auto",
-            overflowX: "hidden",
-            // overflowY: "hidden",
-          }}
-        >
-          <div className="resume">
-            <style>{templateCSS}</style>
-            {drawHeader()}
-            {drawContactInfo()}
-            {drawItems()}
-          </div>
+        <div className="resume">
+          <style>{templateCSS}</style>
+          {drawHeader()}
+          {drawContactInfo()}
+          {drawItems()}
         </div>
-      </PDFExport>
-    </>
+      </div>
+    </PDFExport>
   );
 };
 

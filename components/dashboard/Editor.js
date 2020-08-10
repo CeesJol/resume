@@ -15,12 +15,8 @@ const Editor = () => {
   return (
     <>
       <div className="dashboard__item">
-        <i>
-          Editing <b>{editingResume.title}</b>
-        </i>
-        <br />
-        <br />
-        <a onClick={handleGoBack}>Back to your resumes</a>
+        <h4>{editingResume.title}</h4>
+        <a onClick={handleGoBack}>All resumes</a>
       </div>
       <ResumeWrapper />
     </>

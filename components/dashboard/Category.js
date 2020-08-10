@@ -53,11 +53,12 @@ const Category = ({ category, index }) => {
           {category.name}
         </h3>
         {!preview && (
-          <a onClick={() => handleNewItem(category)}>
-            <p className="resume--hoverable">
-              <i>Add item</i>
-            </p>
-          </a>
+          <p
+            className="resume--hoverable"
+            onClick={() => handleNewItem(category)}
+          >
+            <i>Add item</i>
+          </p>
         )}
         {category.items && category.items.data.length > 0 ? (
           sortByPriority(category.items.data).map((item, index) => (

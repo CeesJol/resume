@@ -45,15 +45,6 @@ const Layout = () => {
           <div>
             <form>
               <div>
-                {/* <label>Job title</label>
-            <input
-              type="text"
-              id="jobTitle"
-              name="jobTitle"
-              value={jobTitle}
-              onChange={handleChangeJobTitle}
-            /> */}
-
                 <label>Style</label>
                 <textarea
                   type="text"

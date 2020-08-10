@@ -294,6 +294,7 @@ export const updateResume = async (resumeId, data) => {
 			${stringifyObject(data)}
 		}) {
 			_id
+			title
 			jobTitle
 			bio
 		}

@@ -13,8 +13,8 @@ const Resume = () => {
     setEditingCategory,
     editingResume,
     setChangingInfo,
-		preview,
-		setPdf,
+    preview,
+    setPdf,
   } = useContext(UserContext);
   const handleChangeInfo = () => {
     if (preview) return false;
@@ -88,11 +88,9 @@ const Resume = () => {
       <div className="resume__container">
         {categories.map((category, index) => drawCategory(category, index))}
         {!preview && (
-          <a onClick={handleNewCategory}>
-            <p>
-              <i className="resume--hoverable">Create category</i>
-            </p>
-          </a>
+          <p onClick={handleNewCategory}>
+            <i className="resume--hoverable">Create category</i>
+          </p>
         )}
       </div>
     );

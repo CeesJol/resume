@@ -22,23 +22,26 @@ const Resumes = () => {
     const resumes = data.resumes.data;
 
     if (resumes.length > 0)
-      return (
-        <>
-          <p>Click on a resume to edit it</p>
-          {resumes.map((resume, i) => (
-            <div key={resume._id}>
-              <h2 onClick={(e) => handleClick(e, resume)}>{resume.title}</h2>
-            </div>
-          ))}
-        </>
-      );
+      return resumes.map((resume, i) => (
+        <div
+          className="dashboard__resume-preview resume--hoverable"
+          key={resume._id}
+          onClick={(e) => handleClick(e, resume)}
+        >
+          <h3 className="dashboard__resume-preview--title">{resume.title}</h3>
+          <h3 className="dashboard__resume-preview--job-title">
+            {resume.jobTitle}
+          </h3>
+          <p className="dashboard__resume-preview--bio">{resume.bio}</p>
+        </div>
+      ));
     return <p>Get started by creating your resume</p>;
   };
 
   return (
     <div className="dashboard__item">
       <h4>Your resumes</h4>
-      <div id="items-container">{drawItems()}</div>
+      {drawItems()}
       <Button text="Create a resume" fn={handleCreate} />
     </div>
   );

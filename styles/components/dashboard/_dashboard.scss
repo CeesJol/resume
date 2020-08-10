@@ -36,7 +36,7 @@
 
       &:hover {
         border-bottom: 1px solid grey;
-      }
+			}
     }
 
     &--item-selected {
@@ -75,7 +75,11 @@
       border: none;
       color: white;
       font-weight: bold;
-    }
+		}
+		
+		h4 {
+			padding-bottom: $s-size;
+		}
 	}
 	
 	&__resume-wrapper {
@@ -101,6 +105,22 @@
 
 		@media (max-width: 33rem) {
 			zoom: 0.65;
+		}
+	}
+
+	&__resume-preview {
+		// background-color: $light-grey;
+		border: 1px solid $light-grey-2;
+		border-radius: 3px;
+		margin-bottom: $m-size;
+		padding: $m-size;
+
+		&--job-title {
+			font-weight: 300;
+		}
+
+		&--bio {
+			margin: 0;
 		}
 	}
 }

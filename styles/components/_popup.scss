@@ -14,12 +14,13 @@
 	background-color: white;
 	border: 1px solid $light-grey-2;
 	border-radius: 3px;
-	padding: 2rem;
-	margin: 2rem 1.5rem;
+	padding: $l-size;
+	margin: $l-size $m-size;
 	overflow: auto;
 	width: 100%;
 	max-width: calc(#{$max-width} - 3rem);
 	height: auto;
+	max-height: calc(100vh - 3rem);
 
 	&--medium {
 		width: 40rem;

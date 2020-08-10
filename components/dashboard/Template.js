@@ -12,14 +12,13 @@ const Template = ({ template }) => {
   return (
     <div
       className={
-        "template " +
-        (template._id === selectedTemplateId ? "template--selected" : "")
+        "box " +
+        (template._id === selectedTemplateId ? "box--selected" : "")
       }
       onClick={(e) => handleClick(e, template._id)}
     >
-      <img src="/templates/1.jpg" className="template--img" />
-      <p className="template--title">{template.name}</p>
-      {/* <p className="template--title">{template.name}</p> */}
+      <img src="/templates/1.jpg" className="box--img" />
+      <p className="box--title">{template.name}</p>
     </div>
   );
 };

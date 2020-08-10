@@ -3,8 +3,8 @@
   background-color: white;
   border-bottom: 1px solid $light-grey-2;
   width: 100%;
-  padding-top: 2rem;
-	padding-bottom: 2rem;
+  padding-top: $l-size;
+	padding-bottom: $l-size;
 
   &__content {
 		@include content-container;

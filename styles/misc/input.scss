@@ -7,8 +7,8 @@ input, textarea, select {
 	border: 1px solid rgb(220, 225, 230);
 	font-size: $font-size-default;
 	border-radius: 3px;
-	padding: 1rem;
-	margin-bottom: 1rem;
+	padding: $s-size;
+	margin-bottom: $s-size;
 }
 
 .select-narrow {

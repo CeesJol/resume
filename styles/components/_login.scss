@@ -19,19 +19,19 @@
     margin-left: auto;
     margin-right: auto;
     border-radius: 3px;
-    padding: 2rem;
+    padding: $l-size;
     width: 100%;
 		height: auto;
 
     @media (min-width: $login-box-breakpoint) {
 			@include shadow;
-      padding: 2rem;
+      padding: $l-size;
       width: $login-box-width;
       height: auto;
     }
 		
 		&--subtitle {
-			padding: 2rem 0;
+			padding: $l-size 0;
 		}
 
     &--subtitle {
@@ -41,8 +41,8 @@
 	
   .button {
     width: 100%;
-		margin-top: 1rem;
+		margin-top: $s-size;
 		text-transform: none;
-		padding: 1.5rem 1rem;
+		padding: $m-size $s-size;
   }
 }

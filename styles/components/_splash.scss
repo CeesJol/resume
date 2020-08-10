@@ -28,8 +28,12 @@
     &--title {
       display: block;
       line-height: 1;
-      padding-bottom: 2rem;
-    }
+      // padding-bottom: $l-size;
+		}
+		
+		p {
+			padding: $l-size 0;
+		}
   }
 
   &__left {

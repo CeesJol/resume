@@ -19,7 +19,7 @@
 		
 		img {
 			width: 8rem;
-			margin-bottom: 2rem;
+			margin-bottom: $l-size;
 		}
 
 		@media (min-width: $desktop-breakpoint) {

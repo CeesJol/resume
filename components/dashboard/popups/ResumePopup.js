@@ -69,7 +69,7 @@ const ResumePopup = () => {
   return (
     <div className="popup-container" onClick={handleCancel}>
       <div className="popup" onClick={(e) => e.stopPropagation()}>
-        <h4>Update info</h4>
+        <h4>Create resume</h4>
         <form>
           <div>
             <label>Job title</label>

@@ -1,7 +1,7 @@
 @mixin content-container {
   max-width: $max-width-landing;
   margin: 0 auto;
-  padding: 0 $l-size;
+  padding: 0 $xl-size;
   @media (max-width: $desktop-breakpoint) {
     padding: 0 $m-size;
   }

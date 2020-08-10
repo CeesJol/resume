@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 
-export default ({ text, altText, fn, color }) => {
+const Button = ({ text, altText, fn, color }) => {
   const [disabled, setDisabled] = useState(false);
   const className = color == "red" ? "button button--red" : "button";
   const handleClick = async (event) => {
@@ -28,3 +28,5 @@ export default ({ text, altText, fn, color }) => {
     </div>
   );
 };
+
+export default Button;

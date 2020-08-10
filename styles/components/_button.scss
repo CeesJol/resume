@@ -1,8 +1,12 @@
 .button-container {
-	display: flex;
+	display: inline-flex;
 	
 	a:hover {
 		opacity: 1;
+	}
+
+	&:not(:last-child) {
+		margin-right: $s-size;
 	}
 }
 
@@ -15,6 +19,7 @@
 	text-transform: uppercase;
 	transition: 0.3s;
 	font-size: $font-size-default;
+	width: auto;
 
 	&:hover {
 		background-color: lighten($light-green, 7%);
@@ -40,6 +45,4 @@
 	a {
 		font-weight: 400;
 	}
-
-	
 }

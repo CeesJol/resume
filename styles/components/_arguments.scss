@@ -4,7 +4,10 @@
   &__content {
     @include content-container;
 
-    text-align: center;
+		@media (min-width: $desktop-breakpoint) {
+			text-align: center;
+		}
+    
     color: white;
 	}
 	
@@ -24,26 +27,11 @@
 
 		@media (min-width: $desktop-breakpoint) {
 			align-items: initial; // cancel vertical alignment for arguments
-
-			// div {
-			// 	margin: 0 2rem;
-			// }
-
-			// div:first-of-type {
-			// 	margin-left: 0;
-			// }
-
-			// div:last-of-type {
-			// 	margin-right: 0;
-			// }
 		}
   }
 
   footer {
     margin-top: 3rem;
 		margin-bottom: 5rem;
-		display: flex;
-		align-items: center;
-		flex-direction: column;
   }
 }

@@ -39,7 +39,10 @@
     }
 	}
 	
-  .button {
+  .button-container {
+		display: flex !important;
+	}
+	.button {
     width: 100%;
 		margin-top: $s-size;
 		text-transform: none;

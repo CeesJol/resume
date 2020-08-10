@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { UserContext } from "../../contexts/userContext";
 import Category from "./Category";
 import ContactItem from "./ContactItem";
@@ -7,7 +7,7 @@ import { PDFExport } from "@progress/kendo-react-pdf";
 // PDF Export source
 // https://blog.usejournal.com/lets-make-a-resume-in-react-2c9c5540f51a
 
-const Resume = () => {
+const Resume = ({ tiny, template }) => {
   const {
     getUser,
     setEditingCategory,
@@ -20,7 +20,8 @@ const Resume = () => {
     if (preview) return false;
     setChangingInfo(true);
   };
-  const templateCSS = editingResume.template.style;
+	const templateCSS = template ? template.style : editingResume.template.style;
+	// const templateCSS = template.style;
   const sortByPriority = (list) => {
     return list.sort((item1, item2) => {
       return item1.priority < item2.priority ? -1 : 1;
@@ -99,7 +100,10 @@ const Resume = () => {
   const handleNewCategory = () => {
     if (preview) return false;
     setEditingCategory({});
-  };
+	};
+	useEffect(() => {
+		console.log('template is', template.style);
+	})
   return (
     <PDFExport
       paperSize={"A4"}
@@ -109,18 +113,8 @@ const Resume = () => {
       keywords=""
       ref={(r) => setPdf(r)}
     >
-      <div
-        style={{
-          maxHeight: 842,
-          width: 595,
-          padding: "none",
-          backgroundColor: "white",
-          margin: "auto",
-          overflowX: "hidden",
-          // overflowY: "hidden",
-        }}
-      >
-        <div className="resume">
+      <div className={"resume-container " + (tiny ? "resume-container--tiny" : "")}>
+				<div className={"resume " + (tiny ? "resume--tiny" : "")}>
           <style>{templateCSS}</style>
           {drawHeader()}
           {drawContactInfo()}

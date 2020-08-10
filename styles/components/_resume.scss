@@ -1,31 +1,60 @@
+.resume-container {
+	max-height: 84.2rem;
+	width: 59.5rem;
+	overflow-x: hidden;
+
+  &--tiny {
+    height: 15rem;
+    padding: none;
+    background-color: white;
+    margin: auto;
+		overflow: hidden;
+
+    @media (min-width: 56rem) {
+      height: 20rem;
+    }
+  }
+}
+
 .resume {
-	h1 {
-		font-size: 3rem;
-	}
-	
-	h2 {
-		font-size: 2rem;
-	}
-	
-	h3 {
-		font-size: 1.5rem;
-	}
-	
-	h4 {
-		font-size: 1.2rem;
-	}
+  &--tiny {
+    transform: scale(0.51);
+    @media (min-width: 56rem) {
+      transform: scale(0.68);
+    }
+    transform-origin: top left;
+    height: 30rem;
+  }
 
-	background-color: white;
-	overflow: auto;
-	font-family: Helvetica, Arial, sans-serif;
-	
-	&--hoverable {
-		@include hover;
-	}
+  h1 {
+    font-size: 3rem;
+  }
 
-  p, i, a {
-		margin: 0;
-		font-size: 1rem;
+  h2 {
+    font-size: 2rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+  }
+
+  h4 {
+    font-size: 1.2rem;
+  }
+
+  background-color: white;
+  overflow: auto;
+  font-family: Helvetica, Arial, sans-serif;
+
+  &--hoverable {
+    @include hover;
+  }
+
+  p,
+  i,
+  a {
+    margin: 0;
+    font-size: 1rem;
   }
 
   &__container {
@@ -74,8 +103,8 @@
   }
 
   &__item {
-		position: relative;
-		padding-bottom: $font-size-default;
+    position: relative;
+    padding-bottom: $font-size-default;
     // @include hover;
 
     &--title {

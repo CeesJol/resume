@@ -8,12 +8,7 @@ import { toast } from "react-toastify";
 const ResumePopup = () => {
   const {
     getUser,
-    storeUser,
-    editingResume,
-    setEditingResume,
-    warning,
     setWarning,
-    setChangingInfo,
     userMadeChanges,
     setUserMadeChanges,
     storeResume,
@@ -46,7 +41,7 @@ const ResumePopup = () => {
         resetPopups();
       },
       (err) => {
-				toast.error(`⚠️ ${err}`);
+        toast.error(`⚠️ ${err}`);
         console.log("createResume err:", err);
       }
     );

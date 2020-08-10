@@ -3,12 +3,13 @@ import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
 
 const Resumes = () => {
-  const { getUser, setEditingResume, setCreatingResume } = useContext(
+  const { getUser, setEditingResume, setCreatingResume, setChangingResume } = useContext(
     UserContext
   );
   const handleClick = (e, resume) => {
     e.preventDefault();
-    setEditingResume(resume);
+		setEditingResume(resume);
+		setChangingResume(true);
   };
   const handleCreate = () => {
     setCreatingResume({});

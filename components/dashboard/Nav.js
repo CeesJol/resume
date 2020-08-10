@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 
 const Nav = () => {
-  const { nav, setNav, editingResume } = useContext(UserContext);
+  const { nav, setNav, changingResume } = useContext(UserContext);
   return (
     <div className="dashboard__nav">
       <div className="dashboard__nav__content">
@@ -16,7 +16,7 @@ const Nav = () => {
         >
           Editor
         </div>
-        {editingResume !== -1 && (
+        {changingResume && (
           <>
             <div
               className={

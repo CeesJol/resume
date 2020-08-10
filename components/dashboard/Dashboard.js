@@ -22,7 +22,7 @@ const Dashboard = () => {
 		userExists,
     nav,
     editingItem,
-    editingResume,
+    changingResume,
     warning,
     creatingResume,
     editingCategory,
@@ -41,7 +41,7 @@ const Dashboard = () => {
             <Nav />
             <div className="dashboard__main">
               <div className="dashboard__main__content">
-                {nav == 0 && (editingResume === -1 ? <Resumes /> : <Editor />)}
+                {nav == 0 && (!changingResume ? <Resumes /> : <Editor />)}
                 {nav == 1 && <Layout />}
                 {nav == 2 && <Preview />}
                 {nav == 3 && <Settings />}

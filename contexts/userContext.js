@@ -12,7 +12,8 @@ const UserContextProvider = (props) => {
   const [nav, setNav] = useState(0);
   const [editingItem, setEditingItem] = useState(-1);
   const [editingCategory, setEditingCategory] = useState(-1);
-  const [editingResume, setEditingResume] = useState(-1);
+	const [editingResume, setEditingResume] = useState(-1);
+	const [changingResume, setChangingResume] = useState(false);
   const [creatingResume, setCreatingResume] = useState(-1);
   const [data, setData] = useState(false);
   const [error, setError] = useState(false);
@@ -22,7 +23,7 @@ const UserContextProvider = (props) => {
   const [userMadeChanges, setUserMadeChanges] = useState(false);
   const [moving, setMoving] = useState(false);
   const [selectedTemplateId, setSelectedTemplateId] = useState(0);
-  const [preview, setPreview] = useState(false);
+  const [preview, setPreview] = useState(true);
   const [pdf, setPdf] = useState(null);
   const [loggingOut, setLoggingOut] = useState(null);
   const forceRender = () => {
@@ -279,9 +280,13 @@ const UserContextProvider = (props) => {
             // Update user info
             readUser(localUser.id).then(
               (data) => {
+								setEditingResume(data.findUserByID.resumes.data[0]);
                 storeUser(data.findUserByID);
                 console.log("readUser");
 								console.table(data.findUserByID);
+
+								console.log(data.findUserByID.resumes.data[0])
+								
 								forceRender();
               },
               (err) => {
@@ -325,7 +330,9 @@ const UserContextProvider = (props) => {
         editingCategory,
         setEditingCategory,
         editingResume,
-        setEditingResume,
+				setEditingResume,
+				changingResume,
+				setChangingResume,
         creatingResume,
         setCreatingResume,
         data,

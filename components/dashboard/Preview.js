@@ -4,14 +4,14 @@ import ResumeWrapper from "./ResumeWrapper";
 import Button from "../general/Button";
 
 const Preview = () => {
-  const { setPreview, editingResume, pdf, setPdf } = useContext(UserContext);
+  const { setPreview, changingResume, pdf, setPdf } = useContext(UserContext);
   const exportPDF = async () => {
     await pdf.save();
   };
   useEffect(() => {
     setPreview(true);
   }, []);
-  return editingResume === -1 ? (
+  return changingResume === -1 ? (
     <p>Select a resume to preview it</p>
   ) : (
     <>

@@ -82,7 +82,7 @@ const UserPopup = () => {
         <h4>Update info</h4>
         <form>
           <div>
-            <label>Resume title</label>
+            <label>Resume Title</label>
             <input
               type="text"
               id="title"
@@ -91,7 +91,7 @@ const UserPopup = () => {
               onChange={handleChangeTitle}
             />
 
-            <label>Job title</label>
+            <label>Job Title</label>
             <input
               type="text"
               id="jobTitle"

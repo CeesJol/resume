@@ -41,7 +41,7 @@ const Resume = ({ tiny, template }) => {
           {getUser() && getUser().username}
         </h1>
         <h3 className="resume__header--job-title">
-          {editingResume.jobTitle || "Job title"}
+          {editingResume.jobTitle || "Job Title"}
         </h3>
         <p className="resume__header--bio multiline">
           {editingResume.bio || "Bio"}

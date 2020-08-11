@@ -34,10 +34,10 @@ const Resumes = () => {
         >
           <h3 className="dashboard__resume-preview--title">{resume.title}</h3>
           <h3 className="dashboard__resume-preview--job-title">
-            {resume.jobTitle}
+            {resume.jobTitle || "Job Title"}
           </h3>
           <p className="dashboard__resume-preview--bio multiline">
-            {resume.bio}
+            {resume.bio || "Bio"}
           </p>
         </div>
       ));

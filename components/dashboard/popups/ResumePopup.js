@@ -74,7 +74,7 @@ const ResumePopup = () => {
         <h4>Create resume</h4>
         <form>
           <div>
-            <label>Job title</label>
+            <label>Title</label>
             <input
               type="text"
               id="title"

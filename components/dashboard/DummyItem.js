@@ -13,7 +13,7 @@ const DummyItem = ({ category }) => {
   };
   const [item, setItem] = useState(null);
   useEffect(() => {
-    if (!item) setItem(getDummyItem(category.name.toLowerCase()));
+    if (!item) setItem(getDummyItem(category.name));
   });
   return item ? (
     <div

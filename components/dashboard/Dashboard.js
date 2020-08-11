@@ -42,7 +42,7 @@ const Dashboard = () => {
             <div className="dashboard__main">
               <div className="dashboard__main__content">
                 {nav == 0 && (!changingResume ? <Resumes /> : <Editor />)}
-                {nav == 1 && <Layout />}
+                {/* {nav == 1 && <Layout />} */}
                 {nav == 2 && <Preview />}
                 {nav == 3 && <Settings />}
               </div>

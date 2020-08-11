@@ -15,7 +15,9 @@ const ResumePopup = () => {
     resetPopups,
     selectedTemplateId,
     templates,
-    setTemplates,
+		setTemplates,
+		setEditingResume,
+		setChangingResume,
   } = useContext(UserContext);
   const [title, setTitle] = useState("");
   const handleChangeTitle = (event) => {
@@ -38,7 +40,9 @@ const ResumePopup = () => {
       title,
     }).then(
       (data) => {
-        storeResume(data.createResume, { add: true });
+				storeResume(data.createResume, { add: true });
+				setEditingResume(data.createResume);
+				setChangingResume(true);
         resetPopups();
       },
       (err) => {

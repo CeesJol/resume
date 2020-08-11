@@ -4,6 +4,7 @@ import { identity } from "../pages/api/auth";
 import { readUser, updateItem, updateCategory } from "../pages/api/fauna";
 import { toast } from "react-toastify";
 import Router from "next/router";
+import { dummyResume } from "../lib/constants";
 
 const UserContextProvider = (props) => {
   const [dummy, setDummy] = useState(false);
@@ -281,12 +282,14 @@ const UserContextProvider = (props) => {
             // Update user info
             readUser(localUser.id).then(
               (data) => {
-                setEditingResume(data.findUserByID.resumes.data[0]);
+								if (data.findUserByID.resumes.data[0]) {
+									setEditingResume(data.findUserByID.resumes.data[0]);
+								} else {
+									setEditingResume(dummyResume);
+								}
                 storeUser(data.findUserByID);
                 console.log("readUser");
                 console.table(data.findUserByID);
-
-                console.log(data.findUserByID.resumes.data[0]);
 
                 forceRender();
               },

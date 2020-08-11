@@ -18,7 +18,7 @@ const Nav = () => {
         </div>
         {changingResume && (
           <>
-            <div
+            {/* <div
               className={
                 "dashboard__nav--item " +
                 (nav === 1 && " dashboard__nav--item-selected")
@@ -26,7 +26,7 @@ const Nav = () => {
               onClick={() => setNav(1)}
             >
               Layout
-            </div>
+            </div> */}
             <div
               className={
                 "dashboard__nav--item " +

@@ -4,7 +4,7 @@ import { UserContext } from "../../contexts/userContext";
 
 const Nav = () => {
   const { nav, setNav, changingResume } = useContext(UserContext);
-  const navItems = ["Editor", "Layout", "Preview", "Options"];
+  const navItems = ["Editor", "Layout", "Export", "Options"];
   if (!changingResume) return <></>;
   return (
     <div className="dashboard__nav">

@@ -90,7 +90,8 @@ const UserContextProvider = (props) => {
       // Delete resume
       user.resumes.data = user.resumes.data.filter(
         (x) => x._id !== resumeData._id
-      );
+			);
+			reset();
       return;
     } else if (add) {
       // Add resume
@@ -287,10 +288,11 @@ const UserContextProvider = (props) => {
     setSelectedTemplateId(0);
   };
   const reset = () => {
-    setNav(0);
-    resetPopups();
-    setEditingResume(-1);
-    setChangingResume(false);
+		setChangingResume(false);
+		setEditingResume(-1);
+		if (user.resumes.data.length === 0) setEditingResume(dummyResume);
+		setNav(0);
+		resetPopups();
   };
   const getLayout = (name) => {
     return editingResume.layout.data.find((item) => item.name === name).value;

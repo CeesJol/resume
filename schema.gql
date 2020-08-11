@@ -1,60 +1,61 @@
 type User {
-	username: String!
-	email: String! @unique
-	resumes: [Resume] @relation
-	confirmed: Boolean
-	bio: String
+  username: String!
+  email: String! @unique
+  resumes: [Resume] @relation
+  confirmed: Boolean
+  bio: String
 }
 
 type Resume {
-	user: User
-	jobTitle: String
-	bio: String
-	title: String @unique
-	categories: [Category] @relation
-	template: Template! @relation
-	contactInfo: [ContactInfo] @relation
-	layout: [Layout] @relation
+  user: User
+  jobTitle: String
+  bio: String
+  title: String @unique
+  priority: Int
+  categories: [Category] @relation
+  template: Template @relation
+  contactInfo: [ContactInfo] @relation
+  layout: [Layout] @relation
 }
 
 type Category {
-	resume: Resume
-	name: String
-	priority: Int
-	items: [Item] @relation
+  resume: Resume
+  name: String
+  priority: Int
+  items: [Item] @relation
 }
 
 type Item {
-	category: Category
-	title: String
-	location: String
-	description: String
-	from: String
-	to: String
-	priority: Int
+  category: Category
+  title: String
+  location: String
+  description: String
+  from: String
+  to: String
+  priority: Int
 }
 
 type ContactInfo {
-	resume: Resume
-	name: String
-	value: String
-	priority: Int
+  resume: Resume
+  name: String
+  value: String
+  priority: Int
 }
 
 type Template {
-	name: String
-	style: String
+  name: String
+  style: String
 }
 
 type Layout {
-	resume: Resume
-	name: String
-	value: String
+  resume: Resume
+  name: String
+  value: String
 }
 
 type Query {
-	users: [User]
-	userByEmail(email: String!): User
-	resumeByTitle(title: String!): Resume
-	templates: [Template]
+  users: [User]
+  userByEmail(email: String!): User
+  resumeByTitle(title: String!): Resume
+  templates: [Template]
 }

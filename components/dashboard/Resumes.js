@@ -8,6 +8,11 @@ const Resumes = () => {
   const handleCreate = () => {
     setCreatingResume({});
   };
+  const sortByPriority = (list) => {
+    return list.sort((item1, item2) => {
+      return item1.priority < item2.priority ? -1 : 1;
+    });
+  };
   const drawResumePreviews = () => {
     const data = getUser();
     // TODO update the few lines below
@@ -16,8 +21,11 @@ const Resumes = () => {
 
     const resumes = data.resumes.data;
 
-    if (resumes.length > 0)
-      return resumes.map((resume, i) => <ResumePreview resume={resume} />);
+    if (resumes.length > 0) {
+      return sortByPriority(resumes).map((resume) => (
+        <ResumePreview resume={resume} key={resume._id} />
+      ));
+    }
     return <p>Get started by creating your resume</p>;
   };
 

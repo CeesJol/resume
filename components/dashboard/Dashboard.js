@@ -3,7 +3,7 @@ import DashboardHeader from "./DashboardHeader";
 import Resumes from "./Resumes";
 import Editor from "./Editor";
 import Layout from "./Layout";
-import Preview from "./Preview";
+import Export from "./Export";
 import Options from "./Options";
 import Settings from "./Settings";
 import Nav from "./Nav";
@@ -41,7 +41,7 @@ const Dashboard = () => {
             <div className="dashboard__main__content">
               {nav == 0 && (!changingResume ? <Resumes /> : <Editor />)}
               {nav == 1 && <Layout />}
-              {nav == 2 && <Preview />}
+              {nav == 2 && <Export />}
 							{nav == 3 && <Options />}
               {nav == 1000 && <Settings />}
             </div>

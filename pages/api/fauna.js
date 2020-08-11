@@ -123,8 +123,6 @@ export const deleteResume = async (id) => {
 	}`);
 };
 
-
-
 /** |----------------------------
  *  | GET USERNAME BY EMAIL
  *  |----------------------------

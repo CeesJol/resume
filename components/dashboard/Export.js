@@ -3,7 +3,7 @@ import { UserContext } from "../../contexts/userContext";
 import ResumeWrapper from "./ResumeWrapper";
 import Button from "../general/Button";
 
-const Preview = () => {
+const Export = () => {
   const { setPreview, changingResume, pdf, setPdf } = useContext(UserContext);
   const exportPDF = async () => {
     await pdf.save();
@@ -25,4 +25,4 @@ const Preview = () => {
   );
 };
 
-export default Preview;
+export default Export;

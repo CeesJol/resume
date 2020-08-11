@@ -5,11 +5,10 @@ import { deleteResume } from "../../pages/api/fauna";
 
 const Options = () => {
   const {
-    getUser,
-    setEditingResume,
-    setCreatingResume,
-    setChangingResume,
-    setWarning,
+    storeResume,
+		setWarning,
+		editingResume,
+		resetPopups,
   } = useContext(UserContext);
   const handleDelete = async (event) => {
     if (event) event.preventDefault();
@@ -42,7 +41,7 @@ const Options = () => {
     <>
       <div className="dashboard__item">
         <h4 className="dashboard__item--title">Options</h4>
-				<p>asdf</p>
+				<Button fn={handleDelete} text="Delete" color="red" />
       </div>
     </>
   );

@@ -37,7 +37,8 @@ const ResumePopup = () => {
     }
 
     await createResume(getUser().id, selectedTemplateId, {
-      title,
+			title,
+			priority: getUser().resumes.data.length + 1
     }).then(
       (data) => {
 				storeResume(data.createResume, { add: true });

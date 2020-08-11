@@ -10,6 +10,7 @@ const Category = ({ category, index }) => {
     moveCategory,
     forceRender,
     preview,
+    getLayout,
   } = useContext(UserContext);
   const handleClick = (e, category) => {
     e.preventDefault();
@@ -48,7 +49,10 @@ const Category = ({ category, index }) => {
         <h3
           className={`resume__category--name ${
             !preview ? "resume--hoverable" : ""
-					}`}
+          }`}
+          style={{
+            color: getLayout("Primary Color"),
+          }}
         >
           {category.name}
         </h3>

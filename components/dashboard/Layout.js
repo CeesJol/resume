@@ -1,68 +1,61 @@
 import React, { useContext, useState, useEffect } from "react";
-import { updateTemplate } from "../../pages/api/fauna";
+import { updateLayout } from "../../pages/api/fauna";
 import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 const Layout = () => {
-  const { editingResume, storeTemplate, resetPopups } = useContext(UserContext);
+  const { editingResume, storeLayout } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
-  const [name, setName] = useState("");
-  const [style, setStyle] = useState("");
-  const handleChangeName = (event) => {
-    setName(event.target.value);
-  };
-  const handleChangeStyle = (event) => {
-    setStyle(event.target.value);
-  };
+  const [items, setItems] = useState([]);
   useEffect(() => {
     if (!filled && editingResume !== -1) {
       setFilled(true);
 
-      setName(editingResume.template.name);
-      setStyle(editingResume.template.style);
+      setItems(editingResume.layout.data);
     }
   });
-  const handleUpdate = async () => {
-    await updateTemplate(editingResume.template._id, {
-      style
+  const handleChangeItem = (i) => {
+    let newArr = [...items];
+    newArr[i].value = event.target.value;
+    setItems(newArr);
+  };
+  const handleUpdate = async (i) => {
+    await updateLayout(items[i]._id, {
+      value: items[i].value,
     }).then(
       (data) => {
-        storeTemplate(data.updateTemplate);
-        resetPopups();
+        storeLayout(data.updateLayout);
       },
       (err) => {
-				toast.error(`⚠️ ${err}`);
-        console.error("updateTemplate err:", err);
+        toast.error(`⚠️ ${err}`);
+        console.error("updateLayout err:", err);
       }
     );
-	};
-  return (
-    <div className="dashboard__item">
-      {editingResume !== -1 ? (
-        <>
-          <h4>{name}</h4>
-          <div>
-            <form>
-              <div>
-                <label>Style</label>
-                <textarea
-                  type="text"
-                  id="style"
-                  name="style"
-                  value={style}
-                  onChange={handleChangeStyle}
-                />
+  };
+  return editingResume !== -1 ? (
+    items.map((item, i) => (
+      <div className="dashboard__item" key={i}>
+        <h4>{item.name}</h4>
+        <form>
+          <input
+            type="text"
+            id="value"
+            name="value"
+            value={item.value}
+            onChange={() => handleChangeItem(i)}
+          />
 
-                <Button text="Update" altText="Updating..." fn={handleUpdate} />
-              </div>
-            </form>
-          </div>
-        </>
-      ) : (
-        <p>Select a resume to edit the layout</p>
-      )}
-    </div>
+          <Button
+            text="Update"
+            altText="Updating..."
+            fn={() => handleUpdate(i)}
+          />
+        </form>
+      </div>
+    ))
+  ) : (
+    <p>Select a resume to edit the layout</p>
   );
 };
 

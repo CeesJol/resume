@@ -13,8 +13,8 @@ const UserContextProvider = (props) => {
   const [nav, setNav] = useState(0);
   const [editingItem, setEditingItem] = useState(-1);
   const [editingCategory, setEditingCategory] = useState(-1);
-  const [editingResume, setEditingResume] = useState(-1);
-  const [changingResume, setChangingResume] = useState(false);
+  const [editingResume, setEditingResume] = useState(dummyResume); // Most recently edited resume
+  const [changingResume, setChangingResume] = useState(false); // Whether user is changing a resume
   const [creatingResume, setCreatingResume] = useState(-1);
   const [data, setData] = useState(false);
   const [error, setError] = useState(false);
@@ -153,6 +153,22 @@ const UserContextProvider = (props) => {
 
     setUser(() => user);
   };
+  const storeLayout = (layoutData) => {
+    var user = getUser();
+
+    user.resumes.data.forEach((resume, r) => {
+      if (resume._id === editingResume._id) {
+        resume.layout.data.forEach((item, i) => {
+          if (item._id === layoutData._id) {
+            user.resumes.data[r].layout.data[i] = layoutData;
+            setEditingResume(user.resumes.data[r]);
+          }
+        });
+      }
+    });
+
+    setUser(() => user);
+  };
   const storeCategory = (categoryData, { add, del }) => {
     var user = getUser();
 
@@ -269,6 +285,9 @@ const UserContextProvider = (props) => {
     setUserMadeChanges(false);
     setSelectedTemplateId(0);
   };
+  const getLayout = (name) => {
+    return editingResume.layout.data.find((item) => item.name === name).value;
+  };
   useEffect(() => {
     if (user == null) {
       const localUser = JSON.parse(localStorage.getItem("user"));
@@ -282,11 +301,11 @@ const UserContextProvider = (props) => {
             // Update user info
             readUser(localUser.id).then(
               (data) => {
-								if (data.findUserByID.resumes.data[0]) {
-									setEditingResume(data.findUserByID.resumes.data[0]);
-								} else {
-									setEditingResume(dummyResume);
-								}
+                if (data.findUserByID.resumes.data[0]) {
+                  setEditingResume(data.findUserByID.resumes.data[0]);
+                } else {
+                  setEditingResume(dummyResume);
+                }
                 storeUser(data.findUserByID);
                 console.log("readUser");
                 console.table(data.findUserByID);
@@ -354,6 +373,7 @@ const UserContextProvider = (props) => {
         storeItem,
         storeResume,
         storeTemplate,
+        storeLayout,
         storeCategory,
         userMadeChanges,
         setUserMadeChanges,
@@ -371,6 +391,7 @@ const UserContextProvider = (props) => {
         setLoggingOut,
         templates,
         setTemplates,
+        getLayout,
       }}
     >
       {props.children}

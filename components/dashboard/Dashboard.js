@@ -18,8 +18,6 @@ import LoadingPopup from "./popups/LoadingPopup";
 const Dashboard = () => {
   const {
     auth,
-		getUser,
-		userExists,
     nav,
     editingItem,
     changingResume,
@@ -42,7 +40,7 @@ const Dashboard = () => {
             <div className="dashboard__main">
               <div className="dashboard__main__content">
                 {nav == 0 && (!changingResume ? <Resumes /> : <Editor />)}
-                {/* {nav == 1 && <Layout />} */}
+                {nav == 1 && <Layout />}
                 {nav == 2 && <Preview />}
                 {nav == 3 && <Settings />}
               </div>
@@ -59,10 +57,8 @@ const Dashboard = () => {
       </div>
     )
   ) : (
-    <LoadingPopup
-      text={`Authenticating${userExists() ? " " + getUser().username : ""}...`}
-    />
+    <LoadingPopup text={`Authenticating...`} />
   );
-}
+};
 
 export default Dashboard;

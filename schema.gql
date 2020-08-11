@@ -14,6 +14,7 @@ type Resume {
 	categories: [Category] @relation
 	template: Template! @relation
 	contactInfo: [ContactInfo] @relation
+	layout: [Layout] @relation
 }
 
 type Category {
@@ -43,6 +44,12 @@ type ContactInfo {
 type Template {
 	name: String
 	style: String
+}
+
+type Layout {
+	resume: Resume
+	name: String
+	value: String
 }
 
 type Query {

@@ -1,6 +1,6 @@
 import executeQuery from "../../lib/executeQuery";
 import stringifyObject from "../../lib/stringifyObject";
-import { defaultCategories } from "../../lib/constants";
+import { defaultCategories, defaultLayoutItems } from "../../lib/constants";
 
 // User data request data used by getUserByEmail and readUser
 const userData = `username
@@ -13,6 +13,13 @@ resumes {
 		title
 		jobTitle
 		bio
+		layout {
+			data {
+				_id
+				name
+				value
+			}
+		}
 		contactInfo {
 			data {
 				_id
@@ -54,7 +61,7 @@ resumes {
 }`;
 
 export const getResume = async (resumeId) => {
-	console.log('getResume request');
+  console.log("getResume request");
   return executeQuery(`query GetResume {
 		findResumeByID(id: "${resumeId}") {
 			_id
@@ -230,6 +237,16 @@ export const createResume = async (userId, templateId, data) => {
           )}
 				]
 			}
+			layout: {
+				create: [
+					${defaultLayoutItems.map(
+            (item) => `{
+						name: "${item.name}"
+						value: "${item.value}"
+					}`
+          )}
+				]
+			}
 			template: { connect: "${templateId}" }
 			user: { connect: "${userId}" }
 		}) {
@@ -240,6 +257,13 @@ export const createResume = async (userId, templateId, data) => {
 					_id
 					name
 					priority
+				}
+			}
+			layout {
+				data {
+					_id
+					name
+					value
 				}
 			}
 			user {
@@ -434,6 +458,23 @@ export const updateTemplate = async (templateId, data) => {
 			_id
 			name
 			style
+		}
+	}`);
+};
+
+/** |----------------------------
+ *  | UPDATE LAYOUT
+ *  |----------------------------
+ */
+export const updateLayout = async (layoutId, data) => {
+  console.log("updateLayout request");
+  return executeQuery(`mutation UpdateLayout {
+		updateLayout(id: "${layoutId}", data: {
+			${stringifyObject(data)}
+		}) {
+			_id
+			name
+			value
 		}
 	}`);
 };

@@ -18,7 +18,6 @@ const Template = ({ template }) => {
       }
       onClick={(e) => handleClick(e, template._id)}
     >
-      {/* <img src="/templates/1.jpg" className="box--img" /> */}
 			<Resume tiny={true} template={template} />
       <p className="box--title">{template.name}</p>
     </div>

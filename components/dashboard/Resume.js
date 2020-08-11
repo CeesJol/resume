@@ -20,8 +20,7 @@ const Resume = ({ tiny, template }) => {
     if (preview) return false;
     setChangingInfo(true);
   };
-	const templateCSS = template ? template.style : editingResume.template.style;
-	// const templateCSS = template.style;
+  const templateCSS = template ? template : editingResume.template;
   const sortByPriority = (list) => {
     return list.sort((item1, item2) => {
       return item1.priority < item2.priority ? -1 : 1;
@@ -62,7 +61,7 @@ const Resume = ({ tiny, template }) => {
       </div>
     );
   };
-  const drawItems = () => {
+  const drawCategories = () => {
     if (!editingResume.categories) return <p>Nothing here yet</p>;
 
     const categories = sortByPriority(editingResume.categories.data);
@@ -100,10 +99,7 @@ const Resume = ({ tiny, template }) => {
   const handleNewCategory = () => {
     if (preview) return false;
     setEditingCategory({});
-	};
-	useEffect(() => {
-		console.log('template is', template.style);
-	})
+  };
   return (
     <PDFExport
       paperSize={"A4"}
@@ -113,12 +109,18 @@ const Resume = ({ tiny, template }) => {
       keywords=""
       ref={(r) => setPdf(r)}
     >
-      <div className={"resume-container " + (tiny ? "resume-container--tiny" : "")}>
-				<div className={"resume " + (tiny ? "resume--tiny" : "")}>
-          <style>{templateCSS}</style>
+      <div
+        className={"resume-container " + (tiny ? "resume-container--tiny" : "")}
+      >
+        <style>{templateCSS.style}</style>
+        <div
+          className={
+            "resume " + (templateCSS.name + " ") + (tiny ? "resume--tiny" : "")
+          }
+        >
           {drawHeader()}
           {drawContactInfo()}
-          {drawItems()}
+          {drawCategories()}
         </div>
       </div>
     </PDFExport>

@@ -3,18 +3,21 @@ import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
 
 const Resumes = () => {
-  const { getUser, setEditingResume, setCreatingResume, setChangingResume } = useContext(
-    UserContext
-  );
+  const {
+    getUser,
+    setEditingResume,
+    setCreatingResume,
+    setChangingResume,
+  } = useContext(UserContext);
   const handleClick = (e, resume) => {
     e.preventDefault();
-		setEditingResume(resume);
-		setChangingResume(true);
+    setEditingResume(resume);
+    setChangingResume(true);
   };
   const handleCreate = () => {
     setCreatingResume({});
   };
-  const drawItems = () => {
+  const drawResumes = () => {
     const data = getUser();
     // TODO update the few lines below
     if (!data || !data.resumes) return <p>Loading...</p>;
@@ -44,7 +47,7 @@ const Resumes = () => {
   return (
     <div className="dashboard__item">
       <h4>Your resumes</h4>
-      {drawItems()}
+      {drawResumes()}
       <Button text="Create a resume" fn={handleCreate} />
     </div>
   );

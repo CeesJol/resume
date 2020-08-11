@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import NewItem from "./NewItem";
 import DummyItem from "./DummyItem";
@@ -48,7 +48,7 @@ const Category = ({ category, index }) => {
         <h3
           className={`resume__category--name ${
             !preview ? "resume--hoverable" : ""
-          }`}
+					}`}
         >
           {category.name}
         </h3>

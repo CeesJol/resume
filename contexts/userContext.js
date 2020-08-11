@@ -12,8 +12,8 @@ const UserContextProvider = (props) => {
   const [nav, setNav] = useState(0);
   const [editingItem, setEditingItem] = useState(-1);
   const [editingCategory, setEditingCategory] = useState(-1);
-	const [editingResume, setEditingResume] = useState(-1);
-	const [changingResume, setChangingResume] = useState(false);
+  const [editingResume, setEditingResume] = useState(-1);
+  const [changingResume, setChangingResume] = useState(false);
   const [creatingResume, setCreatingResume] = useState(-1);
   const [data, setData] = useState(false);
   const [error, setError] = useState(false);
@@ -26,6 +26,7 @@ const UserContextProvider = (props) => {
   const [preview, setPreview] = useState(true);
   const [pdf, setPdf] = useState(null);
   const [loggingOut, setLoggingOut] = useState(null);
+  const [templates, setTemplates] = useState(false);
   const forceRender = () => {
     setDummy(!dummy);
   };
@@ -280,14 +281,14 @@ const UserContextProvider = (props) => {
             // Update user info
             readUser(localUser.id).then(
               (data) => {
-								setEditingResume(data.findUserByID.resumes.data[0]);
+                setEditingResume(data.findUserByID.resumes.data[0]);
                 storeUser(data.findUserByID);
                 console.log("readUser");
-								console.table(data.findUserByID);
+                console.table(data.findUserByID);
 
-								console.log(data.findUserByID.resumes.data[0])
-								
-								forceRender();
+                console.log(data.findUserByID.resumes.data[0]);
+
+                forceRender();
               },
               (err) => {
                 toast.error(`⚠️ ${err}`);
@@ -330,9 +331,9 @@ const UserContextProvider = (props) => {
         editingCategory,
         setEditingCategory,
         editingResume,
-				setEditingResume,
-				changingResume,
-				setChangingResume,
+        setEditingResume,
+        changingResume,
+        setChangingResume,
         creatingResume,
         setCreatingResume,
         data,
@@ -365,6 +366,8 @@ const UserContextProvider = (props) => {
         setPdf,
         loggingOut,
         setLoggingOut,
+        templates,
+        setTemplates,
       }}
     >
       {props.children}

@@ -14,9 +14,10 @@ const ResumePopup = () => {
     storeResume,
     resetPopups,
     selectedTemplateId,
+    templates,
+    setTemplates,
   } = useContext(UserContext);
   const [title, setTitle] = useState("");
-  const [templates, setTemplates] = useState(false);
   const handleChangeTitle = (event) => {
     setTitle(event.target.value);
     setUserMadeChanges(true);
@@ -57,9 +58,11 @@ const ResumePopup = () => {
   };
   useEffect(() => {
     // load templates
-    getTemplates().then((data) => {
-      setTemplates(data.templates.data);
-    });
+    if (!templates) {
+      getTemplates().then((data) => {
+        setTemplates(data.templates.data);
+      });
+    }
   }, []);
   return (
     <div className="popup-container" onClick={handleCancel}>

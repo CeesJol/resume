@@ -113,6 +113,22 @@ export const getResume = async (resumeId) => {
  *  | GET USERNAME BY EMAIL
  *  |----------------------------
  */
+export const deleteResume = async (id) => {
+  console.log("deleteResume request");
+  return executeQuery(`mutation DeleteResume {
+		deleteResume(id: "${id}") {
+			_id
+			title
+		}
+	}`);
+};
+
+
+
+/** |----------------------------
+ *  | GET USERNAME BY EMAIL
+ *  |----------------------------
+ */
 export const getUserByEmail = async (email) => {
   console.log("getUserByEmail request");
   email = email.toLowerCase();

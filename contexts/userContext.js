@@ -216,6 +216,7 @@ const UserContextProvider = (props) => {
 
     // Reset state
     setUser(null);
+    reset();
   };
   const userExists = () => {
     return !!user && user.username;
@@ -284,6 +285,12 @@ const UserContextProvider = (props) => {
     setWarning(false);
     setUserMadeChanges(false);
     setSelectedTemplateId(0);
+  };
+  const reset = () => {
+    setNav(0);
+    resetPopups();
+    setEditingResume(-1);
+    setChangingResume(false);
   };
   const getLayout = (name) => {
     return editingResume.layout.data.find((item) => item.name === name).value;
@@ -392,6 +399,7 @@ const UserContextProvider = (props) => {
         templates,
         setTemplates,
         getLayout,
+        reset,
       }}
     >
       {props.children}

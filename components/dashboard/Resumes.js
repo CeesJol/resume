@@ -1,23 +1,14 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
+import ResumePreview from "./ResumePreview";
 
 const Resumes = () => {
-  const {
-    getUser,
-    setEditingResume,
-    setCreatingResume,
-    setChangingResume,
-  } = useContext(UserContext);
-  const handleClick = (e, resume) => {
-    e.preventDefault();
-    setEditingResume(resume);
-    setChangingResume(true);
-  };
+  const { getUser, setCreatingResume } = useContext(UserContext);
   const handleCreate = () => {
     setCreatingResume({});
   };
-  const drawResumes = () => {
+  const drawResumePreviews = () => {
     const data = getUser();
     // TODO update the few lines below
     if (!data || !data.resumes) return <p>Loading...</p>;
@@ -26,28 +17,14 @@ const Resumes = () => {
     const resumes = data.resumes.data;
 
     if (resumes.length > 0)
-      return resumes.map((resume, i) => (
-        <div
-          className="dashboard__resume-preview resume--hoverable"
-          key={resume._id}
-          onClick={(e) => handleClick(e, resume)}
-        >
-          <h3 className="dashboard__resume-preview--title">{resume.title}</h3>
-          <h3 className="dashboard__resume-preview--job-title">
-            {resume.jobTitle || "Job Title"}
-          </h3>
-          <p className="dashboard__resume-preview--bio multiline">
-            {resume.bio || "Bio"}
-          </p>
-        </div>
-      ));
+      return resumes.map((resume, i) => <ResumePreview resume={resume} />);
     return <p>Get started by creating your resume</p>;
   };
 
   return (
     <div className="dashboard__item">
       <h4>Your resumes</h4>
-      {drawResumes()}
+      {drawResumePreviews()}
       <Button text="Create a resume" fn={handleCreate} />
     </div>
   );

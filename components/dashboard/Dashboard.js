@@ -4,6 +4,7 @@ import Resumes from "./Resumes";
 import Editor from "./Editor";
 import Layout from "./Layout";
 import Preview from "./Preview";
+import Options from "./Options";
 import Settings from "./Settings";
 import Nav from "./Nav";
 import { UserContext } from "../../contexts/userContext";
@@ -41,7 +42,8 @@ const Dashboard = () => {
               {nav == 0 && (!changingResume ? <Resumes /> : <Editor />)}
               {nav == 1 && <Layout />}
               {nav == 2 && <Preview />}
-              {nav == 3 && <Settings />}
+							{nav == 3 && <Options />}
+              {nav == 1000 && <Settings />}
             </div>
           </div>
         </div>

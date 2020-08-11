@@ -4,9 +4,10 @@ import { UserContext } from "../../contexts/userContext";
 import { logout } from "../../pages/api/auth";
 
 const DashboardHeader = () => {
-  const { userExists, getUser, clearUser, setLoggingOut } = useContext(UserContext);
+  const { userExists, getUser, clearUser, setLoggingOut, setAuth } = useContext(UserContext);
   const handleLogout = async () => {
-    setLoggingOut(true);
+		setLoggingOut(true);
+		setAuth(false);
     await logout(getUser().secret);
     clearUser();
   };

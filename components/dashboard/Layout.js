@@ -20,9 +20,9 @@ const Layout = () => {
     newArr[i].value = event.target.value;
     setItems(newArr);
   };
-  const handleUpdate = async (i) => {
-    await updateLayout(items[i]._id, {
-      value: items[i].value,
+  const handleUpdate = async (item) => {
+    await updateLayout(item._id, {
+      value: item.value,
     }).then(
       (data) => {
         storeLayout(data.updateLayout);
@@ -35,7 +35,7 @@ const Layout = () => {
   };
   return editingResume !== -1 ? (
     items.map((item, i) => (
-      <div className="dashboard__item" key={i}>
+      <div className="dashboard__item" key={item._id}>
         <h4>{item.name}</h4>
         <form>
           <input
@@ -49,7 +49,7 @@ const Layout = () => {
           <Button
             text="Update"
             altText="Updating..."
-            fn={() => handleUpdate(i)}
+            fn={() => handleUpdate(item)}
           />
         </form>
       </div>

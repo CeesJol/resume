@@ -74,7 +74,11 @@
 
   &__contact-info {
     background-color: rgb(239, 240, 241);
-    padding: 0.5rem;
+		padding: 0.5rem;
+		height: 2.5rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 
     &__content {
       display: flex;

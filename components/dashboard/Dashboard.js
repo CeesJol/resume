@@ -27,37 +27,33 @@ const Dashboard = () => {
     changingInfo,
     editingContactInfo,
     loggingOut,
-  } = useContext(UserContext);
-  return auth ? (
-    loggingOut ? (
-      <LoadingPopup text={`Logging out...`} />
-    ) : (
-      <div className="dashboard-container">
-        <DashboardHeader />
-        <main>
-          <div className="dashboard">
-            <Nav />
-            <div className="dashboard__main">
-              <div className="dashboard__main__content">
-                {nav == 0 && (!changingResume ? <Resumes /> : <Editor />)}
-                {nav == 1 && <Layout />}
-                {nav == 2 && <Preview />}
-                {nav == 3 && <Settings />}
-              </div>
+	} = useContext(UserContext);
+	if (loggingOut) return <LoadingPopup text={`Logging out...`} />;
+  if (!auth) return <LoadingPopup text={`Authenticating...`} />;
+  return (
+    <div className="dashboard-container">
+      <DashboardHeader />
+      <main>
+        <div className="dashboard">
+          <Nav />
+          <div className="dashboard__main">
+            <div className="dashboard__main__content">
+              {nav == 0 && (!changingResume ? <Resumes /> : <Editor />)}
+              {nav == 1 && <Layout />}
+              {nav == 2 && <Preview />}
+              {nav == 3 && <Settings />}
             </div>
           </div>
-        </main>
-        {/* Draw popups */}
-        {creatingResume !== -1 && <ResumePopup />}
-        {editingItem !== -1 && <Popup />}
-        {editingCategory !== -1 && editingItem === -1 && <CategoryPopup />}
-        {changingInfo && <UserPopup />}
-        {editingContactInfo !== -1 && <ContactPopup />}
-        {warning && <Warning />}
-      </div>
-    )
-  ) : (
-    <LoadingPopup text={`Authenticating...`} />
+        </div>
+      </main>
+      {/* Draw popups */}
+      {creatingResume !== -1 && <ResumePopup />}
+      {editingItem !== -1 && <Popup />}
+      {editingCategory !== -1 && editingItem === -1 && <CategoryPopup />}
+      {changingInfo && <UserPopup />}
+      {editingContactInfo !== -1 && <ContactPopup />}
+      {warning && <Warning />}
+    </div>
   );
 };
 

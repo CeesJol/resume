@@ -319,7 +319,7 @@ const UserContextProvider = (props) => {
   const reset = () => {
 		setChangingResume(false);
 		// setEditingResume(-1);
-		if (user.resumes.data.length === 0) setEditingResume(dummyResume);
+		if (user && user.resumes.data.length === 0) setEditingResume(dummyResume);
 		setNav(0);
 		resetPopups();
   };
@@ -334,11 +334,15 @@ const UserContextProvider = (props) => {
         identity(localUser.secret).then(
           (data) => {
             // Database confirms that user is logged in!
-            storeUser(localUser);
-            setAuth(true);
             // Update user info
             readUser(localUser.id).then(
               (data) => {
+								if (!data.findUserByID) {
+									toast.error(`⚠️ Unauthenticated`);
+									clearUser();
+									return;
+								}
+								setAuth(true);
                 if (data.findUserByID.resumes.data[0]) {
                   setEditingResume(data.findUserByID.resumes.data[0]);
                 } else {

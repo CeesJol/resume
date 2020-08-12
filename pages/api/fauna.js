@@ -2,62 +2,66 @@ import executeQuery from "../../lib/executeQuery";
 import stringifyObject from "../../lib/stringifyObject";
 import { defaultCategories, defaultLayoutItems } from "../../lib/constants";
 
+const ITEM_DATA = `_id
+title
+location
+from
+to
+description
+priority
+category {
+	_id
+}`
+
+const RESUME_DATA = `_id
+title
+jobTitle
+bio
+priority
+layout {
+	data {
+		_id
+		name
+		value
+	}
+}
+contactInfo {
+	data {
+		_id
+		name
+		value
+		priority
+		resume {
+			_id
+		}
+	}
+}
+template {
+	_id
+	name
+	style
+}
+categories {
+	data {
+		_id
+		name
+		priority
+		items {
+			data {
+				${ITEM_DATA}
+			}
+		}
+	}
+}`
+
 // User data request data used by getUserByEmail and readUser
-const userData = `username
+const USER_DATA = `username
 email
 confirmed
 bio
 resumes {
 	data {
-		_id
-		title
-		jobTitle
-		bio
-		priority
-		layout {
-			data {
-				_id
-				name
-				value
-			}
-		}
-		contactInfo {
-			data {
-				_id
-				name
-				value
-				priority
-				resume {
-					_id
-				}
-			}
-		}
-		template {
-			_id
-			name
-			style
-		}
-		categories {
-			data {
-				_id
-				name
-				priority
-				items {
-					data {
-						_id
-						title
-						location
-						from
-						to
-						description
-						priority
-						category {
-							_id
-						}
-					}
-				}
-			}
-		}
+		${RESUME_DATA}
 	}
 }`;
 
@@ -65,47 +69,7 @@ export const getResume = async (resumeId) => {
   console.log("getResume request");
   return executeQuery(`query GetResume {
 		findResumeByID(id: "${resumeId}") {
-			_id
-			title
-			jobTitle
-			bio
-			contactInfo {
-				data {
-					_id
-					name
-					value
-					priority
-					resume {
-						_id
-					}
-				}
-			}
-			template {
-				_id
-				name
-				style
-			}
-			categories {
-				data {
-					_id
-					name
-					priority
-					items {
-						data {
-							_id
-							title
-							location
-							from
-							to
-							description
-							priority
-							category {
-								_id
-							}
-						}
-					}
-				}
-			}
+			${RESUME_DATA}
 		}
 	}`);
 };
@@ -134,7 +98,7 @@ export const getUserByEmail = async (email) => {
   email = email.toLowerCase();
   return executeQuery(`query FindAUserByEmail {
 		userByEmail(email: "${email}") {
-			${userData}
+			${USER_DATA}
 		}
 	}`);
 };
@@ -155,16 +119,7 @@ export const createItem = async (categoryId, data) => {
 			priority: ${data.priority}
 			category: { connect: "${categoryId}" }
 		}) {
-			_id
-			title
-			location
-			from
-			to
-			description
-			priority
-			category {
-				_id
-			}
+			${ITEM_DATA}
 		}
 	}`);
 };
@@ -266,41 +221,7 @@ export const createResume = async (userId, templateId, data) => {
 			template: { connect: "${templateId}" }
 			user: { connect: "${userId}" }
 		}) {
-			_id
-			title
-			categories {
-				data {
-					_id
-					name
-					priority
-				}
-			}
-			layout {
-				data {
-					_id
-					name
-					value
-				}
-			}
-			user {
-				_id
-			}
-			template {
-				_id
-				name
-				style
-			}
-			contactInfo {
-				data {
-					_id
-					name
-					value
-					priority
-					resume {
-						_id
-					}
-				}
-			}
+			${RESUME_DATA}
 		}
 	}`;
   return executeQuery(query);
@@ -310,13 +231,13 @@ export const createResume = async (userId, templateId, data) => {
  *  | DUPLICATE RESUME
  *  |----------------------------
  */
-export const duplicateResume = async (userId, resumeData, priority) => {
+export const duplicateResume = async (userId, resumeData, title, priority) => {
   console.log("duplicateResume request");
   var query = `mutation DuplicateResume {
 		createResume(data: {
-			title: "${resumeData.title} Duplicate"
-			jobTitle: "${resumeData.jobTitle}"
-			bio: """${resumeData.bio}"""
+			title: "${title}"
+			jobTitle: "${resumeData.jobTitle ? resumeData.jobTitle : ``}"
+			bio: "${resumeData.bio ? resumeData.bio : ``}"
 			priority: ${priority}
 			categories: {
 				create: [
@@ -358,44 +279,7 @@ export const duplicateResume = async (userId, resumeData, priority) => {
 			template: { connect: "${resumeData.template._id}" }
 			user: { connect: "${userId}" }
 		}) {
-			_id
-			title
-			jobTitle
-			bio
-			priority
-			categories {
-				data {
-					_id
-					name
-					priority
-				}
-			}
-			layout {
-				data {
-					_id
-					name
-					value
-				}
-			}
-			user {
-				_id
-			}
-			template {
-				_id
-				name
-				style
-			}
-			contactInfo {
-				data {
-					_id
-					name
-					value
-					priority
-					resume {
-						_id
-					}
-				}
-			}
+			${RESUME_DATA}
 		}
 	}`;
   return executeQuery(query);
@@ -508,15 +392,7 @@ export const updateItem = async (itemId, data) => {
 		updateItem(id: "${itemId}", data: {
 			${stringifyObject(data)}
 		}) {
-			_id
-			title
-			location
-			from
-			to
-			description
-			category {
-				_id
-			}
+			${ITEM_DATA}
 		}
 	}`);
 };
@@ -613,16 +489,7 @@ export const deleteItem = async (id) => {
   console.log("deleteItem request");
   return executeQuery(`mutation DeleteItem {
 		deleteItem(id: "${id}") {
-			_id
-			title
-			location
-			from
-			to
-			description
-			priority
-			category {
-				_id
-			}
+			${ITEM_DATA}
 		}
 	}`);
 };
@@ -655,7 +522,7 @@ export const readUser = async (id) => {
   console.log("readUser request");
   return executeQuery(`query FindAUserByID {
 		findUserByID(id: "${id}") {
-			${userData}
+			${USER_DATA}
 		}
 	}`);
 };

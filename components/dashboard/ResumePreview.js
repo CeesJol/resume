@@ -19,8 +19,10 @@ const ResumePreview = ({ resume, index }) => {
     setChangingResume(true);
   };
   const handleDuplicate = (e, resume) => {
-    e.stopPropagation();
-    duplicateResume(getUser().id, resume, getUser().resumes.data.length + 1).then((data) => {
+		e.stopPropagation();
+		const title = resume.title + " Duplicate";
+		const priority = getUser().resumes.data.length + 1;
+    duplicateResume(getUser().id, resume, title, priority).then((data) => {
       storeResume(data.createResume, { add: true });
     });
   };

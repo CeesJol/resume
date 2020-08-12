@@ -10,7 +10,7 @@ type Resume {
   user: User
   jobTitle: String
   bio: String
-  title: String @unique
+  title: String
   priority: Int
   categories: [Category] @relation
   template: Template @relation

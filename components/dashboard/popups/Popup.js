@@ -19,7 +19,8 @@ const Popup = () => {
     userMadeChanges,
     setUserMadeChanges,
     resetPopups,
-    getCategory,
+		getCategory,
+		getItems,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [title, setTitle] = useState("");
@@ -83,7 +84,7 @@ const Popup = () => {
             resetPopups();
             // Propagate priority updates
             const category = getCategory(data.deleteItem.category._id);
-            for (var item of category.items.data) {
+            for (var item of getItems(category)) {
               if (item.priority > data.deleteItem.priority) {
                 const newPriority = item.priority - 1;
                 updateItem(item._id, { priority: newPriority });
@@ -143,7 +144,7 @@ const Popup = () => {
       from,
       to,
       description,
-      priority: getCategory(categoryId).items.data.length + 1,
+      priority: getItems(getCategory(categoryId)).length + 1,
     }).then(
       async (data) => {
         storeItem(data.createItem, { add: true });

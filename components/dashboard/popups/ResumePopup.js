@@ -18,6 +18,7 @@ const ResumePopup = () => {
 		setTemplates,
 		setEditingResume,
 		setChangingResume,
+		getResumes,
   } = useContext(UserContext);
   const [title, setTitle] = useState("");
   const handleChangeTitle = (event) => {
@@ -38,7 +39,7 @@ const ResumePopup = () => {
 
     await createResume(getUser().id, selectedTemplateId, {
 			title,
-			priority: getUser().resumes.data.length + 1
+			priority: getResumes().length + 1
     }).then(
       (data) => {
 				storeResume(data.createResume, { add: true });

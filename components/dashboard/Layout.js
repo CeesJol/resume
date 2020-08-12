@@ -5,14 +5,14 @@ import Button from "../general/Button";
 import { toast } from "react-toastify";
 
 const Layout = () => {
-  const { editingResume, storeLayout } = useContext(UserContext);
+  const { editingResume, storeLayout, getLayout } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [items, setItems] = useState([]);
   useEffect(() => {
     if (!filled && editingResume !== -1) {
       setFilled(true);
 
-      setItems(editingResume.layout.data);
+      setItems(getLayout());
     }
   });
   const handleChangeItem = (i) => {

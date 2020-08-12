@@ -17,7 +17,8 @@ const ContactPopup = () => {
     setUserMadeChanges,
     storeContactInfo,
     resetPopups,
-    editingContactInfo,
+		editingContactInfo,
+		getContactInfo,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [name, setName] = useState("");
@@ -44,7 +45,7 @@ const ContactPopup = () => {
     await createContactInfo(editingResume._id, {
       name,
       value,
-      priority: editingResume.contactInfo.data.length + 1,
+      priority: getContactInfo().length + 1,
     }).then(
       (data) => {
         storeContactInfo(data.createContactInfo, { add: true });
@@ -87,7 +88,7 @@ const ContactPopup = () => {
             storeContactInfo(data.deleteContactInfo, { del: true });
             resetPopups();
             // Propagate priority updates
-            for (var item of editingResume.contactInfo.data) {
+            for (var item of getContactInfo()) {
               if (item.priority > data.deleteContactInfo.priority) {
                 const newPriority = item.priority - 1;
                 updateContactInfo(item._id, { priority: newPriority });

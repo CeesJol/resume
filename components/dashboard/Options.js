@@ -10,6 +10,7 @@ const Options = () => {
 		editingResume,
 		resetPopups,
 		getUser,
+		getResumes,
   } = useContext(UserContext);
   const handleDelete = async (event) => {
     if (event) event.preventDefault();
@@ -22,7 +23,7 @@ const Options = () => {
             storeResume(data.deleteResume, { del: true });
             resetPopups();
             // Propagate priority updates
-            for (var resume of getUser().resumes.data) {
+            for (var resume of getResumes()) {
               if (resume.priority > data.deleteResume.priority) {
                 const newPriority = resume.priority - 1;
                 updateResume(resume._id, { priority: newPriority });

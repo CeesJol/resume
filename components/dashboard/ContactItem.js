@@ -3,7 +3,7 @@ import { UserContext } from "../../contexts/userContext";
 import { contactpickerOptions } from "../../lib/constants";
 
 const ContactItem = ({ item, txt }) => {
-  const { setEditingContactInfo, preview, getLayout } = useContext(UserContext);
+  const { setEditingContactInfo, preview, getLayoutItem } = useContext(UserContext);
   const handleChangeContactInfo = (item) => {
     if (preview) return false;
     setEditingContactInfo(item);
@@ -12,7 +12,7 @@ const ContactItem = ({ item, txt }) => {
     <i
       className={`fa fa-${name} resume__contact-info--icon`}
       style={{
-        color: getLayout("Primary Color"),
+        color: getLayoutItem("Primary Color"),
       }}
     ></i>
   );

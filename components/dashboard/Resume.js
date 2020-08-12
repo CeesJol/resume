@@ -14,7 +14,9 @@ const Resume = ({ tiny, template }) => {
     editingResume,
     setChangingInfo,
     preview,
-    setPdf,
+		setPdf,
+		getCategories,
+		getContactInfo,
   } = useContext(UserContext);
   const handleChangeInfo = () => {
     if (preview) return false;
@@ -53,7 +55,7 @@ const Resume = ({ tiny, template }) => {
     return (
       <div className="resume__contact-info">
         <div className="resume__contact-info__content">
-          {sortByPriority(editingResume.contactInfo.data).map((item) => (
+          {sortByPriority(getContactInfo()).map((item) => (
             <ContactItem item={item} key={`${item.name}-${item.value}`} />
           ))}
           {!preview && <ContactItem item={{}} txt={"Add contact info"} />}
@@ -64,7 +66,7 @@ const Resume = ({ tiny, template }) => {
   const drawCategories = () => {
     if (!editingResume.categories) return <p>Nothing here yet</p>;
 
-    const categories = sortByPriority(editingResume.categories.data);
+    const categories = sortByPriority(getCategories());
     // if (editingResume.template.sidebar) {
     //   const mainCategories = categories.filter(
     //     (category) => category.priority < 1000

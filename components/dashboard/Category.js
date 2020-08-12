@@ -10,7 +10,8 @@ const Category = ({ category, index }) => {
     moveCategory,
     forceRender,
     preview,
-    getLayout,
+		getLayoutItem,
+		getItems,
   } = useContext(UserContext);
   const handleClick = (e, category) => {
     e.preventDefault();
@@ -51,7 +52,7 @@ const Category = ({ category, index }) => {
             !preview ? "resume--hoverable" : ""
           }`}
           style={{
-            color: getLayout("Primary Color"),
+            color: getLayoutItem("Primary Color"),
           }}
         >
           {category.name}
@@ -64,8 +65,8 @@ const Category = ({ category, index }) => {
             <i>Add item</i>
           </p>
         )}
-        {category.items && category.items.data.length > 0 ? (
-          sortByPriority(category.items.data).map((item, index) => (
+        {getItems(category) && getItems(category).length > 0 ? (
+          sortByPriority(getItems(category)).map((item, index) => (
             <div key={item._id}>
               <NewItem item={item} index={index} />
             </div>

@@ -1,7 +1,12 @@
 import React, { createContext, useState, useEffect } from "react";
 export const UserContext = createContext();
 import { identity } from "../pages/api/auth";
-import { readUser, updateItem, updateCategory, updateResume } from "../pages/api/fauna";
+import {
+  readUser,
+  updateItem,
+  updateCategory,
+  updateResume,
+} from "../pages/api/fauna";
 import { toast } from "react-toastify";
 import Router from "next/router";
 import { dummyResume } from "../lib/constants";
@@ -79,10 +84,22 @@ const UserContextProvider = (props) => {
     return editingResume.categories.data.find(
       (category) => category._id === categoryId
     );
-  };
+	};
+	const getResumes = () => {
+		return getUser() && getUser().resumes && getUser().resumes.data;
+	}
+	const getLayout = () => {
+		return editingResume.layout.data;
+	}
+	const getContactInfo = () => {
+		return editingResume.contactInfo.data;
+	}
   const getCategories = () => {
     return editingResume.categories.data;
-  };
+	};
+	const getItems = (category) => {
+		return category && category.items && category.items.data;
+	}
   const storeResume = (resumeData, { add, del }) => {
     var user = getUser();
 
@@ -90,15 +107,15 @@ const UserContextProvider = (props) => {
       // Delete resume
       user.resumes.data = user.resumes.data.filter(
         (x) => x._id !== resumeData._id
-			);
-			reset();
-			setUser(() => user);
-			forceRender();
+      );
+      reset();
+      setUser(() => user);
+      forceRender();
       return;
     } else if (add) {
       // Add resume
-			user.resumes.data.push(resumeData);
-			setUser(() => user);
+      user.resumes.data.push(resumeData);
+      setUser(() => user);
       forceRender();
       return;
     }
@@ -109,9 +126,9 @@ const UserContextProvider = (props) => {
         user.resumes.data[r] = newResume;
         setEditingResume(newResume);
       }
-		});
+    });
 
-		forceRender();
+    forceRender();
 
     setUser(() => user);
   };
@@ -267,10 +284,10 @@ const UserContextProvider = (props) => {
       .find((resume) => resume._id === editingResume._id)
       .categories.data.find(
         (cat) => cat._id === otherCategory._id
-      ).priority += 1;
+      ).priority -= amount;
     user.resumes.data
       .find((resume) => resume._id === editingResume._id)
-      .categories.data.find((cat) => cat._id === category._id).priority -= 1;
+      .categories.data.find((cat) => cat._id === category._id).priority += amount;
 
     resetPopups();
 
@@ -281,8 +298,8 @@ const UserContextProvider = (props) => {
     });
 
     setMoving(false);
-	};
-	const moveResume = async (resume, amount) => {
+  };
+  const moveResume = async (resume, amount) => {
     if (moving) return false;
     setMoving(true);
 
@@ -317,15 +334,15 @@ const UserContextProvider = (props) => {
     setSelectedTemplateId(0);
   };
   const reset = () => {
-		setChangingResume(false);
-		// setEditingResume(-1);
-		if (user && user.resumes.data.length === 0) setEditingResume(dummyResume);
-		setNav(0);
-		resetPopups();
+    setChangingResume(false);
+    // setEditingResume(-1);
+    if (user && user.resumes.data.length === 0) setEditingResume(dummyResume);
+    setNav(0);
+    resetPopups();
   };
-  const getLayout = (name) => {
+  const getLayoutItem = (name) => {
     return editingResume.layout.data.find((item) => item.name === name).value;
-	};
+  };
   useEffect(() => {
     if (user == null) {
       const localUser = JSON.parse(localStorage.getItem("user"));
@@ -337,12 +354,12 @@ const UserContextProvider = (props) => {
             // Update user info
             readUser(localUser.id).then(
               (data) => {
-								if (!data.findUserByID) {
-									toast.error(`⚠️ Unauthenticated`);
-									clearUser();
-									return;
-								}
-								setAuth(true);
+                if (!data.findUserByID) {
+                  toast.error(`⚠️ Unauthenticated`);
+                  clearUser();
+                  return;
+                }
+                setAuth(true);
                 if (data.findUserByID.resumes.data[0]) {
                   setEditingResume(data.findUserByID.resumes.data[0]);
                 } else {
@@ -376,7 +393,11 @@ const UserContextProvider = (props) => {
     }
 
     // Set localstorage
-    localStorage.setItem("user", JSON.stringify(user));
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("user");
+    }
   }, [user]);
   return (
     <UserContext.Provider
@@ -411,8 +432,8 @@ const UserContextProvider = (props) => {
         editingContactInfo,
         setEditingContactInfo,
         moveItem,
-				moveCategory,
-				moveResume,
+        moveCategory,
+        moveResume,
         storeItem,
         storeResume,
         storeTemplate,
@@ -424,7 +445,11 @@ const UserContextProvider = (props) => {
         getCategory,
         selectedTemplateId,
         setSelectedTemplateId,
-        getCategories,
+				getCategories,
+				getItems,
+				getResumes,
+				getLayout,
+				getContactInfo,
         storeContactInfo,
         preview,
         setPreview,
@@ -434,8 +459,8 @@ const UserContextProvider = (props) => {
         setLoggingOut,
         templates,
         setTemplates,
-        getLayout,
-				reset
+        getLayoutItem,
+        reset,
       }}
     >
       {props.children}

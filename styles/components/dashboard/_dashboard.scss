@@ -51,9 +51,9 @@
 
   &__main {
     &__content {
-      @include dashboard-content-container;
+			@include dashboard-content-container;
 
-      overflow: auto;
+      // overflow: auto;
     }
   }
 
@@ -85,26 +85,32 @@
 	&__resume-wrapper {
 		margin: 0 0 $l-size 0;
 		box-shadow: 0px 8px 13px -4px rgba(0, 0, 0, 0.75);
-		zoom: 1.45;
+		transform-origin: center top;
+		transform: scale(1.45);
 		width: inherit;
 		margin-left: auto;
 		margin-right: auto;
 		display: inline-block;
 
+		&--noscale {
+			zoom: 1 !important;
+			transform: none !important;
+		}
+
 		@media (max-width: 57rem) {
-			zoom: 1.25;
+			transform: scale(1.25);
 		}
 
 		@media (max-width: 49rem) {
-			zoom: 1.05;
+			transform: scale(1.05);
 		}
 
 		@media (max-width: 41rem) {
-			zoom: 0.85;
+			transform: scale(0.85);
 		}
 
 		@media (max-width: 33rem) {
-			zoom: 0.65;
+			transform: scale(0.65);
 		}
 	}
 

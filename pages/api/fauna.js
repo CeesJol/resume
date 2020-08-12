@@ -1,6 +1,47 @@
-import executeQuery from "../../lib/executeQuery";
+// import executeQuery from "../../lib/executeQuery";
 import stringifyObject from "../../lib/stringifyObject";
 import { defaultCategories, defaultLayoutItems } from "../../lib/constants";
+
+// import getData from "../../lib/getData"
+// import useFetch from "../../useFetch"
+
+const secret = process.env.FAUNADB_SECRET_KEY;
+
+const executeQuery = async (query) => {
+  const data = await useFetch(process.env.FAUNADB_GRAPHQL_ENDPOINT, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${secret}`,
+      "Content-type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      query,
+    }),
+  });
+
+  return getData(data);
+};
+
+const getData = (data) => {
+  if (data.errors) {
+    console.error('errors :(', data.errors);
+    return -1;
+  }
+  if (!data || data.errors) return -1;
+  return data.data;
+}
+
+async function useFetch(url, options) {
+  try {
+    const res = await fetch(url, options);
+    const json = await res.json();
+
+    return json;
+  } catch (e) {
+    throw new Error(e);
+  }
+}
 
 const ITEM_DATA = `_id
 title

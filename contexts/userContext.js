@@ -92,11 +92,14 @@ const UserContextProvider = (props) => {
         (x) => x._id !== resumeData._id
 			);
 			reset();
+			setUser(() => user);
+			forceRender();
       return;
     } else if (add) {
       // Add resume
-      user.resumes.data.push(resumeData);
-      // setEditingResume(resumeData);
+			user.resumes.data.push(resumeData);
+			setUser(() => user);
+      forceRender();
       return;
     }
 
@@ -106,7 +109,9 @@ const UserContextProvider = (props) => {
         user.resumes.data[r] = newResume;
         setEditingResume(newResume);
       }
-    });
+		});
+
+		forceRender();
 
     setUser(() => user);
   };
@@ -320,7 +325,7 @@ const UserContextProvider = (props) => {
   };
   const getLayout = (name) => {
     return editingResume.layout.data.find((item) => item.name === name).value;
-  };
+	};
   useEffect(() => {
     if (user == null) {
       const localUser = JSON.parse(localStorage.getItem("user"));
@@ -426,7 +431,7 @@ const UserContextProvider = (props) => {
         templates,
         setTemplates,
         getLayout,
-        reset,
+				reset
       }}
     >
       {props.children}

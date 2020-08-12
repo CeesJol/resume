@@ -111,7 +111,7 @@ export const getResume = async (resumeId) => {
 };
 
 /** |----------------------------
- *  | GET USERNAME BY EMAIL
+ *  | DELETE RESUME
  *  |----------------------------
  */
 export const deleteResume = async (id) => {
@@ -120,6 +120,7 @@ export const deleteResume = async (id) => {
 		deleteResume(id: "${id}") {
 			_id
 			title
+			priority
 		}
 	}`);
 };
@@ -306,6 +307,101 @@ export const createResume = async (userId, templateId, data) => {
 };
 
 /** |----------------------------
+ *  | DUPLICATE RESUME
+ *  |----------------------------
+ */
+export const duplicateResume = async (userId, resumeData, priority) => {
+  console.log("duplicateResume request");
+  var query = `mutation DuplicateResume {
+		createResume(data: {
+			title: "${resumeData.title} Duplicate"
+			jobTitle: "${resumeData.jobTitle}"
+			bio: """${resumeData.bio}"""
+			priority: ${priority}
+			categories: {
+				create: [
+					${resumeData.categories.data.map(
+            (category) =>
+              `{ 
+								${stringifyObject(category)}
+								items: {
+									create: [
+										${category.items.data.map(
+                    	(item) => `{
+												${stringifyObject(item)}
+										}`
+                  )}
+								]
+							}
+						}`
+          )}
+				]
+			}
+			layout: {
+				create: [
+					${resumeData.layout.data.map(
+            (layoutItem) => `{
+							${stringifyObject(layoutItem)}
+						}`
+          )}
+				]
+			}
+			contactInfo: {
+				create: [
+					${resumeData.contactInfo.data.map(
+            (contactInfoItem) => `{
+							${stringifyObject(contactInfoItem)}
+						}`
+          )}
+				]
+			}
+			template: { connect: "${resumeData.template._id}" }
+			user: { connect: "${userId}" }
+		}) {
+			_id
+			title
+			jobTitle
+			bio
+			priority
+			categories {
+				data {
+					_id
+					name
+					priority
+				}
+			}
+			layout {
+				data {
+					_id
+					name
+					value
+				}
+			}
+			user {
+				_id
+			}
+			template {
+				_id
+				name
+				style
+			}
+			contactInfo {
+				data {
+					_id
+					name
+					value
+					priority
+					resume {
+						_id
+					}
+				}
+			}
+		}
+	}`;
+  return executeQuery(query);
+};
+
+/** |----------------------------
  *  | GET TEMPLATES
  *  |----------------------------
  */
@@ -327,7 +423,7 @@ export const getTemplates = () => {
  *  |----------------------------
  */
 export const updateResume = async (resumeId, data) => {
-	console.log("updateResume request");
+  console.log("updateResume request");
   return executeQuery(`mutation UpdateResume {
 		updateResume(id: "${resumeId}", data: {
 			${stringifyObject(data)}

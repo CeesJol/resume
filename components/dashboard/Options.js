@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
-import { deleteResume } from "../../pages/api/fauna";
+import { deleteResume, updateResume } from "../../pages/api/fauna";
 
 const Options = () => {
   const {
@@ -9,6 +9,7 @@ const Options = () => {
 		setWarning,
 		editingResume,
 		resetPopups,
+		getUser,
   } = useContext(UserContext);
   const handleDelete = async (event) => {
     if (event) event.preventDefault();
@@ -21,13 +22,13 @@ const Options = () => {
             storeResume(data.deleteResume, { del: true });
             resetPopups();
             // Propagate priority updates
-            // for (var category of getCategories()) {
-            //   if (category.priority > data.deleteResume.priority) {
-            //     const newPriority = category.priority - 1;
-            //     updateResume(category._id, { priority: newPriority });
-            //     storeResume({ ...category, priority: newPriority }, {});
-            //   }
-            // }
+            for (var resume of getUser().resumes.data) {
+              if (resume.priority > data.deleteResume.priority) {
+                const newPriority = resume.priority - 1;
+                updateResume(resume._id, { priority: newPriority });
+                storeResume({ ...resume, priority: newPriority }, {});
+              }
+            }
           },
           (err) => {
             toast.error(`⚠️ ${err}`);

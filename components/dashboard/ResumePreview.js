@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
+import { duplicateResume } from "../../pages/api/fauna";
 
 const ResumePreview = ({ resume, index }) => {
   const {
@@ -8,19 +9,23 @@ const ResumePreview = ({ resume, index }) => {
     setEditingResume,
     setCreatingResume,
     setChangingResume,
-		moveResume,
+    moveResume,
 		forceRender,
+		storeResume,
   } = useContext(UserContext);
   const handleClick = (e, resume) => {
     e.preventDefault();
     setEditingResume(resume);
     setChangingResume(true);
   };
-  const handleDuplicate = (e) => {
+  const handleDuplicate = (e, resume) => {
     e.stopPropagation();
+    duplicateResume(getUser().id, resume, getUser().resumes.data.length + 1).then((data) => {
+      storeResume(data.createResume, { add: true });
+    });
   };
   const handleMove = (e, resume, amount) => {
-		e.stopPropagation();
+    e.stopPropagation();
     moveResume(resume, amount);
     forceRender();
   };

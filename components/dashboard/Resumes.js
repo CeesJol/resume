@@ -22,8 +22,8 @@ const Resumes = () => {
     const resumes = data.resumes.data;
 
     if (resumes.length > 0) {
-      return sortByPriority(resumes).map((resume) => (
-        <ResumePreview resume={resume} key={resume._id} />
+      return sortByPriority(resumes).map((resume, index) => (
+        <ResumePreview resume={resume} key={resume._id} index={index} />
       ));
     }
     return <p>Get started by creating your resume</p>;

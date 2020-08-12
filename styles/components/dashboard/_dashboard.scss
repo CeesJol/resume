@@ -122,5 +122,24 @@
 		&--bio {
 			margin: 0;
 		}
+
+		footer {
+			margin-top: $s-size;
+
+			a, i {
+				color: $light-grey-3;
+				text-transform: uppercase;
+			}
+
+			a:hover {
+				text-decoration: underline;
+				opacity: 1;
+			}
+
+			// Actions separator
+			i {
+				margin: 0 $s-size;
+			}
+		}
 	}
 }

@@ -13,6 +13,7 @@ resumes {
 		title
 		jobTitle
 		bio
+		priority
 		layout {
 			data {
 				_id
@@ -326,7 +327,7 @@ export const getTemplates = () => {
  *  |----------------------------
  */
 export const updateResume = async (resumeId, data) => {
-  console.log("updateResume request");
+	console.log("updateResume request");
   return executeQuery(`mutation UpdateResume {
 		updateResume(id: "${resumeId}", data: {
 			${stringifyObject(data)}

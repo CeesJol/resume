@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 export const UserContext = createContext();
 import { identity } from "../pages/api/auth";
-import { readUser, updateItem, updateCategory } from "../pages/api/fauna";
+import { readUser, updateItem, updateCategory, updateResume } from "../pages/api/fauna";
 import { toast } from "react-toastify";
 import Router from "next/router";
 import { dummyResume } from "../lib/constants";
@@ -96,12 +96,12 @@ const UserContextProvider = (props) => {
     } else if (add) {
       // Add resume
       user.resumes.data.push(resumeData);
-      setEditingResume(resumeData);
+      // setEditingResume(resumeData);
       return;
     }
 
     user.resumes.data.forEach((resume, r) => {
-      if (resume._id === editingResume._id) {
+      if (resume._id === resumeData._id) {
         const newResume = { ...resume, ...resumeData };
         user.resumes.data[r] = newResume;
         setEditingResume(newResume);
@@ -276,6 +276,30 @@ const UserContextProvider = (props) => {
     });
 
     setMoving(false);
+	};
+	const moveResume = async (resume, amount) => {
+    if (moving) return false;
+    setMoving(true);
+
+    // Find item with priority p
+    const p = resume.priority + amount;
+    var otherResume = getUser().resumes.data.find(
+      (resume) => resume.priority === p
+    );
+
+    // Update priority
+    otherResume.priority -= amount;
+    resume.priority += amount;
+    storeResume(otherResume, {});
+    storeResume(resume, {});
+
+    resetPopups();
+
+    // Send to fauna
+    await updateResume(resume._id, { priority: resume.priority });
+    await updateResume(otherResume._id, { priority: otherResume.priority });
+
+    setMoving(false);
   };
   const resetPopups = () => {
     setChangingInfo(false);
@@ -289,7 +313,7 @@ const UserContextProvider = (props) => {
   };
   const reset = () => {
 		setChangingResume(false);
-		setEditingResume(-1);
+		// setEditingResume(-1);
 		if (user.resumes.data.length === 0) setEditingResume(dummyResume);
 		setNav(0);
 		resetPopups();
@@ -378,7 +402,8 @@ const UserContextProvider = (props) => {
         editingContactInfo,
         setEditingContactInfo,
         moveItem,
-        moveCategory,
+				moveCategory,
+				moveResume,
         storeItem,
         storeResume,
         storeTemplate,

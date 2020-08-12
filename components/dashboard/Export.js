@@ -4,7 +4,7 @@ import ResumeWrapper from "./ResumeWrapper";
 import Button from "../general/Button";
 
 const Export = () => {
-  const { setPreview, changingResume, pdf, setPdf } = useContext(UserContext);
+  const { setPreview, changingResume, pdf } = useContext(UserContext);
   const exportPDF = async () => {
     await pdf.save();
   };

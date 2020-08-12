@@ -2,18 +2,27 @@ import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
 
-const ResumePreview = ({ resume }) => {
+const ResumePreview = ({ resume, index }) => {
   const {
     getUser,
     setEditingResume,
     setCreatingResume,
     setChangingResume,
-    setWarning,
+		moveResume,
+		forceRender,
   } = useContext(UserContext);
   const handleClick = (e, resume) => {
     e.preventDefault();
     setEditingResume(resume);
     setChangingResume(true);
+  };
+  const handleDuplicate = (e) => {
+    e.stopPropagation();
+  };
+  const handleMove = (e, resume, amount) => {
+		e.stopPropagation();
+    moveResume(resume, amount);
+    forceRender();
   };
   return (
     <div
@@ -28,6 +37,16 @@ const ResumePreview = ({ resume }) => {
       <p className="dashboard__resume-preview--bio multiline">
         {resume.bio || "Bio"}
       </p>
+
+      <footer>
+        <a onClick={(e) => handleDuplicate(e, resume)}>Create variation</a>
+        {index !== 0 && (
+          <>
+            <i> - </i>
+            <a onClick={(e) => handleMove(e, resume, -1)}>Move up</a>
+          </>
+        )}
+      </footer>
     </div>
   );
 };

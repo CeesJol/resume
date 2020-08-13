@@ -55,6 +55,7 @@ type Layout {
 
 type Query {
   users: [User]
+	usersByConfirmStatus(confirmed: Boolean!): [User]
   userByEmail(email: String!): User
   resumeByTitle(title: String!): Resume
   templates: [Template]

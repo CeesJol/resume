@@ -15,8 +15,8 @@ const Nav = () => {
               "dashboard__nav--item " +
               (nav === i && " dashboard__nav--item-selected")
             }
-						onClick={() => setNav(i)}
-						key={i}
+            onClick={() => setNav(i)}
+            key={i}
           >
             {navItem}
           </div>

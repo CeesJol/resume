@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import Router from "next/router";
 import { UserContext } from "../../contexts/userContext";
-import { logout } from "../../pages/api/auth";
+import { auth } from "../../lib/api";
 
 const DashboardHeader = () => {
   const { userExists, getUser, clearUser, setLoggingOut, setAuth, setNav, reset } = useContext(UserContext);
@@ -9,7 +9,7 @@ const DashboardHeader = () => {
 		setLoggingOut(true);
 		setAuth(false);
 		localStorage.removeItem("user");
-    await logout(getUser().secret);
+    await auth({ type: 'LOGOUT', secret: getUser().secret });
     clearUser();
   };
   return (

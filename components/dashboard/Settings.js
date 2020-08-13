@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import Button from "../general/Button";
 import { updateUser } from "../../pages/api/fauna";
-import { updatePassword } from "../../pages/api/auth";
-import { disconfirmUser, sendConfirmationEmail } from "../../pages/api/confirm";
 import { UserContext } from "../../contexts/userContext";
 import { validateUpdate, validatePassword } from "../../lib/validate";
 import { toast } from "react-toastify";
+import { confirm } from "../../lib/api";
 
 const Settings = () => {
   const { storeUser, getUser } = useContext(UserContext);
@@ -43,8 +42,8 @@ const Settings = () => {
         // If email changed, set confirmed to false and
         // send a new confirmation email
         if (email !== user.email) {
-          disconfirmUser(user.id);
-          sendConfirmationEmail(user.id, email);
+					confirm({ type: "DISCONFIRM", id: user.id });
+          confirm({ type: "SEND_CONFIRMATION_EMAIL", id: user.id, email });
           console.log("user disconfirmed");
         }
 
@@ -70,7 +69,7 @@ const Settings = () => {
       toast.error(`⚠️ ${validationError}`);
       return false;
     }
-    await updatePassword(getUser().id, password).then(
+    await auth({ type: 'UPDATE_PASSWORD', id: getUser().id, password }).then(
       (data) => {
         toast.success("💾 Updated successfully!");
       },

@@ -2,10 +2,10 @@ import React, { useState, useEffect, useContext } from "react";
 import Router from "next/router";
 import Link from "next/link";
 import Button from "../components/general/Button";
-import { login } from "./api/auth";
 import { getUserByEmail } from "./api/fauna";
 import { UserContext } from "../contexts/userContext";
 import { toast } from "react-toastify";
+import { auth } from "../lib/api";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -15,11 +15,12 @@ const Login = () => {
   );
   const handleLogin = async (event) => {
     if (event) event.preventDefault();
-    await login(email, password).then(
+    // await login(email, password).then(
+    await auth({ type: "LOGIN", email, password }).then(
       (res) => {
-        console.log("res.instance.value", res.instance.value);
+        console.log("res", res);
         setAuth(true);
-        const id = res.instance.value.id;
+        const id = res.instance["@ref"].id;
         storeUser({
           id,
           secret: res.secret,

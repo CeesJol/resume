@@ -2,11 +2,10 @@ import React, { useState, useEffect, useContext } from "react";
 import Router from "next/router";
 import Link from "next/link";
 import Button from "../components/general/Button";
-import { login, signup } from "./api/auth";
 import { getUserByEmail } from "./api/fauna";
-import { sendConfirmationEmail } from "./api/confirm";
 import { UserContext } from "../contexts/userContext";
 import { toast } from "react-toastify";
+import { auth, confirm } from "../lib/api";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -15,17 +14,17 @@ const Signup = () => {
   const { userExists, storeUser, setAuth } = useContext(UserContext);
   const handleLogin = (event) => {
     if (event) event.preventDefault();
-    login(email, password).then(
+    auth({ type: "LOGIN", email, password }).then(
       (res) => {
         setAuth(true);
-        console.log("res.instance.value", res.instance.value);
-        const id = res.instance.value.id;
+        console.log("res", res);
+        const id = res.instance["@ref"].id;
         storeUser({
           id,
           secret: res.secret,
           email,
         });
-        sendConfirmationEmail(id, email);
+        confirm({ type: "SEND_CONFIRMATION_EMAIL", id, email });
         getUserByEmail(email).then(
           (data) => {
             console.log("getUserByEmail", data);
@@ -46,7 +45,7 @@ const Signup = () => {
   };
   const handleSignUp = (event) => {
     if (event) event.preventDefault();
-    signup(email, username, password).then(
+    auth({ type: "SIGNUP", email, username, password }).then(
       (res) => {
         handleLogin();
       },

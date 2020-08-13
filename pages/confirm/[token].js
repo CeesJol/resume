@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
-import { confirm } from "../api/confirm";
+import { confirm } from "../../lib/api";
 
 const Token = () => {
   const router = useRouter();
@@ -9,7 +9,8 @@ const Token = () => {
 
   useEffect(() => {
     if (token) {
-      confirm(token).then(
+			console.log('token', token);
+      confirm({ type: 'CONFIRM', token }).then(
         (data) => {
           console.log("data [token]", data);
           setStatus(

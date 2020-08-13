@@ -1,6 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
 export const UserContext = createContext();
-import { identity } from "../pages/api/auth";
 import {
   readUser,
   updateItem,
@@ -10,6 +9,7 @@ import {
 import { toast } from "react-toastify";
 import Router from "next/router";
 import { dummyResume } from "../lib/constants";
+import { auth as authFunction } from "../lib/api";
 
 const UserContextProvider = (props) => {
   const [dummy, setDummy] = useState(false);
@@ -348,7 +348,7 @@ const UserContextProvider = (props) => {
       const localUser = JSON.parse(localStorage.getItem("user"));
       if (localUser != null && localUser.secret != null) {
         storeUser(localUser);
-        identity(localUser.secret).then(
+        authFunction({ type: "IDENTITY", secret: localUser.secret }).then(
           (data) => {
             // Database confirms that user is logged in!
             // Update user info

@@ -40,6 +40,7 @@ template {
 	_id
 	name
 	style
+	sidebar
 }
 categories {
 	data {

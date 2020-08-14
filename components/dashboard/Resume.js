@@ -67,25 +67,35 @@ const Resume = ({ tiny, template }) => {
     if (!editingResume.categories) return <p>Nothing here yet</p>;
 
     const categories = sortByPriority(getCategories());
-    // if (editingResume.template.sidebar) {
-    //   const mainCategories = categories.filter(
-    //     (category) => category.priority < 1000
-    //   );
-    //   const sidebarCategories = categories.filter(
-    //     (category) => category.priority >= 1000
-    //   );
+    if (editingResume.template.sidebar) {
+      const mainCategories = categories.filter(
+        (category) => category.priority <= 1000
+      );
+      const sidebarCategories = categories.filter(
+        (category) => category.priority > 1000
+      );
 
-    //   return (
-    //     <>
-    //       <div className="resume__container">
-    //         {mainCategories.map((category, index) => drawCategory(category, index))}
-    //       </div>
-    //       <div className="resume__container">
-    //         {sidebarCategories.map((category, index) => drawCategory(category, index))}
-    //       </div>
-    //     </>
-    //   );
-    // } else {
+      return (
+        <>
+          <div className="resume__container resume__container--left">
+            {mainCategories.map((category, index) => drawCategory(category, index))}
+						{!preview && (
+							<p onClick={handleNewCategory}>
+								<i className="resume--hoverable">Create category</i>
+							</p>
+						)}
+          </div>
+          <div className="resume__container resume__container--right">
+            {sidebarCategories.map((category, index) => drawCategory(category, index))}
+						{!preview && (
+						<p onClick={() => handleNewCategory({ sidebar: true })}>
+							<i className="resume--hoverable">Create category</i>
+						</p>
+					)}
+          </div>
+        </>
+      );
+    } else {
     return (
       <div className="resume__container">
         {categories.map((category, index) => drawCategory(category, index))}
@@ -96,11 +106,12 @@ const Resume = ({ tiny, template }) => {
         )}
       </div>
     );
-    // }
+    }
   };
-  const handleNewCategory = () => {
-    if (preview) return false;
-    setEditingCategory({});
+  const handleNewCategory = ({ sidebar }) => {
+		if (preview) return false;
+		setEditingCategory({});
+		if (sidebar) setEditingCategory({ sidebar: true });
   };
   return (
     <PDFExport

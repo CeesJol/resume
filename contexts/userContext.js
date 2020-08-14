@@ -232,7 +232,8 @@ const UserContextProvider = (props) => {
     localStorage.removeItem("user");
 
     // Reset state
-    setUser(null);
+		setUser(null);
+		setEditingResume(dummyResume);
     reset();
   };
   const userExists = () => {
@@ -355,8 +356,8 @@ const UserContextProvider = (props) => {
   };
   const reset = () => {
     setChangingResume(false);
-    // setEditingResume(-1);
-    if (user && user.resumes.data.length === 0) setEditingResume(dummyResume);
+		// setEditingResume(-1);
+		if (user && user.resumes.data.length === 0) setEditingResume(dummyResume);
     setNav(0);
     resetPopups();
   };

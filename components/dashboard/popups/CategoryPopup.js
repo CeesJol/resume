@@ -38,12 +38,16 @@ const CategoryPopup = () => {
     }
 
     const resumeId = editingResume._id;
+    // Exclude (or include) items in sidebar to get the right priority
+    let priority = getCategories().filter((x) => x.priority <= 1000).length;
+    if (editingCategory.sidebar)
+      priority = 1000 + getCategories().length - priority;
     await fauna({
       type: "CREATE_CATEGORY",
       resumeId,
       data: {
         name,
-        priority: getCategories().length + 1,
+        priority: priority + 1,
       },
     }).then(
       async (data) => {
@@ -97,7 +101,11 @@ const CategoryPopup = () => {
             for (var category of getCategories()) {
               if (category.priority > data.deleteCategory.priority) {
                 const newPriority = category.priority - 1;
-                updateCategory(category._id, { priority: newPriority });
+                await fauna({
+                  type: "UDPATE_CATEGORY",
+                  id: category._id,
+                  data: { priority: newPriority },
+                });
                 storeCategory({ ...category, priority: newPriority }, {});
               }
             }

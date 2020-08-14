@@ -2,10 +2,12 @@ import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
 import ResumePreview from "./ResumePreview";
+import { MAX_NUMBER_OF_RESUMES } from "../../lib/constants";
 
 const Resumes = () => {
-  const { getUser, setCreatingResume } = useContext(UserContext);
+  const { setCreatingResume, getResumes, setPreview } = useContext(UserContext);
   const handleCreate = () => {
+		setPreview(true);
     setCreatingResume({});
   };
   const sortByPriority = (list) => {
@@ -14,12 +16,7 @@ const Resumes = () => {
     });
   };
   const drawResumePreviews = () => {
-    const data = getUser();
-    // TODO update the few lines below
-    if (!data || !data.resumes) return <p>Loading...</p>;
-    if (data === -1) return <p>Failed to load</p>;
-
-    const resumes = data.resumes.data;
+		const resumes = getResumes();
 
     if (resumes.length > 0) {
       return sortByPriority(resumes).map((resume, index) => (
@@ -33,7 +30,14 @@ const Resumes = () => {
     <div className="dashboard__item">
       <h4>Your resumes</h4>
       {drawResumePreviews()}
-      <Button text="Create a resume" fn={handleCreate} />
+      {getResumes().length < MAX_NUMBER_OF_RESUMES ? (
+        <Button text="Create a resume" fn={handleCreate} />
+      ) : (
+        <p>
+          You have reached the maximum number of resumes (
+          {MAX_NUMBER_OF_RESUMES}). Delete a resume to create a new one.
+        </p>
+      )}
     </div>
   );
 };

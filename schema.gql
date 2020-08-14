@@ -46,6 +46,7 @@ type ContactInfo {
 type Template {
   name: String
   style: String
+	sidebar: Int
 }
 
 type Layout {

@@ -125,7 +125,7 @@ const Settings = () => {
             onChange={handleChangeEmail}
           />
 
-					<label>JobTitle</label>
+					<label>Job title</label>
           <input
             type="text"
             id="jobTitle"

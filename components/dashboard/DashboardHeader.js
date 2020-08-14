@@ -4,13 +4,26 @@ import { UserContext } from "../../contexts/userContext";
 import { auth } from "../../lib/api";
 
 const DashboardHeader = () => {
-  const { userExists, getUser, clearUser, setLoggingOut, setAuth, setNav, reset } = useContext(UserContext);
+  const {
+    userExists,
+    getUser,
+    clearUser,
+    setLoggingOut,
+    setAuth,
+    setNav,
+		reset,
+		setChangingResume,
+  } = useContext(UserContext);
   const handleLogout = async () => {
-		setLoggingOut(true);
-		setAuth(false);
-		localStorage.removeItem("user");
-    await auth({ type: 'LOGOUT', secret: getUser().secret });
+    setLoggingOut(true);
+    setAuth(false);
+    localStorage.removeItem("user");
+    await auth({ type: "LOGOUT", secret: getUser().secret });
     clearUser();
+  };
+  const openSettings = () => {
+    setChangingResume(false);
+    setNav(1000);
   };
   return (
     <header className="header">
@@ -26,7 +39,7 @@ const DashboardHeader = () => {
           </div>
         </div>
         <div className="header__right">
-					<a onClick={() => setNav(1000)}>Settings</a>
+          <a onClick={openSettings}>Settings</a>
           <a onClick={handleLogout}>Log out</a>
         </div>
       </div>

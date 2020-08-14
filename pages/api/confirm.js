@@ -97,6 +97,8 @@ const confirm = async (req, res) => {
     case "SEND_CONFIRMATION_EMAIL":
 			result = await sendConfirmationEmail(req.body);
 			break;
+		default:
+			console.log("No such type in /api/confirm:", type);
   }
   const json = JSON.stringify(result);
   res.end(json);

@@ -39,8 +39,8 @@ const CategoryPopup = () => {
 
     const resumeId = editingResume._id;
     await fauna({
-      type: "CREATE_CATEGORY:",
-      id: resumeId,
+      type: "CREATE_CATEGORY",
+      resumeId,
       data: {
         name,
         priority: getCategories().length + 1,

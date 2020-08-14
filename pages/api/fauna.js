@@ -262,43 +262,43 @@ export const createCategory = async ({ resumeId, data }) => {
 	}`);
 };
 
-export const createCategoryWithItem = async ({
-  resumeId,
-  categoryName,
-  data,
-}) => {
-  console.log("createCategoryWithItem request");
-  return executeQuery(`mutation CreateCategoryWithItem {
-		createCategory(data: {
-			name: "${categoryName}"
-			resume: { connect: "${resumeId}" },
-			items: {
-				create: [
-					{ 
-						title: "${data.title}"
-						location: "${data.location}"
-						from: "${data.from}"
-						to: "${data.to}"
-						description: """${data.description}"""
-					}
-				]
-			}
-		}) {
-			_id
-			name
-			items {
-				data {
-					_id
-					title
-					location
-					from
-					to
-					description
-				}
-			}
-		}
-	}`);
-};
+// export const createCategoryWithItem = async ({
+//   resumeId,
+//   categoryName,
+//   data,
+// }) => {
+//   console.log("createCategoryWithItem request");
+//   return executeQuery(`mutation CreateCategoryWithItem {
+// 		createCategory(data: {
+// 			name: "${categoryName}"
+// 			resume: { connect: "${resumeId}" },
+// 			items: {
+// 				create: [
+// 					{ 
+// 						title: "${data.title}"
+// 						location: "${data.location}"
+// 						from: "${data.from}"
+// 						to: "${data.to}"
+// 						description: """${data.description}"""
+// 					}
+// 				]
+// 			}
+// 		}) {
+// 			_id
+// 			name
+// 			items {
+// 				data {
+// 					_id
+// 					title
+// 					location
+// 					from
+// 					to
+// 					description
+// 				}
+// 			}
+// 		}
+// 	}`);
+// };
 
 export const updateCategory = async ({ id, data }) => {
   console.log("updateCategory request");
@@ -385,18 +385,18 @@ export const getTemplates = () => {
 	}`);
 };
 
-export const updateTemplate = async ({ id, data }) => {
-  console.log("updateTemplate request");
-  return executeQuery(`mutation UpdateTemplate {
-		updateTemplate(id: "${id}", data: {
-			${stringifyObject(data)}
-		}) {
-			_id
-			name
-			style
-		}
-	}`);
-};
+// export const updateTemplate = async ({ id, data }) => {
+//   console.log("updateTemplate request");
+//   return executeQuery(`mutation UpdateTemplate {
+// 		updateTemplate(id: "${id}", data: {
+// 			${stringifyObject(data)}
+// 		}) {
+// 			_id
+// 			name
+// 			style
+// 		}
+// 	}`);
+// };
 
 /** |----------------------------
  *  | CONTACT INFO
@@ -503,10 +503,10 @@ const fauna = async (req, res) => {
     case "CREATE_CATEGORY":
       result = await createCategory(req.body);
       break;
-    case "CREATE_CATEGORY_WITH_ITEM":
-      result = await createCategoryWithItem(req.body);
-      break;
-    case "UPDATE_CATEGORY":
+    // case "CREATE_CATEGORY_WITH_ITEM":
+    //   result = await createCategoryWithItem(req.body);
+    //   break;
+    case "UDPATE_CATEGORY":
       result = await updateCategory(req.body);
       break;
     case "DELETE_CATEGORY":
@@ -526,9 +526,9 @@ const fauna = async (req, res) => {
     case "GET_TEMPLATES":
       result = await getTemplates(req.body);
       break;
-    case "UPDATE_TEMPLATE":
-      result = await updateTemplate(req.body);
-      break;
+    // case "UPDATE_TEMPLATE":
+    //   result = await updateTemplate(req.body);
+    //   break;
     // CONTACT INFO
     case "CREATE_CONTACT_INFO":
       result = await createContactInfo(req.body);
@@ -544,7 +544,7 @@ const fauna = async (req, res) => {
       result = await updateLayout(req.body);
       break;
     default:
-      console.log("you goofed it up (/api/fauna)");
+      console.log("No such type in /api/fauna:", type);
   }
   res.end(JSON.stringify(result));
 };

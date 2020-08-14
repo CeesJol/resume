@@ -107,7 +107,7 @@ const Popup = () => {
     const categoryId = editingItem.category._id;
     await fauna({
       type: "UPDATE_ITEM",
-      resumeId: editingItem._id,
+      id: editingItem._id,
       data: {
         title,
         location,

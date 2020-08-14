@@ -1,7 +1,7 @@
 import React from "react";
 import { contactpickerOptions } from "../../lib/constants";
 
-export default ({ val, fn }) => (
+const Contactpicker = ({ val, fn }) => (
   <select name={val} id={val} value={val} onChange={fn}>
     <option value="">Other</option>
     {Object.keys(contactpickerOptions).map((key) => {
@@ -9,3 +9,5 @@ export default ({ val, fn }) => (
     })}
   </select>
 );
+
+export default Contactpicker;

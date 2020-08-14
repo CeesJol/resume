@@ -3,6 +3,7 @@ import { UserContext } from "../../contexts/userContext";
 import Category from "./Category";
 import ContactItem from "./ContactItem";
 import { PDFExport } from "@progress/kendo-react-pdf";
+import { SIDEBAR_INCREMENT } from "../../lib/constants";
 
 // PDF Export source
 // https://blog.usejournal.com/lets-make-a-resume-in-react-2c9c5540f51a
@@ -69,10 +70,10 @@ const Resume = ({ tiny, template }) => {
     const categories = sortByPriority(getCategories());
     if (editingResume.template.sidebar) {
       const mainCategories = categories.filter(
-        (category) => category.priority <= 1000
+        (category) => category.priority <= SIDEBAR_INCREMENT
       );
       const sidebarCategories = categories.filter(
-        (category) => category.priority > 1000
+        (category) => category.priority > SIDEBAR_INCREMENT
       );
 
       return (

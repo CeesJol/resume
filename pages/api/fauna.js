@@ -510,7 +510,7 @@ const fauna = async (req, res) => {
     // case "CREATE_CATEGORY_WITH_ITEM":
     //   result = await createCategoryWithItem(req.body);
     //   break;
-    case "UDPATE_CATEGORY":
+    case "UPDATE_CATEGORY":
       result = await updateCategory(req.body);
       break;
     case "DELETE_CATEGORY":

@@ -1,4 +1,4 @@
-export default (token) => {
+const Email = (token) => {
   return `<div style="background-color: #fafafa; width: 100vw; height: 100vh; margin: 0; margin-top: 30px; padding: 0; position: relative;">
 	<div style="position: relative; margin: 0 auto; max-width: 400px;">
 	<h1>Affilas</h1>
@@ -10,3 +10,5 @@ export default (token) => {
 	</div>
 	</div>`;
 };
+
+export default Email;

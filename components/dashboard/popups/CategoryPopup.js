@@ -3,31 +3,37 @@ import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import { toast } from "react-toastify";
 import { fauna } from "../../../lib/api";
+import { SIDEBAR_INCREMENT, defaultCategories } from "../../../lib/constants";
+import Categorypicker from "../../general/Categorypicker";
 
 const CategoryPopup = () => {
   const {
-    getUser,
-    storeUser,
-    nav,
     editingResume,
     setWarning,
     storeCategory,
     userMadeChanges,
     setUserMadeChanges,
     resetPopups,
-    getCategory,
     forceRender,
     editingCategory,
     getCategories,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [name, setName] = useState("");
+  const [customName, setCustomName] = useState("");
   const handleChangeName = (event) => {
+    console.log(event.target.value);
     setName(event.target.value);
+    setUserMadeChanges(true);
+  };
+  const handleChangeCustomName = (event) => {
+    setCustomName(event.target.value);
     setUserMadeChanges(true);
   };
   const validateInput = () => {
     if (!name) return "Please provide a name";
+    if (name === "Other" && !customName)
+      return "Please provide a custom category name";
     return false;
   };
   const handleCreate = async () => {
@@ -39,14 +45,16 @@ const CategoryPopup = () => {
 
     const resumeId = editingResume._id;
     // Exclude (or include) items in sidebar to get the right priority
-    let priority = getCategories().filter((x) => x.priority <= 1000).length;
+    let priority = getCategories().filter(
+      (x) => x.priority <= SIDEBAR_INCREMENT
+    ).length;
     if (editingCategory.sidebar)
-      priority = 1000 + getCategories().length - priority;
+      priority = SIDEBAR_INCREMENT + getCategories().length - priority;
     await fauna({
       type: "CREATE_CATEGORY",
       resumeId,
       data: {
-        name,
+        name: name !== "Other" ? name : customName,
         priority: priority + 1,
       },
     }).then(
@@ -70,10 +78,10 @@ const CategoryPopup = () => {
 
     const categoryId = editingCategory._id;
     await fauna({
-      type: "UDPATE_CATEGORY",
+      type: "UPDATE_CATEGORY",
       id: categoryId,
       data: {
-        name,
+        name: name !== "Other" ? name : customName,
       },
     }).then(
       async (data) => {
@@ -99,10 +107,14 @@ const CategoryPopup = () => {
             resetPopups();
             // Propagate priority updates
             for (var category of getCategories()) {
-              if (category.priority > data.deleteCategory.priority) {
+              if (
+                category.priority > data.deleteCategory.priority &&
+                Math.abs(category.priority - data.deleteCategory.priority) <
+                  SIDEBAR_INCREMENT / 2
+              ) {
                 const newPriority = category.priority - 1;
                 await fauna({
-                  type: "UDPATE_CATEGORY",
+                  type: "UPDATE_CATEGORY",
                   id: category._id,
                   data: { priority: newPriority },
                 });
@@ -129,11 +141,20 @@ const CategoryPopup = () => {
     }
   };
   useEffect(() => {
-    if (editingCategory.name && !filled) {
-      setFilled(true);
-
-      setName(editingCategory.name);
-    }
+		if (!filled) {
+			setFilled(true);
+			const name = editingCategory.name;
+			if (name) {
+				if (defaultCategories.includes(name)) {
+					setName(name);
+				} else {
+					setName("Other");
+					setCustomName(name);
+				}
+			} else {
+				setName(defaultCategories[0]);
+			}
+		}
   });
   return (
     <div className="popup-container" onClick={handleCancel}>
@@ -141,14 +162,21 @@ const CategoryPopup = () => {
         <h4>{editingCategory.name ? "Edit category" : "Create category"}</h4>
         <form>
           <div>
-            <label>Name</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={name}
-              onChange={handleChangeName}
-            />
+            <label>Category name</label>
+            <Categorypicker val={name} fn={handleChangeName} />
+
+            {name === "Other" && (
+              <>
+                <label>Custom name</label>
+                <input
+                  type="text"
+                  id="customName"
+                  name="customName"
+                  value={customName}
+                  onChange={handleChangeCustomName}
+                />
+              </>
+            )}
 
             {editingCategory.name ? (
               <>

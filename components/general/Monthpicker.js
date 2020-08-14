@@ -1,6 +1,6 @@
 import React from "react";
 
-export default ({ val, fn }) => (
+const Monthpicker = ({ val, fn }) => (
   <>
     <select
       className="select-narrow"
@@ -25,3 +25,5 @@ export default ({ val, fn }) => (
     </select>
   </>
 );
+
+export default Monthpicker;

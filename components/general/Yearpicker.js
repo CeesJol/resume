@@ -1,6 +1,6 @@
 import React from "react";
 
-export default ({ val, fn }) => {
+const Yearpicker = ({ val, fn }) => {
   const items = [<option value="" key={`${val}`}>Year</option>];
   var currentYear = new Date().getFullYear();
   for (var i = currentYear; i >= 1960; i--) {
@@ -20,3 +20,5 @@ export default ({ val, fn }) => {
     </>
   );
 };
+
+export default Yearpicker;

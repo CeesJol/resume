@@ -76,24 +76,26 @@ export const updatePassword = async ({ id, newPassword }) => {
 };
 
 const auth = async (req, res) => {
-	const { type } = req.body;
+  const { type } = req.body;
   let result;
   switch (type) {
     case "LOGIN":
-			result = await login(req.body);
-			break;
+      result = await login(req.body);
+      break;
     case "LOGOUT":
-			result = await logout(req.body);
-			break;
+      result = await logout(req.body);
+      break;
     case "SIGNUP":
-			result = await signup(req.body);
-			break;
+      result = await signup(req.body);
+      break;
     case "IDENTITY":
-			result = await identity(req.body);
-			break;
+      result = await identity(req.body);
+      break;
     case "UPDATE_PASSWORD":
-			result = await updatePassword(req.body);
-			break;
+      result = await updatePassword(req.body);
+      break;
+    default:
+      console.log("you goofed it up (/api/auth)");
   }
   const json = JSON.stringify(result);
   res.end(json);

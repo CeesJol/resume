@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { updateLayout } from "../../pages/api/fauna";
+import { fauna } from "../../lib/api";
 import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
 import { toast } from "react-toastify";
@@ -21,8 +21,12 @@ const Layout = () => {
     setItems(newArr);
   };
   const handleUpdate = async (item) => {
-    await updateLayout(item._id, {
-      value: item.value,
+    await fauna({
+      type: "UPDATE_LAYOUT",
+      id: item._id,
+      data: {
+        value: item.value,
+      },
     }).then(
       (data) => {
         storeLayout(data.updateLayout);

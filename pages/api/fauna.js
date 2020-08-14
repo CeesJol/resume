@@ -65,35 +65,36 @@ resumes {
 	}
 }`;
 
-export const getResume = async (resumeId) => {
-  console.log("getResume request");
-  return executeQuery(`query GetResume {
-		findResumeByID(id: "${resumeId}") {
-			${RESUME_DATA}
+/** |----------------------------
+ *  | USER
+ *  |----------------------------
+ */
+export const updateUser = async ({ id, username, email, bio }) => {
+  console.log("updateUser request");
+  email = email.toLowerCase();
+  return executeQuery(`mutation UpdateUser {
+		updateUser(id: "${id}", data:{
+			username: "${username}"
+			email: "${email}"
+			bio: """${bio}"""
+		}) {
+			username
+			email
+			bio
 		}
 	}`);
 };
 
-/** |----------------------------
- *  | DELETE RESUME
- *  |----------------------------
- */
-export const deleteResume = async (id) => {
-  console.log("deleteResume request");
-  return executeQuery(`mutation DeleteResume {
-		deleteResume(id: "${id}") {
-			_id
-			title
-			priority
+export const readUser = async ({ id }) => {
+  console.log("readUser request");
+  return executeQuery(`query FindAUserByID {
+		findUserByID(id: "${id}") {
+			${USER_DATA}
 		}
 	}`);
 };
 
-/** |----------------------------
- *  | GET USERNAME BY EMAIL
- *  |----------------------------
- */
-export const getUserByEmail = async (email) => {
+export const getUserByEmail = async ({ email }) => {
   console.log("getUserByEmail request");
   email = email.toLowerCase();
   return executeQuery(`query FindAUserByEmail {
@@ -104,95 +105,30 @@ export const getUserByEmail = async (email) => {
 };
 
 /** |----------------------------
- *  | CREATE ITEM
+ *  | RESUMES
  *  |----------------------------
  */
-export const createItem = async (categoryId, data) => {
-  console.log("createItem request");
-  return executeQuery(`mutation CreateItem {
-		createItem(data: {
-			title: "${data.title}"
-			location: "${data.location}"
-			from: "${data.from}"
-			to: "${data.to}"
-			description: """${data.description}"""
-			priority: ${data.priority}
-			category: { connect: "${categoryId}" }
-		}) {
-			${ITEM_DATA}
+export const getResume = async ({ id }) => {
+  console.log("getResume request");
+  return executeQuery(`query GetResume {
+		findResumeByID(id: "${id}") {
+			${RESUME_DATA}
 		}
 	}`);
 };
 
-/** |----------------------------
- *  | CREATE CATEGORY
- *  |----------------------------
- */
-export const createCategory = async (resumeId, data) => {
-  console.log("createCategory request");
-  return executeQuery(`mutation CreateCategory {
-		createCategory(data: {
-			${stringifyObject(data)}
-			resume: { connect: "${resumeId}" }
-		}) {
+export const deleteResume = async ({ id }) => {
+  console.log("deleteResume request");
+  return executeQuery(`mutation DeleteResume {
+		deleteResume(id: "${id}") {
 			_id
-			name
+			title
 			priority
-			items {
-				data {
-					_id
-				}
-			}
-			resume {
-				_id
-			}
 		}
 	}`);
 };
 
-/** |----------------------------
- *  | CREATE CATEGORY WITH ITEM
- *  |----------------------------
- */
-export const createCategoryWithItem = async (resumeId, categoryName, data) => {
-  console.log("createCategoryWithItem request");
-  return executeQuery(`mutation CreateCategoryWithItem {
-		createCategory(data: {
-			name: "${categoryName}"
-			resume: { connect: "${resumeId}" },
-			items: {
-				create: [
-					{ 
-						title: "${data.title}"
-						location: "${data.location}"
-						from: "${data.from}"
-						to: "${data.to}"
-						description: """${data.description}"""
-					}
-				]
-			}
-		}) {
-			_id
-			name
-			items {
-				data {
-					_id
-					title
-					location
-					from
-					to
-					description
-				}
-			}
-		}
-	}`);
-};
-
-/** |----------------------------
- *  | CREATE RESUME
- *  |----------------------------
- */
-export const createResume = async (userId, templateId, data) => {
+export const createResume = async ({ userId, templateId, data }) => {
   console.log("createResume request");
   var query = `mutation CreateResume {
 		createResume(data: {
@@ -210,7 +146,7 @@ export const createResume = async (userId, templateId, data) => {
 			}
 			layout: {
 				create: [
-					${defaultLayoutItems.map(
+					${data.layout.map(
             (item) => `{
 						name: "${item.name}"
 						value: "${item.value}"
@@ -227,11 +163,12 @@ export const createResume = async (userId, templateId, data) => {
   return executeQuery(query);
 };
 
-/** |----------------------------
- *  | DUPLICATE RESUME
- *  |----------------------------
- */
-export const duplicateResume = async (userId, resumeData, title, priority) => {
+export const duplicateResume = async ({
+  userId,
+  resumeData,
+  title,
+  priority,
+}) => {
   console.log("duplicateResume request");
   var query = `mutation DuplicateResume {
 		createResume(data: {
@@ -285,8 +222,154 @@ export const duplicateResume = async (userId, resumeData, title, priority) => {
   return executeQuery(query);
 };
 
+export const updateResume = async ({ id, data }) => {
+  console.log("updateResume request");
+  return executeQuery(`mutation UpdateResume {
+		updateResume(id: "${id}", data: {
+			${stringifyObject(data)}
+		}) {
+			_id
+			title
+			jobTitle
+			bio
+		}
+	}`);
+};
+
 /** |----------------------------
- *  | GET TEMPLATES
+ *  | CATEGORIES
+ *  |----------------------------
+ */
+export const createCategory = async ({ resumeId, data }) => {
+  console.log("createCategory request");
+  return executeQuery(`mutation CreateCategory {
+		createCategory(data: {
+			${stringifyObject(data)}
+			resume: { connect: "${resumeId}" }
+		}) {
+			_id
+			name
+			priority
+			items {
+				data {
+					_id
+				}
+			}
+			resume {
+				_id
+			}
+		}
+	}`);
+};
+
+export const createCategoryWithItem = async ({
+  resumeId,
+  categoryName,
+  data,
+}) => {
+  console.log("createCategoryWithItem request");
+  return executeQuery(`mutation CreateCategoryWithItem {
+		createCategory(data: {
+			name: "${categoryName}"
+			resume: { connect: "${resumeId}" },
+			items: {
+				create: [
+					{ 
+						title: "${data.title}"
+						location: "${data.location}"
+						from: "${data.from}"
+						to: "${data.to}"
+						description: """${data.description}"""
+					}
+				]
+			}
+		}) {
+			_id
+			name
+			items {
+				data {
+					_id
+					title
+					location
+					from
+					to
+					description
+				}
+			}
+		}
+	}`);
+};
+
+export const updateCategory = async ({ id, data }) => {
+  console.log("updateCategory request");
+  return executeQuery(`mutation UpdateCategory {
+		updateCategory(id: "${id}", data: {
+			${stringifyObject(data)}
+		}) {
+			_id
+			name
+			priority
+		}
+	}`);
+};
+
+export const deleteCategory = async ({ id }) => {
+  console.log("deleteCategory request");
+  return executeQuery(`mutation DeleteCategory {
+		deleteCategory(id: "${id}") {
+			_id
+			name
+			priority
+			resume {
+				_id
+			}
+		}
+	}`);
+};
+
+/** |----------------------------
+ *  | ITEMS
+ *  |----------------------------
+ */
+export const createItem = async ({ categoryId, data }) => {
+  console.log("createItem request");
+  return executeQuery(`mutation CreateItem {
+		createItem(data: {
+			title: "${data.title}"
+			location: "${data.location}"
+			from: "${data.from}"
+			to: "${data.to}"
+			description: """${data.description}"""
+			priority: ${data.priority}
+			category: { connect: "${categoryId}" }
+		}) {
+			${ITEM_DATA}
+		}
+	}`);
+};
+
+export const updateItem = async ({ id, data }) => {
+  console.log("updateItem request");
+  return executeQuery(`mutation UpdateItem {
+		updateItem(id: "${id}", data: {
+			${stringifyObject(data)}
+		}) {
+			${ITEM_DATA}
+		}
+	}`);
+};
+
+export const deleteItem = async ({ id }) => {
+  console.log("deleteItem request");
+  return executeQuery(`mutation DeleteItem {
+		deleteItem(id: "${id}") {
+			${ITEM_DATA}
+		}
+	}`);
+};
+
+/** |----------------------------
+ *  | TEMPLATES
  *  |----------------------------
  */
 export const getTemplates = () => {
@@ -302,29 +385,24 @@ export const getTemplates = () => {
 	}`);
 };
 
-/** |----------------------------
- *  | UPDATE RESUME
- *  |----------------------------
- */
-export const updateResume = async (resumeId, data) => {
-  console.log("updateResume request");
-  return executeQuery(`mutation UpdateResume {
-		updateResume(id: "${resumeId}", data: {
+export const updateTemplate = async ({ id, data }) => {
+  console.log("updateTemplate request");
+  return executeQuery(`mutation UpdateTemplate {
+		updateTemplate(id: "${id}", data: {
 			${stringifyObject(data)}
 		}) {
 			_id
-			title
-			jobTitle
-			bio
+			name
+			style
 		}
 	}`);
 };
 
 /** |----------------------------
- *  | CREATE CONTACT INFO
+ *  | CONTACT INFO
  *  |----------------------------
  */
-export const createContactInfo = async (resumeId, data) => {
+export const createContactInfo = async ({ resumeId, data }) => {
   console.log("createContactInfo request");
   return executeQuery(`mutation UpdateContactInfo {
 		createContactInfo(data: {
@@ -342,14 +420,10 @@ export const createContactInfo = async (resumeId, data) => {
 	}`);
 };
 
-/** |----------------------------
- *  | UPDATE CONTACT INFO
- *  |----------------------------
- */
-export const updateContactInfo = async (contactInfoId, data) => {
+export const updateContactInfo = async ({ id, data }) => {
   console.log("updateContactInfo request");
   return executeQuery(`mutation UpdateContactInfo {
-		updateContactInfo(id: "${contactInfoId}", data: {
+		updateContactInfo(id: "${id}", data: {
 			${stringifyObject(data)}
 		}) {
 			_id
@@ -363,11 +437,7 @@ export const updateContactInfo = async (contactInfoId, data) => {
 	}`);
 };
 
-/** |----------------------------
- *  | DELETE CONTACT INFO
- *  |----------------------------
- */
-export const deleteContactInfo = async (id) => {
+export const deleteContactInfo = async ({ id }) => {
   console.log("deleteContactInfo request");
   return executeQuery(`mutation DeleteContactInfo {
 		deleteContactInfo(id: "${id}") {
@@ -383,80 +453,13 @@ export const deleteContactInfo = async (id) => {
 };
 
 /** |----------------------------
- *  | UPDATE ITEM
+ *  | LAYOUT
  *  |----------------------------
  */
-export const updateItem = async (itemId, data) => {
-  console.log("updateItem request");
-  return executeQuery(`mutation UpdateItem {
-		updateItem(id: "${itemId}", data: {
-			${stringifyObject(data)}
-		}) {
-			${ITEM_DATA}
-		}
-	}`);
-};
-
-/** |----------------------------
- *  | UPDATE CATEGORY
- *  |----------------------------
- */
-export const updateCategory = async (categoryId, data) => {
-  console.log("updateCategory request");
-  return executeQuery(`mutation UpdateCategory {
-		updateCategory(id: "${categoryId}", data: {
-			${stringifyObject(data)}
-		}) {
-			_id
-			name
-			priority
-		}
-	}`);
-};
-
-/** |----------------------------
- *  | DELETE CATEGORY
- *  |----------------------------
- */
-export const deleteCategory = async (id) => {
-  console.log("deleteCategory request");
-  return executeQuery(`mutation DeleteCategory {
-		deleteCategory(id: "${id}") {
-			_id
-			name
-			priority
-			resume {
-				_id
-			}
-		}
-	}`);
-};
-
-/** |----------------------------
- *  | UPDATE TEMPLATE
- *  |----------------------------
- */
-export const updateTemplate = async (templateId, data) => {
-  console.log("updateTemplate request");
-  return executeQuery(`mutation UpdateTemplate {
-		updateTemplate(id: "${templateId}", data: {
-			${stringifyObject(data)}
-		}) {
-			_id
-			name
-			style
-		}
-	}`);
-};
-
-/** |----------------------------
- *  | UPDATE LAYOUT
- *  |----------------------------
- */
-export const updateLayout = async (layoutId, data) => {
+export const updateLayout = async ({ id, data }) => {
   console.log("updateLayout request");
   return executeQuery(`mutation UpdateLayout {
-		updateLayout(id: "${layoutId}", data: {
+		updateLayout(id: "${id}", data: {
 			${stringifyObject(data)}
 		}) {
 			_id
@@ -466,63 +469,84 @@ export const updateLayout = async (layoutId, data) => {
 	}`);
 };
 
-/** |----------------------------
- *  | UPDATE ITEM'S PRIORITY
- *  |----------------------------
- */
-// export const updateItemPriority = async (itemId, priority) => {
-//   console.log("updateItem request");
-//   return executeQuery(`mutation UpdateItem {
-// 		updateItem(id: "${itemId}", data: {
-// 			priority: ${priority}
-// 		}) {
-// 			priority
-// 		}
-// 	}`);
-// };
-
-/** |----------------------------
- *  | DELETE ITEM
- *  |----------------------------
- */
-export const deleteItem = async (id) => {
-  console.log("deleteItem request");
-  return executeQuery(`mutation DeleteItem {
-		deleteItem(id: "${id}") {
-			${ITEM_DATA}
-		}
-	}`);
+const fauna = async (req, res) => {
+  const { type } = req.body;
+  let result;
+  switch (type) {
+    // USERS
+    case "UPDATE_USER":
+      result = await updateUser(req.body);
+      break;
+    case "READ_USER":
+      result = await readUser(req.body);
+      break;
+    case "GET_USER_BY_EMAIL":
+      result = await getUserByEmail(req.body);
+      break;
+    // RESUMES
+    case "GET_RESUME":
+      result = await getResume(req.body);
+      break;
+    case "DELETE_RESUME":
+      result = await deleteResume(req.body);
+      break;
+    case "CREATE_RESUME":
+      result = await createResume(req.body);
+      break;
+    case "DUPLICATE_RESUME":
+      result = await duplicateResume(req.body);
+      break;
+    case "UPDATE_RESUME":
+      result = await updateResume(req.body);
+      break;
+    // CATEGORIES
+    case "CREATE_CATEGORY":
+      result = await createCategory(req.body);
+      break;
+    case "CREATE_CATEGORY_WITH_ITEM":
+      result = await createCategoryWithItem(req.body);
+      break;
+    case "UPDATE_CATEGORY":
+      result = await updateCategory(req.body);
+      break;
+    case "DELETE_CATEGORY":
+      result = await deleteCategory(req.body);
+      break;
+    // ITEMS
+    case "CREATE_ITEM":
+      result = await createItem(req.body);
+      break;
+    case "UPDATE_ITEM":
+      result = await updateItem(req.body);
+      break;
+    case "DELETE_ITEM":
+      result = await deleteItem(req.body);
+      break;
+    // TEMPLATES
+    case "GET_TEMPLATES":
+      result = await getTemplates(req.body);
+      break;
+    case "UPDATE_TEMPLATE":
+      result = await updateTemplate(req.body);
+      break;
+    // CONTACT INFO
+    case "CREATE_CONTACT_INFO":
+      result = await createContactInfo(req.body);
+      break;
+    case "UPDATE_CONTACT_INFO":
+      result = await updateContactInfo(req.body);
+      break;
+    case "DELETE_CONTACT_INFO":
+      result = await deleteContactInfo(req.body);
+      break;
+    // LAYOUT
+    case "UPDATE_LAYOUT":
+      result = await updateLayout(req.body);
+      break;
+    default:
+      console.log("you goofed it up (/api/fauna)");
+  }
+  res.end(JSON.stringify(result));
 };
 
-/** |----------------------------
- *  | UPDATE USER
- *  |----------------------------
- */
-export const updateUser = async (id, username, email, bio) => {
-  console.log("updateUser request");
-  email = email.toLowerCase();
-  return executeQuery(`mutation UpdateUser {
-		updateUser(id: "${id}", data:{
-			username: "${username}"
-			email: "${email}"
-			bio: """${bio}"""
-		}) {
-			username
-			email
-			bio
-		}
-	}`);
-};
-
-/** |----------------------------
- *  | GET USER BY ID
- *  |----------------------------
- */
-export const readUser = async (id) => {
-  console.log("readUser request");
-  return executeQuery(`query FindAUserByID {
-		findUserByID(id: "${id}") {
-			${USER_DATA}
-		}
-	}`);
-};
+export default fauna;

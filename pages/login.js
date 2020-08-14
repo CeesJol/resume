@@ -2,10 +2,9 @@ import React, { useState, useEffect, useContext } from "react";
 import Router from "next/router";
 import Link from "next/link";
 import Button from "../components/general/Button";
-import { getUserByEmail } from "./api/fauna";
 import { UserContext } from "../contexts/userContext";
 import { toast } from "react-toastify";
-import { auth } from "../lib/api";
+import { auth, fauna } from "../lib/api";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -26,7 +25,7 @@ const Login = () => {
           secret: res.secret,
           email,
         });
-        getUserByEmail(email).then(
+        fauna({ type: "GET_USER_BY_EMAIL", email }).then(
           (data) => {
             console.log("getUserByEmail", data);
             storeUser(data.userByEmail);

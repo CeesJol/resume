@@ -1,12 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
-import {
-  updateCategory,
-  createCategory,
-  deleteCategory,
-} from "../../../pages/api/fauna";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import { toast } from "react-toastify";
+import { fauna } from "../../../lib/api";
 
 const CategoryPopup = () => {
   const {
@@ -42,9 +38,13 @@ const CategoryPopup = () => {
     }
 
     const resumeId = editingResume._id;
-    await createCategory(resumeId, {
-      name,
-      priority: getCategories().length + 1,
+    await fauna({
+      type: "CREATE_CATEGORY:",
+      id: resumeId,
+      data: {
+        name,
+        priority: getCategories().length + 1,
+      },
     }).then(
       async (data) => {
         storeCategory(data.createCategory, { add: true });
@@ -52,7 +52,7 @@ const CategoryPopup = () => {
         forceRender();
       },
       (err) => {
-				toast.error(`⚠️ ${err}`);
+        toast.error(`⚠️ ${err}`);
         console.error("createCategory err:", err);
       }
     );
@@ -65,8 +65,12 @@ const CategoryPopup = () => {
     }
 
     const categoryId = editingCategory._id;
-    await updateCategory(categoryId, {
-      name,
+    await fauna({
+      type: "UDPATE_CATEGORY",
+      id: categoryId,
+      data: {
+        name,
+      },
     }).then(
       async (data) => {
         storeCategory(data.updateCategory, {});
@@ -74,7 +78,7 @@ const CategoryPopup = () => {
         forceRender();
       },
       (err) => {
-				toast.error(`⚠️ ${err}`);
+        toast.error(`⚠️ ${err}`);
         console.error("updateCategory err:", err);
       }
     );
@@ -85,7 +89,7 @@ const CategoryPopup = () => {
       text:
         "Are you sure you want to delete this category? All the items in it will be lost.",
       fn: async () => {
-        await deleteCategory(editingCategory._id).then(
+        await fauna({ type: "DELETE_CATEGORY", id: editingCategory._id }).then(
           async (data) => {
             storeCategory(data.deleteCategory, { del: true });
             resetPopups();
@@ -99,7 +103,7 @@ const CategoryPopup = () => {
             }
           },
           (err) => {
-						toast.error(`⚠️ ${err}`);
+            toast.error(`⚠️ ${err}`);
             console.error("deleteCategory err:", err);
           }
         );

@@ -1,15 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
-import {
-  deleteItem,
-  updateItem,
-  createItem,
-  readUser,
-} from "../../../pages/api/fauna";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import Monthpicker from "../../general/Monthpicker";
 import Yearpicker from "../../general/Yearpicker";
 import { toast } from "react-toastify";
+import { fauna } from "../../../lib/api";
 
 const Popup = () => {
   const {
@@ -19,8 +14,8 @@ const Popup = () => {
     userMadeChanges,
     setUserMadeChanges,
     resetPopups,
-		getCategory,
-		getItems,
+    getCategory,
+    getItems,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [title, setTitle] = useState("");
@@ -78,7 +73,7 @@ const Popup = () => {
     setWarning({
       text: "Are you sure you want to delete this item?",
       fn: async () => {
-        await deleteItem(editingItem._id).then(
+        await fauna({ type: "DELETE_ITEM", id: editingItem._id }).then(
           async (data) => {
             storeItem(data.deleteItem, { del: true });
             resetPopups();
@@ -110,12 +105,16 @@ const Popup = () => {
     const from = month1 + "/" + year1;
     const to = isGoing ? "Present" : month2 + "/" + year2;
     const categoryId = editingItem.category._id;
-    await updateItem(editingItem._id, {
-      title,
-      location,
-      from,
-      to,
-      description,
+    await fauna({
+      type: "UPDATE_ITEM",
+      resumeId: editingItem._id,
+      data: {
+        title,
+        location,
+        from,
+        to,
+        description,
+      },
     }).then(
       async (data) => {
         storeItem(data.updateItem, {});
@@ -137,14 +136,18 @@ const Popup = () => {
     const from = month1 + "/" + year1;
     const to = isGoing ? "Present" : month2 + "/" + year2;
     const categoryId = editingItem.category._id;
-    await createItem(categoryId, {
-      id: editingItem._id,
-      title,
-      location,
-      from,
-      to,
-      description,
-      priority: getItems(getCategory(categoryId)).length + 1,
+    await fauna({
+      type: "CREATE_ITEM",
+      categoryId,
+      data: {
+        id: editingItem._id,
+        title,
+        location,
+        from,
+        to,
+        description,
+        priority: getItems(getCategory(categoryId)).length + 1,
+      },
     }).then(
       async (data) => {
         storeItem(data.createItem, { add: true });

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
-import { duplicateResume } from "../../pages/api/fauna";
+import { fauna } from "../../lib/api";
 
 const ResumePreview = ({ resume, index }) => {
   const {
@@ -10,8 +10,8 @@ const ResumePreview = ({ resume, index }) => {
     getResumes,
     setChangingResume,
     moveResume,
-		forceRender,
-		storeResume,
+    forceRender,
+    storeResume,
   } = useContext(UserContext);
   const handleClick = (e, resume) => {
     e.preventDefault();
@@ -19,10 +19,16 @@ const ResumePreview = ({ resume, index }) => {
     setChangingResume(true);
   };
   const handleDuplicate = (e, resume) => {
-		e.stopPropagation();
-		const title = resume.title + " Duplicate";
-		const priority = getResumes().length + 1;
-    duplicateResume(getUser().id, resume, title, priority).then((data) => {
+    e.stopPropagation();
+    const title = resume.title + " Duplicate";
+    const priority = getResumes().length + 1;
+    fauna({
+      type: "DUPLICATE_RESUME",
+      userId: getUser().id,
+      resumeData: resume,
+      title,
+      priority,
+    }).then((data) => {
       storeResume(data.createResume, { add: true });
     });
   };

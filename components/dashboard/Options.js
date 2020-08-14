@@ -1,16 +1,16 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
-import { deleteResume, updateResume } from "../../pages/api/fauna";
+import { fauna } from "../../lib/api";
 
 const Options = () => {
   const {
     storeResume,
-		setWarning,
-		editingResume,
-		resetPopups,
-		getUser,
-		getResumes,
+    setWarning,
+    editingResume,
+    resetPopups,
+    getUser,
+    getResumes,
   } = useContext(UserContext);
   const handleDelete = async (event) => {
     if (event) event.preventDefault();
@@ -18,7 +18,7 @@ const Options = () => {
       text:
         "Are you sure you want to delete this resume? All the data of the resume will be lost.",
       fn: async () => {
-        await deleteResume(editingResume._id).then(
+        await fauna({ type: "DELETE_RESUME", id: editingResume._id }).then(
           async (data) => {
             storeResume(data.deleteResume, { del: true });
             resetPopups();
@@ -26,7 +26,11 @@ const Options = () => {
             for (var resume of getResumes()) {
               if (resume.priority > data.deleteResume.priority) {
                 const newPriority = resume.priority - 1;
-                updateResume(resume._id, { priority: newPriority });
+                fauna({
+                  type: "UPDATE_RESUME",
+                  id: resume._id,
+                  data: { priority: newPriority },
+                });
                 storeResume({ ...resume, priority: newPriority }, {});
               }
             }
@@ -43,7 +47,7 @@ const Options = () => {
     <>
       <div className="dashboard__item">
         <h4 className="dashboard__item--title">Options</h4>
-				<Button fn={handleDelete} text="Delete" color="red" />
+        <Button fn={handleDelete} text="Delete" color="red" />
       </div>
     </>
   );

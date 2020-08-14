@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
-import { updateResume, readUser } from "../../../pages/api/fauna";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import { toast } from "react-toastify";
+import { fauna } from "../../../lib/api";
 
 const UserPopup = () => {
   const {
@@ -13,11 +13,11 @@ const UserPopup = () => {
     storeResume,
     resetPopups,
   } = useContext(UserContext);
-	const [filled, setFilled] = useState(false);
-	const [title, setTitle] = useState("");
+  const [filled, setFilled] = useState(false);
+  const [title, setTitle] = useState("");
   const [jobTitle, setJobTitle] = useState("");
-	const [bio, setBio] = useState("");
-	const handleChangeTitle = (event) => {
+  const [bio, setBio] = useState("");
+  const handleChangeTitle = (event) => {
     setTitle(event.target.value);
     setUserMadeChanges(true);
   };
@@ -30,7 +30,7 @@ const UserPopup = () => {
     setUserMadeChanges(true);
   };
   const validateInput = () => {
-		if (!title) return "Please provide a resume title";
+    if (!title) return "Please provide a resume title";
     if (!jobTitle) return "Please provide a job title";
     if (!bio) return "Please provide a bio";
     return false;
@@ -42,10 +42,14 @@ const UserPopup = () => {
       return;
     }
 
-    await updateResume(editingResume._id, {
-			title,
-      jobTitle,
-      bio,
+    await fauna({
+      type: "UPDATE_RESUME",
+      id: editingResume._id,
+      data: {
+        title,
+        jobTitle,
+        bio,
+      },
     }).then(
       (data) => {
         storeResume(data.updateResume, {});
@@ -71,7 +75,7 @@ const UserPopup = () => {
     if (!filled) {
       setFilled(true);
 
-			setTitle(editingResume.title);
+      setTitle(editingResume.title);
       setJobTitle(editingResume.jobTitle);
       setBio(editingResume.bio);
     }

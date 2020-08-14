@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
-import { createResume, getTemplates } from "../../../pages/api/fauna";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import Template from "../Template";
 import { toast } from "react-toastify";
+import { fauna } from "../../../lib/api";
 
 const ResumePopup = () => {
   const {
@@ -16,9 +16,10 @@ const ResumePopup = () => {
     selectedTemplateId,
     templates,
 		setTemplates,
-		setEditingResume,
-		setChangingResume,
+    setEditingResume,
+    setChangingResume,
 		getResumes,
+		getLayout,
   } = useContext(UserContext);
   const [title, setTitle] = useState("");
   const handleChangeTitle = (event) => {
@@ -35,16 +36,22 @@ const ResumePopup = () => {
     if (validationError) {
       toast.error(`⚠️ ${validationError}`);
       return;
-    }
+		}
 
-    await createResume(getUser().id, selectedTemplateId, {
-			title,
-			priority: getResumes().length + 1
+    await fauna({
+      type: "CREATE_RESUME",
+      userId: getUser().id,
+			templateId: selectedTemplateId,
+      data: {
+				title,
+				layout: getLayout(),
+        priority: getResumes().length + 1,
+      },
     }).then(
       (data) => {
-				storeResume(data.createResume, { add: true });
-				setEditingResume(data.createResume);
-				setChangingResume(true);
+        storeResume(data.createResume, { add: true });
+        setEditingResume(data.createResume);
+        setChangingResume(true);
         resetPopups();
       },
       (err) => {
@@ -65,7 +72,7 @@ const ResumePopup = () => {
   useEffect(() => {
     // load templates
     if (!templates) {
-      getTemplates().then((data) => {
+      fauna({ type: "GET_TEMPLATES" }).then((data) => {
         setTemplates(data.templates.data);
       });
     }

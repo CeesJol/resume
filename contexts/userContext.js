@@ -1,15 +1,9 @@
 import React, { createContext, useState, useEffect } from "react";
 export const UserContext = createContext();
-import {
-  readUser,
-  updateItem,
-  updateCategory,
-  updateResume,
-} from "../pages/api/fauna";
 import { toast } from "react-toastify";
 import Router from "next/router";
 import { dummyResume } from "../lib/constants";
-import { auth as authFunction } from "../lib/api";
+import { auth as authFunction, fauna } from "../lib/api";
 
 const UserContextProvider = (props) => {
   const [dummy, setDummy] = useState(false);
@@ -84,22 +78,22 @@ const UserContextProvider = (props) => {
     return editingResume.categories.data.find(
       (category) => category._id === categoryId
     );
-	};
-	const getResumes = () => {
-		return getUser() && getUser().resumes && getUser().resumes.data;
-	}
-	const getLayout = () => {
-		return editingResume.layout.data;
-	}
-	const getContactInfo = () => {
-		return editingResume.contactInfo.data;
-	}
+  };
+  const getResumes = () => {
+    return getUser() && getUser().resumes && getUser().resumes.data;
+  };
+  const getLayout = () => {
+    return editingResume.layout.data;
+  };
+  const getContactInfo = () => {
+    return editingResume.contactInfo.data;
+  };
   const getCategories = () => {
     return editingResume.categories.data;
-	};
-	const getItems = (category) => {
-		return category && category.items && category.items.data;
-	}
+  };
+  const getItems = (category) => {
+    return category && category.items && category.items.data;
+  };
   const storeResume = (resumeData, { add, del }) => {
     var user = getUser();
 
@@ -263,8 +257,16 @@ const UserContextProvider = (props) => {
     resetPopups();
 
     // Send to fauna
-    await updateItem(item._id, { priority: item.priority });
-    await updateItem(otherItem._id, { priority: otherItem.priority });
+    await fauna({
+      type: "UPDATE_ITEM",
+      id: item._id,
+      data: { priority: item.priority },
+    });
+    await fauna({
+      type: "UPDATE_ITEM",
+      id: otherItem._id,
+      data: { priority: otherItem.priority },
+    });
 
     setMoving(false);
   };
@@ -287,14 +289,24 @@ const UserContextProvider = (props) => {
       ).priority -= amount;
     user.resumes.data
       .find((resume) => resume._id === editingResume._id)
-      .categories.data.find((cat) => cat._id === category._id).priority += amount;
+      .categories.data.find(
+        (cat) => cat._id === category._id
+      ).priority += amount;
 
     resetPopups();
 
     // Send to fauna
-    await updateCategory(category._id, { priority: category.priority });
-    await updateCategory(otherCategory._id, {
-      priority: otherCategory.priority,
+    await fauna({
+      type: "UPDATE_CATEGORY",
+      id: category._id,
+      data: { priority: category.priority },
+    });
+    await fauna({
+      type: "UPDATE_CATEGORY",
+      id: otherCategory._id,
+      data: {
+        priority: otherCategory.priority,
+      },
     });
 
     setMoving(false);
@@ -318,8 +330,16 @@ const UserContextProvider = (props) => {
     resetPopups();
 
     // Send to fauna
-    await updateResume(resume._id, { priority: resume.priority });
-    await updateResume(otherResume._id, { priority: otherResume.priority });
+    await fauna({
+      type: "UPDATE_RESUME",
+      id: resume._id,
+      data: { priority: resume.priority },
+    });
+    await fauna({
+      type: "UPDATE_RESUME",
+      id: otherResume._id,
+      data: { priority: otherResume.priority },
+    });
 
     setMoving(false);
   };
@@ -352,7 +372,7 @@ const UserContextProvider = (props) => {
           (data) => {
             // Database confirms that user is logged in!
             // Update user info
-            readUser(localUser.id).then(
+            fauna({ type: "READ_USER", id: localUser.id }).then(
               (data) => {
                 if (!data.findUserByID) {
                   toast.error(`⚠️ Unauthenticated`);
@@ -445,11 +465,11 @@ const UserContextProvider = (props) => {
         getCategory,
         selectedTemplateId,
         setSelectedTemplateId,
-				getCategories,
-				getItems,
-				getResumes,
-				getLayout,
-				getContactInfo,
+        getCategories,
+        getItems,
+        getResumes,
+        getLayout,
+        getContactInfo,
         storeContactInfo,
         preview,
         setPreview,

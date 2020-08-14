@@ -1,13 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
-import {
-  createContactInfo,
-  updateContactInfo,
-  deleteContactInfo,
-} from "../../../pages/api/fauna";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import Contactpicker from "../../general/Contactpicker";
 import { toast } from "react-toastify";
+import { fauna } from "../../../lib/api";
 
 const ContactPopup = () => {
   const {
@@ -17,8 +13,8 @@ const ContactPopup = () => {
     setUserMadeChanges,
     storeContactInfo,
     resetPopups,
-		editingContactInfo,
-		getContactInfo,
+    editingContactInfo,
+    getContactInfo,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [name, setName] = useState("");
@@ -42,17 +38,21 @@ const ContactPopup = () => {
       return;
     }
 
-    await createContactInfo(editingResume._id, {
-      name,
-      value,
-      priority: getContactInfo().length + 1,
+    await fauna({
+      type: "CREATE_CONTACT_INFO",
+      resumeId: editingResume._id,
+      data: {
+        name,
+        value,
+        priority: getContactInfo().length + 1,
+      },
     }).then(
       (data) => {
         storeContactInfo(data.createContactInfo, { add: true });
         resetPopups();
       },
       (err) => {
-				toast.error(`⚠️ ${err}`);
+        toast.error(`⚠️ ${err}`);
         console.error("createContactInfo err:", err);
       }
     );
@@ -64,16 +64,20 @@ const ContactPopup = () => {
       return;
     }
 
-    await updateContactInfo(editingContactInfo._id, {
-      name,
-      value,
+    await fauna({
+      type: "UPDATE_CONTACT_INFO",
+      id: editingContactInfo._id,
+      data: {
+        name,
+        value,
+      },
     }).then(
       (data) => {
         storeContactInfo(data.updateContactInfo, {});
         resetPopups();
       },
       (err) => {
-				toast.error(`⚠️ ${err}`);
+        toast.error(`⚠️ ${err}`);
         console.error("updateContactInfo err:", err);
       }
     );
@@ -83,7 +87,10 @@ const ContactPopup = () => {
     setWarning({
       text: "Are you sure you want to delete this item?",
       fn: async () => {
-        await deleteContactInfo(editingContactInfo._id).then(
+        await fauna({
+          type: "DELETE_CONTACT_INFO",
+          id: editingContactInfo._id,
+        }).then(
           async (data) => {
             storeContactInfo(data.deleteContactInfo, { del: true });
             resetPopups();
@@ -97,7 +104,7 @@ const ContactPopup = () => {
             }
           },
           (err) => {
-						toast.error(`⚠️ ${err}`);
+            toast.error(`⚠️ ${err}`);
             console.error("deleteContactInfo err:", err);
           }
         );

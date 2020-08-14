@@ -2,10 +2,9 @@ import React, { useState, useEffect, useContext } from "react";
 import Router from "next/router";
 import Link from "next/link";
 import Button from "../components/general/Button";
-import { getUserByEmail } from "./api/fauna";
 import { UserContext } from "../contexts/userContext";
 import { toast } from "react-toastify";
-import { auth, confirm } from "../lib/api";
+import { auth, confirm, fauna } from "../lib/api";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -25,7 +24,7 @@ const Signup = () => {
           email,
         });
         confirm({ type: "SEND_CONFIRMATION_EMAIL", id, email });
-        getUserByEmail(email).then(
+        fauna({ type: "GET_USER_BY_EMAIL", email }).then(
           (data) => {
             console.log("getUserByEmail", data);
             storeUser(data.userByEmail);

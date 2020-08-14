@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import Button from "../general/Button";
-import { updateUser } from "../../pages/api/fauna";
 import { UserContext } from "../../contexts/userContext";
 import { validateUpdate, validatePassword } from "../../lib/validate";
 import { toast } from "react-toastify";
-import { confirm } from "../../lib/api";
+import { confirm, fauna, auth } from "../../lib/api";
 
 const Settings = () => {
   const { storeUser, getUser } = useContext(UserContext);
@@ -32,17 +31,23 @@ const Settings = () => {
       return;
     }
     const user = getUser();
-    await updateUser(user.id, username, email, bio).then(
+    await fauna({
+      type: "UPDATE_USER",
+      id: user.id,
+      username,
+      email,
+      bio,
+    }).then(
       (data) => {
         if (data == -1) {
-          toast.error("⚠️ That username or email is already taken");
+          toast.error("⚠️ That email is already taken");
           return;
         }
 
         // If email changed, set confirmed to false and
         // send a new confirmation email
         if (email !== user.email) {
-					confirm({ type: "DISCONFIRM", id: user.id });
+          confirm({ type: "DISCONFIRM", id: user.id });
           confirm({ type: "SEND_CONFIRMATION_EMAIL", id: user.id, email });
           console.log("user disconfirmed");
         }
@@ -69,7 +74,7 @@ const Settings = () => {
       toast.error(`⚠️ ${validationError}`);
       return false;
     }
-    await auth({ type: 'UPDATE_PASSWORD', id: getUser().id, password }).then(
+    await auth({ type: "UPDATE_PASSWORD", id: getUser().id, password }).then(
       (data) => {
         toast.success("💾 Updated successfully!");
       },

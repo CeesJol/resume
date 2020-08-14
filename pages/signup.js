@@ -11,10 +11,10 @@ const Signup = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { userExists, storeUser, setAuth } = useContext(UserContext);
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     if (event) event.preventDefault();
-    auth({ type: "LOGIN", email, password }).then(
-      (res) => {
+    await auth({ type: "LOGIN", email, password }).then(
+      async (res) => {
         setAuth(true);
         console.log("res", res);
         const id = res.instance["@ref"].id;
@@ -24,7 +24,7 @@ const Signup = () => {
           email,
         });
         confirm({ type: "SEND_CONFIRMATION_EMAIL", id, email });
-        fauna({ type: "GET_USER_BY_EMAIL", email }).then(
+        await fauna({ type: "GET_USER_BY_EMAIL", email }).then(
           (data) => {
             console.log("getUserByEmail", data);
             storeUser(data.userByEmail);
@@ -42,11 +42,11 @@ const Signup = () => {
       }
     );
   };
-  const handleSignUp = (event) => {
+  const handleSignUp = async (event) => {
     if (event) event.preventDefault();
-    auth({ type: "SIGNUP", email, username, password }).then(
-      (res) => {
-        handleLogin();
+    await auth({ type: "SIGNUP", email, username, password }).then(
+      async (res) => {
+        await handleLogin();
       },
       (err) => {
         toast.error("⚠️ Signup failed");

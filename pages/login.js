@@ -14,9 +14,8 @@ const Login = () => {
   );
   const handleLogin = async (event) => {
     if (event) event.preventDefault();
-    // await login(email, password).then(
     await auth({ type: "LOGIN", email, password }).then(
-      (res) => {
+      async (res) => {
         console.log("res", res);
         setAuth(true);
         const id = res.instance["@ref"].id;
@@ -25,7 +24,7 @@ const Login = () => {
           secret: res.secret,
           email,
         });
-        fauna({ type: "GET_USER_BY_EMAIL", email }).then(
+        await fauna({ type: "GET_USER_BY_EMAIL", email }).then(
           (data) => {
             console.log("getUserByEmail", data);
             storeUser(data.userByEmail);

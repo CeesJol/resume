@@ -3,6 +3,7 @@ type User {
   email: String! @unique
   resumes: [Resume] @relation
   confirmed: Boolean
+	jobTitle: String
   bio: String
 }
 

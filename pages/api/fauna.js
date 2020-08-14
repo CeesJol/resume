@@ -58,6 +58,7 @@ categories {
 const USER_DATA = `username
 email
 confirmed
+jobTitle
 bio
 resumes {
 	data {
@@ -69,17 +70,19 @@ resumes {
  *  | USER
  *  |----------------------------
  */
-export const updateUser = async ({ id, username, email, bio }) => {
+export const updateUser = async ({ id, username, email, jobTitle, bio }) => {
   console.log("updateUser request");
   email = email.toLowerCase();
   return executeQuery(`mutation UpdateUser {
 		updateUser(id: "${id}", data:{
 			username: "${username}"
 			email: "${email}"
+			jobTitle: "${jobTitle}"
 			bio: """${bio}"""
 		}) {
 			username
 			email
+			jobTitle
 			bio
 		}
 	}`);

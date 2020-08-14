@@ -9,13 +9,17 @@ const Settings = () => {
   const { storeUser, getUser } = useContext(UserContext);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [bio, setBio] = useState("");
+	const [bio, setBio] = useState("");
+	const [jobTitle, setJobTitle] = useState("");
   const [password, setPassword] = useState("");
   const handleChangeUsername = (event) => {
     setUsername(event.target.value);
   };
   const handleChangeEmail = (event) => {
     setEmail(event.target.value.toLowerCase());
+	};
+	const handleChangeJobTitle = (event) => {
+    setJobTitle(event.target.value);
   };
   const handleChangeBio = (event) => {
     setBio(event.target.value);
@@ -35,7 +39,8 @@ const Settings = () => {
       type: "UPDATE_USER",
       id: user.id,
       username,
-      email,
+			email,
+			jobTitle,
       bio,
     }).then(
       (data) => {
@@ -55,7 +60,8 @@ const Settings = () => {
         // Update user locally
         storeUser({
           username: data.updateUser.username,
-          email: data.updateUser.email,
+					email: data.updateUser.email,
+					jobTitle: data.updateUser.jobTitle,
           bio: data.updateUser.bio,
         });
 
@@ -90,7 +96,8 @@ const Settings = () => {
     if (!username && !email) {
       const user = getUser();
       setUsername(user.username);
-      setEmail(user.email);
+			setEmail(user.email);
+			setJobTitle(user.jobTitle ? user.jobTitle : "");
       setBio(user.bio ? user.bio : "");
     }
   });
@@ -118,6 +125,15 @@ const Settings = () => {
             onChange={handleChangeEmail}
           />
 
+					<label>JobTitle</label>
+          <input
+            type="text"
+            id="jobTitle"
+            name="jobTitle"
+            value={jobTitle}
+            onChange={handleChangeJobTitle}
+          />
+
           <label>Bio</label>
           <textarea
             type="text"
@@ -126,6 +142,8 @@ const Settings = () => {
             value={bio}
             onChange={handleChangeBio}
           />
+
+					<label><i>Your job title and bio will be used when creating a new resume.</i></label>
 
           <Button text="Save" altText="Saving..." fn={handleSave} />
         </form>

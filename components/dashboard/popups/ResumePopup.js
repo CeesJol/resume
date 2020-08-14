@@ -15,11 +15,11 @@ const ResumePopup = () => {
     resetPopups,
     selectedTemplateId,
     templates,
-		setTemplates,
+    setTemplates,
     setEditingResume,
     setChangingResume,
-		getResumes,
-		getLayout,
+    getResumes,
+    getLayout,
   } = useContext(UserContext);
   const [title, setTitle] = useState("");
   const handleChangeTitle = (event) => {
@@ -36,15 +36,18 @@ const ResumePopup = () => {
     if (validationError) {
       toast.error(`⚠️ ${validationError}`);
       return;
-		}
+    }
 
+    const user = getUser();
     await fauna({
       type: "CREATE_RESUME",
-      userId: getUser().id,
-			templateId: selectedTemplateId,
+      userId: user.id,
+      templateId: selectedTemplateId,
       data: {
-				title,
-				layout: getLayout(),
+        title,
+        layout: getLayout(),
+        jobTitle: user.jobTitle ? user.jobTitle : "",
+        bio: user.bio ? user.bio : "",
         priority: getResumes().length + 1,
       },
     }).then(

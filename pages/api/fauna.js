@@ -278,7 +278,7 @@ export const createCategory = async ({ resumeId, data }) => {
 // 			resume: { connect: "${resumeId}" },
 // 			items: {
 // 				create: [
-// 					{ 
+// 					{
 // 						title: "${data.title}"
 // 						location: "${data.location}"
 // 						from: "${data.from}"
@@ -548,7 +548,8 @@ const fauna = async (req, res) => {
       result = await updateLayout(req.body);
       break;
     default:
-      console.log("No such type in /api/fauna:", type);
+      result = "Error: No such type in /api/fauna: " + type;
+      console.log(result);
   }
   res.end(JSON.stringify(result));
 };

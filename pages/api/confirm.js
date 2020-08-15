@@ -13,18 +13,18 @@ const server = new faunadb.Client({ secret });
  */
 export const confirmUser = ({ token }) => {
   try {
-		// Decode the token
+    // Decode the token
     var decoded = jwt.verify(token, process.env.EMAIL_SECRET);
-		const id = decoded.id;
+    const id = decoded.id;
 
     // If it went well, send info to database
     return server.query(
-			q.Update(q.Ref(q.Collection("User"), `${id}`), {
-				data: {
-					confirmed: true,
-				},
-			})
-		);
+      q.Update(q.Ref(q.Collection("User"), `${id}`), {
+        data: {
+          confirmed: true,
+        },
+      })
+    );
   } catch (e) {
     console.log("token verification error", e);
   }
@@ -62,12 +62,12 @@ export const sendConfirmationEmail = async ({ id, email }) => {
   email = email.toLowerCase();
 
   const token = generateToken(id);
-	const message = Email(token);
-	
-	sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+  const message = Email(token);
+
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
   const content = {
-		to: email,
+    to: email,
     from: process.env.FROM_EMAIL,
     subject: `Confirm your account on Affilas`,
     text: message,
@@ -75,9 +75,9 @@ export const sendConfirmationEmail = async ({ id, email }) => {
   };
 
   try {
-		await sgMail.send(content);
-		console.log("Message sent successfully.");
-    return "Message sent successfully."
+    await sgMail.send(content);
+    console.log("Message sent successfully.");
+    return "Message sent successfully.";
   } catch (err) {
     console.error("send ERROR", err);
     return "Message not sent.";
@@ -85,20 +85,21 @@ export const sendConfirmationEmail = async ({ id, email }) => {
 };
 
 const confirm = async (req, res) => {
-	const { type } = req.body;
+  const { type } = req.body;
   let result;
   switch (type) {
     case "CONFIRM":
-			result = await confirmUser(req.body);
-			break;
+      result = await confirmUser(req.body);
+      break;
     case "DISCONFIRM":
-			result = await disconfirmUser(req.body);
-			break;
+      result = await disconfirmUser(req.body);
+      break;
     case "SEND_CONFIRMATION_EMAIL":
-			result = await sendConfirmationEmail(req.body);
-			break;
-		default:
-			console.log("No such type in /api/confirm:", type);
+      result = await sendConfirmationEmail(req.body);
+      break;
+    default:
+      result = "Error: No such type in /api/confirm: " + type;
+      console.log(result);
   }
   const json = JSON.stringify(result);
   res.end(json);

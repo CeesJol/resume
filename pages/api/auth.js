@@ -95,7 +95,8 @@ const auth = async (req, res) => {
       result = await updatePassword(req.body);
       break;
     default:
-      console.log("No such type in /api/auth:", type);
+      result = "Error: No such type in /api/auth: " + type;
+      console.log(result);
   }
   const json = JSON.stringify(result);
   res.end(json);

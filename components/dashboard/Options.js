@@ -20,17 +20,12 @@ const Options = () => {
       fn: async () => {
         await fauna({ type: "DELETE_RESUME", id: editingResume._id }).then(
           async (data) => {
-            storeResume(data.deleteResume, { del: true });
+            storeResume(editingResume, { del: true });
             resetPopups();
             // Propagate priority updates
             for (var resume of getResumes()) {
-              if (resume.priority > data.deleteResume.priority) {
+              if (resume.priority > editingResume.priority) {
                 const newPriority = resume.priority - 1;
-                fauna({
-                  type: "UPDATE_RESUME",
-                  id: resume._id,
-                  data: { priority: newPriority },
-                });
                 storeResume({ ...resume, priority: newPriority }, {});
               }
             }

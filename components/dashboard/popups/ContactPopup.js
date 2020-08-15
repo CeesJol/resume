@@ -14,7 +14,8 @@ const ContactPopup = () => {
     storeContactInfo,
     resetPopups,
     editingContactInfo,
-    getContactInfo,
+		getContactInfo,
+		updateContactInfo,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [name, setName] = useState("");
@@ -92,11 +93,11 @@ const ContactPopup = () => {
           id: editingContactInfo._id,
         }).then(
           async (data) => {
-            storeContactInfo(data.deleteContactInfo, { del: true });
+            storeContactInfo(editingContactInfo, { del: true });
             resetPopups();
             // Propagate priority updates
             for (var item of getContactInfo()) {
-              if (item.priority > data.deleteContactInfo.priority) {
+              if (item.priority > editingContactInfo.priority) {
                 const newPriority = item.priority - 1;
                 updateContactInfo(item._id, { priority: newPriority });
                 storeContactInfo({ ...item, priority: newPriority }, {});

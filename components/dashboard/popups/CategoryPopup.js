@@ -103,21 +103,16 @@ const CategoryPopup = () => {
       fn: async () => {
         await fauna({ type: "DELETE_CATEGORY", id: editingCategory._id }).then(
           async (data) => {
-            storeCategory(data.deleteCategory, { del: true });
+            storeCategory(editingCategory, { del: true });
             resetPopups();
             // Propagate priority updates
             for (var category of getCategories()) {
               if (
-                category.priority > data.deleteCategory.priority &&
-                Math.abs(category.priority - data.deleteCategory.priority) <
+                category.priority > editingCategory.priority &&
+                Math.abs(category.priority - editingCategory.priority) <
                   SIDEBAR_INCREMENT / 2
               ) {
                 const newPriority = category.priority - 1;
-                await fauna({
-                  type: "UPDATE_CATEGORY",
-                  id: category._id,
-                  data: { priority: newPriority },
-                });
                 storeCategory({ ...category, priority: newPriority }, {});
               }
             }

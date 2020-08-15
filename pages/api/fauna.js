@@ -124,11 +124,7 @@ export const getResume = async ({ id }) => {
 export const deleteResume = async ({ id }) => {
   console.log("deleteResume request");
   return executeQuery(`mutation DeleteResume {
-		deleteResume(id: "${id}") {
-			_id
-			title
-			priority
-		}
+		cascadeDeleteResume(id: "${id}")
 	}`);
 };
 
@@ -320,14 +316,7 @@ export const updateCategory = async ({ id, data }) => {
 export const deleteCategory = async ({ id }) => {
   console.log("deleteCategory request");
   return executeQuery(`mutation DeleteCategory {
-		deleteCategory(id: "${id}") {
-			_id
-			name
-			priority
-			resume {
-				_id
-			}
-		}
+		cascadeDeleteCategory(id: "${id}")
 	}`);
 };
 
@@ -366,9 +355,7 @@ export const updateItem = async ({ id, data }) => {
 export const deleteItem = async ({ id }) => {
   console.log("deleteItem request");
   return executeQuery(`mutation DeleteItem {
-		deleteItem(id: "${id}") {
-			${ITEM_DATA}
-		}
+		cascadeDeleteItem(id: "${id}")
 	}`);
 };
 
@@ -444,15 +431,7 @@ export const updateContactInfo = async ({ id, data }) => {
 export const deleteContactInfo = async ({ id }) => {
   console.log("deleteContactInfo request");
   return executeQuery(`mutation DeleteContactInfo {
-		deleteContactInfo(id: "${id}") {
-			_id
-			name
-			value
-			priority
-			resume {
-				_id
-			}
-		}
+		cascadeDeleteContactInfo(id: "${id}")
 	}`);
 };
 

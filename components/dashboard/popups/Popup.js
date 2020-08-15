@@ -75,12 +75,12 @@ const Popup = () => {
       fn: async () => {
         await fauna({ type: "DELETE_ITEM", id: editingItem._id }).then(
           async (data) => {
-            storeItem(data.deleteItem, { del: true });
+            storeItem(editingItem, { del: true });
             resetPopups();
             // Propagate priority updates
-            const category = getCategory(data.deleteItem.category._id);
+            const category = getCategory(editingItem.category._id);
             for (var item of getItems(category)) {
-              if (item.priority > data.deleteItem.priority) {
+              if (item.priority > editingItem.priority) {
                 const newPriority = item.priority - 1;
                 updateItem(item._id, { priority: newPriority });
                 storeItem({ ...item, priority: newPriority }, {});

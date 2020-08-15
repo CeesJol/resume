@@ -16,7 +16,6 @@ const Signup = () => {
     await auth({ type: "LOGIN", email, password }).then(
       async (res) => {
         setAuth(true);
-        console.log("res", res);
         const id = res.instance["@ref"].id;
         storeUser({
           id,

@@ -16,7 +16,6 @@ const Login = () => {
     if (event) event.preventDefault();
     await auth({ type: "LOGIN", email, password }).then(
       async (res) => {
-        console.log("res", res);
         setAuth(true);
         const id = res.instance["@ref"].id;
         storeUser({

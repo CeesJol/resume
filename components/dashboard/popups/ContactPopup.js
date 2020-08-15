@@ -99,7 +99,6 @@ const ContactPopup = () => {
             for (var item of getContactInfo()) {
               if (item.priority > editingContactInfo.priority) {
                 const newPriority = item.priority - 1;
-                updateContactInfo(item._id, { priority: newPriority });
                 storeContactInfo({ ...item, priority: newPriority }, {});
               }
             }

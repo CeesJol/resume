@@ -82,7 +82,6 @@ const Popup = () => {
             for (var item of getItems(category)) {
               if (item.priority > editingItem.priority) {
                 const newPriority = item.priority - 1;
-                updateItem(item._id, { priority: newPriority });
                 storeItem({ ...item, priority: newPriority }, {});
               }
             }

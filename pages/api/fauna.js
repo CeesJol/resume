@@ -236,6 +236,13 @@ export const updateResume = async ({ id, data }) => {
 	}`);
 };
 
+export const moveResume = async ({ id, amount }) => {
+  console.log("moveResume request");
+  return executeQuery(`mutation MoveResume {
+		moveResume(id: "${id}", amount: ${amount})
+	}`);
+};
+
 /** |----------------------------
  *  | CATEGORIES
  *  |----------------------------
@@ -320,6 +327,13 @@ export const deleteCategory = async ({ id }) => {
 	}`);
 };
 
+export const moveCategory = async ({ id, amount }) => {
+  console.log("moveCategory request");
+  return executeQuery(`mutation MoveCategory {
+		moveCategory(id: "${id}", amount: ${amount})
+	}`);
+};
+
 /** |----------------------------
  *  | ITEMS
  *  |----------------------------
@@ -356,6 +370,13 @@ export const deleteItem = async ({ id }) => {
   console.log("deleteItem request");
   return executeQuery(`mutation DeleteItem {
 		cascadeDeleteItem(id: "${id}")
+	}`);
+};
+
+export const moveItem = async ({ id, amount }) => {
+  console.log("moveItem request");
+  return executeQuery(`mutation MoveItem {
+		moveItem(id: "${id}", amount: ${amount})
 	}`);
 };
 
@@ -456,7 +477,9 @@ const fauna = async (req, res) => {
   const { type } = req.body;
   let result;
   switch (type) {
+    // ----------
     // USERS
+    // ----------
     case "UPDATE_USER":
       result = await updateUser(req.body);
       break;
@@ -466,7 +489,9 @@ const fauna = async (req, res) => {
     case "GET_USER_BY_EMAIL":
       result = await getUserByEmail(req.body);
       break;
+    // ----------
     // RESUMES
+    // ----------
     case "GET_RESUME":
       result = await getResume(req.body);
       break;
@@ -482,7 +507,12 @@ const fauna = async (req, res) => {
     case "UPDATE_RESUME":
       result = await updateResume(req.body);
       break;
+    case "MOVE_RESUME":
+      result = await moveResume(req.body);
+      break;
+    // ----------
     // CATEGORIES
+    // ----------
     case "CREATE_CATEGORY":
       result = await createCategory(req.body);
       break;
@@ -495,7 +525,12 @@ const fauna = async (req, res) => {
     case "DELETE_CATEGORY":
       result = await deleteCategory(req.body);
       break;
+    case "MOVE_CATEGORY":
+      result = await moveCategory(req.body);
+      break;
+    // ----------
     // ITEMS
+    // ----------
     case "CREATE_ITEM":
       result = await createItem(req.body);
       break;
@@ -505,7 +540,12 @@ const fauna = async (req, res) => {
     case "DELETE_ITEM":
       result = await deleteItem(req.body);
       break;
+    case "MOVE_ITEM":
+      result = await moveItem(req.body);
+      break;
+    // ----------
     // TEMPLATES
+    // ----------
     case "GET_TEMPLATES":
       result = await getTemplates(req.body);
       break;
@@ -522,7 +562,9 @@ const fauna = async (req, res) => {
     case "DELETE_CONTACT_INFO":
       result = await deleteContactInfo(req.body);
       break;
+    // ----------
     // LAYOUT
+    // ----------
     case "UPDATE_LAYOUT":
       result = await updateLayout(req.body);
       break;

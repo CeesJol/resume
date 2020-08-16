@@ -257,17 +257,12 @@ const UserContextProvider = (props) => {
 
     resetPopups();
 
-    // Send to fauna
-    await fauna({
-      type: "UPDATE_ITEM",
-      id: item._id,
-      data: { priority: item.priority },
-    });
-    await fauna({
-      type: "UPDATE_ITEM",
-      id: otherItem._id,
-      data: { priority: otherItem.priority },
-    });
+		// Send to fauna
+		await fauna({
+			type: "MOVE_ITEM",
+			id: item._id,
+			amount
+		})
 
     setMoving(false);
   };
@@ -298,17 +293,10 @@ const UserContextProvider = (props) => {
 
     // Send to fauna
     await fauna({
-      type: "UPDATE_CATEGORY",
-      id: category._id,
-      data: { priority: category.priority },
-    });
-    await fauna({
-      type: "UPDATE_CATEGORY",
-      id: otherCategory._id,
-      data: {
-        priority: otherCategory.priority,
-      },
-    });
+			type: "MOVE_CATEGORY",
+			id: category._id,
+			amount
+		})
 
     setMoving(false);
   };
@@ -332,15 +320,10 @@ const UserContextProvider = (props) => {
 
     // Send to fauna
     await fauna({
-      type: "UPDATE_RESUME",
-      id: resume._id,
-      data: { priority: resume.priority },
-    });
-    await fauna({
-      type: "UPDATE_RESUME",
-      id: otherResume._id,
-      data: { priority: otherResume.priority },
-    });
+			type: "MOVE_RESUME",
+			id: resume._id,
+			amount
+		})
 
     setMoving(false);
   };

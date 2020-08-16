@@ -64,8 +64,13 @@ type Query {
 }
 
 type Mutation {
-	cascadeDeleteResume(id: ID!): ID! @resolver(name: "cascadeDeleteResume")
-	cascadeDeleteCategory(id: ID!): ID! @resolver(name: "cascadeDeleteCategory")
+  cascadeDeleteResume(id: ID!): ID! @resolver(name: "cascadeDeleteResume")
+  cascadeDeleteCategory(id: ID!): ID! @resolver(name: "cascadeDeleteCategory")
   cascadeDeleteItem(id: ID!): ID! @resolver(name: "cascadeDeleteItem")
-	cascadeDeleteContactInfo(id: ID!): ID! @resolver(name: "cascadeDeleteContactInfo")
+  cascadeDeleteContactInfo(id: ID!): ID!
+    @resolver(name: "cascadeDeleteContactInfo")
+
+  moveResume(id: ID!, amount: Int!): ID! @resolver(name: "moveResume")
+  moveCategory(id: ID!, amount: Int!): ID! @resolver(name: "moveCategory")
+  moveItem(id: ID!, amount: Int!): ID! @resolver(name: "moveItem")
 }

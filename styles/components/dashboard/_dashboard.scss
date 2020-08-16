@@ -83,34 +83,41 @@
 	}
 	
 	&__resume-wrapper {
-		margin: 0 0 $l-size 0;
+		margin: 0 0 calc(#{$l-size} * 2) 0;
 		box-shadow: 0px 8px 13px -4px rgba(0, 0, 0, 0.75);
 		transform-origin: center top;
-		transform: scale(1.45);
+		transform: scale(0.73) perspective(1px);
+		backface-visibility: hidden !important;
+		-webkit-font-smoothing: subpixel-antialiased;
 		width: inherit;
 		margin-left: auto;
 		margin-right: auto;
 		display: inline-block;
+		position: absolute;
 
 		&--noscale {
-			zoom: 1 !important;
-			transform: none !important;
+			// Remove scale transition on noscale
+			transform: perspective(1px) !important;
 		}
 
-		@media (max-width: 57rem) {
-			transform: scale(1.25);
+		@media (max-width: 912px) {
+			transform: scale(0.625) perspective(1px);
 		}
 
-		@media (max-width: 49rem) {
-			transform: scale(1.05);
+		@media (max-width: 784px) {
+			transform: scale(0.525) perspective(1px);
 		}
 
-		@media (max-width: 41rem) {
-			transform: scale(0.85);
+		@media (max-width: 656px) {
+			transform: scale(0.425) perspective(1px);
 		}
 
-		@media (max-width: 33rem) {
-			transform: scale(0.65);
+		@media (max-width: 528px) {
+			transform: scale(0.325) perspective(1px);
+		}
+
+		@media (max-width: 464px) {
+			transform: scale(0.275) perspective(1px);
 		}
 	}
 

@@ -8,16 +8,16 @@ import { SIDEBAR_INCREMENT } from "../../lib/constants";
 // PDF Export source
 // https://blog.usejournal.com/lets-make-a-resume-in-react-2c9c5540f51a
 
-const Resume = ({ tiny, template }) => {
+const Resume = ({ tiny, template, exportpdf }) => {
   const {
     getUser,
     setEditingCategory,
     editingResume,
     setChangingInfo,
     preview,
-		setPdf,
-		getCategories,
-		getContactInfo,
+    setPdf,
+    getCategories,
+    getContactInfo,
   } = useContext(UserContext);
   const handleChangeInfo = () => {
     if (preview) return false;
@@ -79,42 +79,62 @@ const Resume = ({ tiny, template }) => {
       return (
         <>
           <div className="resume__container resume__container--left">
-            {mainCategories.map((category, index) => drawCategory(category, index))}
-						{!preview && (
-							<p onClick={handleNewCategory}>
-								<i className="resume--hoverable">Create category</i>
-							</p>
-						)}
+            {mainCategories.map((category, index) =>
+              drawCategory(category, index)
+            )}
+            {!preview && (
+              <p onClick={handleNewCategory}>
+                <i className="resume--hoverable">Create category</i>
+              </p>
+            )}
           </div>
           <div className="resume__container resume__container--right">
-            {sidebarCategories.map((category, index) => drawCategory(category, index))}
-						{!preview && (
-						<p onClick={() => handleNewCategory({ sidebar: true })}>
-							<i className="resume--hoverable">Create category</i>
-						</p>
-					)}
+            {sidebarCategories.map((category, index) =>
+              drawCategory(category, index)
+            )}
+            {!preview && (
+              <p onClick={() => handleNewCategory({ sidebar: true })}>
+                <i className="resume--hoverable">Create category</i>
+              </p>
+            )}
           </div>
         </>
       );
     } else {
-    return (
-      <div className="resume__container">
-        {categories.map((category, index) => drawCategory(category, index))}
-        {!preview && (
-          <p onClick={handleNewCategory}>
-            <i className="resume--hoverable">Create category</i>
-          </p>
-        )}
-      </div>
-    );
+      return (
+        <div className="resume__container">
+          {categories.map((category, index) => drawCategory(category, index))}
+          {!preview && (
+            <p onClick={handleNewCategory}>
+              <i className="resume--hoverable">Create category</i>
+            </p>
+          )}
+        </div>
+      );
     }
   };
   const handleNewCategory = ({ sidebar }) => {
-		if (preview) return false;
-		setEditingCategory({});
-		if (sidebar) setEditingCategory({ sidebar: true });
+    if (preview) return false;
+    setEditingCategory({});
+    if (sidebar) setEditingCategory({ sidebar: true });
   };
-  return (
+  const resume = (
+    <div
+      className={"resume-container " + (tiny ? "resume-container--tiny" : "")}
+    >
+      <style>{templateCSS.style}</style>
+      <div
+        className={
+          "resume " + (templateCSS.name + " ") + (tiny ? "resume--tiny" : "")
+        }
+      >
+        {drawHeader()}
+        {drawContactInfo()}
+        {drawCategories()}
+      </div>
+    </div>
+  );
+  return exportpdf ? (
     <PDFExport
       paperSize={"A4"}
       fileName={editingResume.title + ".pdf"}
@@ -122,22 +142,12 @@ const Resume = ({ tiny, template }) => {
       subject=""
       keywords=""
       ref={(r) => setPdf(r)}
+      scale={0.5}
     >
-      <div
-        className={"resume-container " + (tiny ? "resume-container--tiny" : "")}
-      >
-        <style>{templateCSS.style}</style>
-        <div
-          className={
-            "resume " + (templateCSS.name + " ") + (tiny ? "resume--tiny" : "")
-          }
-        >
-          {drawHeader()}
-          {drawContactInfo()}
-          {drawCategories()}
-        </div>
-      </div>
+      {resume}
     </PDFExport>
+  ) : (
+    resume
   );
 };
 

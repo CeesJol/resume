@@ -19,7 +19,7 @@ const Editor = () => {
         <h4>{editingResume.title}</h4>
         <a onClick={handleGoBack}>All resumes</a>
       </div>
-      <ResumeWrapper />
+      <ResumeWrapper exportpdf={false} />
     </>
   );
 };

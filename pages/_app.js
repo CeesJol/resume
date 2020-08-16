@@ -16,6 +16,7 @@ class MyApp extends App {
       <div>
         <div>
           <Head>
+						<meta name="viewport" content="width=device-width, initial-scale=1" />
             <title>Affilas</title>
           </Head>
         </div>

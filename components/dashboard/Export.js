@@ -19,12 +19,14 @@ const Export = () => {
         <h4>Export your resume</h4>
         <p>
           Preview and export your resume to PDF here.
-          <br />
-          The preview below is unscaled to make it suitable for export.
         </p>
         <Button fn={exportPDF} text="Export" altText="Exporting..." />
       </div>
-      <ResumeWrapper noscale={true} />
+			{/* Resume preview */}
+			<ResumeWrapper exportpdf={false} />
+
+			{/* Resume export item */}
+      <ResumeWrapper exportpdf={true} noscale={true} />
     </>
   );
 };

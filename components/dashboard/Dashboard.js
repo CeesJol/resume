@@ -33,7 +33,6 @@ const Dashboard = () => {
   if (!auth) return <LoadingPopup text={`Authenticating...`} />;
   return (
     <div className="dashboard-container">
-			{console.log('render Dashboard')}
       <DashboardHeader />
       <main>
         <div className="dashboard">

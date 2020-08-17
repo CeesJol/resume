@@ -1,15 +1,14 @@
 @mixin hover {
   cursor: pointer;
-	transition: $default-transition-duration;
-	transform: perspective(1px);
+	// transition: $default-transition-duration;
+	// transform: perspective(1px);
 
 	// Transform: scale on the resume wrapper creates a blurry effect on hover.
 	// These lines prevent that
-	backface-visibility: hidden !important;
+	// backface-visibility: hidden;
 	// transform: translateZ(0);
 	
   &:hover {
 		opacity: $hover-opacity;
-		// opacity: 0.99;
   }
 }

@@ -10,23 +10,23 @@ import { SIDEBAR_INCREMENT } from "../../lib/constants";
 
 const Resume = ({ resume, tiny, template, exportpdf }) => {
   const {
-		getUser,
-		userExists,
+    getUser,
+    userExists,
     setEditingCategory,
     editingResume,
     setChangingInfo,
     preview,
     setPdf,
     getCategories,
-		getContactInfo,
-		getJobTitle,
-		getBio,
+    getContactInfo,
+    getJobTitle,
+    getBio,
   } = useContext(UserContext);
   const handleChangeInfo = () => {
     if (preview) return false;
     setChangingInfo(true);
   };
-	const templateCSS = template ? template : editingResume.template;
+  const templateCSS = template ? template : editingResume.template;
   const sortByPriority = (list) => {
     return list.sort((item1, item2) => {
       return item1.priority < item2.priority ? -1 : 1;
@@ -46,12 +46,8 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
         <h1 className="resume__header--name">
           {userExists() && getUser().username}
         </h1>
-        <h3 className="resume__header--job-title">
-          {getJobTitle(resume)}
-        </h3>
-        <p className="resume__header--bio multiline">
-          {getBio(resume)}
-        </p>
+        <h3 className="resume__header--job-title">{getJobTitle(resume)}</h3>
+        <p className="resume__header--bio multiline">{getBio(resume)}</p>
       </div>
     );
   };
@@ -86,8 +82,8 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
               drawCategory(category, index)
             )}
             {!preview && (
-              <p onClick={handleNewCategory}>
-                <i className="resume--hoverable">Create category</i>
+              <p className="resume--hoverable" onClick={handleNewCategory}>
+                <i>Create category</i>
               </p>
             )}
           </div>
@@ -96,8 +92,11 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
               drawCategory(category, index)
             )}
             {!preview && (
-              <p onClick={() => handleNewCategory({ sidebar: true })}>
-                <i className="resume--hoverable">Create category</i>
+              <p
+                className="resume--hoverable"
+                onClick={() => handleNewCategory({ sidebar: true })}
+              >
+                <i>Create category</i>
               </p>
             )}
           </div>
@@ -108,8 +107,8 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
         <div className="resume__container">
           {categories.map((category, index) => drawCategory(category, index))}
           {!preview && (
-            <p onClick={handleNewCategory}>
-              <i className="resume--hoverable">Create category</i>
+            <p className="resume--hoverable" onClick={handleNewCategory}>
+              <i>Create category</i>
             </p>
           )}
         </div>

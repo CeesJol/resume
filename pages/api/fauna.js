@@ -243,6 +243,19 @@ export const moveResume = async ({ id, amount }) => {
 	}`);
 };
 
+export const updateResumeTemplate = async ({ id, templateId }) => {
+	console.log("updateResumeTemplate request");
+  return executeQuery(`mutation UpdateResumeTemplate {
+		updateResume(id: "${id}", data: {
+			template: { connect: "${templateId}" }
+		}) {
+			template {
+				_id
+			}
+		}
+	}`);
+};
+
 /** |----------------------------
  *  | CATEGORIES
  *  |----------------------------
@@ -509,7 +522,10 @@ const fauna = async (req, res) => {
       break;
     case "MOVE_RESUME":
       result = await moveResume(req.body);
-      break;
+			break;
+		case "UPDATE_RESUME_TEMPLATE":
+			result = await updateResumeTemplate(req.body);
+			break;
     // ----------
     // CATEGORIES
     // ----------

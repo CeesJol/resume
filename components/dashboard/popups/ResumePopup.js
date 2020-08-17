@@ -74,7 +74,7 @@ const ResumePopup = () => {
   };
   useEffect(() => {
     // load templates
-    if (!templates) {
+    if (templates.length == 0) {
       fauna({ type: "GET_TEMPLATES" }).then((data) => {
         setTemplates(data.templates.data);
       });

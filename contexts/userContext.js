@@ -26,7 +26,7 @@ const UserContextProvider = (props) => {
   const [preview, setPreview] = useState(true);
   const [pdf, setPdf] = useState(null);
   const [loggingOut, setLoggingOut] = useState(null);
-  const [templates, setTemplates] = useState(false);
+  const [templates, setTemplates] = useState([]);
   const forceRender = () => {
     setDummy(!dummy);
   };
@@ -157,13 +157,14 @@ const UserContextProvider = (props) => {
 
     setUser(() => user);
   };
-  const storeTemplate = (templateData) => {
+  const storeTemplate = (templateId) => {
     var user = getUser();
 
     user.resumes.data.forEach((resume, r) => {
       if (resume._id === editingResume._id) {
-        const newTemplate = { ...resume.template, ...templateData };
-        user.resumes.data[r].template = newTemplate;
+        user.resumes.data[r].template = templates.find(
+          (template) => template._id === templateId
+        );
         setEditingResume(user.resumes.data[r]);
       }
     });
@@ -232,8 +233,8 @@ const UserContextProvider = (props) => {
     localStorage.removeItem("user");
 
     // Reset state
-		setUser(null);
-		setEditingResume(dummyResume);
+    setUser(null);
+    setEditingResume(dummyResume);
     reset();
   };
   const userExists = () => {
@@ -257,12 +258,12 @@ const UserContextProvider = (props) => {
 
     resetPopups();
 
-		// Send to fauna
-		await fauna({
-			type: "MOVE_ITEM",
-			id: item._id,
-			amount
-		})
+    // Send to fauna
+    await fauna({
+      type: "MOVE_ITEM",
+      id: item._id,
+      amount,
+    });
 
     setMoving(false);
   };
@@ -293,10 +294,10 @@ const UserContextProvider = (props) => {
 
     // Send to fauna
     await fauna({
-			type: "MOVE_CATEGORY",
-			id: category._id,
-			amount
-		})
+      type: "MOVE_CATEGORY",
+      id: category._id,
+      amount,
+    });
 
     setMoving(false);
   };
@@ -320,10 +321,10 @@ const UserContextProvider = (props) => {
 
     // Send to fauna
     await fauna({
-			type: "MOVE_RESUME",
-			id: resume._id,
-			amount
-		})
+      type: "MOVE_RESUME",
+      id: resume._id,
+      amount,
+    });
 
     setMoving(false);
   };
@@ -339,8 +340,8 @@ const UserContextProvider = (props) => {
   };
   const reset = () => {
     setChangingResume(false);
-		// setEditingResume(-1);
-		if (user && user.resumes.data.length === 0) setEditingResume(dummyResume);
+    // setEditingResume(-1);
+    if (user && user.resumes.data.length === 0) setEditingResume(dummyResume);
     setNav(0);
     resetPopups();
   };

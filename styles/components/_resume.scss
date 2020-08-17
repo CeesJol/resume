@@ -23,12 +23,12 @@
 
 .resume {
   &--tiny {
-    transform: scale(0.51);
+    transform: scale(0.255);
     @media (min-width: 56rem) {
-      transform: scale(0.68);
+      transform: scale(0.34);
     }
     transform-origin: top left;
-    height: 30rem;
+    height: 60rem;
   }
 
   h1 {

@@ -5,22 +5,22 @@
 }
 
 .dashboard {
-	a {
-		color: blue;
-	}
-	
+  a {
+    color: blue;
+  }
+
   .button {
     margin-top: $s-size;
   }
 
   &__nav {
     background-color: white;
-		border-bottom: 1px solid $light-grey-2;
-		transition: 0.3s;
+    border-bottom: 1px solid $light-grey-2;
+    transition: 0.3s;
 
     &__content {
-			@include dashboard-content-container;
-			transition: 0.3s;
+      @include dashboard-content-container;
+      transition: 0.3s;
 
       display: flex;
       justify-content: space-around;
@@ -36,7 +36,7 @@
 
       &:hover {
         border-bottom: 1px solid grey;
-			}
+      }
     }
 
     &--item-selected {
@@ -51,7 +51,7 @@
 
   &__main {
     &__content {
-			@include dashboard-content-container;
+      @include dashboard-content-container;
 
       // overflow: auto;
     }
@@ -75,85 +75,49 @@
       border: none;
       color: white;
       font-weight: bold;
-		}
-		
-		h4 {
-			padding-bottom: $m-size;
-		}
-	}
-	
-	&__resume-wrapper {
-		margin: 0 0 calc(#{$l-size} * 2) 0;
-		box-shadow: 0px 8px 13px -4px rgba(0, 0, 0, 0.75);
-		transform-origin: center top;
-		transform: scale(0.73) perspective(1px);
-		backface-visibility: hidden !important;
-		-webkit-font-smoothing: subpixel-antialiased;
-		width: inherit;
-		margin-left: auto;
-		margin-right: auto;
-		display: inline-block;
-		position: absolute;
+    }
 
-		&--noscale {
-			// Remove scale transition on noscale
-			transform: perspective(1px) !important;
-		}
+    h4 {
+      padding-bottom: $m-size;
+    }
+  }
 
-		@media (max-width: 912px) {
-			transform: scale(0.625) perspective(1px);
-		}
+  &__resume-wrapper {
+    margin: 0 0 calc(#{$l-size} * 2) 0;
+    box-shadow: 0px 8px 13px -4px rgba(0, 0, 0, 0.75);
+    transform-origin: center top;
+    transform: scale(0.73) perspective(1px);
+    backface-visibility: hidden !important;
+    -webkit-font-smoothing: subpixel-antialiased;
+    width: inherit;
+    margin-left: auto;
+    margin-right: auto;
+    display: inline-block;
+    position: absolute;
 
-		@media (max-width: 784px) {
-			transform: scale(0.525) perspective(1px);
-		}
+    &--noscale {
+      // Remove scale transition
+      transform: perspective(1px) !important;
+    }
 
-		@media (max-width: 656px) {
-			transform: scale(0.425) perspective(1px);
-		}
+    @media (max-width: 912px) {
+      transform: scale(0.625) perspective(1px);
+    }
 
-		@media (max-width: 528px) {
-			transform: scale(0.325) perspective(1px);
-		}
+    @media (max-width: 784px) {
+      transform: scale(0.525) perspective(1px);
+    }
 
-		@media (max-width: 464px) {
-			transform: scale(0.275) perspective(1px);
-		}
-	}
+    @media (max-width: 656px) {
+      transform: scale(0.425) perspective(1px);
+    }
 
-	&__resume-preview {
-		// background-color: $light-grey;
-		border: 1px solid $light-grey-2;
-		border-radius: 3px;
-		margin-bottom: $m-size;
-		padding: $m-size;
+    @media (max-width: 528px) {
+      transform: scale(0.325) perspective(1px);
+    }
 
-		&--job-title {
-			font-weight: 300;
-		}
-
-		&--bio {
-			margin: 0;
-		}
-
-		footer {
-			margin-top: $s-size;
-
-			a, i {
-				color: $light-grey-3;
-				text-transform: uppercase;
-				font-size: 1.4rem;
-			}
-
-			a:hover {
-				text-decoration: underline;
-				opacity: 1;
-			}
-
-			// Actions separator
-			i {
-				margin: 0 $s-size;
-			}
-		}
-	}
+    @media (max-width: 464px) {
+      transform: scale(0.275) perspective(1px);
+    }
+  }
 }

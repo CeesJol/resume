@@ -8,22 +8,25 @@ import { SIDEBAR_INCREMENT } from "../../lib/constants";
 // PDF Export source
 // https://blog.usejournal.com/lets-make-a-resume-in-react-2c9c5540f51a
 
-const Resume = ({ tiny, template, exportpdf }) => {
+const Resume = ({ resume, tiny, template, exportpdf }) => {
   const {
-    getUser,
+		getUser,
+		userExists,
     setEditingCategory,
     editingResume,
     setChangingInfo,
     preview,
     setPdf,
     getCategories,
-    getContactInfo,
+		getContactInfo,
+		getJobTitle,
+		getBio,
   } = useContext(UserContext);
   const handleChangeInfo = () => {
     if (preview) return false;
     setChangingInfo(true);
   };
-  const templateCSS = template ? template : editingResume.template;
+	const templateCSS = template ? template : editingResume.template;
   const sortByPriority = (list) => {
     return list.sort((item1, item2) => {
       return item1.priority < item2.priority ? -1 : 1;
@@ -41,13 +44,13 @@ const Resume = ({ tiny, template, exportpdf }) => {
         onClick={handleChangeInfo}
       >
         <h1 className="resume__header--name">
-          {getUser() && getUser().username}
+          {userExists() && getUser().username}
         </h1>
         <h3 className="resume__header--job-title">
-          {editingResume.jobTitle || "Job Title"}
+          {getJobTitle(resume)}
         </h3>
         <p className="resume__header--bio multiline">
-          {editingResume.bio || "Bio"}
+          {getBio(resume)}
         </p>
       </div>
     );
@@ -56,7 +59,7 @@ const Resume = ({ tiny, template, exportpdf }) => {
     return (
       <div className="resume__contact-info">
         <div className="resume__contact-info__content">
-          {sortByPriority(getContactInfo()).map((item) => (
+          {sortByPriority(getContactInfo(resume)).map((item) => (
             <ContactItem item={item} key={`${item.name}-${item.value}`} />
           ))}
           {!preview && <ContactItem item={{}} txt={"Add contact info"} />}
@@ -65,10 +68,10 @@ const Resume = ({ tiny, template, exportpdf }) => {
     );
   };
   const drawCategories = () => {
-    if (!editingResume.categories) return <p>Nothing here yet</p>;
+    if (!getCategories(resume)) return <p>Nothing here yet</p>;
 
-    const categories = sortByPriority(getCategories());
-    if (editingResume.template.sidebar) {
+    const categories = sortByPriority(getCategories(resume));
+    if (templateCSS.sidebar) {
       const mainCategories = categories.filter(
         (category) => category.priority <= SIDEBAR_INCREMENT
       );
@@ -118,7 +121,7 @@ const Resume = ({ tiny, template, exportpdf }) => {
     setEditingCategory({});
     if (sidebar) setEditingCategory({ sidebar: true });
   };
-  const resume = (
+  const result = (
     <div
       className={"resume-container " + (tiny ? "resume-container--tiny" : "")}
     >
@@ -144,10 +147,10 @@ const Resume = ({ tiny, template, exportpdf }) => {
       ref={(r) => setPdf(r)}
       scale={0.5}
     >
-      {resume}
+      {result}
     </PDFExport>
   ) : (
-    resume
+    result
   );
 };
 

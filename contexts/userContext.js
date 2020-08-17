@@ -80,19 +80,30 @@ const UserContextProvider = (props) => {
     );
   };
   const getResumes = () => {
-    return getUser() && getUser().resumes && getUser().resumes.data;
+    return userExists() && getUser().resumes.data;
   };
-  const getLayout = () => {
+  const getLayout = (resume) => {
+		if (resume) return resume.layout.data;
     return editingResume.layout.data;
   };
-  const getContactInfo = () => {
+  const getContactInfo = (resume) => {
+		if (resume) return resume.contactInfo.data;
     return editingResume.contactInfo.data;
   };
-  const getCategories = () => {
+  const getCategories = (resume) => {
+		if (resume) return resume.categories.data;
     return editingResume.categories.data;
   };
   const getItems = (category) => {
     return category && category.items && category.items.data;
+	};
+	const getJobTitle = (resume) => {
+		if (resume) return resume.jobTitle || "Job Title";
+    return editingResume.jobTitle || "Job Title"
+	};
+	const getBio = (resume) => {
+		if (resume) return resume.bio || "Bio";
+    return editingResume.bio || "Bio"
   };
   const storeResume = (resumeData, { add, del }) => {
     var user = getUser();
@@ -364,7 +375,6 @@ const UserContextProvider = (props) => {
                   clearUser();
                   return;
                 }
-                setAuth(true);
                 if (data.findUserByID.resumes.data[0]) {
                   setEditingResume(data.findUserByID.resumes.data[0]);
                 } else {
@@ -372,9 +382,9 @@ const UserContextProvider = (props) => {
                 }
                 storeUser(data.findUserByID);
                 console.log("readUser");
-                console.table(data.findUserByID);
-
-                forceRender();
+								console.table(data.findUserByID);
+								
+								setAuth(true);
               },
               (err) => {
                 toast.error(`⚠️ ${err}`);
@@ -454,7 +464,9 @@ const UserContextProvider = (props) => {
         getItems,
         getResumes,
         getLayout,
-        getContactInfo,
+				getContactInfo,
+				getJobTitle,
+				getBio,
         storeContactInfo,
         preview,
         setPreview,

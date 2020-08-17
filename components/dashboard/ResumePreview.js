@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
 import { fauna } from "../../lib/api";
+import Resume from "./Resume";
 
 const ResumePreview = ({ resume, index }) => {
   const {
@@ -39,27 +40,32 @@ const ResumePreview = ({ resume, index }) => {
   };
   return (
     <div
-      className="dashboard__resume-preview resume--hoverable"
+      className="resume-preview resume--hoverable"
       key={resume._id}
       onClick={(e) => handleClick(e, resume)}
     >
-      <h3 className="dashboard__resume-preview--title">{resume.title}</h3>
-      <h3 className="dashboard__resume-preview--job-title">
-        {resume.jobTitle || "Job Title"}
-      </h3>
-      <p className="dashboard__resume-preview--bio multiline">
-        {resume.bio || "Bio"}
-      </p>
+      <div className="resume-preview__head">
+        <Resume noscale={true} tiny={true} template={resume.template} resume={resume} />
+      </div>
+      <div className="resume-preview__body">
+        <h3 className="resume-preview__body--title">{resume.title}</h3>
+        <h3 className="resume-preview__body--job-title">
+          {resume.jobTitle || "Job Title"}
+        </h3>
+        <p className="resume-preview__body--bio multiline">
+          {resume.bio || "Bio"}
+        </p>
 
-      <footer>
-        <a onClick={(e) => handleDuplicate(e, resume)}>Create variation</a>
-        {index !== 0 && (
-          <>
-            <i> - </i>
-            <a onClick={(e) => handleMove(e, resume, -1)}>Move up</a>
-          </>
-        )}
-      </footer>
+        <footer>
+          <a onClick={(e) => handleDuplicate(e, resume)}>Create variation</a>
+          {index !== 0 && (
+            <>
+              <i> - </i>
+              <a onClick={(e) => handleMove(e, resume, -1)}>Move up</a>
+            </>
+          )}
+        </footer>
+      </div>
     </div>
   );
 };

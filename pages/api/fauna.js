@@ -405,6 +405,7 @@ export const getTemplates = () => {
 				_id
 				name
 				style
+				sidebar
 			}
 		}
 	}`);

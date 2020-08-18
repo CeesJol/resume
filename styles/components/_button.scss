@@ -1,48 +1,48 @@
 .button-container {
-	display: inline-flex;
-	
-	a:hover {
-		opacity: 1;
-	}
+  display: inline-flex;
 
-	&:not(:last-child) {
-		margin-right: $s-size;
-	}
+  a:hover {
+    opacity: 1;
+  }
+
+  &:not(:last-child) {
+    margin-right: $s-size;
+  }
 }
 
 .button {
-	background-color: $light-green;
-	border: none;
-	border-radius: 3px;
-	color: white;
-	padding: $s-size $m-size;
-	text-transform: uppercase;
-	transition: 0.3s;
-	font-size: $font-size-default;
-	width: auto;
+  background-color: $light-green;
+  border: none;
+  border-radius: 3px;
+  color: white;
+  padding: $s-size $m-size;
+  text-transform: uppercase;
+  transition: 0.3s;
+  font-size: $font-size-default;
+  width: auto;
 
-	&:hover {
-		background-color: lighten($light-green, 7%);
-	}
+  &:hover {
+    background-color: lighten($light-green, 7%);
+  }
 
-	&:disabled {
-		background-color: darken($light-green, 30%);
-	}
+  &:disabled {
+    background-color: darken($light-green, 30%);
+  }
 
-	&--shadow {
-		@include shadow;
-	}
+  &--shadow {
+    @include shadow;
+  }
 
-	&--red {
-		background-color: $light-red;
+  &--red {
+    background-color: $light-red;
 
-		&:hover {
-			// display: none;
-			background-color: lighten($light-red, 10%);
-		}
-	}
+    &:hover {
+      // display: none;
+      background-color: lighten($light-red, 10%);
+    }
+  }
 
-	a {
-		font-weight: 400;
-	}
+  a {
+    font-weight: 400;
+  }
 }

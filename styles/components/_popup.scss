@@ -1,38 +1,38 @@
 .popup-container {
-	position: fixed;
-	background-color: rgba(black, 0.4);
-	width: 100vw;
-	height: 100%;
-	top: 0;
-	left: 0;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+  position: fixed;
+  background-color: rgba(black, 0.4);
+  width: 100vw;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .popup {
-	background-color: white;
-	border: 1px solid $light-grey-2;
-	border-radius: 3px;
-	padding: $l-size;
-	margin: $l-size $m-size;
-	overflow: auto;
-	width: 100%;
-	max-width: calc(#{$max-width} - 3rem);
-	height: auto;
-	max-height: calc(100vh - 3rem);
+  background-color: white;
+  border: 1px solid $light-grey-2;
+  border-radius: 3px;
+  padding: $l-size;
+  margin: $l-size $m-size;
+  overflow: auto;
+  width: 100%;
+  max-width: calc(#{$max-width} - 3rem);
+  height: auto;
+  max-height: calc(100vh - 3rem);
 
-	&--medium {
-		width: 40rem;
-		text-align: center;
-	}
+  &--medium {
+    width: 40rem;
+    text-align: center;
+  }
 
-	&--small {
-		width: 25rem;
-		text-align: center;
-	}
+  &--small {
+    width: 25rem;
+    text-align: center;
+  }
 
-	h4 {
-		margin-bottom: $m-size;
-	}
+  h4 {
+    margin-bottom: $m-size;
+  }
 }

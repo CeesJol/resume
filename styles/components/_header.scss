@@ -4,17 +4,17 @@
   border-bottom: 1px solid $light-grey-2;
   width: 100%;
   padding-top: $l-size;
-	padding-bottom: $l-size;
+  padding-bottom: $l-size;
 
   &__content {
-		@include content-container;
-		
-		&--dashboard {
-			@include dashboard-content-container;
+    @include content-container;
 
-			padding-left: 3.5rem;
-			padding-right: 3.5rem;
-		}
+    &--dashboard {
+      @include dashboard-content-container;
+
+      padding-left: 3.5rem;
+      padding-right: 3.5rem;
+    }
 
     display: flex;
     align-items: center;
@@ -35,21 +35,21 @@
   h3,
   h4 {
     padding: 0;
-	}
-	
-	&__left {
-		display: flex;
-	}
+  }
+
+  &__left {
+    display: flex;
+  }
 
   &__right a {
-		font-weight: 300;
-		
-		&:not(:last-child) {
-			margin-right: 2rem;
-			@media (max-width: $desktop-breakpoint) {
-				margin-right: 1rem;
-			}
-		}
+    font-weight: 300;
+
+    &:not(:last-child) {
+      margin-right: 2rem;
+      @media (max-width: $desktop-breakpoint) {
+        margin-right: 1rem;
+      }
+    }
   }
 
   * {
@@ -61,7 +61,8 @@
     background-color: transparent;
     border: none;
 
-    *, a:visited {
+    *,
+    a:visited {
       color: white;
     }
   }

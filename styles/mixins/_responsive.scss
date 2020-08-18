@@ -1,22 +1,22 @@
 @mixin responsive {
-	@media (min-width: $desktop-breakpoint) {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	
-		& > div {
-			flex-grow: 1;
-			flex-basis: 0;
-		}
+  @media (min-width: $desktop-breakpoint) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-		& > div:not(:last-child) {
-			margin-right: 3rem;
-		}
-	}
+    & > div {
+      flex-grow: 1;
+      flex-basis: 0;
+    }
 
-	@media (max-width: calc(#{$desktop-breakpoint})) {
-		& > div:not(:last-child) {
-			margin-bottom: 3rem;
-		}
-	}
+    & > div:not(:last-child) {
+      margin-right: 3rem;
+    }
+  }
+
+  @media (max-width: calc(#{$desktop-breakpoint})) {
+    & > div:not(:last-child) {
+      margin-bottom: 3rem;
+    }
+  }
 }

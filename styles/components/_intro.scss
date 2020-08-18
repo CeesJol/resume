@@ -1,14 +1,13 @@
 .intro {
-	padding-top: $l-size;
+  padding-top: $l-size;
 
-	h2 {
-		padding-top: $l-size;
-		position: relative;
-	}
+  h2 {
+    padding-top: $l-size;
+    position: relative;
+  }
 
-	&__content {
-		@include content-container;
-		text-align: center;
-		
-	}
+  &__content {
+    @include content-container;
+    text-align: center;
+  }
 }

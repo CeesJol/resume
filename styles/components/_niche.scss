@@ -1,8 +1,8 @@
 .niche {
-	padding-top: 0;
+  padding-top: 0;
 
-	&__content {
-		@include content-container;
-		@include responsive;
-	}
+  &__content {
+    @include content-container;
+    @include responsive;
+  }
 }

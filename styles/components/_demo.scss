@@ -1,8 +1,6 @@
 .demo {
-
-
-	&__content {
-		@include content-container;
-		@include responsive;
-	}
+  &__content {
+    @include content-container;
+    @include responsive;
+  }
 }

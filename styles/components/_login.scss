@@ -10,8 +10,8 @@
 
   display: flex;
   align-items: center;
-	justify-content: center;
-	flex-direction: column;
+  justify-content: center;
+  flex-direction: column;
 
   &__box {
     position: relative;
@@ -21,31 +21,31 @@
     border-radius: 3px;
     padding: $l-size;
     width: 100%;
-		height: auto;
+    height: auto;
 
     @media (min-width: $login-box-breakpoint) {
-			@include shadow;
+      @include shadow;
       padding: $l-size;
       width: $login-box-width;
       height: auto;
     }
-		
-		&--subtitle {
-			padding: $l-size 0;
-		}
+
+    &--subtitle {
+      padding: $l-size 0;
+    }
 
     &--subtitle {
       font-weight: 300;
     }
-	}
-	
+  }
+
   .button-container {
-		display: flex !important;
-	}
-	.button {
+    display: flex !important;
+  }
+  .button {
     width: 100%;
-		margin-top: $s-size;
-		text-transform: none;
-		padding: $m-size $s-size;
+    margin-top: $s-size;
+    text-transform: none;
+    padding: $m-size $s-size;
   }
 }

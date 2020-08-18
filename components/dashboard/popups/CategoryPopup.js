@@ -3,7 +3,7 @@ import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import { toast } from "react-toastify";
 import { fauna } from "../../../lib/api";
-import { SIDEBAR_INCREMENT, defaultCategories } from "../../../lib/constants";
+import { SIDEBAR_INCREMENT, DEFAULT_CATEGORIES } from "../../../lib/constants";
 import Categorypicker from "../../general/Categorypicker";
 
 const CategoryPopup = () => {
@@ -140,14 +140,14 @@ const CategoryPopup = () => {
       setFilled(true);
       const name = editingCategory.name;
       if (name) {
-        if (defaultCategories.includes(name)) {
+        if (DEFAULT_CATEGORIES.includes(name)) {
           setName(name);
         } else {
           setName("Other");
           setCustomName(name);
         }
       } else {
-        setName(defaultCategories[0]);
+        setName(DEFAULT_CATEGORIES[0]);
       }
     }
   });

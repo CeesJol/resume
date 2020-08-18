@@ -1,10 +1,10 @@
 import React from "react";
 
-const Monthpicker = ({ val, fn }) => (
+const Monthpicker = ({ val, name, fn }) => (
   <>
     <select
       className="select-narrow"
-      name={val}
+      name={name}
       id={val}
       value={val}
       onChange={fn}

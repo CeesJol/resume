@@ -1,10 +1,10 @@
 import React from "react";
-import { contactpickerOptions } from "../../lib/constants";
+import { CONTACTPICKER_OPTIONS } from "../../lib/constants";
 
 const Contactpicker = ({ val, fn }) => (
   <select name={val} id={val} value={val} onChange={fn}>
     <option value="">Other</option>
-    {Object.keys(contactpickerOptions).map((key) => {
+    {Object.keys(CONTACTPICKER_OPTIONS).map((key) => {
       return (
         <option key={key} value={key}>
           {key}

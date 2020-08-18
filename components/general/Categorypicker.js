@@ -1,9 +1,9 @@
 import React from "react";
-import { defaultCategories } from "../../lib/constants";
+import { DEFAULT_CATEGORIES } from "../../lib/constants";
 
 const Categorypicker = ({ val, fn }) => (
   <select name={val} id={val} value={val} onChange={fn}>
-    {defaultCategories.map((cat) => {
+    {DEFAULT_CATEGORIES.map((cat) => {
       return (
         <option key={cat} value={cat}>
           {cat}

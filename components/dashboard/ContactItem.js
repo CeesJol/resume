@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
-import { contactpickerOptions } from "../../lib/constants";
+import { CONTACTPICKER_OPTIONS } from "../../lib/constants";
 
 const ContactItem = ({ item, txt }) => {
   const { setEditingContactInfo, preview, getLayoutItem } = useContext(
@@ -26,8 +26,8 @@ const ContactItem = ({ item, txt }) => {
       }`}
     >
       {item.value
-        ? contactpickerOptions[item.value] &&
-          drawIcon(contactpickerOptions[item.value])
+        ? CONTACTPICKER_OPTIONS[item.value] &&
+          drawIcon(CONTACTPICKER_OPTIONS[item.value])
         : drawIcon("plus-square")}
       <p>{item.name ? item.name : txt}</p>
     </div>

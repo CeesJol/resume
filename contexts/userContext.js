@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect } from "react";
 export const UserContext = createContext();
 import { toast } from "react-toastify";
 import Router from "next/router";
-import { dummyResume } from "../lib/constants";
+import { DUMMY_RESUME } from "../lib/constants";
 import { auth as authFunction, fauna } from "../lib/api";
 import { useCookies } from "react-cookie";
 
@@ -14,7 +14,7 @@ const UserContextProvider = (props) => {
   const [nav, setNav] = useState(0);
   const [editingItem, setEditingItem] = useState(-1);
   const [editingCategory, setEditingCategory] = useState(-1);
-  const [editingResume, setEditingResume] = useState(dummyResume); // Most recently edited resume
+  const [editingResume, setEditingResume] = useState(DUMMY_RESUME); // Most recently edited resume
   const [changingResume, setChangingResume] = useState(false); // Whether user is changing a resume
   const [creatingResume, setCreatingResume] = useState(-1);
   const [data, setData] = useState(false);
@@ -251,7 +251,7 @@ const UserContextProvider = (props) => {
 
     // Reset state
     setUser(null);
-    setEditingResume(dummyResume);
+    setEditingResume(DUMMY_RESUME);
     reset();
   };
   const userExists = () => {
@@ -358,7 +358,7 @@ const UserContextProvider = (props) => {
   const reset = () => {
     setChangingResume(false);
     // setEditingResume(-1);
-    if (user && user.resumes.data.length === 0) setEditingResume(dummyResume);
+    if (user && user.resumes.data.length === 0) setEditingResume(DUMMY_RESUME);
     setNav(0);
     resetPopups();
   };
@@ -385,7 +385,7 @@ const UserContextProvider = (props) => {
                 if (data.findUserByID.resumes.data[0]) {
                   setEditingResume(data.findUserByID.resumes.data[0]);
                 } else {
-                  setEditingResume(dummyResume);
+                  setEditingResume(DUMMY_RESUME);
                 }
                 storeUser(data.findUserByID);
                 console.log("readUser");

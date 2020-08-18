@@ -1,6 +1,10 @@
 import executeQuery from "../../lib/executeQuery";
 import stringifyObject from "../../lib/stringifyObject";
-import { defaultCategories, defaultLayoutItems } from "../../lib/constants";
+import {
+  DEFAULT_CATEGORIES,
+  DEFAULT_CATEGORIES_SIDEBAR_CUTOFF,
+  SIDEBAR_INCREMENT,
+} from "../../lib/constants";
 import jwt from "jsonwebtoken";
 
 const ITEM_DATA = `_id
@@ -151,11 +155,15 @@ export const createResume = async ({ userId, templateId, data }) => {
 			${stringifyObject(data)}
 			categories: {
 				create: [
-					${defaultCategories.map(
+					${DEFAULT_CATEGORIES.map(
             (category, index) =>
               `{ 
 							name: "${category}" 
-							priority: ${index + 1}
+							priority: ${
+                index +
+                1 +
+                (index > DEFAULT_CATEGORIES_SIDEBAR_CUTOFF) * SIDEBAR_INCREMENT
+              }
 						}`
           )}
 				]

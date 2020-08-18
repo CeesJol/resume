@@ -18,55 +18,67 @@ const Popup = () => {
     getItems,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
-  const [title, setTitle] = useState("");
-  const [isGoing, setIsGoing] = useState(true);
-  const [month1, setMonth1] = useState("");
-  const [year1, setYear1] = useState("");
-  const [month2, setMonth2] = useState("");
-  const [year2, setYear2] = useState("");
-  const [location, setLocation] = useState("");
-  const [description, setDescription] = useState("");
-  const handleChangeTitle = (event) => {
-    setTitle(event.target.value);
-    setUserMadeChanges(true);
-  };
-  const handleChangeLocation = (event) => {
-    setLocation(event.target.value);
-    setUserMadeChanges(true);
-  };
-  const handleChangeIsGoing = (event) => {
-    setIsGoing(!isGoing);
-    setUserMadeChanges(true);
-  };
-  const handleChangeMonth1 = (event) => {
-    setMonth1(event.target.value);
-    setUserMadeChanges(true);
-  };
-  const handleChangeYear1 = (event) => {
-    setYear1(event.target.value);
-    setUserMadeChanges(true);
-  };
-  const handleChangeMonth2 = (event) => {
-    setMonth2(event.target.value);
-    setUserMadeChanges(true);
-  };
-  const handleChangeYear2 = (event) => {
-    setYear2(event.target.value);
-    setUserMadeChanges(true);
-  };
-  const handleChangeDescription = (event) => {
-    setDescription(event.target.value);
-    setUserMadeChanges(true);
-  };
+  const [fields, setFields] = useState({
+    title: "",
+    isGoing: true,
+    month1: "",
+    year1: "",
+    month2: "",
+    year2: "",
+    location: "",
+    description: "",
+  });
+  function handleChange(event) {
+    const value =
+      event.target.type === "checkbox"
+        ? !fields[event.target.name]
+        : event.target.value;
+    setFields({
+      ...fields,
+      [event.target.name]: value,
+    });
+    if (!userMadeChanges) setUserMadeChanges(true);
+  }
   const validateInput = () => {
-    if (!title) return "Please provide a title";
-    if (!location) return "Please provide a location";
-    if (!month1) return "Please provide a starting date month";
-    if (!year1) return "Please provide a starting date year";
-    if (!isGoing && !month2) return "Please provide an ending date month";
-    if (!isGoing && !year2) return "Please provide an ending date year";
-    if (!description) return "Please provide a description";
+    if (!fields.title) return "Please provide a title";
+    // if (!fields.location) return "Please provide a location";
+    // if (!fields.month1) return "Please provide a starting date month";
+    // if (!fields.year1) return "Please provide a starting date year";
+    // if (!fields.isGoing && !fields.month2)
+    //   return "Please provide an ending date month";
+    // if (!fields.isGoing && !fields.year2)
+    //   return "Please provide an ending date year";
+    // if (!fields.description) return "Please provide a description";
+
+    if (!!fields.month1 ^ !!fields.year1)
+      return "Please provide both a starting month and year";
+    if (!isGoing && !!fields.month2 ^ !!fields.year2)
+      return "Please provide both an ending month and year";
+
     return false;
+  };
+  const getFromAndTo = () => {
+    let from;
+    if (fields.month1 && fields.year1) {
+      from = fields.month1 + "/" + fields.year1;
+      // } else if (fields.year1) {
+      //   from = fields.year1;
+    } else {
+      from = "";
+    }
+
+    let to;
+    if (fields.isGoing) {
+      to = "Present";
+    } else if (fields.month2 && fields.year2) {
+      to = fields.month2 + "/" + fields.year2;
+      // } else if (fields.year2) {
+      //   to = fields.year2;
+    } else {
+      to = "";
+    }
+
+    return { from, to };
   };
   const handleDelete = async (event) => {
     if (event) event.preventDefault();
@@ -101,18 +113,16 @@ const Popup = () => {
       return;
     }
 
-    const from = month1 + "/" + year1;
-    const to = isGoing ? "Present" : month2 + "/" + year2;
-    const categoryId = editingItem.category._id;
+    const { from, to } = getFromAndTo();
     await fauna({
       type: "UPDATE_ITEM",
       id: editingItem._id,
       data: {
-        title,
-        location,
+        title: fields.title,
+        location: fields.location,
         from,
         to,
-        description,
+        description: fields.description,
       },
     }).then(
       async (data) => {
@@ -132,19 +142,18 @@ const Popup = () => {
       return;
     }
 
-    const from = month1 + "/" + year1;
-    const to = isGoing ? "Present" : month2 + "/" + year2;
+    const { from, to } = getFromAndTo();
     const categoryId = editingItem.category._id;
     await fauna({
       type: "CREATE_ITEM",
       categoryId,
       data: {
         id: editingItem._id,
-        title,
-        location,
+        title: fields.title,
+        location: fields.location,
         from,
         to,
-        description,
+        description: fields.description,
         priority: getItems(getCategory(categoryId)).length + 1,
       },
     }).then(
@@ -172,16 +181,17 @@ const Popup = () => {
     if (editingItem.title && !filled) {
       setFilled(true);
 
-      setTitle(editingItem.title);
-      setIsGoing(editingItem.to == "Present");
-      setMonth1(editingItem.from.substring(0, 2));
-      setYear1(editingItem.from.substring(3));
-      if (editingItem.to != "Present") {
-        setMonth2(editingItem.to.substring(0, 2));
-        setYear2(editingItem.to.substring(3));
-      }
-      setLocation(editingItem.location);
-      setDescription(editingItem.description);
+      setFields({
+        title: editingItem.title,
+        isGoing: editingItem.to == "Present",
+        month1: editingItem.from.substring(0, 2),
+        year1: editingItem.from.substring(3),
+        month2:
+          editingItem.to != "Present" ? editingItem.to.substring(0, 2) : "",
+        year2: editingItem.to != "Present" ? editingItem.to.substring(3) : "",
+        location: editingItem.location,
+        description: editingItem.description,
+      });
     }
   });
   return (
@@ -195,8 +205,8 @@ const Popup = () => {
               type="text"
               id="title"
               name="title"
-              value={title}
-              onChange={handleChangeTitle}
+              value={fields.title}
+              onChange={handleChange}
             />
 
             <label>Location</label>
@@ -204,8 +214,8 @@ const Popup = () => {
               type="text"
               id="location"
               name="location"
-              value={location}
-              onChange={handleChangeLocation}
+              value={fields.location}
+              onChange={handleChange}
             />
 
             <label htmlFor="isGoing">
@@ -213,23 +223,35 @@ const Popup = () => {
                 name="isGoing"
                 id="isGoing"
                 type="checkbox"
-                checked={isGoing}
-                onChange={handleChangeIsGoing}
+                checked={fields.isGoing}
+                onChange={handleChange}
               />
               I'm currently working here
             </label>
 
             <div>
               <label>Start date</label>
-              <Monthpicker val={month1} fn={handleChangeMonth1} />
-              <Yearpicker val={year1} fn={handleChangeYear1} />
+              <Monthpicker
+                val={fields.month1}
+                name={"month1"}
+                fn={handleChange}
+              />
+              <Yearpicker val={fields.year1} name={"year1"} fn={handleChange} />
             </div>
 
-            {!isGoing && (
+            {!fields.isGoing && (
               <div>
                 <label>End date</label>
-                <Monthpicker val={month2} fn={handleChangeMonth2} />
-                <Yearpicker val={year2} fn={handleChangeYear2} />
+                <Monthpicker
+                  val={fields.month2}
+                  name={"month2"}
+                  fn={handleChange}
+                />
+                <Yearpicker
+                  val={fields.year2}
+                  name={"year2"}
+                  fn={handleChange}
+                />
               </div>
             )}
 
@@ -238,8 +260,8 @@ const Popup = () => {
               type="text"
               id="description"
               name="description"
-              value={description}
-              onChange={handleChangeDescription}
+              value={fields.description}
+              onChange={handleChange}
             />
 
             {editingItem.title ? (

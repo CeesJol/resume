@@ -35,12 +35,16 @@ const NewItem = ({ item, index }) => {
       >
         <h3 className="resume__item--title">{item.title}</h3>
         <h3 className="resume__item--location">{item.location}</h3>
-        <p className="resume__item--date">
-          {item.from} - {item.to}
-        </p>
-        <p className="resume__item--description multiline">
-          {item.description}
-        </p>
+        {item.from && item.to && (
+          <p className="resume__item--date">
+            {item.from} - {item.to}
+          </p>
+        )}
+        {item.description && (
+          <p className="resume__item--description multiline">
+            {item.description}
+          </p>
+        )}
       </div>
     </>
   );

@@ -1,6 +1,6 @@
 import React from "react";
 
-const Yearpicker = ({ val, fn }) => {
+const Yearpicker = ({ val, name, fn }) => {
   const items = [
     <option value="" key={`${val}`}>
       Year
@@ -18,7 +18,7 @@ const Yearpicker = ({ val, fn }) => {
     <>
       <select
         className="select-narrow"
-        name={val}
+        name={name}
         id={val}
         value={val}
         onChange={fn}

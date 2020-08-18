@@ -86,7 +86,7 @@
     margin: 0 0 calc(#{$l-size} * 2) 0;
     box-shadow: 0px 8px 13px -4px rgba(0, 0, 0, 0.75);
     transform-origin: center top;
-    transform: scale(.73) perspective(1px);
+    transform: scale(.73);
     width: inherit;
     margin-left: auto;
     margin-right: auto;
@@ -94,28 +94,27 @@
     position: absolute;
 
     &--noscale {
-      // Remove scale transition
-      transform: perspective(1px) !important;
+      transform: none !important;
     }
 
     @media (max-width: 912px) {
-      transform: scale(0.625) perspective(1px);
+      transform: scale(0.625);
     }
 
     @media (max-width: 784px) {
-      transform: scale(0.525) perspective(1px);
+      transform: scale(0.525);
     }
 
     @media (max-width: 656px) {
-      transform: scale(0.425) perspective(1px);
+      transform: scale(0.425);
     }
 
     @media (max-width: 528px) {
-      transform: scale(0.325) perspective(1px);
+      transform: scale(0.325);
     }
 
     @media (max-width: 464px) {
-      transform: scale(0.275) perspective(1px);
+      transform: scale(0.275);
     }
   }
 }

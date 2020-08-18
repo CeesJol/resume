@@ -2,8 +2,10 @@ import React, { useContext, useState } from "react";
 import Router from "next/router";
 import { UserContext } from "../../contexts/userContext";
 import { auth } from "../../lib/api";
+import { useCookies } from 'react-cookie';
 
 const DashboardHeader = () => {
+	const [cookies, setCookie, removeCookie] = useCookies(['secret']);
   const {
     userExists,
     getUser,
@@ -17,8 +19,9 @@ const DashboardHeader = () => {
   const handleLogout = async () => {
     setLoggingOut(true);
     setAuth(false);
-    localStorage.removeItem("user");
-    await auth({ type: "LOGOUT", secret: getUser().secret });
+		localStorage.removeItem("userId");
+		removeCookie('secret')
+    await auth({ type: "LOGOUT", secret: cookies.secret });
     clearUser();
   };
   const openSettings = () => {

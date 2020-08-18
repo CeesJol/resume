@@ -5,8 +5,10 @@ import Button from "../components/general/Button";
 import { UserContext } from "../contexts/userContext";
 import { toast } from "react-toastify";
 import { auth, confirm, fauna } from "../lib/api";
+import { useCookies } from "react-cookie";
 
 const Signup = () => {
+  const [cookies, setCookie] = useCookies(["secret"]);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -16,17 +18,20 @@ const Signup = () => {
     await auth({ type: "LOGIN", email, password }).then(
       async (res) => {
         setAuth(true);
-        const id = res.instance["@ref"].id;
-        storeUser({
-          id,
-          secret: res.secret,
-          email,
+				const id = res.instance["@ref"].id;
+				// On production, set cookies to HTTPS only
+        setCookie("secret", res.secret, {
+          path: "/",
+          secure: process.env.NODE_ENV !== "development",
         });
+        const userData = { id, email }
+				storeUser(userData);
+				localStorage.setItem("userId", JSON.stringify(id));
         confirm({ type: "SEND_CONFIRMATION_EMAIL", id, email });
         await fauna({ type: "GET_USER_BY_EMAIL", email }).then(
           (data) => {
             console.log("getUserByEmail", data);
-            storeUser(data.userByEmail);
+						storeUser(data.userByEmail);
             Router.push("/dashboard");
           },
           (err) => {

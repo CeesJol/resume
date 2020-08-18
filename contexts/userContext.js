@@ -4,8 +4,10 @@ import { toast } from "react-toastify";
 import Router from "next/router";
 import { dummyResume } from "../lib/constants";
 import { auth as authFunction, fauna } from "../lib/api";
+import { useCookies } from "react-cookie";
 
 const UserContextProvider = (props) => {
+  const [cookies, setCookie, removeCookie] = useCookies(["secret"]);
   const [dummy, setDummy] = useState(false);
   const [user, setUser] = useState(null);
   const [auth, setAuth] = useState(false);
@@ -83,27 +85,27 @@ const UserContextProvider = (props) => {
     return userExists() && getUser().resumes.data;
   };
   const getLayout = (resume) => {
-		if (resume) return resume.layout.data;
+    if (resume) return resume.layout.data;
     return editingResume.layout.data;
   };
   const getContactInfo = (resume) => {
-		if (resume) return resume.contactInfo.data;
+    if (resume) return resume.contactInfo.data;
     return editingResume.contactInfo.data;
   };
   const getCategories = (resume) => {
-		if (resume) return resume.categories.data;
+    if (resume) return resume.categories.data;
     return editingResume.categories.data;
   };
   const getItems = (category) => {
     return category && category.items && category.items.data;
-	};
-	const getJobTitle = (resume) => {
-		if (resume) return resume.jobTitle || "Job Title";
-    return editingResume.jobTitle || "Job Title"
-	};
-	const getBio = (resume) => {
-		if (resume) return resume.bio || "Bio";
-    return editingResume.bio || "Bio"
+  };
+  const getJobTitle = (resume) => {
+    if (resume) return resume.jobTitle || "Job Title";
+    return editingResume.jobTitle || "Job Title";
+  };
+  const getBio = (resume) => {
+    if (resume) return resume.bio || "Bio";
+    return editingResume.bio || "Bio";
   };
   const storeResume = (resumeData, { add, del }) => {
     var user = getUser();
@@ -235,13 +237,17 @@ const UserContextProvider = (props) => {
     return user;
   };
   const clearUser = () => {
+		console.log('clearUser');
     // Get user away from dashboard
     if (Router.pathname.startsWith("/dashboard")) {
       Router.push("/login");
     }
 
     // Reset localstorage
-    localStorage.removeItem("user");
+    localStorage.removeItem("userId");
+
+    // Reset cookies
+    removeCookie("secret");
 
     // Reset state
     setUser(null);
@@ -361,16 +367,17 @@ const UserContextProvider = (props) => {
   };
   useEffect(() => {
     if (user == null) {
-      const localUser = JSON.parse(localStorage.getItem("user"));
-      if (localUser != null && localUser.secret != null) {
-        storeUser(localUser);
-        authFunction({ type: "IDENTITY", secret: localUser.secret }).then(
+      const userId = JSON.parse(localStorage.getItem("userId"));
+      const localSecret = cookies.secret;
+      if (userId != null && localSecret != null) {
+        authFunction({ type: "IDENTITY", secret: localSecret }).then(
           (data) => {
             // Database confirms that user is logged in!
             // Update user info
-            fauna({ type: "READ_USER", id: localUser.id }).then(
+            fauna({ type: "READ_USER", id: userId }).then(
               (data) => {
                 if (!data.findUserByID) {
+									console.log('data', data);
                   toast.error(`⚠️ Unauthenticated`);
                   clearUser();
                   return;
@@ -383,35 +390,30 @@ const UserContextProvider = (props) => {
                 storeUser(data.findUserByID);
                 console.log("readUser");
 								console.table(data.findUserByID);
-								
-								setAuth(true);
+
+                setAuth(true);
               },
               (err) => {
                 toast.error(`⚠️ ${err}`);
-                console.error("Failed getting the user data", err);
+								console.error("Failed getting the user data", err);
+								clearUser();
               }
             );
           },
           (err) => {
             // Database denies that user is logged in!
-            console.log("localUser:");
-            console.table(localUser);
+						console.log("userId:", userId);
+						console.log("secret", cookies.secret);
             console.warn("Your secret is fake news", err);
             toast.error(`⚠️ ${err}`);
             clearUser();
           }
         );
       } else {
-        // There is no user data
+				// There is no user data
+				console.log("No user data");
         clearUser();
       }
-    }
-
-    // Set localstorage
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
-    } else {
-      localStorage.removeItem("user");
     }
   }, [user]);
   return (
@@ -464,9 +466,9 @@ const UserContextProvider = (props) => {
         getItems,
         getResumes,
         getLayout,
-				getContactInfo,
-				getJobTitle,
-				getBio,
+        getContactInfo,
+        getJobTitle,
+        getBio,
         storeContactInfo,
         preview,
         setPreview,

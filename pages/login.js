@@ -5,8 +5,10 @@ import Button from "../components/general/Button";
 import { UserContext } from "../contexts/userContext";
 import { toast } from "react-toastify";
 import { auth, fauna } from "../lib/api";
+import { useCookies } from "react-cookie";
 
 const Login = () => {
+  const [cookies, setCookie] = useCookies(["secret"]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { userExists, storeUser, setAuth, setLoggingOut } = useContext(
@@ -18,15 +20,18 @@ const Login = () => {
       async (res) => {
         setAuth(true);
         const id = res.instance["@ref"].id;
-        storeUser({
-          id,
-          secret: res.secret,
-          email,
-        });
+        // On production, set cookies to HTTPS only
+        setCookie("secret", res.secret, {
+          path: "/",
+          secure: process.env.NODE_ENV !== "development",
+				});
+				const userData = { id, email }
+				storeUser(userData);
+				localStorage.setItem("userId", JSON.stringify(id));
         await fauna({ type: "GET_USER_BY_EMAIL", email }).then(
           (data) => {
             console.log("getUserByEmail", data);
-            storeUser(data.userByEmail);
+						storeUser(data.userByEmail);
             Router.push("/dashboard");
           },
           (err) => {

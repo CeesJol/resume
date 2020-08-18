@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../contexts/userContext";
-import { getDummyItem } from "../../lib/constants";
+import { GET_DUMMY_ITEM } from "../../lib/constants";
 
 const DummyItem = ({ category }) => {
   const { setEditingItem, preview } = useContext(UserContext);
@@ -13,7 +13,7 @@ const DummyItem = ({ category }) => {
   };
   const [item, setItem] = useState(null);
   useEffect(() => {
-    if (!item) setItem(getDummyItem(category.name));
+    if (!item) setItem(GET_DUMMY_ITEM(category.name));
   });
   return item ? (
     <div

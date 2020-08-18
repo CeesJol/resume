@@ -15,6 +15,7 @@ const DashboardHeader = () => {
     setNav,
     reset,
     setChangingResume,
+    setPreview,
   } = useContext(UserContext);
   const handleLogout = async () => {
     setLoggingOut(true);
@@ -23,6 +24,10 @@ const DashboardHeader = () => {
     removeCookie("secret");
     await auth({ type: "LOGOUT", secret: cookies.secret });
     clearUser();
+  };
+  const handleGoBack = () => {
+    setPreview(true);
+    reset();
   };
   const openSettings = () => {
     setChangingResume(false);
@@ -34,7 +39,7 @@ const DashboardHeader = () => {
         <div className="header__left">
           <div className="icon-container">
             <h3>
-              <a className="header__title" onClick={reset}>
+              <a className="header__title" onClick={handleGoBack}>
                 <img className="icon--large" src="../images/icon-small.png" />
                 {userExists() ? getUser().username : "Loading..."}
               </a>

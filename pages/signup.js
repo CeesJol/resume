@@ -4,7 +4,7 @@ import Link from "next/link";
 import Button from "../components/general/Button";
 import { UserContext } from "../contexts/userContext";
 import { toast } from "react-toastify";
-import { auth, confirm, fauna } from "../lib/api";
+import { auth, send, fauna } from "../lib/api";
 import { COOKIE_MAX_AGE } from "../lib/constants";
 import { useCookies } from "react-cookie";
 
@@ -29,7 +29,7 @@ const Signup = () => {
         const userData = { id, email }
 				storeUser(userData);
 				localStorage.setItem("userId", JSON.stringify(id));
-        confirm({ type: "SEND_CONFIRMATION_EMAIL", id, email });
+        send({ type: "SEND_CONFIRMATION_EMAIL", id, email });
         await fauna({ type: "GET_USER_BY_EMAIL", email }).then(
           (data) => {
             console.log("getUserByEmail", data);

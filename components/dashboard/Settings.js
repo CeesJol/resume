@@ -3,22 +3,22 @@ import Button from "../general/Button";
 import { UserContext } from "../../contexts/userContext";
 import { validateUpdate, validatePassword } from "../../lib/validate";
 import { toast } from "react-toastify";
-import { confirm, fauna, auth } from "../../lib/api";
+import { send, fauna, auth } from "../../lib/api";
 
 const Settings = () => {
   const { storeUser, getUser } = useContext(UserContext);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-	const [bio, setBio] = useState("");
-	const [jobTitle, setJobTitle] = useState("");
+  const [bio, setBio] = useState("");
+  const [jobTitle, setJobTitle] = useState("");
   const [password, setPassword] = useState("");
   const handleChangeUsername = (event) => {
     setUsername(event.target.value);
   };
   const handleChangeEmail = (event) => {
     setEmail(event.target.value.toLowerCase());
-	};
-	const handleChangeJobTitle = (event) => {
+  };
+  const handleChangeJobTitle = (event) => {
     setJobTitle(event.target.value);
   };
   const handleChangeBio = (event) => {
@@ -38,10 +38,12 @@ const Settings = () => {
     await fauna({
       type: "UPDATE_USER",
       id: user.id,
-      username,
-			email,
-			jobTitle,
-      bio,
+      data: {
+        username,
+        email,
+        jobTitle,
+        bio,
+      },
     }).then(
       (data) => {
         if (data == -1) {
@@ -52,16 +54,20 @@ const Settings = () => {
         // If email changed, set confirmed to false and
         // send a new confirmation email
         if (email !== user.email) {
-          confirm({ type: "DISCONFIRM", id: user.id });
-          confirm({ type: "SEND_CONFIRMATION_EMAIL", id: user.id, email });
+          fauna({
+            type: "UPDATE_USER",
+            id: user.id,
+            data: { confirmed: false },
+          });
+          send({ type: "SEND_CONFIRMATION_EMAIL", id: user.id, email });
           console.log("user disconfirmed");
         }
 
         // Update user locally
         storeUser({
           username: data.updateUser.username,
-					email: data.updateUser.email,
-					jobTitle: data.updateUser.jobTitle,
+          email: data.updateUser.email,
+          jobTitle: data.updateUser.jobTitle,
           bio: data.updateUser.bio,
         });
 
@@ -96,8 +102,8 @@ const Settings = () => {
     if (!username && !email) {
       const user = getUser();
       setUsername(user.username);
-			setEmail(user.email);
-			setJobTitle(user.jobTitle ? user.jobTitle : "");
+      setEmail(user.email);
+      setJobTitle(user.jobTitle ? user.jobTitle : "");
       setBio(user.bio ? user.bio : "");
     }
   });
@@ -125,7 +131,7 @@ const Settings = () => {
             onChange={handleChangeEmail}
           />
 
-					<label>Job title</label>
+          <label>Job title</label>
           <input
             type="text"
             id="jobTitle"
@@ -143,7 +149,11 @@ const Settings = () => {
             onChange={handleChangeBio}
           />
 
-					<label><i>Your job title and bio will be used when creating a new resume.</i></label>
+          <label>
+            <i>
+              Your job title and bio will be used when creating a new resume.
+            </i>
+          </label>
 
           <Button text="Save" altText="Saving..." fn={handleSave} />
         </form>

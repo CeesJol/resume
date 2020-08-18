@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
-import { confirm } from "../../lib/api";
+import { fauna } from "../../lib/api";
 
 const Token = () => {
   const router = useRouter();
@@ -9,19 +9,27 @@ const Token = () => {
 
   useEffect(() => {
     if (token) {
-			console.log('token', token);
-      confirm({ type: 'CONFIRM', token }).then(
-        (data) => {
-          console.log("data [token]", data);
-          setStatus(
-            "Email confirmed successfully! You can close this tab now."
-          );
-        },
-        (err) => {
-          console.error("err", err);
-          setStatus("Something went wrong. Please contact us for help. " + err);
-        }
-      );
+      console.log("token", token);
+      // Decode the token
+      try {
+        fauna({ type: "CONFIRM_USER", token }).then(
+          (data) => {
+            console.log("data [token]", data);
+            setStatus(
+              "Email confirmed successfully! You can close this tab now."
+            );
+          },
+          (err) => {
+            console.error("err", err);
+            setStatus(
+              "Something went wrong. Please contact us for help. " + err
+            );
+          }
+        );
+      } catch (e) {
+        console.log("Token confirmation error", e);
+        setStatus("Something went wrong. Please contact us for help. " + err);
+      }
     }
   }, [token]);
 

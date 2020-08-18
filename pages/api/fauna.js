@@ -1,6 +1,7 @@
 import executeQuery from "../../lib/executeQuery";
 import stringifyObject from "../../lib/stringifyObject";
 import { defaultCategories, defaultLayoutItems } from "../../lib/constants";
+import jwt from "jsonwebtoken";
 
 const ITEM_DATA = `_id
 title
@@ -71,20 +72,18 @@ resumes {
  *  | USER
  *  |----------------------------
  */
-export const updateUser = async ({ id, username, email, jobTitle, bio }) => {
-  console.log("updateUser request");
-  email = email.toLowerCase();
+export const updateUser = async ({ id, data }) => {
+  console.log("updateUser request", id, data);
+  if (data.email) data.email.toLowerCase();
   return executeQuery(`mutation UpdateUser {
-		updateUser(id: "${id}", data:{
-			username: "${username}"
-			email: "${email}"
-			jobTitle: "${jobTitle}"
-			bio: """${bio}"""
+		updateUser(id: "${id}", data: {
+			${stringifyObject(data)}
 		}) {
 			username
 			email
 			jobTitle
 			bio
+			confirmed
 		}
 	}`);
 };
@@ -106,6 +105,23 @@ export const getUserByEmail = async ({ email }) => {
 			${USER_DATA}
 		}
 	}`);
+};
+
+export const confirmUser = async ({ token }) => {
+	console.log("confirmUser request");
+  try {
+    var decoded = jwt.verify(token, process.env.EMAIL_SECRET);
+		const id = decoded.id;
+    return executeQuery(`mutation UpdateUser {
+			updateUser(id: "${id}", data: {
+				confirmed: true
+			}) {
+				confirmed
+			}
+		}`);
+  } catch (e) {
+    throw new Error("Confirm user error", e);
+  }
 };
 
 /** |----------------------------
@@ -244,7 +260,7 @@ export const moveResume = async ({ id, amount }) => {
 };
 
 export const updateResumeTemplate = async ({ id, templateId }) => {
-	console.log("updateResumeTemplate request");
+  console.log("updateResumeTemplate request");
   return executeQuery(`mutation UpdateResumeTemplate {
 		updateResume(id: "${id}", data: {
 			template: { connect: "${templateId}" }
@@ -490,6 +506,7 @@ export const updateLayout = async ({ id, data }) => {
 const fauna = async (req, res) => {
   const { type } = req.body;
   let result;
+  console.log(req.body);
   switch (type) {
     // ----------
     // USERS
@@ -502,6 +519,9 @@ const fauna = async (req, res) => {
       break;
     case "GET_USER_BY_EMAIL":
       result = await getUserByEmail(req.body);
+      break;
+    case "CONFIRM_USER":
+      result = await confirmUser(req.body);
       break;
     // ----------
     // RESUMES
@@ -523,10 +543,10 @@ const fauna = async (req, res) => {
       break;
     case "MOVE_RESUME":
       result = await moveResume(req.body);
-			break;
-		case "UPDATE_RESUME_TEMPLATE":
-			result = await updateResumeTemplate(req.body);
-			break;
+      break;
+    case "UPDATE_RESUME_TEMPLATE":
+      result = await updateResumeTemplate(req.body);
+      break;
     // ----------
     // CATEGORIES
     // ----------

@@ -45,7 +45,12 @@ const ResumePreview = ({ resume, index }) => {
       onClick={(e) => handleClick(e, resume)}
     >
       <div className="resume-preview__head">
-        <Resume noscale={true} tiny={true} template={resume.template} resume={resume} />
+        <Resume
+          noscale={true}
+          tiny={true}
+          template={resume.template}
+          resume={resume}
+        />
       </div>
       <div className="resume-preview__body">
         <h3 className="resume-preview__body--title">{resume.title}</h3>

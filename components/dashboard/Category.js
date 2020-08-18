@@ -10,8 +10,8 @@ const Category = ({ category, index }) => {
     moveCategory,
     forceRender,
     preview,
-		getLayoutItem,
-		getItems,
+    getLayoutItem,
+    getItems,
   } = useContext(UserContext);
   const handleClick = (e, category) => {
     e.preventDefault();

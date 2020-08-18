@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Router from "next/router";
 
 // import Image from "./image"
@@ -6,8 +6,8 @@ import Wave from "../general/Wave";
 import Button from "../general/Button";
 
 const Splash = () => {
-	const [email, setEmail] = useState("");
-	const handleChangeEmail = (event) => {
+  const [email, setEmail] = useState("");
+  const handleChangeEmail = (event) => {
     setEmail(event.target.value.toLowerCase());
   };
   return (
@@ -20,14 +20,17 @@ const Splash = () => {
                 <h1 className="splash__content--title">
                   Create a professional resume in minutes
                 </h1>
-								<p>Affilas is an online resume builder that creates resumes quickly.</p>
+                <p>
+                  Affilas is an online resume builder that creates resumes
+                  quickly.
+                </p>
               </div>
               <footer>
                 <form style={{ display: "flex" }}>
                   <input
                     type="text"
-										id="email"
-										name="email"
+                    id="email"
+                    name="email"
                     value={email}
                     onChange={handleChangeEmail}
                     placeholder="Email"
@@ -36,9 +39,9 @@ const Splash = () => {
                       width: "auto",
                       display: "inline-block",
                       marginRight: "1.5rem",
-											flexGrow: "1",
-											fontSize: "2rem",
-											marginBottom: "0",
+                      flexGrow: "1",
+                      fontSize: "2rem",
+                      marginBottom: "0",
                     }}
                   />
                   <Button

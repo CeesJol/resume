@@ -28,8 +28,8 @@ const Dashboard = () => {
     changingInfo,
     editingContactInfo,
     loggingOut,
-	} = useContext(UserContext);
-	if (loggingOut) return <LoadingPopup text={`Logging out...`} />;
+  } = useContext(UserContext);
+  if (loggingOut) return <LoadingPopup text={`Logging out...`} />;
   if (!auth) return <LoadingPopup text={`Authenticating...`} />;
   return (
     <div className="dashboard-container">
@@ -42,7 +42,7 @@ const Dashboard = () => {
               {nav == 0 && (!changingResume ? <Resumes /> : <Editor />)}
               {nav == 1 && <Layout />}
               {nav == 2 && <Export />}
-							{nav == 3 && <Options />}
+              {nav == 3 && <Options />}
               {nav == 1000 && <Settings />}
             </div>
           </div>

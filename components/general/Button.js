@@ -16,13 +16,11 @@ const Button = ({ text, altText, fn, color }) => {
     <div className="button-container">
       {fn ? (
         <button onClick={handleClick} disabled={disabled} className={className}>
-          {(disabled && altText) ? altText : text}
+          {disabled && altText ? altText : text}
         </button>
       ) : (
         <Link href="/signup">
-          <button className={className}>
-            {text ? text : "Start now"}
-          </button>
+          <button className={className}>{text ? text : "Start now"}</button>
         </Link>
       )}
     </div>

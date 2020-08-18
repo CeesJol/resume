@@ -1,5 +1,5 @@
-import Header from "./Header"
-import Footer from "./Footer"
+import Header from "./Header";
+import Footer from "./Footer";
 
 const Layout = ({ children, transparentHeader }) => {
   return (
@@ -8,9 +8,9 @@ const Layout = ({ children, transparentHeader }) => {
       <div>
         <main>{children}</main>
       </div>
-			<Footer />
+      <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;

@@ -3,7 +3,9 @@ import { UserContext } from "../../contexts/userContext";
 import { contactpickerOptions } from "../../lib/constants";
 
 const ContactItem = ({ item, txt }) => {
-  const { setEditingContactInfo, preview, getLayoutItem } = useContext(UserContext);
+  const { setEditingContactInfo, preview, getLayoutItem } = useContext(
+    UserContext
+  );
   const handleChangeContactInfo = (item) => {
     if (preview) return false;
     setEditingContactInfo(item);

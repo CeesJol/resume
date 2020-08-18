@@ -14,8 +14,8 @@ const ContactPopup = () => {
     storeContactInfo,
     resetPopups,
     editingContactInfo,
-		getContactInfo,
-		updateContactInfo,
+    getContactInfo,
+    updateContactInfo,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [name, setName] = useState("");

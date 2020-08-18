@@ -237,7 +237,7 @@ const UserContextProvider = (props) => {
     return user;
   };
   const clearUser = () => {
-		console.log('clearUser');
+    console.log("clearUser");
     // Get user away from dashboard
     if (Router.pathname.startsWith("/dashboard")) {
       Router.push("/login");
@@ -377,7 +377,7 @@ const UserContextProvider = (props) => {
             fauna({ type: "READ_USER", id: userId }).then(
               (data) => {
                 if (!data.findUserByID) {
-									console.log('data', data);
+                  console.log("data", data);
                   toast.error(`⚠️ Unauthenticated`);
                   clearUser();
                   return;
@@ -389,29 +389,29 @@ const UserContextProvider = (props) => {
                 }
                 storeUser(data.findUserByID);
                 console.log("readUser");
-								console.table(data.findUserByID);
+                console.table(data.findUserByID);
 
                 setAuth(true);
               },
               (err) => {
                 toast.error(`⚠️ ${err}`);
-								console.error("Failed getting the user data", err);
-								clearUser();
+                console.error("Failed getting the user data", err);
+                clearUser();
               }
             );
           },
           (err) => {
             // Database denies that user is logged in!
-						console.log("userId:", userId);
-						console.log("secret", cookies.secret);
+            console.log("userId:", userId);
+            console.log("secret", cookies.secret);
             console.warn("Your secret is fake news", err);
             toast.error(`⚠️ ${err}`);
             clearUser();
           }
         );
       } else {
-				// There is no user data
-				console.log("No user data");
+        // There is no user data
+        console.log("No user data");
         clearUser();
       }
     }

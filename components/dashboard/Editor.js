@@ -7,8 +7,8 @@ const Editor = () => {
     UserContext
   );
   const handleGoBack = () => {
-		setChangingResume(false);
-		setPreview(true);
+    setChangingResume(false);
+    setPreview(true);
   };
   useEffect(() => {
     setPreview(false);

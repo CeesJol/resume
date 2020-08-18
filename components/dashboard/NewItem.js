@@ -2,20 +2,17 @@ import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 
 const NewItem = ({ item, index }) => {
-  const {
-    setEditingItem,
-    moveItem,
-    forceRender,
-    preview,
-  } = useContext(UserContext);
+  const { setEditingItem, moveItem, forceRender, preview } = useContext(
+    UserContext
+  );
   const handleClick = (e, item) => {
-		e.preventDefault();
-		if (preview) return false;
+    e.preventDefault();
+    if (preview) return false;
     setEditingItem(item);
   };
   const handleMove = (e, item, amount) => {
-		e.stopPropagation();
-		if (preview) return false;
+    e.stopPropagation();
+    if (preview) return false;
     moveItem(item, amount);
     forceRender();
   };

@@ -9,7 +9,7 @@ const Arguments = () => (
       <div className="arguments__content">
         <h2>Take the best path forward</h2>
         <div className="arguments__args">
-				<div className="arguments__arg">
+          <div className="arguments__arg">
             <img src="../images/shop.svg" />
             <h4>Pick a theme</h4>
             <p>Use our theme store to find a theme that suits you.</p>

@@ -15,7 +15,7 @@ const Header = ({ transparentHeader = false }) => {
           <div className="icon-container">
             <Link href="/">
               <a className="header__title">
-								<img className="icon--large" src="../images/icon-small.png" />
+                <img className="icon--large" src="../images/icon-small.png" />
                 <h3>Affilas</h3>
               </a>
             </Link>

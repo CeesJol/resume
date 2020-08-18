@@ -136,20 +136,20 @@ const CategoryPopup = () => {
     }
   };
   useEffect(() => {
-		if (!filled) {
-			setFilled(true);
-			const name = editingCategory.name;
-			if (name) {
-				if (defaultCategories.includes(name)) {
-					setName(name);
-				} else {
-					setName("Other");
-					setCustomName(name);
-				}
-			} else {
-				setName(defaultCategories[0]);
-			}
-		}
+    if (!filled) {
+      setFilled(true);
+      const name = editingCategory.name;
+      if (name) {
+        if (defaultCategories.includes(name)) {
+          setName(name);
+        } else {
+          setName("Other");
+          setCustomName(name);
+        }
+      } else {
+        setName(defaultCategories[0]);
+      }
+    }
   });
   return (
     <div className="popup-container" onClick={handleCancel}>

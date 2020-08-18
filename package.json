@@ -26,5 +26,8 @@
     "react-image-crop": "^8.6.4",
     "react-toastify": "^6.0.8",
     "sass": "^1.26.8"
+  },
+  "devDependencies": {
+    "prettier": "2.0.5"
   }
 }

@@ -7,7 +7,7 @@ import { MAX_NUMBER_OF_RESUMES } from "../../lib/constants";
 const Resumes = () => {
   const { setCreatingResume, getResumes, setPreview } = useContext(UserContext);
   const handleCreate = () => {
-		setPreview(true);
+    setPreview(true);
     setCreatingResume({});
   };
   const sortByPriority = (list) => {
@@ -16,7 +16,7 @@ const Resumes = () => {
     });
   };
   const drawResumePreviews = () => {
-		const resumes = getResumes();
+    const resumes = getResumes();
 
     if (resumes.length > 0) {
       return sortByPriority(resumes).map((resume, index) => (

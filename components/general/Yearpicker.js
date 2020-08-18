@@ -1,10 +1,18 @@
 import React from "react";
 
 const Yearpicker = ({ val, fn }) => {
-  const items = [<option value="" key={`${val}`}>Year</option>];
+  const items = [
+    <option value="" key={`${val}`}>
+      Year
+    </option>,
+  ];
   var currentYear = new Date().getFullYear();
   for (var i = currentYear; i >= 1960; i--) {
-    items.push(<option value={i} key={`${val}-${i}`}>{i}</option>)
+    items.push(
+      <option value={i} key={`${val}-${i}`}>
+        {i}
+      </option>
+    );
   }
   return (
     <>

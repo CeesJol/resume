@@ -108,10 +108,10 @@ export const getUserByEmail = async ({ email }) => {
 };
 
 export const confirmUser = async ({ token }) => {
-	console.log("confirmUser request");
+  console.log("confirmUser request");
   try {
     var decoded = jwt.verify(token, process.env.EMAIL_SECRET);
-		const id = decoded.id;
+    const id = decoded.id;
     return executeQuery(`mutation UpdateUser {
 			updateUser(id: "${id}", data: {
 				confirmed: true

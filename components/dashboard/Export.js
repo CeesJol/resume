@@ -17,15 +17,13 @@ const Export = () => {
     <>
       <div className="dashboard__item">
         <h4>Export your resume</h4>
-        <p>
-          Preview and export your resume to PDF here.
-        </p>
+        <p>Preview and export your resume to PDF here.</p>
         <Button fn={exportPDF} text="Export" altText="Exporting..." />
       </div>
-			{/* Resume preview */}
-			<ResumeWrapper exportpdf={false} />
+      {/* Resume preview */}
+      <ResumeWrapper exportpdf={false} />
 
-			{/* Resume export item */}
+      {/* Resume export item */}
       <ResumeWrapper exportpdf={true} noscale={true} />
     </>
   );

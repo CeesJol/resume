@@ -5,6 +5,7 @@ import Button from "../components/general/Button";
 import { UserContext } from "../contexts/userContext";
 import { toast } from "react-toastify";
 import { auth, fauna } from "../lib/api";
+import { COOKIE_MAX_AGE } from "../lib/constants";
 import { useCookies } from "react-cookie";
 
 const Login = () => {
@@ -24,14 +25,15 @@ const Login = () => {
         setCookie("secret", res.secret, {
           path: "/",
           secure: process.env.NODE_ENV !== "development",
-				});
-				const userData = { id, email }
-				storeUser(userData);
-				localStorage.setItem("userId", JSON.stringify(id));
+          maxAge: COOKIE_MAX_AGE,
+        });
+        const userData = { id, email };
+        storeUser(userData);
+        localStorage.setItem("userId", JSON.stringify(id));
         await fauna({ type: "GET_USER_BY_EMAIL", email }).then(
           (data) => {
             console.log("getUserByEmail", data);
-						storeUser(data.userByEmail);
+            storeUser(data.userByEmail);
             Router.push("/dashboard");
           },
           (err) => {

@@ -5,6 +5,7 @@ import Button from "../components/general/Button";
 import { UserContext } from "../contexts/userContext";
 import { toast } from "react-toastify";
 import { auth, confirm, fauna } from "../lib/api";
+import { COOKIE_MAX_AGE } from "../lib/constants";
 import { useCookies } from "react-cookie";
 
 const Signup = () => {
@@ -22,7 +23,8 @@ const Signup = () => {
 				// On production, set cookies to HTTPS only
         setCookie("secret", res.secret, {
           path: "/",
-          secure: process.env.NODE_ENV !== "development",
+					secure: process.env.NODE_ENV !== "development",
+					maxAge: COOKIE_MAX_AGE,
         });
         const userData = { id, email }
 				storeUser(userData);

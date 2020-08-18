@@ -36,17 +36,17 @@ type Item {
   priority: Int
 }
 
+type Template {
+  name: String
+  style: String
+  sidebar: Int
+}
+
 type ContactInfo {
   resume: Resume
   name: String
   value: String
   priority: Int
-}
-
-type Template {
-  name: String
-  style: String
-  sidebar: Int
 }
 
 type Layout {

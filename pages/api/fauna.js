@@ -61,7 +61,8 @@ categories {
 }`;
 
 // User data request data used by getUserByEmail and readUser
-const USER_DATA = `username
+const USER_DATA = `_id
+username
 email
 confirmed
 jobTitle
@@ -184,6 +185,7 @@ export const createResume = async ({ userId, templateId, data }) => {
 			${RESUME_DATA}
 		}
 	}`;
+  console.log("query", query);
   return executeQuery(query);
 };
 

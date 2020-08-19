@@ -37,7 +37,7 @@ const Settings = () => {
     const user = getUser();
     await fauna({
       type: "UPDATE_USER",
-      id: user.id,
+      id: user._id,
       data: {
         username,
         email,
@@ -56,10 +56,10 @@ const Settings = () => {
         if (email !== user.email) {
           fauna({
             type: "UPDATE_USER",
-            id: user.id,
+            id: user._id,
             data: { confirmed: false },
           });
-          send({ type: "SEND_CONFIRMATION_EMAIL", id: user.id, email });
+          send({ type: "SEND_CONFIRMATION_EMAIL", id: user._id, email });
           console.log("user disconfirmed");
         }
 
@@ -86,7 +86,7 @@ const Settings = () => {
       toast.error(`⚠️ ${validationError}`);
       return false;
     }
-    await auth({ type: "UPDATE_PASSWORD", id: getUser().id, password }).then(
+    await auth({ type: "UPDATE_PASSWORD", id: getUser()._id, password }).then(
       (data) => {
         toast.success("💾 Updated successfully!");
       },

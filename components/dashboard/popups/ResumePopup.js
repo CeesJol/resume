@@ -41,7 +41,7 @@ const ResumePopup = () => {
     const user = getUser();
     await fauna({
       type: "CREATE_RESUME",
-      userId: user.id,
+      userId: user._id,
       templateId: selectedTemplateId,
       data: {
         title,

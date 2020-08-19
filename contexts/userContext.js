@@ -412,6 +412,8 @@ const UserContextProvider = (props) => {
       } else {
         // There is no user data
         console.log("No user data");
+        console.log("userId", userId);
+        console.log("localSecret", localSecret);
         clearUser();
       }
     }

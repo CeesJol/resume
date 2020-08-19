@@ -25,7 +25,7 @@ const ResumePreview = ({ resume, index }) => {
     const priority = getResumes().length + 1;
     fauna({
       type: "DUPLICATE_RESUME",
-      userId: getUser().id,
+      userId: getUser()._id,
       resumeData: resume,
       title,
       priority,

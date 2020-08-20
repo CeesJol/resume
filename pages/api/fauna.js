@@ -299,6 +299,7 @@ export const createCategory = async ({ resumeId, data }) => {
 		}) {
 			_id
 			name
+			type
 			priority
 			items {
 				data {
@@ -358,6 +359,7 @@ export const updateCategory = async ({ id, data }) => {
 		}) {
 			_id
 			name
+			type
 			priority
 		}
 	}`);

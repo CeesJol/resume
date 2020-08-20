@@ -5,6 +5,7 @@ import Button from "../general/Button";
 import { toast } from "react-toastify";
 import Template from "./Template";
 import { TEMPLATES } from "../../templates/templates";
+import { cloneDeep } from "lodash";
 
 const Layout = () => {
   const {
@@ -29,8 +30,8 @@ const Layout = () => {
     if (!filled && editingResume !== -1) {
       setFilled(true);
 
-      // Object spread to avoid shallow copy
-      setItems({ ...getLayout() });
+      // cloneDeep to avoid shallow copy
+      setItems(cloneDeep(getLayout()));
     }
 
     setTemplates(TEMPLATES);

@@ -56,6 +56,11 @@
   &__body {
     padding: $m-size;
     flex-grow: 1;
+    max-height: 15rem;
+    @media (min-width: 56rem) {
+      max-height: 20rem;
+    }
+    overflow-y: scroll;
 
     &--job-title {
       font-weight: 300;

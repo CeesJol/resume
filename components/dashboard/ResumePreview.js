@@ -58,9 +58,6 @@ const ResumePreview = ({ resume, index }) => {
         <h3 className="resume-preview__body--job-title">
           {resume.jobTitle || "Job Title"}
         </h3>
-        <p className="resume-preview__body--bio multiline">
-          {resume.bio || "Bio"}
-        </p>
 
         <footer>
           <a onClick={(e) => handleDuplicate(e, resume)}>Create variation</a>

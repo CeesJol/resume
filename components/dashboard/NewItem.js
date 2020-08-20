@@ -2,31 +2,29 @@ import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import { GET_CATEGORY_ITEMS } from "../../lib/constants";
 
-const NewItem = ({ item, index }) => {
-  const {
-    setEditingItem,
-    moveItem,
-    forceRender,
-    preview,
-    getCategory,
-  } = useContext(UserContext);
-  const category_items = GET_CATEGORY_ITEMS(
-    getCategory(item.category._id).type
+const NewItem = ({ category, item, index, dummy }) => {
+  const { setEditingItem, moveItem, forceRender, preview } = useContext(
+    UserContext
   );
+  const category_items = GET_CATEGORY_ITEMS(category.type);
   const handleClick = (e, item) => {
     e.preventDefault();
     if (preview) return false;
-    setEditingItem(item);
+    if (dummy)
+      setEditingItem({
+        category,
+      });
+    else setEditingItem(item);
   };
   const handleMove = (e, item, amount) => {
     e.stopPropagation();
-    if (preview) return false;
+    if (preview || dummy) return false;
     moveItem(item, amount);
     forceRender();
   };
   return (
     <>
-      {index > 0 && !preview && (
+      {index > 0 && !preview && !dummy && (
         <p className="resume--hoverable">
           <i
             onClick={(e) => handleMove(e, item, -1)}

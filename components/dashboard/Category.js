@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import NewItem from "./NewItem";
-import DummyItem from "./DummyItem";
+import { GET_DUMMY_ITEM } from "../../lib/constants";
 
 const Category = ({ category, index }) => {
   const {
@@ -59,11 +59,6 @@ const Category = ({ category, index }) => {
         </h3>
         {getItems(category) && getItems(category).length > 0 ? (
           <>
-            {sortByPriority(getItems(category)).map((item, index) => (
-              <div key={item._id}>
-                <NewItem item={item} index={index} />
-              </div>
-            ))}
             {!preview && (
               <p
                 className="resume--hoverable"
@@ -72,9 +67,18 @@ const Category = ({ category, index }) => {
                 <i>Add {category.name.toLowerCase()}</i>
               </p>
             )}
+            {sortByPriority(getItems(category)).map((item, index) => (
+              <div key={item._id}>
+                <NewItem category={category} item={item} index={index} />
+              </div>
+            ))}
           </>
         ) : (
-          <DummyItem category={category} />
+          <NewItem
+            item={GET_DUMMY_ITEM(category.name)}
+            category={category}
+            dummy={true}
+          />
         )}
       </div>
     </div>

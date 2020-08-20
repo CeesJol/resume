@@ -5,6 +5,7 @@ import Monthpicker from "../../general/Monthpicker";
 import Yearpicker from "../../general/Yearpicker";
 import { toast } from "react-toastify";
 import { fauna } from "../../../lib/api";
+import { GET_CATEGORY_ITEMS } from "../../../lib/constants";
 
 const Popup = () => {
   const {
@@ -18,67 +19,35 @@ const Popup = () => {
     getItems,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
+  const [isGoing, setIsGoing] = useState(true); // Seperate from fields, because DB doesn't take this value.
   const [fields, setFields] = useState({
     title: "",
-    isGoing: true,
+    month0: "",
+    year0: "",
     month1: "",
     year1: "",
     month2: "",
     year2: "",
     location: "",
     description: "",
+    value: "",
   });
+  const category = getCategory(editingItem.category._id);
+  const category_items = GET_CATEGORY_ITEMS(category.type);
   function handleChange(event) {
-    const value =
-      event.target.type === "checkbox"
-        ? !fields[event.target.name]
-        : event.target.value;
     setFields({
       ...fields,
-      [event.target.name]: value,
+      [event.target.name]: event.target.value,
     });
     if (!userMadeChanges) setUserMadeChanges(true);
   }
+  const handleChangeIsGoing = () => {
+    setIsGoing(!isGoing);
+  };
   const validateInput = () => {
     if (!fields.title) return "Please provide a title";
-    // if (!fields.location) return "Please provide a location";
-    // if (!fields.month1) return "Please provide a starting date month";
-    // if (!fields.year1) return "Please provide a starting date year";
-    // if (!fields.isGoing && !fields.month2)
-    //   return "Please provide an ending date month";
-    // if (!fields.isGoing && !fields.year2)
-    //   return "Please provide an ending date year";
-    // if (!fields.description) return "Please provide a description";
-
-    if (!!fields.month1 ^ !!fields.year1)
-      return "Please provide both a starting month and year";
-    if (!isGoing && !!fields.month2 ^ !!fields.year2)
-      return "Please provide both an ending month and year";
 
     return false;
-  };
-  const getFromAndTo = () => {
-    let from;
-    if (fields.month1 && fields.year1) {
-      from = fields.month1 + "/" + fields.year1;
-      // } else if (fields.year1) {
-      //   from = fields.year1;
-    } else {
-      from = "";
-    }
-
-    let to;
-    if (fields.isGoing) {
-      to = "Present";
-    } else if (fields.month2 && fields.year2) {
-      to = fields.month2 + "/" + fields.year2;
-      // } else if (fields.year2) {
-      //   to = fields.year2;
-    } else {
-      to = "";
-    }
-
-    return { from, to };
   };
   const handleDelete = async (event) => {
     if (event) event.preventDefault();
@@ -90,7 +59,6 @@ const Popup = () => {
             storeItem(editingItem, { del: true });
             resetPopups();
             // Propagate priority updates
-            const category = getCategory(editingItem.category._id);
             for (var item of getItems(category)) {
               if (item.priority > editingItem.priority) {
                 const newPriority = item.priority - 1;
@@ -113,17 +81,20 @@ const Popup = () => {
       return;
     }
 
-    const { from, to } = getFromAndTo();
+    // Get relevant data
+    let myData = fields;
+    Object.keys(myData).forEach(
+      (key) => !category_items.includes(key) && delete myData[key]
+    );
+    if (isGoing) {
+      myData.month2 = "";
+      myData.year2 = "";
+    }
+    console.log("fields:", myData);
     await fauna({
       type: "UPDATE_ITEM",
       id: editingItem._id,
-      data: {
-        title: fields.title,
-        location: fields.location,
-        from,
-        to,
-        description: fields.description,
-      },
+      data: { ...myData },
     }).then(
       async (data) => {
         storeItem(data.updateItem, {});
@@ -142,20 +113,21 @@ const Popup = () => {
       return;
     }
 
-    const { from, to } = getFromAndTo();
+    // Get relevant data
+    let myData = fields;
+    Object.keys(myData).forEach(
+      (key) => !category_items.includes(key) && delete myData[key]
+    );
+    if (isGoing) {
+      myData.month2 = "";
+      myData.year2 = "";
+    }
+    console.log("fields:", myData);
     const categoryId = editingItem.category._id;
     await fauna({
       type: "CREATE_ITEM",
       categoryId,
-      data: {
-        id: editingItem._id,
-        title: fields.title,
-        location: fields.location,
-        from,
-        to,
-        description: fields.description,
-        priority: getItems(getCategory(categoryId)).length + 1,
-      },
+      data: { ...fields },
     }).then(
       async (data) => {
         storeItem(data.createItem, { add: true });
@@ -179,19 +151,19 @@ const Popup = () => {
   };
   useEffect(() => {
     if (editingItem.title && !filled) {
+      // Updating item
       setFilled(true);
 
       setFields({
         title: editingItem.title,
-        isGoing: editingItem.to == "Present",
-        month1: editingItem.from.substring(0, 2),
-        year1: editingItem.from.substring(3),
-        month2:
-          editingItem.to != "Present" ? editingItem.to.substring(0, 2) : "",
-        year2: editingItem.to != "Present" ? editingItem.to.substring(3) : "",
+        month1: editingItem.month1,
+        year1: editingItem.year1,
+        month2: editingItem.month2,
+        year2: editingItem.year2,
         location: editingItem.location,
         description: editingItem.description,
       });
+      setIsGoing(!editingItem.year2);
     }
   });
   return (
@@ -208,61 +180,93 @@ const Popup = () => {
               value={fields.title}
               onChange={handleChange}
             />
-
-            <label>Location</label>
-            <input
-              type="text"
-              id="location"
-              name="location"
-              value={fields.location}
-              onChange={handleChange}
-            />
-
-            <label htmlFor="isGoing">
-              <input
-                name="isGoing"
-                id="isGoing"
-                type="checkbox"
-                checked={fields.isGoing}
-                onChange={handleChange}
-              />
-              I'm currently working here
-            </label>
-
-            <div>
-              <label>Start date</label>
-              <Monthpicker
-                val={fields.month1}
-                name={"month1"}
-                fn={handleChange}
-              />
-              <Yearpicker val={fields.year1} name={"year1"} fn={handleChange} />
-            </div>
-
-            {!fields.isGoing && (
-              <div>
-                <label>End date</label>
-                <Monthpicker
-                  val={fields.month2}
-                  name={"month2"}
-                  fn={handleChange}
+            {category_items.includes("location") && (
+              <>
+                <label>Location</label>
+                <input
+                  type="text"
+                  id="location"
+                  name="location"
+                  value={fields.location}
+                  onChange={handleChange}
                 />
-                <Yearpicker
-                  val={fields.year2}
-                  name={"year2"}
-                  fn={handleChange}
-                />
-              </div>
+              </>
+            )}
+            {category_items.includes("year2") && (
+              <>
+                <label htmlFor="isGoing">
+                  <input
+                    name="isGoing"
+                    id="isGoing"
+                    type="checkbox"
+                    checked={isGoing}
+                    onChange={handleChangeIsGoing}
+                  />
+                  I'm currently working here
+                </label>
+              </>
             )}
 
-            <label>Description</label>
-            <textarea
-              type="text"
-              id="description"
-              name="description"
-              value={fields.description}
-              onChange={handleChange}
-            />
+            {category_items.includes("year1") && (
+              <>
+                <div>
+                  <label>Start date</label>
+                  <Monthpicker
+                    val={fields.month1}
+                    name={"month1"}
+                    fn={handleChange}
+                  />
+                  <Yearpicker
+                    val={fields.year1}
+                    name={"year1"}
+                    fn={handleChange}
+                  />
+                </div>
+              </>
+            )}
+
+            {category_items.includes("year1") && !isGoing && (
+              <>
+                <div>
+                  <label>End date</label>
+                  <Monthpicker
+                    val={fields.month2}
+                    name={"month2"}
+                    fn={handleChange}
+                  />
+                  <Yearpicker
+                    val={fields.year2}
+                    name={"year2"}
+                    fn={handleChange}
+                  />
+                </div>
+              </>
+            )}
+
+            {category_items.includes("description") && (
+              <>
+                <label>Description</label>
+                <textarea
+                  type="text"
+                  id="description"
+                  name="description"
+                  value={fields.description}
+                  onChange={handleChange}
+                />
+              </>
+            )}
+            {category_items.includes("value") && (
+              <>
+                <label>Value</label>
+                <input
+                  type="text"
+                  id="value"
+                  name="value"
+                  value={fields.value}
+                  onChange={handleChange}
+                />
+              </>
+            )}
 
             {editingItem.title ? (
               <>

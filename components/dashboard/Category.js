@@ -57,24 +57,24 @@ const Category = ({ category, index }) => {
         >
           {category.name}
         </h3>
-        {!preview && (
-          <p
-            className="resume--hoverable"
-            onClick={() => handleNewItem(category)}
-          >
-            <i>Add item</i>
-          </p>
-        )}
         {getItems(category) && getItems(category).length > 0 ? (
-          sortByPriority(getItems(category)).map((item, index) => (
-            <div key={item._id}>
-              <NewItem item={item} index={index} />
-            </div>
-          ))
-        ) : (
           <>
-            <DummyItem category={category} />
+            {sortByPriority(getItems(category)).map((item, index) => (
+              <div key={item._id}>
+                <NewItem item={item} index={index} />
+              </div>
+            ))}
+            {!preview && (
+              <p
+                className="resume--hoverable"
+                onClick={() => handleNewItem(category)}
+              >
+                <i>Add {category.name.toLowerCase()}</i>
+              </p>
+            )}
           </>
+        ) : (
+          <DummyItem category={category} />
         )}
       </div>
     </div>

@@ -1,9 +1,17 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
+import { GET_CATEGORY_ITEMS } from "../../lib/constants";
 
 const NewItem = ({ item, index }) => {
-  const { setEditingItem, moveItem, forceRender, preview } = useContext(
-    UserContext
+  const {
+    setEditingItem,
+    moveItem,
+    forceRender,
+    preview,
+    getCategory,
+  } = useContext(UserContext);
+  const category_items = GET_CATEGORY_ITEMS(
+    getCategory(item.category._id).type
   );
   const handleClick = (e, item) => {
     e.preventDefault();
@@ -35,11 +43,16 @@ const NewItem = ({ item, index }) => {
       >
         <h3 className="resume__item--title">{item.title}</h3>
         <h3 className="resume__item--location">{item.location}</h3>
-        {item.from && item.to && (
+        {item.year1 && (
           <p className="resume__item--date">
-            {item.from} - {item.to}
+            {item.month1 ? item.month1 + "/" : ""}
+            {item.year1}
+            {item.year2 &&
+              " - " + (item.month2 ? item.month2 + "/" : "") + item.year2}
+            {!item.year2 && category_items.includes("year2") && " - Present"}
           </p>
         )}
+        {item.value && item.value}
         {item.description && (
           <p className="resume__item--description multiline">
             {item.description}

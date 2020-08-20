@@ -10,8 +10,11 @@ import jwt from "jsonwebtoken";
 const ITEM_DATA = `_id
 title
 location
-from
-to
+month1
+year1
+month2
+year2
+value
 description
 priority
 category {
@@ -51,6 +54,7 @@ categories {
 	data {
 		_id
 		name
+		type
 		priority
 		items {
 			data {
@@ -159,11 +163,12 @@ export const createResume = async ({ userId, templateId, data }) => {
 					${DEFAULT_CATEGORIES.map(
             (category, index) =>
               `{ 
-							name: "${category}" 
+							name: "${category.name}" 
+							type: "${category.type}"
 							priority: ${
                 index +
                 1 +
-                (index > DEFAULT_CATEGORIES_SIDEBAR_CUTOFF) * SIDEBAR_INCREMENT
+                (index >= DEFAULT_CATEGORIES_SIDEBAR_CUTOFF) * SIDEBAR_INCREMENT
               }
 						}`
           )}
@@ -185,7 +190,6 @@ export const createResume = async ({ userId, templateId, data }) => {
 			${RESUME_DATA}
 		}
 	}`;
-  console.log("query", query);
   return executeQuery(query);
 };
 
@@ -381,12 +385,7 @@ export const createItem = async ({ categoryId, data }) => {
   console.log("createItem request");
   return executeQuery(`mutation CreateItem {
 		createItem(data: {
-			title: "${data.title}"
-			location: "${data.location}"
-			from: "${data.from}"
-			to: "${data.to}"
-			description: """${data.description}"""
-			priority: ${data.priority}
+			${stringifyObject(data)}
 			category: { connect: "${categoryId}" }
 		}) {
 			${ITEM_DATA}

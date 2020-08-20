@@ -3,8 +3,13 @@ import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import { toast } from "react-toastify";
 import { fauna } from "../../../lib/api";
-import { SIDEBAR_INCREMENT, DEFAULT_CATEGORIES } from "../../../lib/constants";
+import {
+  SIDEBAR_INCREMENT,
+  DEFAULT_CATEGORIES,
+  CATEGORY_TYPES,
+} from "../../../lib/constants";
 import Categorypicker from "../../general/Categorypicker";
+import Typepicker from "../../general/Typepicker";
 
 const CategoryPopup = () => {
   const {
@@ -21,13 +26,17 @@ const CategoryPopup = () => {
   const [filled, setFilled] = useState(false);
   const [name, setName] = useState("");
   const [customName, setCustomName] = useState("");
+  const [type, setType] = useState("");
   const handleChangeName = (event) => {
-    console.log(event.target.value);
     setName(event.target.value);
     setUserMadeChanges(true);
   };
   const handleChangeCustomName = (event) => {
     setCustomName(event.target.value);
+    setUserMadeChanges(true);
+  };
+  const handleChangeType = (event) => {
+    setType(event.target.value);
     setUserMadeChanges(true);
   };
   const validateInput = () => {
@@ -50,11 +59,16 @@ const CategoryPopup = () => {
     ).length;
     if (editingCategory.sidebar)
       priority = SIDEBAR_INCREMENT + getCategories().length - priority;
+    console.log(name, type, priority);
     await fauna({
       type: "CREATE_CATEGORY",
       resumeId,
       data: {
-        name: name !== "Other" ? name : customName,
+        name: name === "Other" ? customName : name,
+        type:
+          name === "Other"
+            ? type
+            : DEFAULT_CATEGORIES.find((cat) => cat.name === name).type,
         priority: priority + 1,
       },
     }).then(
@@ -136,18 +150,29 @@ const CategoryPopup = () => {
     }
   };
   useEffect(() => {
+    console.log(name + "-" + customName + "-" + type);
     if (!filled) {
       setFilled(true);
       const name = editingCategory.name;
       if (name) {
-        if (DEFAULT_CATEGORIES.includes(name)) {
+        // If category already exists (it's being updated)
+        setType(editingCategory.type);
+        if (
+          DEFAULT_CATEGORIES.find(
+            (cat) => cat.name.toLowerCase() === name.toLowerCase()
+          )
+        ) {
+          // If the category is a default category
           setName(name);
         } else {
+          // The category is a custom category
           setName("Other");
           setCustomName(name);
         }
       } else {
-        setName(DEFAULT_CATEGORIES[0]);
+        // The category is being created
+        setName(DEFAULT_CATEGORIES[0].name);
+        setType(CATEGORY_TYPES[0]);
       }
     }
   });
@@ -162,6 +187,9 @@ const CategoryPopup = () => {
 
             {name === "Other" && (
               <>
+                <label>Custom type</label>
+                <Typepicker val={type} fn={handleChangeType} />
+
                 <label>Custom name</label>
                 <input
                   type="text"

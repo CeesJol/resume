@@ -22,6 +22,7 @@ type Resume {
 type Category {
   resume: Resume
   name: String
+  type: String
   priority: Int
   items: [Item] @relation
 }
@@ -31,8 +32,11 @@ type Item {
   title: String
   location: String
   description: String
-  from: String
-  to: String
+  month1: String
+  year1: String
+  month2: String
+  year2: String
+  value: String
   priority: Int
 }
 

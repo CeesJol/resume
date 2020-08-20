@@ -127,7 +127,10 @@ const Popup = () => {
     await fauna({
       type: "CREATE_ITEM",
       categoryId,
-      data: { ...fields },
+      data: {
+        ...fields,
+        priority: getItems(category).length + 1,
+      },
     }).then(
       async (data) => {
         storeItem(data.createItem, { add: true });

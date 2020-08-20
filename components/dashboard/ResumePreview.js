@@ -3,6 +3,7 @@ import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
 import { fauna } from "../../lib/api";
 import Resume from "./Resume";
+import { getTemplate } from "../../templates/templates";
 
 const ResumePreview = ({ resume, index }) => {
   const {
@@ -45,10 +46,11 @@ const ResumePreview = ({ resume, index }) => {
       onClick={(e) => handleClick(e, resume)}
     >
       <div className="resume-preview__head">
+        {console.log(resume.templateId)}
         <Resume
           noscale={true}
           tiny={true}
-          template={resume.template}
+          template={getTemplate(resume.templateId)}
           resume={resume}
         />
       </div>

@@ -4,6 +4,7 @@ import Category from "./Category";
 import ContactItem from "./ContactItem";
 import { PDFExport } from "@progress/kendo-react-pdf";
 import { SIDEBAR_INCREMENT } from "../../lib/constants";
+import { getTemplate } from "../../templates/templates";
 
 // PDF Export source
 // https://blog.usejournal.com/lets-make-a-resume-in-react-2c9c5540f51a
@@ -26,7 +27,9 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
     if (preview) return false;
     setChangingInfo(true);
   };
-  const templateCSS = template ? template : editingResume.template;
+  const templateCSS = template
+    ? template
+    : getTemplate(editingResume.templateId);
   const sortByPriority = (list) => {
     return list.sort((item1, item2) => {
       return item1.priority < item2.priority ? -1 : 1;
@@ -127,7 +130,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
       <style>{templateCSS.style}</style>
       <div
         className={
-          "resume " + (templateCSS.name + " ") + (tiny ? "resume--tiny" : "")
+          "resume " + (templateCSS.id + " ") + (tiny ? "resume--tiny" : "")
         }
       >
         {drawHeader()}

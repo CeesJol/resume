@@ -4,6 +4,7 @@ import Button from "../../general/Button";
 import Template from "../Template";
 import { toast } from "react-toastify";
 import { fauna } from "../../../lib/api";
+import { getTemplate, TEMPLATES } from "../../../templates/templates";
 
 const ResumePopup = () => {
   const {
@@ -73,12 +74,7 @@ const ResumePopup = () => {
     }
   };
   useEffect(() => {
-    // load templates
-    if (templates.length == 0) {
-      fauna({ type: "GET_TEMPLATES" }).then((data) => {
-        setTemplates(data.templates.data);
-      });
-    }
+    setTemplates(TEMPLATES);
   }, []);
   return (
     <div className="popup-container" onClick={handleCancel}>
@@ -98,7 +94,7 @@ const ResumePopup = () => {
             <label>Template</label>
             {templates ? (
               templates.map((template) => (
-                <Template template={template} key={template._id} />
+                <Template template={template} key={template.id} />
               ))
             ) : (
               <p>Loading templates...</p>

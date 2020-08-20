@@ -170,20 +170,20 @@ const UserContextProvider = (props) => {
 
     setUser(() => user);
   };
-  const storeTemplate = (templateId) => {
-    var user = getUser();
+  // const storeTemplate = (templateId) => {
+  //   var user = getUser();
 
-    user.resumes.data.forEach((resume, r) => {
-      if (resume._id === editingResume._id) {
-        user.resumes.data[r].template = templates.find(
-          (template) => template._id === templateId
-        );
-        setEditingResume(user.resumes.data[r]);
-      }
-    });
+  //   user.resumes.data.forEach((resume, r) => {
+  //     if (resume._id === editingResume._id) {
+  //       user.resumes.data[r].template = templates.find(
+  //         (template) => template._id === templateId
+  //       );
+  //       setEditingResume(user.resumes.data[r]);
+  //     }
+  //   });
 
-    setUser(() => user);
-  };
+  //   setUser(() => user);
+  // };
   const storeLayout = (layoutData) => {
     var user = getUser();
 
@@ -455,7 +455,7 @@ const UserContextProvider = (props) => {
         moveResume,
         storeItem,
         storeResume,
-        storeTemplate,
+        // storeTemplate,
         storeLayout,
         storeCategory,
         userMadeChanges,

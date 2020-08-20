@@ -4,12 +4,13 @@ import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
 import { toast } from "react-toastify";
 import Template from "./Template";
+import { TEMPLATES, getTemplate } from "../../templates/templates";
 
 const Layout = () => {
   const {
     editingResume,
     storeLayout,
-    storeTemplate,
+    storeResume,
     getLayout,
     templates,
     setTemplates,
@@ -22,7 +23,7 @@ const Layout = () => {
   useEffect(() => {
     setPreview(true);
 
-    setSelectedTemplateId(editingResume.template._id);
+    setSelectedTemplateId(editingResume.templateId);
 
     // load layout
     if (!filled && editingResume !== -1) {
@@ -31,12 +32,7 @@ const Layout = () => {
       setItems(getLayout());
     }
 
-    // load templates
-    if (templates.length == 0) {
-      fauna({ type: "GET_TEMPLATES" }).then((data) => {
-        setTemplates(data.templates.data);
-      });
-    }
+    setTemplates(TEMPLATES);
   }, []);
   const handleChangeItem = (i) => {
     let newArr = [...items];
@@ -63,12 +59,12 @@ const Layout = () => {
   };
   const handleUpdateTemplate = async () => {
     await fauna({
-      type: "UPDATE_RESUME_TEMPLATE",
+      type: "UPDATE_RESUME",
       id: editingResume._id,
-      templateId: selectedTemplateId,
+      data: { templateId: selectedTemplateId },
     }).then(
       (data) => {
-        storeTemplate(data.updateResume.template._id);
+        storeResume(data.updateResume, {});
         toast.success("💾 Updated template successfully!");
       },
       (err) => {
@@ -83,7 +79,7 @@ const Layout = () => {
       {templates.length > 0 ? (
         <>
           {templates.map((template, i) => (
-            <Template template={template} key={template._id} />
+            <Template template={template} key={template.id} />
           ))}
           {/* <br > to force button on new line */}
           <br />

@@ -26,6 +26,7 @@ title
 jobTitle
 bio
 priority
+templateId
 layout {
 	data {
 		_id
@@ -43,12 +44,6 @@ contactInfo {
 			_id
 		}
 	}
-}
-template {
-	_id
-	name
-	style
-	sidebar
 }
 categories {
 	data {
@@ -153,7 +148,7 @@ export const deleteResume = async ({ id }) => {
 	}`);
 };
 
-export const createResume = async ({ userId, templateId, data }) => {
+export const createResume = async ({ userId, data }) => {
   console.log("createResume request");
   var query = `mutation CreateResume {
 		createResume(data: {
@@ -184,7 +179,6 @@ export const createResume = async ({ userId, templateId, data }) => {
           )}
 				]
 			}
-			template: { connect: "${templateId}" }
 			user: { connect: "${userId}" }
 		}) {
 			${RESUME_DATA}
@@ -205,6 +199,7 @@ export const duplicateResume = async ({
 			title: "${title}"
 			jobTitle: "${resumeData.jobTitle ? resumeData.jobTitle : ``}"
 			bio: "${resumeData.bio ? resumeData.bio : ``}"
+			templateId: "${resumeData.templateId}"
 			priority: ${priority}
 			categories: {
 				create: [
@@ -243,7 +238,6 @@ export const duplicateResume = async ({
           )}
 				]
 			}
-			template: { connect: "${resumeData.template._id}" }
 			user: { connect: "${userId}" }
 		}) {
 			${RESUME_DATA}
@@ -273,18 +267,18 @@ export const moveResume = async ({ id, amount }) => {
 	}`);
 };
 
-export const updateResumeTemplate = async ({ id, templateId }) => {
-  console.log("updateResumeTemplate request");
-  return executeQuery(`mutation UpdateResumeTemplate {
-		updateResume(id: "${id}", data: {
-			template: { connect: "${templateId}" }
-		}) {
-			template {
-				_id
-			}
-		}
-	}`);
-};
+// export const updateResumeTemplate = async ({ id, templateId }) => {
+//   console.log("updateResumeTemplate request");
+//   return executeQuery(`mutation UpdateResumeTemplate {
+// 		updateResume(id: "${id}", data: {
+// 			template: { connect: "${templateId}" }
+// 		}) {
+// 			template {
+// 				_id
+// 			}
+// 		}
+// 	}`);
+// };
 
 /** |----------------------------
  *  | CATEGORIES
@@ -424,19 +418,19 @@ export const moveItem = async ({ id, amount }) => {
  *  | TEMPLATES
  *  |----------------------------
  */
-export const getTemplates = () => {
-  console.log("getTemplates request");
-  return executeQuery(`query GetTemplates {
-		templates {
-			data {
-				_id
-				name
-				style
-				sidebar
-			}
-		}
-	}`);
-};
+// export const getTemplates = () => {
+//   console.log("getTemplates request");
+//   return executeQuery(`query GetTemplates {
+// 		templates {
+// 			data {
+// 				_id
+// 				name
+// 				style
+// 				sidebar
+// 			}
+// 		}
+// 	}`);
+// };
 
 // export const updateTemplate = async ({ id, data }) => {
 //   console.log("updateTemplate request");
@@ -555,9 +549,9 @@ const fauna = async (req, res) => {
     case "MOVE_RESUME":
       result = await moveResume(req.body);
       break;
-    case "UPDATE_RESUME_TEMPLATE":
-      result = await updateResumeTemplate(req.body);
-      break;
+    // case "UPDATE_RESUME_TEMPLATE":
+    //   result = await updateResumeTemplate(req.body);
+    //   break;
     // ----------
     // CATEGORIES
     // ----------
@@ -594,9 +588,9 @@ const fauna = async (req, res) => {
     // ----------
     // TEMPLATES
     // ----------
-    case "GET_TEMPLATES":
-      result = await getTemplates(req.body);
-      break;
+    // case "GET_TEMPLATES":
+    //   result = await getTemplates(req.body);
+    //   break;
     // case "UPDATE_TEMPLATE":
     //   result = await updateTemplate(req.body);
     //   break;

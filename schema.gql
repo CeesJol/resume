@@ -14,7 +14,7 @@ type Resume {
   title: String
   priority: Int
   categories: [Category] @relation
-  template: Template @relation
+  templateId: String
   contactInfo: [ContactInfo] @relation
   layout: [Layout] @relation
 }
@@ -40,12 +40,6 @@ type Item {
   priority: Int
 }
 
-type Template {
-  name: String
-  style: String
-  sidebar: Int
-}
-
 type ContactInfo {
   resume: Resume
   name: String
@@ -64,7 +58,6 @@ type Query {
   usersByConfirmStatus(confirmed: Boolean!): [User]
   userByEmail(email: String!): User
   resumeByTitle(title: String!): Resume
-  templates: [Template]
 }
 
 type Mutation {

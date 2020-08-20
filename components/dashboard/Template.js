@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { UserContext } from "../../contexts/userContext";
 import Resume from "./Resume";
+import { getTemplate } from "../../templates/templates";
 
 const Template = ({ template }) => {
   const {
@@ -15,14 +16,14 @@ const Template = ({ template }) => {
   };
   const isSelected = () => {
     // If the user is creating a resume and clicked this template
-    if (template._id === selectedTemplateId) return true;
+    if (template.id === selectedTemplateId) return true;
 
     return false;
   };
   return (
     <div
       className={"box " + (isSelected() ? "box--selected" : "")}
-      onClick={(e) => handleClick(e, template._id)}
+      onClick={(e) => handleClick(e, template.id)}
     >
       <Resume tiny={true} template={template} />
       <p className="box--title">{template.name}</p>

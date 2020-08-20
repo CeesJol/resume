@@ -147,7 +147,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
       subject=""
       keywords=""
       ref={(r) => setPdf(r)}
-      scale={0.5}
+      scale={1} // Note: also change scale in _settings.scss!
     >
       {result}
     </PDFExport>

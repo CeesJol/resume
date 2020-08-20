@@ -1,11 +1,6 @@
 .resume-container {
-  // height: 84.2rem;
-  // width: 59.5rem;
-  height: 168.4rem;
-  width: 119rem;
-  // transform-origin: center top;
-  // transform: scale(1.45);
-  // -moz-transform: scale(1.45);
+  height: calc(84.2rem * #{$resume-scale});
+  width: calc(59.5rem * #{$resume-scale});
   overflow-x: hidden;
   background-color: white;
 
@@ -23,35 +18,37 @@
 
 .resume {
   &--tiny {
-    transform: scale(0.255);
+    transform: scale(0.51 / $resume-scale);
     @media (min-width: 56rem) {
-      transform: scale(0.34);
+      transform: scale(0.68 / $resume-scale);
     }
     transform-origin: top left;
-    height: 60rem;
+
+    // COMMENT OUT THIS LINE TO DISABLE SCROLLING IN RESUME PREVIEW
+    height: calc(30rem * #{$resume-scale});
   }
 
   h1 {
-    font-size: 6rem;
+    font-size: calc(3rem * #{$resume-scale});
   }
 
   h2 {
-    font-size: 4rem;
+    font-size: calc(2rem * #{$resume-scale});
   }
 
   h3 {
-    font-size: 3rem;
+    font-size: calc(1.5rem * #{$resume-scale});
   }
 
   h4 {
-    font-size: 2.4rem;
+    font-size: calc(1.2rem * #{$resume-scale});
   }
 
   p,
   i,
   a {
     margin: 0;
-    font-size: 2rem;
+    font-size: calc(1rem * #{$resume-scale});
   }
 
   background-color: white;
@@ -66,7 +63,7 @@
   }
 
   &__container {
-    padding: calc(#{$l-size} * 2);
+    padding: calc(#{$l-size} * #{#{$resume-scale}});
 
     &--left {
       float: left;
@@ -92,8 +89,8 @@
 
   &__contact-info {
     background-color: rgb(239, 240, 241);
-    padding: 1rem;
-    height: 5rem;
+    padding: calc(#{$xs-size} * #{$resume-scale});
+    height: calc(2.5rem * #{$resume-scale});
     display: flex;
     justify-content: center;
     align-items: center;
@@ -105,35 +102,40 @@
 
     &--item {
       position: relative;
-      padding: 0 calc(#{$s-size} * 2);
+      padding: 0 calc(#{$s-size} * #{$resume-scale});
       display: flex;
       align-items: center;
       vertical-align: middle;
     }
 
     &--icon {
-      padding-right: calc(#{$s-size} * 2) !important;
-      margin-top: -0.3rem !important; // beun solution to get the icon aligned with the text
+      padding-right: calc(#{$s-size} * #{$resume-scale}) !important;
+      margin-top: calc(
+        -0.15rem * #{$resume-scale}
+      ) !important; // beun solution to get the icon aligned with the text
     }
   }
 
   &__category {
     &--name {
       text-transform: uppercase;
-      margin-bottom: calc(#{$xs-size} * 2);
+      margin-bottom: calc(#{$xs-size} * #{$resume-scale});
       // @include hover;
     }
 
     // Specific categories
     &--title-and-value {
-      display: inline-flex;
-      margin-bottom: calc((#{$font-size-default} - #{$xs-size}) * 2);
+      display: flex;
+      flex-direction: column;
+      margin-bottom: calc(
+        (#{$font-size-default} - #{$xs-size}) * #{$resume-scale}
+      );
     }
   }
 
   &__item {
     position: relative;
-    padding-bottom: calc(#{$font-size-default} * 2);
+    padding-bottom: calc(#{$font-size-default} * #{$resume-scale});
 
     &--title {
       font-weight: bold;
@@ -153,13 +155,14 @@
       background-color: red;
       color: white;
       display: inline-flex;
-      padding: calc(#{$xs-size} * 2);
-      margin: 0 calc(#{$xs-size} * 2) calc(#{$xs-size} * 2) 0;
+      padding: calc(#{$xs-size} * #{$resume-scale});
+      margin: 0 calc(#{$xs-size} * #{$resume-scale})
+        calc(#{$xs-size} * #{$resume-scale}) 0;
       border-radius: 5px;
       width: auto;
 
       h3 {
-        font-size: 2.5rem;
+        font-size: calc(1.2rem * #{$resume-scale});
       }
     }
   }

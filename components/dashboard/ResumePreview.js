@@ -46,7 +46,6 @@ const ResumePreview = ({ resume, index }) => {
       onClick={(e) => handleClick(e, resume)}
     >
       <div className="resume-preview__head">
-        {console.log(resume.templateId)}
         <Resume
           noscale={true}
           tiny={true}

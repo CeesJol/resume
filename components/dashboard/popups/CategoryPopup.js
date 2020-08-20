@@ -57,7 +57,6 @@ const CategoryPopup = () => {
     ).length;
     if (editingCategory.sidebar)
       priority = SIDEBAR_INCREMENT + getCategories().length - priority;
-    console.log(name, type, priority);
     await fauna({
       type: "CREATE_CATEGORY",
       resumeId,
@@ -148,7 +147,6 @@ const CategoryPopup = () => {
     }
   };
   useEffect(() => {
-    console.log(name + "-" + customName + "-" + type);
     if (!filled) {
       setFilled(true);
       const name = editingCategory.name;

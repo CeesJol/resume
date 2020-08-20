@@ -256,6 +256,7 @@ export const updateResume = async ({ id, data }) => {
 			title
 			jobTitle
 			bio
+			templateId
 		}
 	}`);
 };

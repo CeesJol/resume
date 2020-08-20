@@ -4,7 +4,7 @@ import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
 import { toast } from "react-toastify";
 import Template from "./Template";
-import { TEMPLATES, getTemplate } from "../../templates/templates";
+import { TEMPLATES } from "../../templates/templates";
 
 const Layout = () => {
   const {
@@ -29,7 +29,8 @@ const Layout = () => {
     if (!filled && editingResume !== -1) {
       setFilled(true);
 
-      setItems(getLayout());
+      // Object spread to avoid shallow copy
+      setItems({ ...getLayout() });
     }
 
     setTemplates(TEMPLATES);

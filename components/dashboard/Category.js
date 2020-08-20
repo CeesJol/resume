@@ -13,6 +13,9 @@ const Category = ({ category, index }) => {
     getLayoutItem,
     getItems,
   } = useContext(UserContext);
+  const getTypeClassName = () => {
+    return category.type.toLowerCase().replace(/\s/g, "-");
+  };
   const handleClick = (e, category) => {
     e.preventDefault();
     if (preview) return false;
@@ -35,7 +38,7 @@ const Category = ({ category, index }) => {
     forceRender();
   };
   return (
-    <div className="resume__category">
+    <div className={`resume__category resume__category--${getTypeClassName()}`}>
       {index > 0 && !preview && (
         <p className="resume--hoverable">
           <i
@@ -68,9 +71,12 @@ const Category = ({ category, index }) => {
               </p>
             )}
             {sortByPriority(getItems(category)).map((item, index) => (
-              <div key={item._id}>
-                <NewItem category={category} item={item} index={index} />
-              </div>
+              <NewItem
+                category={category}
+                item={item}
+                index={index}
+                key={item._id}
+              />
             ))}
           </>
         ) : (

@@ -6,14 +6,14 @@ const NewItem = ({ category, item, index, dummy }) => {
   const { setEditingItem, moveItem, forceRender, preview } = useContext(
     UserContext
   );
-  const category_items = GET_CATEGORY_ITEMS(category.type);
+  const categoryItems = GET_CATEGORY_ITEMS(category.type);
+  const getTypeClassName = () => {
+    return category.type.toLowerCase().replace(/\s/g, "-");
+  };
   const handleClick = (e, item) => {
     e.preventDefault();
     if (preview) return false;
-    if (dummy)
-      setEditingItem({
-        category,
-      });
+    if (dummy) setEditingItem({ category });
     else setEditingItem(item);
   };
   const handleMove = (e, item, amount) => {
@@ -24,18 +24,23 @@ const NewItem = ({ category, item, index, dummy }) => {
   };
   return (
     <>
-      {index > 0 && !preview && !dummy && (
-        <p className="resume--hoverable">
-          <i
-            onClick={(e) => handleMove(e, item, -1)}
-            style={{ cursor: "pointer" }}
-          >
-            Move up
-          </i>
-        </p>
-      )}
+      {index > 0 &&
+        !preview &&
+        !dummy &&
+        getTypeClassName() !== "title-and-value" && (
+          <p className="resume--hoverable">
+            <i
+              onClick={(e) => handleMove(e, item, -1)}
+              style={{ cursor: "pointer" }}
+            >
+              Move up
+            </i>
+          </p>
+        )}
       <div
-        className={`resume__item ${!preview ? "resume--hoverable" : ""}`}
+        className={`resume__item resume__item--${getTypeClassName()} ${
+          !preview ? "resume--hoverable" : ""
+        }`}
         onClick={(e) => handleClick(e, item)}
         key={item._id}
       >
@@ -47,7 +52,7 @@ const NewItem = ({ category, item, index, dummy }) => {
             {item.year1}
             {item.year2 &&
               " - " + (item.month2 ? item.month2 + "/" : "") + item.year2}
-            {!item.year2 && category_items.includes("year2") && " - Present"}
+            {!item.year2 && categoryItems.includes("year2") && " - Present"}
           </p>
         )}
         {item.value && item.value}

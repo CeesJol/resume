@@ -26,10 +26,9 @@ const ContactPopup = () => {
   };
   const handleChangeValue = (event) => {
     setValue(event.target.value);
-    setUserMadeChanges(true);
   };
   const validateInput = () => {
-    if (!name) return "Please provide a job title";
+    if (!name) return "Please provide a contact details";
     return false;
   };
   const handleCreate = async () => {

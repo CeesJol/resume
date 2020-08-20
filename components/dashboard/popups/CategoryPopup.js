@@ -29,7 +29,6 @@ const CategoryPopup = () => {
   const [type, setType] = useState("");
   const handleChangeName = (event) => {
     setName(event.target.value);
-    setUserMadeChanges(true);
   };
   const handleChangeCustomName = (event) => {
     setCustomName(event.target.value);
@@ -37,7 +36,6 @@ const CategoryPopup = () => {
   };
   const handleChangeType = (event) => {
     setType(event.target.value);
-    setUserMadeChanges(true);
   };
   const validateInput = () => {
     if (!name) return "Please provide a name";

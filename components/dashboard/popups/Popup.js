@@ -33,7 +33,7 @@ const Popup = () => {
     value: "",
   });
   const category = getCategory(editingItem.category._id);
-  const category_items = GET_CATEGORY_ITEMS(category.type);
+  const categoryItems = GET_CATEGORY_ITEMS(category.type);
   function handleChange(event) {
     setFields({
       ...fields,
@@ -84,7 +84,7 @@ const Popup = () => {
     // Get relevant data
     let myData = fields;
     Object.keys(myData).forEach(
-      (key) => !category_items.includes(key) && delete myData[key]
+      (key) => !categoryItems.includes(key) && delete myData[key]
     );
     if (isGoing) {
       myData.month2 = "";
@@ -116,7 +116,7 @@ const Popup = () => {
     // Get relevant data
     let myData = fields;
     Object.keys(myData).forEach(
-      (key) => !category_items.includes(key) && delete myData[key]
+      (key) => !categoryItems.includes(key) && delete myData[key]
     );
     if (isGoing) {
       myData.month2 = "";
@@ -162,6 +162,7 @@ const Popup = () => {
         year2: editingItem.year2,
         location: editingItem.location,
         description: editingItem.description,
+        value: editingItem.value,
       });
       setIsGoing(!editingItem.year2);
     }
@@ -180,7 +181,7 @@ const Popup = () => {
               value={fields.title}
               onChange={handleChange}
             />
-            {category_items.includes("location") && (
+            {categoryItems.includes("location") && (
               <>
                 <label>Location</label>
                 <input
@@ -192,7 +193,7 @@ const Popup = () => {
                 />
               </>
             )}
-            {category_items.includes("year2") && (
+            {categoryItems.includes("year2") && (
               <>
                 <label htmlFor="isGoing">
                   <input
@@ -207,7 +208,7 @@ const Popup = () => {
               </>
             )}
 
-            {category_items.includes("year1") && (
+            {categoryItems.includes("year1") && (
               <>
                 <div>
                   <label>Start date</label>
@@ -225,7 +226,7 @@ const Popup = () => {
               </>
             )}
 
-            {category_items.includes("year1") && !isGoing && (
+            {categoryItems.includes("year1") && !isGoing && (
               <>
                 <div>
                   <label>End date</label>
@@ -243,7 +244,7 @@ const Popup = () => {
               </>
             )}
 
-            {category_items.includes("description") && (
+            {categoryItems.includes("description") && (
               <>
                 <label>Description</label>
                 <textarea
@@ -255,7 +256,7 @@ const Popup = () => {
                 />
               </>
             )}
-            {category_items.includes("value") && (
+            {categoryItems.includes("value") && (
               <>
                 <label>Value</label>
                 <input

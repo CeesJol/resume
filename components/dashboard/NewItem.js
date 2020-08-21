@@ -3,9 +3,13 @@ import { UserContext } from "../../contexts/userContext";
 import { GET_CATEGORY_ITEMS } from "../../lib/constants";
 
 const NewItem = ({ category, item, index, dummy, hovering }) => {
-  const { setEditingItem, moveItem, forceRender, preview } = useContext(
-    UserContext
-  );
+  const {
+    setEditingItem,
+    moveItem,
+    forceRender,
+    preview,
+    getLayoutItem,
+  } = useContext(UserContext);
   const categoryItems = GET_CATEGORY_ITEMS(category.type);
   const getTypeClassName = () => {
     return category.type.toLowerCase().replace(/\s/g, "-");
@@ -42,6 +46,13 @@ const NewItem = ({ category, item, index, dummy, hovering }) => {
         className={`resume__item resume__item--${getTypeClassName()} ${
           !preview ? "resume--hoverable" : ""
         }`}
+        style={
+          getTypeClassName() === "title-and-value"
+            ? {
+                backgroundColor: getLayoutItem("Primary Color"),
+              }
+            : {}
+        }
         onClick={(e) => handleClick(e, item)}
         key={item._id}
       >

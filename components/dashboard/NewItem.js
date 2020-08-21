@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import { GET_CATEGORY_ITEMS } from "../../lib/constants";
 
-const NewItem = ({ category, item, index, dummy }) => {
+const NewItem = ({ category, item, index, dummy, hovering }) => {
   const { setEditingItem, moveItem, forceRender, preview } = useContext(
     UserContext
   );
@@ -24,7 +24,8 @@ const NewItem = ({ category, item, index, dummy }) => {
   };
   return (
     <>
-      {index > 0 &&
+      {hovering &&
+        index > 0 &&
         !preview &&
         !dummy &&
         getTypeClassName() !== "title-and-value" && (

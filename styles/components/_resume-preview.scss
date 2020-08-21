@@ -20,17 +20,8 @@
     width: 100%;
     border-right: 1px solid $light-grey-2;
 
-    // @media (min-width: 25rem) and (max-width: calc(#{$desktop-breakpoint} - .1rem)) {
-    // 	width: calc(50% - #{$m-size} / 2);
-
-    // 	&:not(:nth-child(2n+1)) {
-    // 		margin-right: $m-size;
-    // 	}
-    // }
     width: 30.375rem;
     @media (min-width: 45rem) {
-      width: 30.375rem;
-
       &:not(:nth-child(2n + 1)) {
         margin-right: $m-size;
       }

@@ -13,7 +13,7 @@ const Category = ({ category, index }) => {
     getLayoutItem,
     getItems,
   } = useContext(UserContext);
-  const [isShown, setIsShown] = useState(false);
+  const [hovering, setHovering] = useState(false);
   const getTypeClassName = () => {
     return category.type.toLowerCase().replace(/\s/g, "-");
   };
@@ -43,8 +43,8 @@ const Category = ({ category, index }) => {
       className={`resume__category ${
         !preview ? "resume__category--hoverable" : ""
       } resume__category--${getTypeClassName()}`}
-      onMouseEnter={() => setIsShown(true)}
-      onMouseLeave={() => setIsShown(false)}
+      onMouseEnter={() => setHovering(true)}
+      onMouseLeave={() => setHovering(false)}
     >
       <div>
         <h3
@@ -58,7 +58,7 @@ const Category = ({ category, index }) => {
         >
           {category.name}
         </h3>
-        {isShown && !preview && (
+        {hovering && !preview && (
           <p
             className="resume--hoverable resume--action"
             onClick={() => handleNewItem(category)}
@@ -66,7 +66,7 @@ const Category = ({ category, index }) => {
             <i>Add {category.name.toLowerCase()}</i>
           </p>
         )}
-        {isShown && index > 0 && !preview && (
+        {hovering && index > 0 && !preview && (
           <>
             <i> - </i>
             <p className="resume--hoverable resume--action">
@@ -87,6 +87,7 @@ const Category = ({ category, index }) => {
                 item={item}
                 index={index}
                 key={item._id}
+                hovering={hovering}
               />
             ))}
           </div>
@@ -97,6 +98,7 @@ const Category = ({ category, index }) => {
               item={GET_DUMMY_ITEM(category.name)}
               index={0}
               dummy={true}
+              hovering={hovering}
             />
           </div>
         )}

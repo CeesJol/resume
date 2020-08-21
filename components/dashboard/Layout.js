@@ -18,6 +18,7 @@ const Layout = () => {
     setPreview,
     selectedTemplateId,
     setSelectedTemplateId,
+    forceRender,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [items, setItems] = useState([]);
@@ -51,6 +52,7 @@ const Layout = () => {
     }).then(
       (data) => {
         storeLayout(data.updateLayout);
+        forceRender();
         toast.success("💾 Updated layout successfully!");
       },
       (err) => {

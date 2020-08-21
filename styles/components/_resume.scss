@@ -51,6 +51,11 @@
     font-size: calc(1rem * #{$resume-scale});
   }
 
+  .resume__category--name,
+  .resume--action {
+    display: inline-flex;
+  }
+
   background-color: white;
   overflow: auto;
   font-family: Helvetica, Arial, sans-serif;
@@ -123,6 +128,13 @@
       // @include hover;
     }
 
+    border-radius: 3px;
+    border: 1px solid transparent;
+
+    &:hover {
+      border: 1px solid $light-grey-2;
+    }
+
     // Specific categories
     &--title-and-value {
       display: flex;
@@ -130,6 +142,11 @@
       margin-bottom: calc(
         (#{$font-size-default} - #{$xs-size}) * #{$resume-scale}
       );
+    }
+
+    // Actions separator
+    i {
+      margin-left: $xs-size;
     }
   }
 

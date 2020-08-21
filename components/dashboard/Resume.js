@@ -86,7 +86,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
             )}
             {!preview && (
               <p className="resume--hoverable" onClick={handleNewCategory}>
-                <i>Create category</i>
+                <i>Create new category</i>
               </p>
             )}
           </div>
@@ -99,7 +99,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
                 className="resume--hoverable"
                 onClick={() => handleNewCategory({ sidebar: true })}
               >
-                <i>Create category</i>
+                <i>Create new category</i>
               </p>
             )}
           </div>
@@ -111,7 +111,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
           {categories.map((category, index) => drawCategory(category, index))}
           {!preview && (
             <p className="resume--hoverable" onClick={handleNewCategory}>
-              <i>Create category</i>
+              <i>Create new category</i>
             </p>
           )}
         </div>

@@ -90,7 +90,6 @@ const Popup = () => {
       myData.month2 = "";
       myData.year2 = "";
     }
-    console.log("fields:", myData);
     await fauna({
       type: "UPDATE_ITEM",
       id: editingItem._id,
@@ -122,7 +121,6 @@ const Popup = () => {
       myData.month2 = "";
       myData.year2 = "";
     }
-    console.log("fields:", myData);
     const categoryId = editingItem.category._id;
     await fauna({
       type: "CREATE_ITEM",

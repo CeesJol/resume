@@ -40,7 +40,9 @@ const Category = ({ category, index }) => {
   };
   return (
     <div
-      className={`resume__category resume__category--${getTypeClassName()}`}
+      className={`resume__category ${
+        !preview ? "resume__category--hoverable" : ""
+      } resume__category--${getTypeClassName()}`}
       onMouseEnter={() => setIsShown(true)}
       onMouseLeave={() => setIsShown(false)}
     >

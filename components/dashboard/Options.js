@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
 import { fauna } from "../../lib/api";
+import { toast } from "react-toastify";
 
 const Options = () => {
   const {

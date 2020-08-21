@@ -76,10 +76,11 @@ resumes {
  *  | USER
  *  |----------------------------
  */
-export const updateUser = async ({ id, data }) => {
+export const updateUser = async ({ id, data }, secret) => {
   console.log("updateUser request", id, data);
   if (data.email) data.email.toLowerCase();
-  return executeQuery(`mutation UpdateUser {
+  return executeQuery(
+    `mutation UpdateUser {
 		updateUser(id: "${id}", data: {
 			${stringifyObject(data)}
 		}) {
@@ -89,40 +90,51 @@ export const updateUser = async ({ id, data }) => {
 			bio
 			confirmed
 		}
-	}`);
+	}`,
+    secret
+  );
 };
 
-export const readUser = async ({ id }) => {
+export const readUser = async ({ id }, secret) => {
   console.log("readUser request");
-  return executeQuery(`query FindAUserByID {
+  return executeQuery(
+    `query FindAUserByID {
 		findUserByID(id: "${id}") {
 			${USER_DATA}
 		}
-	}`);
+	}`,
+    secret
+  );
 };
 
-export const getUserByEmail = async ({ email }) => {
+export const getUserByEmail = async ({ email }, secret) => {
   console.log("getUserByEmail request");
   email = email.toLowerCase();
-  return executeQuery(`query FindAUserByEmail {
+  return executeQuery(
+    `query FindAUserByEmail {
 		userByEmail(email: "${email}") {
 			${USER_DATA}
 		}
-	}`);
+	}`,
+    secret
+  );
 };
 
-export const confirmUser = async ({ token }) => {
+export const confirmUser = async ({ token }, secret) => {
   console.log("confirmUser request");
   try {
     var decoded = jwt.verify(token, process.env.EMAIL_SECRET);
     const id = decoded.id;
-    return executeQuery(`mutation UpdateUser {
+    return executeQuery(
+      `mutation UpdateUser {
 			updateUser(id: "${id}", data: {
 				confirmed: true
 			}) {
 				confirmed
 			}
-		}`);
+		}`,
+      secret
+    );
   } catch (e) {
     throw new Error("Confirm user error", e);
   }
@@ -132,23 +144,29 @@ export const confirmUser = async ({ token }) => {
  *  | RESUMES
  *  |----------------------------
  */
-export const getResume = async ({ id }) => {
+export const getResume = async ({ id }, secret) => {
   console.log("getResume request");
-  return executeQuery(`query GetResume {
+  return executeQuery(
+    `query GetResume {
 		findResumeByID(id: "${id}") {
 			${RESUME_DATA}
 		}
-	}`);
+	}`,
+    secret
+  );
 };
 
-export const deleteResume = async ({ id }) => {
+export const deleteResume = async ({ id }, secret) => {
   console.log("deleteResume request");
-  return executeQuery(`mutation DeleteResume {
+  return executeQuery(
+    `mutation DeleteResume {
 		cascadeDeleteResume(id: "${id}")
-	}`);
+	}`,
+    secret
+  );
 };
 
-export const createResume = async ({ userId, data }) => {
+export const createResume = async ({ userId, data }, secret) => {
   console.log("createResume request");
   var query = `mutation CreateResume {
 		createResume(data: {
@@ -184,15 +202,13 @@ export const createResume = async ({ userId, data }) => {
 			${RESUME_DATA}
 		}
 	}`;
-  return executeQuery(query);
+  return executeQuery(query, secret);
 };
 
-export const duplicateResume = async ({
-  userId,
-  resumeData,
-  title,
-  priority,
-}) => {
+export const duplicateResume = async (
+  { userId, resumeData, title, priority },
+  secret
+) => {
   console.log("duplicateResume request");
   var query = `mutation DuplicateResume {
 		createResume(data: {
@@ -243,12 +259,13 @@ export const duplicateResume = async ({
 			${RESUME_DATA}
 		}
 	}`;
-  return executeQuery(query);
+  return executeQuery(query, secret);
 };
 
-export const updateResume = async ({ id, data }) => {
+export const updateResume = async ({ id, data }, secret) => {
   console.log("updateResume request");
-  return executeQuery(`mutation UpdateResume {
+  return executeQuery(
+    `mutation UpdateResume {
 		updateResume(id: "${id}", data: {
 			${stringifyObject(data)}
 		}) {
@@ -258,17 +275,22 @@ export const updateResume = async ({ id, data }) => {
 			bio
 			templateId
 		}
-	}`);
+	}`,
+    secret
+  );
 };
 
-export const moveResume = async ({ id, amount }) => {
+export const moveResume = async ({ id, amount }, secret) => {
   console.log("moveResume request");
-  return executeQuery(`mutation MoveResume {
+  return executeQuery(
+    `mutation MoveResume {
 		moveResume(id: "${id}", amount: ${amount})
-	}`);
+	}`,
+    secret
+  );
 };
 
-// export const updateResumeTemplate = async ({ id, templateId }) => {
+// export const updateResumeTemplate = async ({ id, templateId }, secret) => {
 //   console.log("updateResumeTemplate request");
 //   return executeQuery(`mutation UpdateResumeTemplate {
 // 		updateResume(id: "${id}", data: {
@@ -278,16 +300,17 @@ export const moveResume = async ({ id, amount }) => {
 // 				_id
 // 			}
 // 		}
-// 	}`);
+// 	}`, secret);
 // };
 
 /** |----------------------------
  *  | CATEGORIES
  *  |----------------------------
  */
-export const createCategory = async ({ resumeId, data }) => {
+export const createCategory = async ({ resumeId, data }, secret) => {
   console.log("createCategory request");
-  return executeQuery(`mutation CreateCategory {
+  return executeQuery(
+    `mutation CreateCategory {
 		createCategory(data: {
 			${stringifyObject(data)}
 			resume: { connect: "${resumeId}" }
@@ -305,14 +328,16 @@ export const createCategory = async ({ resumeId, data }) => {
 				_id
 			}
 		}
-	}`);
+	}`,
+    secret
+  );
 };
 
 // export const createCategoryWithItem = async ({
 //   resumeId,
 //   categoryName,
 //   data,
-// }) => {
+// }, secret) => {
 //   console.log("createCategoryWithItem request");
 //   return executeQuery(`mutation CreateCategoryWithItem {
 // 		createCategory(data: {
@@ -343,12 +368,13 @@ export const createCategory = async ({ resumeId, data }) => {
 // 				}
 // 			}
 // 		}
-// 	}`);
+// 	}`, secret);
 // };
 
-export const updateCategory = async ({ id, data }) => {
+export const updateCategory = async ({ id, data }, secret) => {
   console.log("updateCategory request");
-  return executeQuery(`mutation UpdateCategory {
+  return executeQuery(
+    `mutation UpdateCategory {
 		updateCategory(id: "${id}", data: {
 			${stringifyObject(data)}
 		}) {
@@ -357,62 +383,82 @@ export const updateCategory = async ({ id, data }) => {
 			type
 			priority
 		}
-	}`);
+	}`,
+    secret
+  );
 };
 
-export const deleteCategory = async ({ id }) => {
+export const deleteCategory = async ({ id }, secret) => {
   console.log("deleteCategory request");
-  return executeQuery(`mutation DeleteCategory {
+  return executeQuery(
+    `mutation DeleteCategory {
 		cascadeDeleteCategory(id: "${id}")
-	}`);
+	}`,
+    secret
+  );
 };
 
-export const moveCategory = async ({ id, amount }) => {
+export const moveCategory = async ({ id, amount }, secret) => {
   console.log("moveCategory request");
-  return executeQuery(`mutation MoveCategory {
+  return executeQuery(
+    `mutation MoveCategory {
 		moveCategory(id: "${id}", amount: ${amount})
-	}`);
+	}`,
+    secret
+  );
 };
 
 /** |----------------------------
  *  | ITEMS
  *  |----------------------------
  */
-export const createItem = async ({ categoryId, data }) => {
+export const createItem = async ({ categoryId, data }, secret) => {
   console.log("createItem request");
-  return executeQuery(`mutation CreateItem {
+  return executeQuery(
+    `mutation CreateItem {
 		createItem(data: {
 			${stringifyObject(data)}
 			category: { connect: "${categoryId}" }
 		}) {
 			${ITEM_DATA}
 		}
-	}`);
+	}`,
+    secret
+  );
 };
 
-export const updateItem = async ({ id, data }) => {
+export const updateItem = async ({ id, data }, secret) => {
   console.log("updateItem request");
-  return executeQuery(`mutation UpdateItem {
+  return executeQuery(
+    `mutation UpdateItem {
 		updateItem(id: "${id}", data: {
 			${stringifyObject(data)}
 		}) {
 			${ITEM_DATA}
 		}
-	}`);
+	}`,
+    secret
+  );
 };
 
-export const deleteItem = async ({ id }) => {
+export const deleteItem = async ({ id }, secret) => {
   console.log("deleteItem request");
-  return executeQuery(`mutation DeleteItem {
+  return executeQuery(
+    `mutation DeleteItem {
 		cascadeDeleteItem(id: "${id}")
-	}`);
+	}`,
+    secret
+  );
 };
 
-export const moveItem = async ({ id, amount }) => {
+export const moveItem = async ({ id, amount }, secret) => {
   console.log("moveItem request");
-  return executeQuery(`mutation MoveItem {
+  return executeQuery(
+    `mutation MoveItem {
 		moveItem(id: "${id}", amount: ${amount})
-	}`);
+	}`,
+    secret
+  );
 };
 
 /** |----------------------------
@@ -430,10 +476,10 @@ export const moveItem = async ({ id, amount }) => {
 // 				sidebar
 // 			}
 // 		}
-// 	}`);
+// 	}`, secret);
 // };
 
-// export const updateTemplate = async ({ id, data }) => {
+// export const updateTemplate = async ({ id, data }, secret) => {
 //   console.log("updateTemplate request");
 //   return executeQuery(`mutation UpdateTemplate {
 // 		updateTemplate(id: "${id}", data: {
@@ -443,16 +489,17 @@ export const moveItem = async ({ id, amount }) => {
 // 			name
 // 			style
 // 		}
-// 	}`);
+// 	}`, secret);
 // };
 
 /** |----------------------------
  *  | CONTACT INFO
  *  |----------------------------
  */
-export const createContactInfo = async ({ resumeId, data }) => {
+export const createContactInfo = async ({ resumeId, data }, secret) => {
   console.log("createContactInfo request");
-  return executeQuery(`mutation UpdateContactInfo {
+  return executeQuery(
+    `mutation UpdateContactInfo {
 		createContactInfo(data: {
 			${stringifyObject(data)}
 			resume: { connect: "${resumeId}" }
@@ -465,12 +512,15 @@ export const createContactInfo = async ({ resumeId, data }) => {
 				_id
 			}
 		}
-	}`);
+	}`,
+    secret
+  );
 };
 
-export const updateContactInfo = async ({ id, data }) => {
+export const updateContactInfo = async ({ id, data }, secret) => {
   console.log("updateContactInfo request");
-  return executeQuery(`mutation UpdateContactInfo {
+  return executeQuery(
+    `mutation UpdateContactInfo {
 		updateContactInfo(id: "${id}", data: {
 			${stringifyObject(data)}
 		}) {
@@ -482,23 +532,29 @@ export const updateContactInfo = async ({ id, data }) => {
 				_id
 			}
 		}
-	}`);
+	}`,
+    secret
+  );
 };
 
-export const deleteContactInfo = async ({ id }) => {
+export const deleteContactInfo = async ({ id }, secret) => {
   console.log("deleteContactInfo request");
-  return executeQuery(`mutation DeleteContactInfo {
+  return executeQuery(
+    `mutation DeleteContactInfo {
 		cascadeDeleteContactInfo(id: "${id}")
-	}`);
+	}`,
+    secret
+  );
 };
 
 /** |----------------------------
  *  | LAYOUT
  *  |----------------------------
  */
-export const updateLayout = async ({ id, data }) => {
+export const updateLayout = async ({ id, data }, secret) => {
   console.log("updateLayout request");
-  return executeQuery(`mutation UpdateLayout {
+  return executeQuery(
+    `mutation UpdateLayout {
 		updateLayout(id: "${id}", data: {
 			${stringifyObject(data)}
 		}) {
@@ -506,110 +562,123 @@ export const updateLayout = async ({ id, data }) => {
 			name
 			value
 		}
-	}`);
+	}`,
+    secret
+  );
 };
 
+// Source
+// https://stackoverflow.com/questions/10730362/get-cookie-by-name
+function getCookie(name, cookies) {
+  const value = `; ${cookies}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(";").shift();
+}
+
 const fauna = async (req, res) => {
+  console.log("COOKIES\n", req.headers.cookie);
+  const userSecret = getCookie("secret", req.headers.cookie);
+  console.log("USERSECRET", userSecret);
   const { type } = req.body;
   let result;
-  console.log(req.body);
+  console.log(req.body, userSecret);
   switch (type) {
     // ----------
     // USERS
     // ----------
     case "UPDATE_USER":
-      result = await updateUser(req.body);
+      result = await updateUser(req.body, userSecret);
       break;
     case "READ_USER":
-      result = await readUser(req.body);
+      result = await readUser(req.body, userSecret);
       break;
     case "GET_USER_BY_EMAIL":
-      result = await getUserByEmail(req.body);
+      result = await getUserByEmail(req.body, userSecret);
       break;
     case "CONFIRM_USER":
-      result = await confirmUser(req.body);
+      result = await confirmUser(req.body, userSecret);
       break;
     // ----------
     // RESUMES
     // ----------
     case "GET_RESUME":
-      result = await getResume(req.body);
+      result = await getResume(req.body, userSecret);
       break;
     case "DELETE_RESUME":
-      result = await deleteResume(req.body);
+      result = await deleteResume(req.body, userSecret);
       break;
     case "CREATE_RESUME":
-      result = await createResume(req.body);
+      result = await createResume(req.body, userSecret);
       break;
     case "DUPLICATE_RESUME":
-      result = await duplicateResume(req.body);
+      result = await duplicateResume(req.body, userSecret);
       break;
     case "UPDATE_RESUME":
-      result = await updateResume(req.body);
+      result = await updateResume(req.body, userSecret);
       break;
     case "MOVE_RESUME":
-      result = await moveResume(req.body);
+      result = await moveResume(req.body, userSecret);
       break;
     // case "UPDATE_RESUME_TEMPLATE":
-    //   result = await updateResumeTemplate(req.body);
+    //   result = await updateResumeTemplate(req.body, userSecret);
     //   break;
     // ----------
     // CATEGORIES
     // ----------
     case "CREATE_CATEGORY":
-      result = await createCategory(req.body);
+      result = await createCategory(req.body, userSecret);
       break;
     // case "CREATE_CATEGORY_WITH_ITEM":
-    //   result = await createCategoryWithItem(req.body);
+    //   result = await createCategoryWithItem(req.body, userSecret);
     //   break;
     case "UPDATE_CATEGORY":
-      result = await updateCategory(req.body);
+      result = await updateCategory(req.body, userSecret);
       break;
     case "DELETE_CATEGORY":
-      result = await deleteCategory(req.body);
+      result = await deleteCategory(req.body, userSecret);
       break;
     case "MOVE_CATEGORY":
-      result = await moveCategory(req.body);
+      result = await moveCategory(req.body, userSecret);
       break;
     // ----------
     // ITEMS
     // ----------
     case "CREATE_ITEM":
-      result = await createItem(req.body);
+      result = await createItem(req.body, userSecret);
       break;
     case "UPDATE_ITEM":
-      result = await updateItem(req.body);
+      result = await updateItem(req.body, userSecret);
       break;
     case "DELETE_ITEM":
-      result = await deleteItem(req.body);
+      result = await deleteItem(req.body, userSecret);
       break;
     case "MOVE_ITEM":
-      result = await moveItem(req.body);
+      result = await moveItem(req.body, userSecret);
       break;
     // ----------
     // TEMPLATES
     // ----------
     // case "GET_TEMPLATES":
-    //   result = await getTemplates(req.body);
+    //   result = await getTemplates(req.body, userSecret);
     //   break;
     // case "UPDATE_TEMPLATE":
-    //   result = await updateTemplate(req.body);
+    //   result = await updateTemplate(req.body, userSecret);
     //   break;
     // CONTACT INFO
     case "CREATE_CONTACT_INFO":
-      result = await createContactInfo(req.body);
+      result = await createContactInfo(req.body, userSecret);
       break;
     case "UPDATE_CONTACT_INFO":
-      result = await updateContactInfo(req.body);
+      result = await updateContactInfo(req.body, userSecret);
       break;
     case "DELETE_CONTACT_INFO":
-      result = await deleteContactInfo(req.body);
+      result = await deleteContactInfo(req.body, userSecret);
       break;
     // ----------
     // LAYOUT
     // ----------
     case "UPDATE_LAYOUT":
-      result = await updateLayout(req.body);
+      result = await updateLayout(req.body, userSecret);
       break;
     default:
       result = "Error: No such type in /api/fauna: " + type;

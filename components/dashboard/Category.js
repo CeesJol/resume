@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { UserContext } from "../../contexts/userContext";
 import NewItem from "./NewItem";
 import { GET_DUMMY_ITEM } from "../../lib/constants";
+import Button from "../general/Button";
 
 const Category = ({ category, index }) => {
   const {
@@ -33,9 +34,9 @@ const Category = ({ category, index }) => {
       return item1.priority < item2.priority ? -1 : 1;
     });
   };
-  const handleMove = (category, amount) => {
+  const handleMove = async (category, amount) => {
     if (preview) return false;
-    moveCategory(category, amount);
+    await moveCategory(category, amount);
     forceRender();
   };
   return (
@@ -59,24 +60,21 @@ const Category = ({ category, index }) => {
           {category.name}
         </h3>
         {hovering && !preview && (
-          <p
-            className="resume--hoverable resume--action"
-            onClick={() => handleNewItem(category)}
-          >
-            <i>Add {category.name.toLowerCase()}</i>
-          </p>
+          <Button
+            fn={() => handleNewItem(category)}
+            text={`Add ${category.name.toLowerCase()}`}
+            textual={true}
+          />
         )}
         {hovering && index > 0 && !preview && (
           <>
-            <i> - </i>
-            <p className="resume--hoverable resume--action">
-              <i
-                onClick={() => handleMove(category, -1)}
-                style={{ cursor: "pointer" }}
-              >
-                Move up
-              </i>
-            </p>
+            <i className="separator">‒</i>
+            <Button
+              fn={() => handleMove(category, -1)}
+              text="Move up"
+              altText="Moving..."
+              textual={true}
+            />
           </>
         )}
         {getItems(category) && getItems(category).length > 0 ? (

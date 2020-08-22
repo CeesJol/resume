@@ -20,11 +20,10 @@ const ResumePreview = ({ resume, index }) => {
     setEditingResume(resume);
     setChangingResume(true);
   };
-  const handleDuplicate = (e, resume) => {
-    e.stopPropagation();
+  const handleDuplicate = async (resume) => {
     const title = resume.title + " Duplicate";
     const priority = getResumes().length + 1;
-    fauna({
+    await fauna({
       type: "DUPLICATE_RESUME",
       userId: getUser()._id,
       resumeData: resume,
@@ -34,9 +33,8 @@ const ResumePreview = ({ resume, index }) => {
       storeResume(data.createResume, { add: true });
     });
   };
-  const handleMove = (e, resume, amount) => {
-    e.stopPropagation();
-    moveResume(resume, amount);
+  const handleMove = async (resume, amount) => {
+    await moveResume(resume, amount);
     forceRender();
   };
   return (
@@ -60,11 +58,26 @@ const ResumePreview = ({ resume, index }) => {
         </h3>
 
         <footer>
-          <a onClick={(e) => handleDuplicate(e, resume)}>Create variation</a>
+          <span onClick={(event) => event.stopPropagation()}>
+            <Button
+              fn={() => handleDuplicate(resume)}
+              text="Create variation"
+              altText="Creating..."
+              textual={true}
+            />
+          </span>
+
           {index !== 0 && (
             <>
-              <i> - </i>
-              <a onClick={(e) => handleMove(e, resume, -1)}>Move up</a>
+              <i className="separator">‒</i>
+              <span onClick={(event) => event.stopPropagation()}>
+                <Button
+                  fn={() => handleMove(resume, -1)}
+                  text="Move up"
+                  altText="Moving up..."
+                  textual={true}
+                />
+              </span>
             </>
           )}
         </footer>

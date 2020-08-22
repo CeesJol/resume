@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import { GET_CATEGORY_ITEMS } from "../../lib/constants";
+import Button from "../general/Button";
 
 const NewItem = ({ category, item, index, dummy, hovering }) => {
   const {
@@ -20,61 +21,60 @@ const NewItem = ({ category, item, index, dummy, hovering }) => {
     if (dummy) setEditingItem({ category });
     else setEditingItem(item);
   };
-  const handleMove = (e, item, amount) => {
-    e.stopPropagation();
+  const handleMove = async (item, amount) => {
     if (preview || dummy) return false;
-    moveItem(item, amount);
+    console.log("Moving...");
+    await moveItem(item, amount);
+    console.log("Done!");
     forceRender();
   };
   return (
-    <>
+    <div
+      className={`resume__item resume__item--${getTypeClassName()} ${
+        !preview ? "resume--hoverable" : ""
+      }`}
+      style={
+        getTypeClassName() === "title-and-value"
+          ? {
+              backgroundColor: getLayoutItem("Primary Color"),
+            }
+          : {}
+      }
+      onClick={(e) => handleClick(e, item)}
+      key={item._id}
+    >
+      <h3 className="resume__item--title">{item.title}</h3>
       {hovering &&
         index > 0 &&
         !preview &&
         !dummy &&
         getTypeClassName() !== "title-and-value" && (
-          <p className="resume--hoverable">
-            <i
-              onClick={(e) => handleMove(e, item, -1)}
-              style={{ cursor: "pointer" }}
-            >
-              Move up
-            </i>
-          </p>
+          <span onClick={(event) => event.stopPropagation()}>
+            <Button
+              fn={() => handleMove(item, -1)}
+              text="Move up"
+              altText="Moving..."
+              textual={true}
+            />
+          </span>
         )}
-      <div
-        className={`resume__item resume__item--${getTypeClassName()} ${
-          !preview ? "resume--hoverable" : ""
-        }`}
-        style={
-          getTypeClassName() === "title-and-value"
-            ? {
-                backgroundColor: getLayoutItem("Primary Color"),
-              }
-            : {}
-        }
-        onClick={(e) => handleClick(e, item)}
-        key={item._id}
-      >
-        <h3 className="resume__item--title">{item.title}</h3>
-        <h3 className="resume__item--location">{item.location}</h3>
-        {item.year1 && (
-          <p className="resume__item--date">
-            {item.month1 ? item.month1 + "/" : ""}
-            {item.year1}
-            {item.year2 &&
-              " - " + (item.month2 ? item.month2 + "/" : "") + item.year2}
-            {!item.year2 && categoryItems.includes("year2") && " - Present"}
-          </p>
-        )}
-        {item.value && item.value}
-        {item.description && (
-          <p className="resume__item--description multiline">
-            {item.description}
-          </p>
-        )}
-      </div>
-    </>
+      <h3 className="resume__item--location">{item.location}</h3>
+      {item.year1 && (
+        <p className="resume__item--date">
+          {item.month1 ? item.month1 + "/" : ""}
+          {item.year1}
+          {item.year2 &&
+            " - " + (item.month2 ? item.month2 + "/" : "") + item.year2}
+          {!item.year2 && categoryItems.includes("year2") && " - Present"}
+        </p>
+      )}
+      {item.value && item.value}
+      {item.description && (
+        <p className="resume__item--description multiline">
+          {item.description}
+        </p>
+      )}
+    </div>
   );
 };
 

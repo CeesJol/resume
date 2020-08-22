@@ -23,7 +23,6 @@ const UserContextProvider = (props) => {
   const [changingInfo, setChangingInfo] = useState(false);
   const [editingContactInfo, setEditingContactInfo] = useState(-1);
   const [userMadeChanges, setUserMadeChanges] = useState(false);
-  const [moving, setMoving] = useState(false);
   const [selectedTemplateId, setSelectedTemplateId] = useState(0);
   const [preview, setPreview] = useState(true);
   const [pdf, setPdf] = useState(null);
@@ -258,92 +257,78 @@ const UserContextProvider = (props) => {
     return !!user && user.username;
   };
   const moveItem = async (item, amount) => {
-    if (moving) return false;
-    setMoving(true);
-
-    // Find item with priority p
-    const p = item.priority + amount;
-    var otherItem = getCategory(item.category._id).items.data.find(
-      (item) => item.priority === p
-    );
-
-    // Update priority
-    otherItem.priority -= amount;
-    item.priority += amount;
-    storeItem(otherItem, {});
-    storeItem(item, {});
-
-    resetPopups();
-
     // Send to fauna
     await fauna({
       type: "MOVE_ITEM",
       id: item._id,
       amount,
-    });
+    }).then(() => {
+      console.log("FUCK");
+      // Find item with priority p
+      const p = item.priority + amount;
+      var otherItem = getCategory(item.category._id).items.data.find(
+        (item) => item.priority === p
+      );
 
-    setMoving(false);
+      // Update priority
+      otherItem.priority -= amount;
+      item.priority += amount;
+      storeItem(otherItem, {});
+      storeItem(item, {});
+
+      resetPopups();
+    });
   };
   const moveCategory = async (category, amount) => {
-    if (moving) return false;
-    setMoving(true);
-
-    // Find category with priority p
-    const p = category.priority + amount;
-    var otherCategory = editingResume.categories.data.find(
-      (cat) => cat.priority === p
-    );
-
-    // Update priority
-    var user = getUser();
-    user.resumes.data
-      .find((resume) => resume._id === editingResume._id)
-      .categories.data.find(
-        (cat) => cat._id === otherCategory._id
-      ).priority -= amount;
-    user.resumes.data
-      .find((resume) => resume._id === editingResume._id)
-      .categories.data.find(
-        (cat) => cat._id === category._id
-      ).priority += amount;
-
-    resetPopups();
-
     // Send to fauna
     await fauna({
       type: "MOVE_CATEGORY",
       id: category._id,
       amount,
-    });
+    }).then(() => {
+      // Find category with priority p
+      const p = category.priority + amount;
+      var otherCategory = editingResume.categories.data.find(
+        (cat) => cat.priority === p
+      );
 
-    setMoving(false);
+      // Update priority
+      var user = getUser();
+      user.resumes.data
+        .find((resume) => resume._id === editingResume._id)
+        .categories.data.find(
+          (cat) => cat._id === otherCategory._id
+        ).priority -= amount;
+      user.resumes.data
+        .find((resume) => resume._id === editingResume._id)
+        .categories.data.find(
+          (cat) => cat._id === category._id
+        ).priority += amount;
+
+      resetPopups();
+    });
   };
   const moveResume = async (resume, amount) => {
-    if (moving) return false;
-    setMoving(true);
-
-    // Find item with priority p
-    const p = resume.priority + amount;
-    var otherResume = getUser().resumes.data.find(
-      (resume) => resume.priority === p
-    );
-
-    // Update priority
-    otherResume.priority -= amount;
-    resume.priority += amount;
-    storeResume(otherResume, {});
-    storeResume(resume, {});
-
-    resetPopups();
-
     // Send to fauna
     await fauna({
       type: "MOVE_RESUME",
       id: resume._id,
       amount,
-    });
+    }).then(() => {
+      // Find item with priority p
+      const p = resume.priority + amount;
+      var otherResume = getUser().resumes.data.find(
+        (resume) => resume.priority === p
+      );
 
-    setMoving(false);
+      // Update priority
+      otherResume.priority -= amount;
+      resume.priority += amount;
+      storeResume(otherResume, {});
+      storeResume(resume, {});
+
+      resetPopups();
+    });
   };
   const resetPopups = () => {
     setChangingInfo(false);

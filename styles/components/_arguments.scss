@@ -1,37 +1,37 @@
 .arguments {
-  @include gradient2;
+	@include gradient2;
 
-  &__content {
-    @include content-container;
+	&__content {
+		@include content-container;
 
-    @media (min-width: $desktop-breakpoint) {
-      text-align: center;
-    }
+		@media (min-width: $desktop-breakpoint) {
+			text-align: center;
+		}
 
-    color: white;
-  }
+		color: white;
+	}
 
-  p {
-    color: rgba(255, 255, 255, 0.8);
-  }
+	p {
+		color: rgba(255, 255, 255, 0.8);
+	}
 
-  &__args {
-    @include responsive;
-    margin-top: 5rem;
-    text-align: left;
+	&__args {
+		@include responsive;
+		margin-top: 5rem;
+		text-align: left;
 
-    img {
-      width: 8rem;
-      margin-bottom: $l-size;
-    }
+		img {
+			width: 8rem;
+			margin-bottom: $l-size;
+		}
 
-    @media (min-width: $desktop-breakpoint) {
-      align-items: initial; // cancel vertical alignment for arguments
-    }
-  }
+		@media (min-width: $desktop-breakpoint) {
+			align-items: initial; // cancel vertical alignment for arguments
+		}
+	}
 
-  footer {
-    margin-top: 3rem;
-    margin-bottom: 5rem;
-  }
+	footer {
+		margin-top: 3rem;
+		margin-bottom: 5rem;
+	}
 }

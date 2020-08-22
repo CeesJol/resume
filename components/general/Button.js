@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 
-const Button = ({ text, altText, fn, color }) => {
+const Button = ({ text, altText, fn, color, textual }) => {
   const [disabled, setDisabled] = useState(false);
   const className = color == "red" ? "button button--red" : "button";
   const handleClick = async (event) => {
@@ -12,6 +12,14 @@ const Button = ({ text, altText, fn, color }) => {
       setDisabled(false);
     }
   };
+  if (textual)
+    return (
+      <p disabled={disabled} className="resume--hoverable resume--action">
+        <i onClick={handleClick} style={{ cursor: "pointer" }}>
+          {disabled && altText ? altText : text}
+        </i>
+      </p>
+    );
   return (
     <div className="button-container">
       {fn ? (

@@ -34,13 +34,13 @@ const Popup = () => {
   });
   const category = getCategory(editingItem.category._id);
   const categoryItems = GET_CATEGORY_ITEMS(category.type);
-  const handleChange = (event) {
+  const handleChange = (event) => {
     setFields({
       ...fields,
       [event.target.name]: event.target.value,
     });
     if (!userMadeChanges) setUserMadeChanges(true);
-  }
+  };
   const handleChangeIsGoing = () => {
     setIsGoing(!isGoing);
   };

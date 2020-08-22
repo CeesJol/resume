@@ -3,11 +3,9 @@ export const UserContext = createContext();
 import { toast } from "react-toastify";
 import Router from "next/router";
 import { DUMMY_RESUME } from "../lib/constants";
-import { auth as authFunction, fauna } from "../lib/api";
-import { useCookies } from "react-cookie";
+import { fauna } from "../lib/api";
 
 const UserContextProvider = (props) => {
-  const [cookies, setCookie, removeCookie] = useCookies(["secret"]);
   const [dummy, setDummy] = useState(false);
   const [user, setUser] = useState(null);
   const [auth, setAuth] = useState(false);
@@ -237,6 +235,10 @@ const UserContextProvider = (props) => {
   };
   const clearUser = () => {
     console.log("clearUser");
+
+    const userId = JSON.parse(localStorage.getItem("userId"));
+    console.log("userId", userId);
+
     // Get user away from dashboard
     if (Router.pathname.startsWith("/dashboard")) {
       Router.push("/login");
@@ -244,9 +246,6 @@ const UserContextProvider = (props) => {
 
     // Reset localstorage
     localStorage.removeItem("userId");
-
-    // Reset cookies
-    removeCookie("secret");
 
     // Reset state
     setUser(null);
@@ -263,7 +262,6 @@ const UserContextProvider = (props) => {
       id: item._id,
       amount,
     }).then(() => {
-      console.log("FUCK");
       // Find item with priority p
       const p = item.priority + amount;
       var otherItem = getCategory(item.category._id).items.data.find(
@@ -353,52 +351,35 @@ const UserContextProvider = (props) => {
   useEffect(() => {
     if (user == null) {
       const userId = JSON.parse(localStorage.getItem("userId"));
-      const localSecret = cookies.secret;
-      if (userId != null && localSecret != null) {
-        authFunction({ type: "IDENTITY", secret: localSecret }).then(
+      if (userId != null) {
+        fauna({ type: "READ_USER", id: userId }).then(
           (data) => {
-            // Database confirms that user is logged in!
-            // Update user info
-            fauna({ type: "READ_USER", id: userId }).then(
-              (data) => {
-                if (!data.findUserByID) {
-                  console.log("data", data);
-                  toast.error(`⚠️ Unauthenticated`);
-                  clearUser();
-                  return;
-                }
-                if (data.findUserByID.resumes.data[0]) {
-                  setEditingResume(data.findUserByID.resumes.data[0]);
-                } else {
-                  setEditingResume(DUMMY_RESUME);
-                }
-                storeUser(data.findUserByID);
-                console.log("readUser");
-                console.table(data.findUserByID);
+            if (!data.findUserByID) {
+              console.log("data", data);
+              toast.error(`⚠️ Unauthenticated`);
+              clearUser();
+              return;
+            }
+            if (data.findUserByID.resumes.data[0]) {
+              setEditingResume(data.findUserByID.resumes.data[0]);
+            } else {
+              setEditingResume(DUMMY_RESUME);
+            }
+            storeUser(data.findUserByID);
+            console.log("readUser");
+            console.table(data.findUserByID);
 
-                setAuth(true);
-              },
-              (err) => {
-                toast.error(`⚠️ ${err}`);
-                console.error("Failed getting the user data", err);
-                clearUser();
-              }
-            );
+            setAuth(true);
           },
           (err) => {
-            // Database denies that user is logged in!
-            console.log("userId:", userId);
-            console.log("secret", cookies.secret);
-            console.warn("Your secret is fake news", err);
             toast.error(`⚠️ ${err}`);
+            console.error("Failed getting the user data", err);
             clearUser();
           }
         );
       } else {
         // There is no user data
         console.log("No user data");
-        console.log("userId", userId);
-        console.log("localSecret", localSecret);
         clearUser();
       }
     }

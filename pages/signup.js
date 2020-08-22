@@ -4,43 +4,25 @@ import Link from "next/link";
 import Button from "../components/general/Button";
 import { UserContext } from "../contexts/userContext";
 import { toast } from "react-toastify";
-import { auth, send, fauna } from "../lib/api";
-import { COOKIE_MAX_AGE } from "../lib/constants";
-import { useCookies } from "react-cookie";
+import { send, fauna } from "../lib/api";
 
 const Signup = () => {
-  const [cookies, setCookie] = useCookies(["secret"]);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { userExists, storeUser, setAuth } = useContext(UserContext);
   const handleLogin = async (event) => {
     if (event) event.preventDefault();
-    await auth({ type: "LOGIN", email, password }).then(
-      async (res) => {
+    await fauna({ type: "LOGIN_USER", email, password }).then(
+      async (data) => {
         setAuth(true);
-        const id = res.instance["@ref"].id;
-        // On production, set cookies to HTTPS only
-        setCookie("secret", res.secret, {
-          path: "/",
-          secure: process.env.NODE_ENV !== "development",
-          maxAge: COOKIE_MAX_AGE,
-        });
-        const userData = { id, email };
-        storeUser(userData);
-        localStorage.setItem("userId", JSON.stringify(id));
         send({ type: "SEND_CONFIRMATION_EMAIL", id, email });
-        await fauna({ type: "GET_USER_BY_EMAIL", email }).then(
-          (data) => {
-            console.log("getUserByEmail", data);
-            storeUser(data.userByEmail);
-            Router.push("/dashboard");
-          },
-          (err) => {
-            console.error("signup err", err);
-            toast.error("⚠️ Login failed");
-          }
-        );
+        console.log("getUserByEmail", data);
+        storeUser(data.loginUser.user);
+        const id = data.loginUser.user._id;
+        localStorage.setItem("userId", JSON.stringify(id));
+        storeUser({ id });
+        Router.push("/dashboard");
       },
       (err) => {
         console.error("(Signup) login err", err);
@@ -50,8 +32,8 @@ const Signup = () => {
   };
   const handleSignUp = async (event) => {
     if (event) event.preventDefault();
-    await auth({ type: "SIGNUP", email, username, password }).then(
-      async (res) => {
+    await fauna({ type: "CREATE_USER", email, username, password }).then(
+      async () => {
         await handleLogin();
       },
       (err) => {

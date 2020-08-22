@@ -4,12 +4,9 @@ import Link from "next/link";
 import Button from "../components/general/Button";
 import { UserContext } from "../contexts/userContext";
 import { toast } from "react-toastify";
-import { auth, fauna } from "../lib/api";
-import { COOKIE_MAX_AGE } from "../lib/constants";
-import { useCookies } from "react-cookie";
+import { fauna } from "../lib/api";
 
 const Login = () => {
-  const [cookies, setCookie] = useCookies(["secret"]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { userExists, storeUser, setAuth, setLoggingOut } = useContext(
@@ -17,33 +14,18 @@ const Login = () => {
   );
   const handleLogin = async (event) => {
     if (event) event.preventDefault();
-    await auth({ type: "LOGIN", email, password }).then(
-      async (res) => {
+    await fauna({ type: "LOGIN_USER", email, password }).then(
+      async (data) => {
         setAuth(true);
-        const id = res.instance["@ref"].id;
-        // On production, set cookies to HTTPS only
-        setCookie("secret", res.secret, {
-          path: "/",
-          secure: process.env.NODE_ENV !== "development",
-          maxAge: COOKIE_MAX_AGE,
-        });
-        const userData = { id, email };
-        storeUser(userData);
+        console.log("loginUser", data);
+        storeUser(data.loginUser.user);
+        const id = data.loginUser.user._id;
+        storeUser({ id });
         localStorage.setItem("userId", JSON.stringify(id));
-        await fauna({ type: "GET_USER_BY_EMAIL", email }).then(
-          (data) => {
-            console.log("getUserByEmail", data);
-            storeUser(data.userByEmail);
-            Router.push("/dashboard");
-          },
-          (err) => {
-            console.error("login err", err);
-            toast.error("⚠️ Login failed");
-          }
-        );
+        Router.push("/dashboard");
       },
       (err) => {
-        console.error("login err 2", err);
+        console.error("login err", err);
         toast.error("⚠️ Login failed");
       }
     );

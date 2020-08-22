@@ -3,7 +3,6 @@ import App from "next/app";
 import Head from "next/head";
 import UserContextProvider from "../contexts/userContext";
 import { ToastContainer } from "react-toastify";
-import { CookiesProvider } from "react-cookie";
 
 import "../styles/index.scss";
 import "font-awesome/css/font-awesome.min.css";
@@ -24,12 +23,10 @@ class MyApp extends App {
             <title>Affilas</title>
           </Head>
         </div>
-        <CookiesProvider>
-          <UserContextProvider>
-            <ToastContainer />
-            <Component {...pageProps} />
-          </UserContextProvider>
-        </CookiesProvider>
+        <UserContextProvider>
+          <ToastContainer />
+          <Component {...pageProps} />
+        </UserContextProvider>
       </div>
     );
   }

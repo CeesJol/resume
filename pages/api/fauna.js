@@ -4,8 +4,14 @@ import {
   DEFAULT_CATEGORIES,
   DEFAULT_CATEGORIES_SIDEBAR_CUTOFF,
   SIDEBAR_INCREMENT,
+  COOKIE_MAX_AGE,
 } from "../../lib/constants";
 import jwt from "jsonwebtoken";
+import {
+  validateSignup,
+  validateLogin,
+  validatePassword,
+} from "../../lib/validate";
 
 const ITEM_DATA = `_id
 title
@@ -76,6 +82,73 @@ resumes {
  *  | USER
  *  |----------------------------
  */
+export const loginUser = ({ email, password }) => {
+  console.log("loginUser request");
+  email = email.toLowerCase();
+  const validationError = validateLogin(email, password);
+  if (validationError) return Promise.reject(validationError);
+  return executeQuery(
+    `mutation LoginUser {
+			loginUser(email:"${email}", password: "${password}") {
+				token
+				user {
+					${USER_DATA}
+				}
+			}
+		}`,
+    process.env.FAUNADB_SECRET_KEY
+  );
+};
+
+export const logoutUser = (secret) => {
+  console.log("logoutUser request");
+  return executeQuery(
+    `mutation LogoutUser {
+			logoutUser
+		}`,
+    secret
+  );
+};
+
+export const createUser = ({ email, username, password }) => {
+  console.log("createUser request");
+  email = email.toLowerCase();
+  const validationError = validateSignup(email, username, password);
+  if (validationError) return Promise.reject(validationError);
+  return executeQuery(
+    `mutation CreateUser {
+			createUser(email: "${email}", username: "${username}", password: "${password}") {
+				_id
+				username
+				email
+				jobTitle
+				bio
+				confirmed
+			}
+		}`,
+    process.env.FAUNADB_SECRET_KEY
+  );
+};
+
+export const updateUserPassword = ({ id, password }, secret) => {
+  console.log("updateUserPassword request");
+  const validationError = validatePassword(password);
+  if (validationError) return Promise.reject(validationError);
+  return executeQuery(
+    `mutation UpdateUserPassword {
+			updateUserPassword(id: "${id}", password: "${password}") {
+				_id
+				username
+				email
+				jobTitle
+				bio
+				confirmed
+			}
+		}`,
+    secret
+  );
+};
+
 export const updateUser = async ({ id, data }, secret) => {
   console.log("updateUser request", id, data);
   if (data.email) data.email.toLowerCase();
@@ -576,16 +649,33 @@ function getCookie(name, cookies) {
 }
 
 const fauna = async (req, res) => {
-  console.log("COOKIES\n", req.headers.cookie);
   const userSecret = getCookie("secret", req.headers.cookie);
-  console.log("USERSECRET", userSecret);
   const { type } = req.body;
   let result;
-  console.log(req.body, userSecret);
   switch (type) {
     // ----------
     // USERS
     // ----------
+    case "LOGIN_USER":
+      result = await loginUser(req.body);
+      // Set secret cookie
+      res.setHeader("Set-Cookie", [
+        `secret=${result.loginUser.token}; HttpOnly; Max-Age=${COOKIE_MAX_AGE}`,
+      ]);
+      break;
+    case "LOGOUT_USER":
+      result = await logoutUser(userSecret);
+      // Delete secret cookie
+      res.setHeader("Set-Cookie", [
+        `secret=deleted; expires=Thu, 01 Jan 1970 00:00:00 GMT`,
+      ]);
+      break;
+    case "CREATE_USER":
+      result = await createUser(req.body);
+      break;
+    case "UPDATE_USER_PASSWORD":
+      result = await updateUserPassword(req.body, userSecret);
+      break;
     case "UPDATE_USER":
       result = await updateUser(req.body, userSecret);
       break;

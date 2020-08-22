@@ -23,9 +23,7 @@ const NewItem = ({ category, item, index, dummy, hovering }) => {
   };
   const handleMove = async (item, amount) => {
     if (preview || dummy) return false;
-    console.log("Moving...");
     await moveItem(item, amount);
-    console.log("Done!");
     forceRender();
   };
   return (

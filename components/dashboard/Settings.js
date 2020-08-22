@@ -86,8 +86,12 @@ const Settings = () => {
       toast.error(`⚠️ ${validationError}`);
       return false;
     }
-    await auth({ type: "UPDATE_PASSWORD", id: getUser()._id, password }).then(
-      (data) => {
+    await fauna({
+      type: "UPDATE_USER_PASSWORD",
+      id: getUser()._id,
+      password,
+    }).then(
+      () => {
         toast.success("💾 Updated successfully!");
       },
       (err) => {

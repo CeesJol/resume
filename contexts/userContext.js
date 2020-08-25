@@ -1,9 +1,10 @@
 import React, { createContext, useState, useEffect } from "react";
-export const UserContext = createContext();
 import { toast } from "react-toastify";
 import Router from "next/router";
 import { DUMMY_RESUME } from "../lib/constants";
 import { fauna } from "../lib/api";
+
+export const UserContext = createContext();
 
 const UserContextProvider = (props) => {
   const [dummy, setDummy] = useState(false);
@@ -31,47 +32,6 @@ const UserContextProvider = (props) => {
   };
   const storeUser = (data) => {
     setUser((prevUser) => ({ ...prevUser, ...data }));
-  };
-  const storeItem = (itemData, { del, add }) => {
-    var user = getUser();
-
-    // jr developer: the code isnt that bad
-    // the code:
-    user.resumes.data.some((resume, r) => {
-      if (resume._id === editingResume._id) {
-        resume.categories.data.some((category, c) => {
-          if (category._id === itemData.category._id) {
-            if (add) {
-              // Add item
-              user.resumes.data[r].categories.data[c].items.data.push(itemData);
-              // setEditingItem(itemData);
-              return true; // break the loop
-            } else if (del) {
-              // Delete item
-              user.resumes.data[r].categories.data[
-                c
-              ].items.data = user.resumes.data[r].categories.data[
-                c
-              ].items.data.filter((x) => x._id !== itemData._id);
-              return true; // break the loop
-            }
-            category.items.data.some((item, i) => {
-              if (item._id === itemData._id) {
-                // Update item
-                const newItem = { ...item, ...itemData };
-                user.resumes.data[r].categories.data[c].items.data[i] = newItem;
-                // setEditingItem(newItem);
-                return true; // break the loop
-              }
-            });
-            return true; // break the loop
-          }
-        });
-        return true; // break the loop
-      }
-    });
-
-    setUser(() => user);
   };
   const getCategory = (categoryId) => {
     return editingResume.categories.data.find(
@@ -136,51 +96,78 @@ const UserContextProvider = (props) => {
 
     setUser(() => user);
   };
-  const storeContactInfo = (contactInfoData, { add, del }) => {
-    var user = getUser();
+  const storeCategory = (categoryData, { add, del }) => {
+    const resume = getUser().resumes.data.find(
+      (res) => res._id === editingResume._id
+    );
 
-    user.resumes.data.some((resume, r) => {
-      if (resume._id === editingResume._id) {
-        if (add) {
-          // Add contactInfo
-          user.resumes.data[r].contactInfo.data.push(contactInfoData);
-          return true; // break the loop
+    if (add) {
+      // Add category
+      resume.categories.data.push(categoryData);
+    } else if (del) {
+      // Delete category
+      resume.categories.data = resume.categories.data.filter(
+        (category) => category._id !== categoryData._id
+      );
+    } else {
+      resume.categories.data.find((category, i) => {
+        if (category._id === categoryData._id) {
+          // Update category
+          const newCategory = { ...category, ...categoryData };
+          resume.categories.data[i] = newCategory;
         }
-        resume.contactInfo.data.some((contactInfo, c) => {
-          if (contactInfo._id === contactInfoData._id) {
-            if (del) {
-              // Delete contactInfo
-              user.resumes.data[r].contactInfo.data = user.resumes.data[
-                r
-              ].contactInfo.data.filter((x) => x._id !== contactInfoData._id);
-            } else {
-              // Update contactInfo
-              const newContactInfo = { ...contactInfo, ...contactInfoData };
-              user.resumes.data[r].contactInfo.data[c] = newContactInfo;
-            }
-            return true; // break the loop
-          }
-        });
-        return true; // break the loop
-      }
-    });
-
-    setUser(() => user);
+      });
+    }
   };
-  // const storeTemplate = (templateId) => {
-  //   var user = getUser();
+  const storeItem = (itemData, { del, add }) => {
+    const resume = getUser().resumes.data.find(
+      (res) => res._id === editingResume._id
+    );
+    const category = resume.categories.data.find(
+      (cat) => cat._id === itemData.category._id
+    );
 
-  //   user.resumes.data.forEach((resume, r) => {
-  //     if (resume._id === editingResume._id) {
-  //       user.resumes.data[r].template = templates.find(
-  //         (template) => template._id === templateId
-  //       );
-  //       setEditingResume(user.resumes.data[r]);
-  //     }
-  //   });
+    if (add) {
+      // Add item
+      category.items.data.push(itemData);
+    } else if (del) {
+      // Delete item
+      category.items.data = category.items.data.filter(
+        (item) => item._id !== itemData._id
+      );
+    } else {
+      category.items.data.find((item, i) => {
+        if (item._id === itemData._id) {
+          // Update item
+          const newItem = { ...item, ...itemData };
+          category.items.data[i] = newItem;
+        }
+      });
+    }
+  };
+  const storeContactInfo = (contactInfoData, { add, del }) => {
+    const resume = getUser().resumes.data.find(
+      (res) => res._id === editingResume._id
+    );
 
-  //   setUser(() => user);
-  // };
+    if (add) {
+      // Add contactInfo
+      resume.contactInfo.data.push(contactInfoData);
+    } else if (del) {
+      // Delete contactInfo
+      resume.contactInfo.data = resume.contactInfo.data.filter(
+        (item) => item._id !== contactInfoData._id
+      );
+    } else {
+      resume.contactInfo.data.find((item, i) => {
+        if (item._id === contactInfoData._id) {
+          // Update contactInfo
+          const newItem = { ...contactInfo, ...contactInfoData };
+          resume.contactInfo.data[i] = newItem;
+        }
+      });
+    }
+  };
   const storeLayout = (layoutData) => {
     var user = getUser();
 
@@ -194,41 +181,6 @@ const UserContextProvider = (props) => {
         });
       }
     });
-
-    setUser(() => user);
-  };
-  const storeCategory = (categoryData, { add, del }) => {
-    var user = getUser();
-
-    user.resumes.data.some((resume, r) => {
-      if (resume._id === editingResume._id) {
-        if (add) {
-          // Add category
-          user.resumes.data[r].categories.data.push(categoryData);
-          // setEditingCategory(categoryData);
-          return true; // break the loop
-        }
-        resume.categories.data.some((category, c) => {
-          if (category._id === categoryData._id) {
-            if (del) {
-              // Delete category
-              user.resumes.data[r].categories.data = user.resumes.data[
-                r
-              ].categories.data.filter((x) => x._id !== categoryData._id);
-            } else {
-              // Update category
-              const newCategory = { ...category, ...categoryData };
-              user.resumes.data[r].categories.data[c] = newCategory;
-              // setEditingCategory(newCategory);
-            }
-            return true; // break the loop
-          }
-        });
-        return true; // break the loop
-      }
-    });
-
-    setUser(() => user);
   };
   const getUser = () => {
     return user;
@@ -421,7 +373,6 @@ const UserContextProvider = (props) => {
         moveResume,
         storeItem,
         storeResume,
-        // storeTemplate,
         storeLayout,
         storeCategory,
         userMadeChanges,

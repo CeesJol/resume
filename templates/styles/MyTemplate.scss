@@ -1,0 +1,9 @@
+.MyTemplate .resume {
+	&__category--name,
+	&__contact-info--icon {
+		color: rgb(62, 207, 142);
+	}
+	&__item--title-and-value {
+		background-color: rgb(62, 207, 142);
+	}
+}

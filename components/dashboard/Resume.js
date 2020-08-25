@@ -127,7 +127,6 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
     <div
       className={"resume-container " + (tiny ? "resume-container--tiny" : "")}
     >
-      <style>{templateCSS.style}</style>
       <div
         className={
           "resume " + (templateCSS.id + " ") + (tiny ? "resume--tiny" : "")

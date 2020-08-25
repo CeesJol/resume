@@ -73,7 +73,7 @@
 
 	&--hoverable {
 		// Remove weird effect where after 'transform: scale' the left pixel column is cut off
-		padding-left: 1px;
+		// padding-left: 1px;
 
 		@include hover;
 	}
@@ -130,9 +130,8 @@
 		}
 	}
 
-	&__category--name,
-	&__item--title {
-		margin-right: calc(#{$xs-size} * #{$resume-scale});
+	&__actions {
+		margin-left: calc(#{$xs-size} * #{$resume-scale});
 	}
 
 	&__category {

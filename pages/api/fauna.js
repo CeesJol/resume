@@ -192,7 +192,7 @@ export const getUserByEmail = async ({ email }, secret) => {
 export const confirmUser = async ({ token }, secret) => {
   console.log("confirmUser request");
   try {
-    var decoded = jwt.verify(token, process.env.EMAIL_SECRET);
+    const decoded = jwt.verify(token, process.env.EMAIL_SECRET);
     const id = decoded.id;
     return executeQuery(
       `mutation UpdateUser {
@@ -204,8 +204,8 @@ export const confirmUser = async ({ token }, secret) => {
 		}`,
       secret
     );
-  } catch (e) {
-    throw new Error("Confirm user error", e);
+  } catch (err) {
+    return [{ message: "Confirm user error:" + err }];
   }
 };
 
@@ -635,6 +635,24 @@ export const updateLayout = async ({ id, data }, secret) => {
   );
 };
 
+export const faultyQuery = async () => {
+  console.log("faultyQuery request");
+  // try {
+  //   throw new Error("NO.");
+  // } catch (err) {
+  //   return [{ message: "Confirm user error:" + err }];
+  // }
+
+  return executeQuery(
+    `query PlausibleError{
+		plausibleError {
+			_id
+		}
+	}`,
+    process.env.FAUNADB_SECRET_KEY
+  );
+};
+
 // Source
 // https://stackoverflow.com/questions/10730362/get-cookie-by-name
 function getCookie(name, cookies) {
@@ -647,127 +665,134 @@ const fauna = async (req, res) => {
   const userSecret = getCookie("secret", req.headers.cookie);
   const { type } = req.body;
   let result;
-  switch (type) {
-    // ----------
-    // USERS
-    // ----------
-    case "LOGIN_USER":
-      result = await loginUser(req.body);
-      // Set secret cookie
-      res.setHeader("Set-Cookie", [
-        `secret=${result.loginUser.token}; HttpOnly; Max-Age=${COOKIE_MAX_AGE}`,
-      ]);
-      break;
-    case "LOGOUT_USER":
-      result = await logoutUser(userSecret);
-      // Delete secret cookie
-      res.setHeader("Set-Cookie", [
-        `secret=deleted; expires=Thu, 01 Jan 1970 00:00:00 GMT`,
-      ]);
-      break;
-    case "CREATE_USER":
-      result = await createUser(req.body);
-      break;
-    case "UPDATE_USER_PASSWORD":
-      result = await updateUserPassword(req.body, userSecret);
-      break;
-    case "UPDATE_USER":
-      result = await updateUser(req.body, userSecret);
-      break;
-    case "READ_USER":
-      result = await readUser(req.body, userSecret);
-      break;
-    case "GET_USER_BY_EMAIL":
-      result = await getUserByEmail(req.body, userSecret);
-      break;
-    case "CONFIRM_USER":
-      result = await confirmUser(req.body, userSecret);
-      break;
-    // ----------
-    // RESUMES
-    // ----------
-    case "GET_RESUME":
-      result = await getResume(req.body, userSecret);
-      break;
-    case "DELETE_RESUME":
-      result = await deleteResume(req.body, userSecret);
-      break;
-    case "CREATE_RESUME":
-      result = await createResume(req.body, userSecret);
-      break;
-    case "DUPLICATE_RESUME":
-      result = await duplicateResume(req.body, userSecret);
-      break;
-    case "UPDATE_RESUME":
-      result = await updateResume(req.body, userSecret);
-      break;
-    case "MOVE_RESUME":
-      result = await moveResume(req.body, userSecret);
-      break;
-    // case "UPDATE_RESUME_TEMPLATE":
-    //   result = await updateResumeTemplate(req.body, userSecret);
-    //   break;
-    // ----------
-    // CATEGORIES
-    // ----------
-    case "CREATE_CATEGORY":
-      result = await createCategory(req.body, userSecret);
-      break;
-    // case "CREATE_CATEGORY_WITH_ITEM":
-    //   result = await createCategoryWithItem(req.body, userSecret);
-    //   break;
-    case "UPDATE_CATEGORY":
-      result = await updateCategory(req.body, userSecret);
-      break;
-    case "DELETE_CATEGORY":
-      result = await deleteCategory(req.body, userSecret);
-      break;
-    case "MOVE_CATEGORY":
-      result = await moveCategory(req.body, userSecret);
-      break;
-    // ----------
-    // ITEMS
-    // ----------
-    case "CREATE_ITEM":
-      result = await createItem(req.body, userSecret);
-      break;
-    case "UPDATE_ITEM":
-      result = await updateItem(req.body, userSecret);
-      break;
-    case "DELETE_ITEM":
-      result = await deleteItem(req.body, userSecret);
-      break;
-    case "MOVE_ITEM":
-      result = await moveItem(req.body, userSecret);
-      break;
-    // ----------
-    // TEMPLATES
-    // ----------
-    // case "GET_TEMPLATES":
-    //   result = await getTemplates(req.body, userSecret);
-    //   break;
-    // case "UPDATE_TEMPLATE":
-    //   result = await updateTemplate(req.body, userSecret);
-    //   break;
-    // CONTACT INFO
-    case "CREATE_CONTACT_INFO":
-      result = await createContactInfo(req.body, userSecret);
-      break;
-    case "UPDATE_CONTACT_INFO":
-      result = await updateContactInfo(req.body, userSecret);
-      break;
-    case "DELETE_CONTACT_INFO":
-      result = await deleteContactInfo(req.body, userSecret);
-      break;
-    // ----------
-    // LAYOUT
-    // ----------
-    case "UPDATE_LAYOUT":
-      result = await updateLayout(req.body, userSecret);
-      break;
-    default:
-      result = "Error: No such type in /api/fauna: " + type;
-      console.log(result);
+
+  try {
+    switch (type) {
+      // ----------
+      // USERS
+      // ----------
+      case "LOGIN_USER":
+        result = await loginUser(req.body);
+        // Set secret cookie
+        res.setHeader("Set-Cookie", [
+          `secret=${result.loginUser.token}; HttpOnly; Max-Age=${COOKIE_MAX_AGE}`,
+        ]);
+        break;
+      case "LOGOUT_USER":
+        result = await logoutUser(userSecret);
+        // Delete secret cookie
+        res.setHeader("Set-Cookie", [
+          `secret=deleted; expires=Thu, 01 Jan 1970 00:00:00 GMT`,
+        ]);
+        break;
+      case "CREATE_USER":
+        result = await createUser(req.body);
+        break;
+      case "UPDATE_USER_PASSWORD":
+        result = await updateUserPassword(req.body, userSecret);
+        break;
+      case "UPDATE_USER":
+        result = await updateUser(req.body, userSecret);
+        break;
+      case "READ_USER":
+        result = await readUser(req.body, userSecret);
+        break;
+      case "GET_USER_BY_EMAIL":
+        result = await getUserByEmail(req.body, userSecret);
+        break;
+      case "CONFIRM_USER":
+        result = await confirmUser(req.body, userSecret);
+        break;
+      // ----------
+      // RESUMES
+      // ----------
+      case "GET_RESUME":
+        result = await getResume(req.body, userSecret);
+        break;
+      case "DELETE_RESUME":
+        result = await deleteResume(req.body, userSecret);
+        break;
+      case "CREATE_RESUME":
+        result = await createResume(req.body, userSecret);
+        break;
+      case "DUPLICATE_RESUME":
+        result = await duplicateResume(req.body, userSecret);
+        break;
+      case "UPDATE_RESUME":
+        result = await updateResume(req.body, userSecret);
+        break;
+      case "MOVE_RESUME":
+        result = await moveResume(req.body, userSecret);
+        break;
+      // case "UPDATE_RESUME_TEMPLATE":
+      //   result = await updateResumeTemplate(req.body, userSecret);
+      //   break;
+      // ----------
+      // CATEGORIES
+      // ----------
+      case "CREATE_CATEGORY":
+        result = await createCategory(req.body, userSecret);
+        break;
+      // case "CREATE_CATEGORY_WITH_ITEM":
+      //   result = await createCategoryWithItem(req.body, userSecret);
+      //   break;
+      case "UPDATE_CATEGORY":
+        result = await updateCategory(req.body, userSecret);
+        break;
+      case "DELETE_CATEGORY":
+        result = await deleteCategory(req.body, userSecret);
+        break;
+      case "MOVE_CATEGORY":
+        result = await moveCategory(req.body, userSecret);
+        break;
+      // ----------
+      // ITEMS
+      // ----------
+      case "CREATE_ITEM":
+        result = await createItem(req.body, userSecret);
+        break;
+      case "UPDATE_ITEM":
+        result = await updateItem(req.body, userSecret);
+        break;
+      case "DELETE_ITEM":
+        result = await deleteItem(req.body, userSecret);
+        break;
+      case "MOVE_ITEM":
+        result = await moveItem(req.body, userSecret);
+        break;
+      // ----------
+      // TEMPLATES
+      // ----------
+      // case "GET_TEMPLATES":
+      //   result = await getTemplates(req.body, userSecret);
+      //   break;
+      // case "UPDATE_TEMPLATE":
+      //   result = await updateTemplate(req.body, userSecret);
+      //   break;
+      // CONTACT INFO
+      case "CREATE_CONTACT_INFO":
+        result = await createContactInfo(req.body, userSecret);
+        break;
+      case "UPDATE_CONTACT_INFO":
+        result = await updateContactInfo(req.body, userSecret);
+        break;
+      case "DELETE_CONTACT_INFO":
+        result = await deleteContactInfo(req.body, userSecret);
+        break;
+      // ----------
+      // LAYOUT
+      // ----------
+      case "UPDATE_LAYOUT":
+        result = await updateLayout(req.body, userSecret);
+        break;
+      case "FAULTY_QUERY":
+        result = await faultyQuery();
+        break;
+      default:
+        result = [{ message: "Error: No such type in /api/fauna: " + type }];
+    }
+  } catch (e) {
+    result = e;
   }
   res.end(JSON.stringify(result));
 };

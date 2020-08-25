@@ -60,22 +60,24 @@ const Category = ({ category, index }) => {
           {category.name}
         </h3>
         {hovering && !preview && (
-          <Button
-            fn={() => handleNewItem(category)}
-            text={`Add ${category.name.toLowerCase()}`}
-            textual={true}
-          />
-        )}
-        {hovering && index > 0 && !preview && (
-          <>
-            <i className="separator">‒</i>
+          <span className="resume__actions">
             <Button
-              fn={() => handleMove(category, -1)}
-              text="Move up"
-              altText="Moving..."
+              fn={() => handleNewItem(category)}
+              text={` Add ${category.name.toLowerCase()}`}
               textual={true}
             />
-          </>
+            {index > 0 && (
+              <>
+                <i className="separator">‒</i>
+                <Button
+                  fn={() => handleMove(category, -1)}
+                  text="Move up"
+                  altText="Moving..."
+                  textual={true}
+                />
+              </>
+            )}
+          </span>
         )}
         {getItems(category) && getItems(category).length > 0 ? (
           <div className="resume__category--items-container">

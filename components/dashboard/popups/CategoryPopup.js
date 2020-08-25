@@ -47,7 +47,7 @@ const CategoryPopup = () => {
     }
 
     const resumeId = editingResume._id;
-    let priority = getCategories().length() + 1;
+    let priority = getCategories().length + 1;
     await fauna({
       type: "CREATE_CATEGORY",
       resumeId,
@@ -59,7 +59,7 @@ const CategoryPopup = () => {
         // 		: DEFAULT_CATEGORIES.find((cat) => cat.name === name).type,
         type,
         sidebar: editingCategory.sidebar,
-        priority: priority + 1,
+        priority,
       },
     }).then(
       async (data) => {

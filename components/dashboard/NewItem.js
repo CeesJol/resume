@@ -47,7 +47,10 @@ const NewItem = ({ category, item, index, dummy, hovering }) => {
         !preview &&
         !dummy &&
         getTypeClassName() !== "title-and-value" && (
-          <span onClick={(event) => event.stopPropagation()}>
+          <span
+            className="resume__actions"
+            onClick={(event) => event.stopPropagation()}
+          >
             <Button
               fn={() => handleMove(item, -1)}
               text="Move up"

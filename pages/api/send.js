@@ -36,10 +36,10 @@ export const sendConfirmationEmail = async ({ id, email }) => {
   try {
     await sgMail.send(content);
     console.log("Message sent successfully.");
-    return "Message sent successfully.";
+    return { message: "Message sent successfully." };
   } catch (err) {
     console.error("send ERROR", err);
-    return "Message not sent.";
+    return [{ message: "Message not sent: " + err }];
   }
 };
 

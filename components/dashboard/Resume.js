@@ -3,7 +3,6 @@ import { UserContext } from "../../contexts/userContext";
 import Category from "./Category";
 import ContactItem from "./ContactItem";
 import { PDFExport } from "@progress/kendo-react-pdf";
-import { SIDEBAR_INCREMENT } from "../../lib/constants";
 import { getTemplate } from "../../templates/templates";
 
 // PDF Export source
@@ -70,42 +69,8 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
     if (!getCategories(resume)) return <p>Nothing here yet</p>;
 
     const categories = sortByPriority(getCategories(resume));
-    if (templateCSS.sidebar) {
-      const mainCategories = categories.filter(
-        (category) => category.priority <= SIDEBAR_INCREMENT
-      );
-      const sidebarCategories = categories.filter(
-        (category) => category.priority > SIDEBAR_INCREMENT
-      );
 
-      return (
-        <>
-          <div className="resume__container resume__container--left">
-            {mainCategories.map((category, index) =>
-              drawCategory(category, index)
-            )}
-            {!preview && (
-              <p className="resume--hoverable" onClick={handleNewCategory}>
-                <i>Create new category</i>
-              </p>
-            )}
-          </div>
-          <div className="resume__container resume__container--right">
-            {sidebarCategories.map((category, index) =>
-              drawCategory(category, index)
-            )}
-            {!preview && (
-              <p
-                className="resume--hoverable"
-                onClick={() => handleNewCategory({ sidebar: true })}
-              >
-                <i>Create new category</i>
-              </p>
-            )}
-          </div>
-        </>
-      );
-    } else {
+    if (!templateCSS.sidebar) {
       return (
         <div className="resume__container">
           {categories.map((category, index) => drawCategory(category, index))}
@@ -117,6 +82,37 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
         </div>
       );
     }
+
+    const mainCategories = categories.filter((category) => !category.sidebar);
+    const sidebarCategories = categories.filter((category) => category.sidebar);
+
+    return (
+      <>
+        <div className="resume__container resume__container--left">
+          {mainCategories.map((category, index) =>
+            drawCategory(category, index)
+          )}
+          {!preview && (
+            <p className="resume--hoverable" onClick={handleNewCategory}>
+              <i>Create new category</i>
+            </p>
+          )}
+        </div>
+        <div className="resume__container resume__container--right">
+          {sidebarCategories.map((category, index) =>
+            drawCategory(category, index)
+          )}
+          {!preview && (
+            <p
+              className="resume--hoverable"
+              onClick={() => handleNewCategory({ sidebar: true })}
+            >
+              <i>Create new category</i>
+            </p>
+          )}
+        </div>
+      </>
+    );
   };
   const handleNewCategory = ({ sidebar }) => {
     if (preview) return false;

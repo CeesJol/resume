@@ -3,11 +3,7 @@ import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import { toast } from "react-toastify";
 import { fauna } from "../../../lib/api";
-import {
-  SIDEBAR_INCREMENT,
-  DEFAULT_CATEGORIES,
-  CATEGORY_TYPES,
-} from "../../../lib/constants";
+import { DEFAULT_CATEGORIES, CATEGORY_TYPES } from "../../../lib/constants";
 import Categorypicker from "../../general/Categorypicker";
 import Typepicker from "../../general/Typepicker";
 
@@ -51,21 +47,18 @@ const CategoryPopup = () => {
     }
 
     const resumeId = editingResume._id;
-    // Exclude (or include) items in sidebar to get the right priority
-    let priority = getCategories().filter(
-      (x) => x.priority <= SIDEBAR_INCREMENT
-    ).length;
-    if (editingCategory.sidebar)
-      priority = SIDEBAR_INCREMENT + getCategories().length - priority;
+    let priority = getCategories().length() + 1;
     await fauna({
       type: "CREATE_CATEGORY",
       resumeId,
       data: {
         name: name === "Other" ? customName : name,
-        type:
-          name === "Other"
-            ? type
-            : DEFAULT_CATEGORIES.find((cat) => cat.name === name).type,
+        // type:
+        //   name === "Other"
+        //     ? type
+        // 		: DEFAULT_CATEGORIES.find((cat) => cat.name === name).type,
+        type,
+        sidebar: editingCategory.sidebar,
         priority: priority + 1,
       },
     }).then(
@@ -118,11 +111,7 @@ const CategoryPopup = () => {
             resetPopups();
             // Propagate priority updates
             for (var category of getCategories()) {
-              if (
-                category.priority > editingCategory.priority &&
-                Math.abs(category.priority - editingCategory.priority) <
-                  SIDEBAR_INCREMENT / 2
-              ) {
+              if (category.priority > editingCategory.priority) {
                 const newPriority = category.priority - 1;
                 storeCategory({ ...category, priority: newPriority }, {});
               }

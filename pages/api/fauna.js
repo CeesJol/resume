@@ -1,11 +1,6 @@
 import executeQuery from "../../lib/executeQuery";
 import stringifyObject from "../../lib/stringifyObject";
-import {
-  DEFAULT_CATEGORIES,
-  DEFAULT_CATEGORIES_SIDEBAR_CUTOFF,
-  SIDEBAR_INCREMENT,
-  COOKIE_MAX_AGE,
-} from "../../lib/constants";
+import { DEFAULT_CATEGORIES, COOKIE_MAX_AGE } from "../../lib/constants";
 import jwt from "jsonwebtoken";
 import {
   validateSignup,
@@ -57,6 +52,7 @@ categories {
 		name
 		type
 		priority
+		sidebar
 		items {
 			data {
 				${ITEM_DATA}
@@ -251,11 +247,8 @@ export const createResume = async ({ userId, data }, secret) => {
               `{ 
 							name: "${category.name}" 
 							type: "${category.type}"
-							priority: ${
-                index +
-                1 +
-                (index >= DEFAULT_CATEGORIES_SIDEBAR_CUTOFF) * SIDEBAR_INCREMENT
-              }
+							sidebar: ${category.sidebar}
+							priority: ${index + 1}
 						}`
           )}
 				]
@@ -392,6 +385,7 @@ export const createCategory = async ({ resumeId, data }, secret) => {
 			name
 			type
 			priority
+			sidebar
 			items {
 				data {
 					_id
@@ -454,6 +448,7 @@ export const updateCategory = async ({ id, data }, secret) => {
 			_id
 			name
 			type
+			sidebar
 			priority
 		}
 	}`,

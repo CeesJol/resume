@@ -25,6 +25,7 @@ type Category {
   type: String
   priority: Int
   items: [Item] @relation
+  sidebar: Boolean
 }
 
 type Item {

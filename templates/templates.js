@@ -2,7 +2,7 @@ export const TEMPLATES = [
   {
     id: "MyTemplate",
     name: "My Template",
-    sidebar: 0,
+    sidebar: 50,
   },
   {
     id: "AnotherTemplate",

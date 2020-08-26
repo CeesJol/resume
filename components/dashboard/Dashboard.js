@@ -33,10 +33,12 @@ const Dashboard = () => {
   if (!auth) return <LoadingPopup text={`Authenticating...`} />;
   return (
     <div className="dashboard-container">
-      <DashboardHeader />
+      <div style={{ position: "sticky", top: "0", zIndex: "1" }}>
+        <DashboardHeader />
+        <Nav />
+      </div>
       <main>
         <div className="dashboard">
-          <Nav />
           <div className="dashboard__main">
             <div className="dashboard__main__content">
               {nav == 0 && (!changingResume ? <Resumes /> : <Editor />)}

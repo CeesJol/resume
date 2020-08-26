@@ -25,7 +25,6 @@ const ContactItem = ({ item, txt }) => {
         !preview ? "resume--hoverable" : ""
       }`}
     >
-      {console.log(getContactIcon(item.value))}
       {item.value !== undefined
         ? drawIcon(getContactIcon(item.value))
         : drawIcon("plus-square")}

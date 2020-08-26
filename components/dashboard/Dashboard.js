@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import DashboardHeader from "./DashboardHeader";
 import Resumes from "./Resumes";
 import Editor from "./Editor";
@@ -29,11 +29,29 @@ const Dashboard = () => {
     editingContactInfo,
     loggingOut,
   } = useContext(UserContext);
+  const [scroll, setScroll] = useState(0);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.onscroll = function () {
+        setScroll(window.pageYOffset);
+      };
+    }
+  }, []);
   if (loggingOut) return <LoadingPopup text={`Logging out...`} />;
   if (!auth) return <LoadingPopup text={`Authenticating...`} />;
   return (
     <div className="dashboard-container">
-      <div style={{ position: "sticky", top: "0", zIndex: "1" }}>
+      <div
+        style={{
+          position: "sticky",
+          top: "0",
+          zIndex: "1",
+          boxShadow: `0px -10px 
+						${Math.min((20 * scroll) / 200, 20)}px  
+						${Math.min((10 * scroll) / 200, 10)}px 
+						rgba(0,0,0,0.15)`,
+        }}
+      >
         <DashboardHeader />
         <Nav />
       </div>

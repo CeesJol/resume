@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from "react";
 import { fauna } from "../../lib/api";
 import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
-import { toast } from "react-toastify";
 import Template from "./Template";
 import { TEMPLATES } from "../../templates/templates";
 import { cloneDeep } from "lodash";
@@ -18,7 +17,7 @@ const Layout = () => {
     setPreview,
     selectedTemplateId,
     setSelectedTemplateId,
-    forceRender,
+    storeStatus,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [items, setItems] = useState([]);
@@ -42,39 +41,40 @@ const Layout = () => {
     newArr[i].value = event.target.value;
     setItems(newArr);
   };
-  const handleUpdateLayout = async (item) => {
-    await fauna({
+  const handleUpdateLayout = (item) => {
+    console.log("item:", item);
+
+    const myData = {
+      value: item.value,
+      _id: item._id,
+    };
+
+    storeLayout(myData);
+
+    fauna({
       type: "UPDATE_LAYOUT",
       id: item._id,
-      data: {
-        value: item.value,
-      },
+      data: myData,
     }).then(
-      (data) => {
-        storeLayout(data.updateLayout);
-        forceRender();
-        toast.success("💾 Updated layout successfully!");
-      },
-      (err) => {
-        toast.error(`⚠️ ${err}`);
-        console.error("updateLayout err:", err);
-      }
+      () => storeStatus("Saved."),
+      (err) => storeStatus("Error: failed to save", err)
     );
   };
-  const handleUpdateTemplate = async () => {
-    await fauna({
+  const handleUpdateTemplate = () => {
+    const myData = {
+      templateId: selectedTemplateId,
+      _id: editingResume._id,
+    };
+
+    storeResume(myData, {});
+
+    fauna({
       type: "UPDATE_RESUME",
       id: editingResume._id,
-      data: { templateId: selectedTemplateId },
+      data: myData,
     }).then(
-      (data) => {
-        storeResume(data.updateResume, {});
-        toast.success("💾 Updated template successfully!");
-      },
-      (err) => {
-        toast.error(`⚠️ ${err}`);
-        console.error("updateResumeTemplate err:", err);
-      }
+      () => storeStatus("Saved."),
+      (err) => storeStatus("Error: failed to save", err)
     );
   };
   const drawTemplates = () => (

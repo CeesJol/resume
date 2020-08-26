@@ -6,6 +6,7 @@ import { fauna } from "../../../lib/api";
 import { DEFAULT_CATEGORIES, CATEGORY_TYPES } from "../../../lib/constants";
 import Categorypicker from "../../general/Categorypicker";
 import Typepicker from "../../general/Typepicker";
+import randomId from "../../../lib/randomId";
 
 const CategoryPopup = () => {
   const {
@@ -15,9 +16,9 @@ const CategoryPopup = () => {
     userMadeChanges,
     setUserMadeChanges,
     resetPopups,
-    forceRender,
     editingCategory,
     getCategories,
+    storeStatus,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [name, setName] = useState("");
@@ -39,88 +40,84 @@ const CategoryPopup = () => {
       return "Please provide a custom category name";
     return false;
   };
-  const handleCreate = async () => {
+  const handleCreate = () => {
     const validationError = validateInput();
     if (validationError) {
       toast.error(`⚠️ ${validationError}`);
       return;
     }
 
-    const resumeId = editingResume._id;
-    let priority = getCategories().length + 1;
-    await fauna({
+    const tempId = randomId();
+    let myData = {
+      ...editingCategory,
+      name: name === "Other" ? customName : name,
+      type,
+      sidebar: editingCategory.sidebar,
+      priority: getCategories().length + 1,
+      _id: tempId,
+      items: {
+        data: [],
+      },
+    };
+
+    storeCategory(myData, { add: true });
+
+    fauna({
       type: "CREATE_CATEGORY",
-      resumeId,
-      data: {
-        name: name === "Other" ? customName : name,
-        // type:
-        //   name === "Other"
-        //     ? type
-        // 		: DEFAULT_CATEGORIES.find((cat) => cat.name === name).type,
-        type,
-        sidebar: editingCategory.sidebar,
-        priority,
-      },
+      resumeId: editingResume._id,
+      data: myData,
     }).then(
-      async (data) => {
-        storeCategory(data.createCategory, { add: true });
-        resetPopups();
-        forceRender();
+      (data) => {
+        storeCategory({ _id: tempId }, { newId: data.createCategory._id });
+        storeStatus("Saved.");
       },
-      (err) => {
-        toast.error(`⚠️ ${err}`);
-        console.error("createCategory err:", err);
-      }
+      (err) => storeStatus("Error: some error", err)
     );
   };
-  const handleUpdate = async () => {
+  const handleUpdate = () => {
     const validationError = validateInput();
     if (validationError) {
       toast.error(`⚠️ ${validationError}`);
       return;
     }
 
-    const categoryId = editingCategory._id;
-    await fauna({
+    let myData = {
+      ...editingCategory,
+      name: name === "Other" ? customName : name,
+      type,
+      sidebar: editingCategory.sidebar,
+      priority: getCategories().length + 1,
+    };
+
+    storeCategory(myData, {});
+
+    fauna({
       type: "UPDATE_CATEGORY",
-      id: categoryId,
-      data: {
-        name: name !== "Other" ? name : customName,
-      },
+      id: editingCategory._id,
+      data: myData,
     }).then(
-      async (data) => {
-        storeCategory(data.updateCategory, {});
-        resetPopups();
-        forceRender();
-      },
-      (err) => {
-        toast.error(`⚠️ ${err}`);
-        console.error("updateCategory err:", err);
-      }
+      () => storeStatus("Saved."),
+      (err) => storeStatus("Error: failed to save", err)
     );
   };
-  const handleDelete = async (event) => {
+  const handleDelete = (event) => {
     if (event) event.preventDefault();
     setWarning({
       text:
         "Are you sure you want to delete this category? All the items in it will be lost.",
-      fn: async () => {
-        await fauna({ type: "DELETE_CATEGORY", id: editingCategory._id }).then(
-          async (data) => {
-            storeCategory(editingCategory, { del: true });
-            resetPopups();
-            // Propagate priority updates
-            for (var category of getCategories()) {
-              if (category.priority > editingCategory.priority) {
-                const newPriority = category.priority - 1;
-                storeCategory({ ...category, priority: newPriority }, {});
-              }
-            }
-          },
-          (err) => {
-            toast.error(`⚠️ ${err}`);
-            console.error("deleteCategory err:", err);
+      fn: () => {
+        storeCategory(editingCategory, { del: true });
+        // Propagate priority updates
+        for (var category of getCategories()) {
+          if (category.priority > editingCategory.priority) {
+            const newPriority = category.priority - 1;
+            storeCategory({ ...category, priority: newPriority }, {});
           }
+        }
+
+        fauna({ type: "DELETE_CATEGORY", id: editingCategory._id }).then(
+          () => storeStatus("Saved."),
+          (err) => storeStatus("Error: failed to save", err)
         );
       },
     });

@@ -26,7 +26,9 @@ const Category = ({ category, index }) => {
   const handleNewItem = (category) => {
     if (preview) return false;
     setEditingItem({
-      category,
+      category: {
+        _id: category._id,
+      },
     });
   };
   const sortByPriority = (list) => {

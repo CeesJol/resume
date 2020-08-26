@@ -4,7 +4,9 @@ import Button from "../../general/Button";
 import Template from "../Template";
 import { toast } from "react-toastify";
 import { fauna } from "../../../lib/api";
-import { getTemplate, TEMPLATES } from "../../../templates/templates";
+import { TEMPLATES } from "../../../templates/templates";
+import randomId from "../../../lib/randomId";
+import { RESUME_SKELETON } from "../../../lib/constants";
 
 const ResumePopup = () => {
   const {
@@ -20,7 +22,7 @@ const ResumePopup = () => {
     setEditingResume,
     setChangingResume,
     getResumes,
-    getLayout,
+    storeStatus,
   } = useContext(UserContext);
   const [title, setTitle] = useState("");
   const handleChangeTitle = (event) => {
@@ -32,7 +34,7 @@ const ResumePopup = () => {
     if (!selectedTemplateId) return "Please choose a template";
     return false;
   };
-  const handleCreate = async () => {
+  const handleCreate = () => {
     const validationError = validateInput();
     if (validationError) {
       toast.error(`⚠️ ${validationError}`);
@@ -40,28 +42,31 @@ const ResumePopup = () => {
     }
 
     const user = getUser();
-    await fauna({
+    const tempId = randomId();
+    const myData = {
+      ...RESUME_SKELETON,
+      _id: tempId,
+      title,
+      jobTitle: user.jobTitle ? user.jobTitle : "",
+      bio: user.bio ? user.bio : "",
+      templateId: selectedTemplateId,
+      priority: getResumes().length + 1,
+    };
+
+    storeResume(myData, { add: true });
+    setEditingResume(myData);
+    setChangingResume(true);
+
+    fauna({
       type: "CREATE_RESUME",
       userId: user._id,
-      data: {
-        title,
-        layout: getLayout(),
-        jobTitle: user.jobTitle ? user.jobTitle : "",
-        bio: user.bio ? user.bio : "",
-        templateId: selectedTemplateId,
-        priority: getResumes().length + 1,
-      },
+      data: myData,
     }).then(
       (data) => {
-        storeResume(data.createResume, { add: true });
-        setEditingResume(data.createResume);
-        setChangingResume(true);
-        resetPopups();
+        console.log("data", data);
+        storeResume({ _id: tempId }, { newId: data.createResume._id });
       },
-      (err) => {
-        toast.error(`⚠️ ${err}`);
-        console.log("createResume err:", err);
-      }
+      (err) => storeStatus("Error: failed to save", err)
     );
   };
   const handleCancel = () => {

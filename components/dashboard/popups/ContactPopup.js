@@ -4,6 +4,7 @@ import Button from "../../general/Button";
 import Contactpicker from "../../general/Contactpicker";
 import { toast } from "react-toastify";
 import { fauna } from "../../../lib/api";
+import randomId from "../../../lib/randomId";
 
 const ContactPopup = () => {
   const {
@@ -15,7 +16,7 @@ const ContactPopup = () => {
     resetPopups,
     editingContactInfo,
     getContactInfo,
-    updateContactInfo,
+    storeStatus,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [name, setName] = useState("");
@@ -31,81 +32,83 @@ const ContactPopup = () => {
     if (!name) return "Please provide a contact details";
     return false;
   };
-  const handleCreate = async () => {
+  const handleCreate = () => {
     const validationError = validateInput();
     if (validationError) {
       toast.error(`⚠️ ${validationError}`);
       return;
     }
 
-    await fauna({
+    const tempId = randomId();
+    const myData = {
+      _id: tempId,
+      name,
+      value,
+      priority: getContactInfo().length + 1,
+    };
+
+    storeContactInfo(myData, { add: true });
+
+    fauna({
       type: "CREATE_CONTACT_INFO",
       resumeId: editingResume._id,
-      data: {
-        name,
-        value,
-        priority: getContactInfo().length + 1,
-      },
+      data: myData,
     }).then(
       (data) => {
-        storeContactInfo(data.createContactInfo, { add: true });
-        resetPopups();
+        storeStatus("Saved."),
+          storeContactInfo(
+            { _id: tempId },
+            { newId: data.createContactInfo._id }
+          );
       },
-      (err) => {
-        toast.error(`⚠️ ${err}`);
-        console.error("createContactInfo err:", err);
-      }
+      (err) => storeStatus("Error: failed to save", err)
     );
   };
-  const handleUpdate = async () => {
+  const handleUpdate = () => {
     const validationError = validateInput();
     if (validationError) {
       toast.error(`⚠️ ${validationError}`);
       return;
     }
 
-    await fauna({
+    const myData = {
+      ...editingContactInfo,
+      name,
+      value,
+    };
+
+    storeContactInfo(myData, {});
+
+    fauna({
       type: "UPDATE_CONTACT_INFO",
       id: editingContactInfo._id,
-      data: {
-        name,
-        value,
-      },
+      data: myData,
     }).then(
-      (data) => {
-        storeContactInfo(data.updateContactInfo, {});
-        resetPopups();
-      },
-      (err) => {
-        toast.error(`⚠️ ${err}`);
-        console.error("updateContactInfo err:", err);
-      }
+      () => storeStatus("Saved."),
+      (err) => storeStatus("Error: failed to save", err)
     );
   };
-  const handleDelete = async (event) => {
+  const handleDelete = (event) => {
     if (event) event.preventDefault();
     setWarning({
       text: "Are you sure you want to delete this item?",
-      fn: async () => {
-        await fauna({
+      fn: () => {
+        storeContactInfo(editingContactInfo, { del: true });
+        resetPopups();
+        // Propagate priority updates
+        for (var item of getContactInfo()) {
+          if (item.priority > editingContactInfo.priority) {
+            const newPriority = item.priority - 1;
+            storeContactInfo({ ...item, priority: newPriority }, {});
+          }
+        }
+
+        fauna({
           type: "DELETE_CONTACT_INFO",
           id: editingContactInfo._id,
         }).then(
-          async (data) => {
-            storeContactInfo(editingContactInfo, { del: true });
-            resetPopups();
-            // Propagate priority updates
-            for (var item of getContactInfo()) {
-              if (item.priority > editingContactInfo.priority) {
-                const newPriority = item.priority - 1;
-                storeContactInfo({ ...item, priority: newPriority }, {});
-              }
-            }
-          },
-          (err) => {
-            toast.error(`⚠️ ${err}`);
-            console.error("deleteContactInfo err:", err);
-          }
+          () => storeStatus("Saved."),
+          (err) => storeStatus("Error: failed to save", err)
         );
       },
     });

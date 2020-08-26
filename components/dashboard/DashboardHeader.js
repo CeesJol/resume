@@ -14,6 +14,7 @@ const DashboardHeader = () => {
     reset,
     setChangingResume,
     setPreview,
+    status,
   } = useContext(UserContext);
   const handleLogout = async () => {
     setLoggingOut(true);
@@ -40,6 +41,7 @@ const DashboardHeader = () => {
                 {userExists() ? getUser().username : "Loading..."}
               </a>
             </h3>
+            <span style={{ marginLeft: "2rem" }}>{status}</span>
           </div>
         </div>
         <div className="header__right">

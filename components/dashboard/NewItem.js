@@ -18,7 +18,12 @@ const NewItem = ({ category, item, index, dummy, hovering }) => {
   const handleClick = (e, item) => {
     e.preventDefault();
     if (preview) return false;
-    if (dummy) setEditingItem({ category });
+    if (dummy)
+      setEditingItem({
+        category: {
+          _id: category._id,
+        },
+      });
     else setEditingItem(item);
   };
   const handleMove = async (item, amount) => {

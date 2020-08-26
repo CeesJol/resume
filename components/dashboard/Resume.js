@@ -60,7 +60,9 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
           {sortByPriority(getContactInfo(resume)).map((item) => (
             <ContactItem item={item} key={`${item.name}-${item.value}`} />
           ))}
-          {!preview && <ContactItem item={{}} txt={"Add contact info"} />}
+          <span>
+            {!preview && <ContactItem item={{}} txt={"Add contact info"} />}
+          </span>
         </div>
       </div>
     );

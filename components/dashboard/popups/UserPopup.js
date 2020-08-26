@@ -12,6 +12,7 @@ const UserPopup = () => {
     setUserMadeChanges,
     storeResume,
     resetPopups,
+    storeStatus,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [title, setTitle] = useState("");
@@ -35,30 +36,29 @@ const UserPopup = () => {
     if (!bio) return "Please provide a bio";
     return false;
   };
-  const handleUpdate = async () => {
+  const handleUpdate = () => {
     const validationError = validateInput();
     if (validationError) {
       toast.error(`⚠️ ${validationError}`);
       return;
     }
 
-    await fauna({
+    const myData = {
+      _id: editingResume._id,
+      title,
+      jobTitle,
+      bio,
+    };
+
+    storeResume(myData, {});
+
+    fauna({
       type: "UPDATE_RESUME",
       id: editingResume._id,
-      data: {
-        title,
-        jobTitle,
-        bio,
-      },
+      data: myData,
     }).then(
-      (data) => {
-        storeResume(data.updateResume, {});
-        resetPopups();
-      },
-      (err) => {
-        toast.error(`⚠️ ${err}`);
-        console.log("updateResume err:", err);
-      }
+      () => storeStatus("Saved."),
+      (err) => storeStatus("Error: failed to save", err)
     );
   };
   const handleCancel = () => {

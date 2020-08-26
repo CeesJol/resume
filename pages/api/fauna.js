@@ -148,18 +148,17 @@ export const updateUserPassword = ({ id, password }, secret) => {
 export const updateUser = async ({ id, data }, secret) => {
   console.log("updateUser request", id, data);
   if (data.email) data.email.toLowerCase();
+  const { pairs, keys } = stringifyObject(data);
+  console.log("pairs, keys:", pairs, keys);
   return executeQuery(
     `mutation UpdateUser {
-		updateUser(id: "${id}", data: {
-			${stringifyObject(data)}
-		}) {
-			username
-			email
-			jobTitle
-			bio
-			confirmed
-		}
-	}`,
+			updateUser(id: "${id}", data: {
+				${pairs}
+			}) {
+				_id
+				${keys}
+			}
+		}`,
     secret
   );
 };
@@ -168,10 +167,10 @@ export const readUser = async ({ id }, secret) => {
   console.log("readUser request");
   return executeQuery(
     `query FindAUserByID {
-		findUserByID(id: "${id}") {
-			${USER_DATA}
-		}
-	}`,
+			findUserByID(id: "${id}") {
+				${USER_DATA}
+			}
+		}`,
     secret
   );
 };
@@ -181,10 +180,10 @@ export const getUserByEmail = async ({ email }, secret) => {
   email = email.toLowerCase();
   return executeQuery(
     `query FindAUserByEmail {
-		userByEmail(email: "${email}") {
-			${USER_DATA}
-		}
-	}`,
+			userByEmail(email: "${email}") {
+				${USER_DATA}
+			}
+		}`,
     secret
   );
 };
@@ -196,12 +195,12 @@ export const confirmUser = async ({ token }, secret) => {
     const id = decoded.id;
     return executeQuery(
       `mutation UpdateUser {
-			updateUser(id: "${id}", data: {
-				confirmed: true
-			}) {
-				confirmed
-			}
-		}`,
+				updateUser(id: "${id}", data: {
+					confirmed: true
+				}) {
+					confirmed
+				}
+			}`,
       secret
     );
   } catch (err) {
@@ -217,10 +216,10 @@ export const getResume = async ({ id }, secret) => {
   console.log("getResume request");
   return executeQuery(
     `query GetResume {
-		findResumeByID(id: "${id}") {
-			${RESUME_DATA}
-		}
-	}`,
+			findResumeByID(id: "${id}") {
+				${RESUME_DATA}
+			}
+		}`,
     secret
   );
 };
@@ -229,17 +228,18 @@ export const deleteResume = async ({ id }, secret) => {
   console.log("deleteResume request");
   return executeQuery(
     `mutation DeleteResume {
-		cascadeDeleteResume(id: "${id}")
-	}`,
+			cascadeDeleteResume(id: "${id}")
+		}`,
     secret
   );
 };
 
 export const createResume = async ({ userId, data }, secret) => {
   console.log("createResume request");
+  const { pairs, keys } = stringifyObject(data);
   var query = `mutation CreateResume {
 		createResume(data: {
-			${stringifyObject(data)}
+			${pairs}
 			categories: {
 				create: [
 					${DEFAULT_CATEGORIES.map(
@@ -255,7 +255,7 @@ export const createResume = async ({ userId, data }, secret) => {
 			}
 			layout: {
 				create: [
-					${data.layout.map(
+					${data.layout.data.map(
             (item) => `{
 						name: "${item.name}"
 						value: "${item.value}"
@@ -330,18 +330,16 @@ export const duplicateResume = async (
 
 export const updateResume = async ({ id, data }, secret) => {
   console.log("updateResume request");
+  const { pairs, keys } = stringifyObject(data);
   return executeQuery(
     `mutation UpdateResume {
-		updateResume(id: "${id}", data: {
-			${stringifyObject(data)}
-		}) {
-			_id
-			title
-			jobTitle
-			bio
-			templateId
-		}
-	}`,
+			updateResume(id: "${id}", data: {
+				${pairs}
+			}) {
+				_id
+				${keys}
+			}
+		}`,
     secret
   );
 };
@@ -350,8 +348,8 @@ export const moveResume = async ({ id, amount }, secret) => {
   console.log("moveResume request");
   return executeQuery(
     `mutation MoveResume {
-		moveResume(id: "${id}", amount: ${amount})
-	}`,
+			moveResume(id: "${id}", amount: ${amount})
+		}`,
     secret
   );
 };
@@ -375,27 +373,25 @@ export const moveResume = async ({ id, amount }, secret) => {
  */
 export const createCategory = async ({ resumeId, data }, secret) => {
   console.log("createCategory request");
+  const { pairs, keys } = stringifyObject(data);
   return executeQuery(
     `mutation CreateCategory {
-		createCategory(data: {
-			${stringifyObject(data)}
-			resume: { connect: "${resumeId}" }
-		}) {
-			_id
-			name
-			type
-			priority
-			sidebar
-			items {
-				data {
+			createCategory(data: {
+				${pairs}
+				resume: { connect: "${resumeId}" }
+			}) {
+				items {
+					data {
+						_id
+					}
+				}
+				resume {
 					_id
 				}
-			}
-			resume {
 				_id
+				${keys}
 			}
-		}
-	}`,
+		}`,
     secret
   );
 };
@@ -440,18 +436,16 @@ export const createCategory = async ({ resumeId, data }, secret) => {
 
 export const updateCategory = async ({ id, data }, secret) => {
   console.log("updateCategory request");
+  const { pairs, keys } = stringifyObject(data);
   return executeQuery(
     `mutation UpdateCategory {
-		updateCategory(id: "${id}", data: {
-			${stringifyObject(data)}
-		}) {
-			_id
-			name
-			type
-			sidebar
-			priority
-		}
-	}`,
+			updateCategory(id: "${id}", data: {
+				${pairs}
+			}) {
+				_id
+				${keys}
+			}
+		}`,
     secret
   );
 };
@@ -460,8 +454,8 @@ export const deleteCategory = async ({ id }, secret) => {
   console.log("deleteCategory request");
   return executeQuery(
     `mutation DeleteCategory {
-		cascadeDeleteCategory(id: "${id}")
-	}`,
+			cascadeDeleteCategory(id: "${id}")
+		}`,
     secret
   );
 };
@@ -470,8 +464,8 @@ export const moveCategory = async ({ id, amount }, secret) => {
   console.log("moveCategory request");
   return executeQuery(
     `mutation MoveCategory {
-		moveCategory(id: "${id}", amount: ${amount})
-	}`,
+			moveCategory(id: "${id}", amount: ${amount})
+		}`,
     secret
   );
 };
@@ -482,29 +476,38 @@ export const moveCategory = async ({ id, amount }, secret) => {
  */
 export const createItem = async ({ categoryId, data }, secret) => {
   console.log("createItem request");
+  const { pairs, keys } = stringifyObject(data);
+  console.log("{ pairs, keys }:", pairs, keys);
+
   return executeQuery(
     `mutation CreateItem {
-		createItem(data: {
-			${stringifyObject(data)}
-			category: { connect: "${categoryId}" }
-		}) {
-			${ITEM_DATA}
-		}
-	}`,
+			createItem(data: {
+				${pairs}
+				category: { connect: "${categoryId}" }
+			}) {
+				_id
+				category {
+					_id
+				}
+				${keys}
+			}
+		}`,
     secret
   );
 };
 
 export const updateItem = async ({ id, data }, secret) => {
   console.log("updateItem request");
+  const { pairs, keys } = stringifyObject(data);
   return executeQuery(
     `mutation UpdateItem {
-		updateItem(id: "${id}", data: {
-			${stringifyObject(data)}
-		}) {
-			${ITEM_DATA}
-		}
-	}`,
+			updateItem(id: "${id}", data: {
+				${pairs}
+			}) {
+				_id
+				${keys}
+			}
+		}`,
     secret
   );
 };
@@ -513,8 +516,8 @@ export const deleteItem = async ({ id }, secret) => {
   console.log("deleteItem request");
   return executeQuery(
     `mutation DeleteItem {
-		cascadeDeleteItem(id: "${id}")
-	}`,
+			cascadeDeleteItem(id: "${id}")
+		}`,
     secret
   );
 };
@@ -523,8 +526,8 @@ export const moveItem = async ({ id, amount }, secret) => {
   console.log("moveItem request");
   return executeQuery(
     `mutation MoveItem {
-		moveItem(id: "${id}", amount: ${amount})
-	}`,
+			moveItem(id: "${id}", amount: ${amount})
+		}`,
     secret
   );
 };
@@ -566,41 +569,36 @@ export const moveItem = async ({ id, amount }, secret) => {
  */
 export const createContactInfo = async ({ resumeId, data }, secret) => {
   console.log("createContactInfo request");
+  const { pairs, keys } = stringifyObject(data);
   return executeQuery(
     `mutation UpdateContactInfo {
-		createContactInfo(data: {
-			${stringifyObject(data)}
-			resume: { connect: "${resumeId}" }
-		}) {
-			_id
-			name
-			value
-			priority
-			resume {
+			createContactInfo(data: {
+				${pairs}
+				resume: { connect: "${resumeId}" }
+			}) {
 				_id
+				${keys}
 			}
-		}
-	}`,
+		}`,
     secret
   );
 };
 
 export const updateContactInfo = async ({ id, data }, secret) => {
   console.log("updateContactInfo request");
+  const { pairs, keys } = stringifyObject(data);
   return executeQuery(
     `mutation UpdateContactInfo {
-		updateContactInfo(id: "${id}", data: {
-			${stringifyObject(data)}
-		}) {
-			_id
-			name
-			value
-			priority
-			resume {
+			updateContactInfo(id: "${id}", data: {
+				${pairs}
+			}) {
+				resume {
+					_id
+				}
 				_id
+				${keys}
 			}
-		}
-	}`,
+		}`,
     secret
   );
 };
@@ -609,8 +607,8 @@ export const deleteContactInfo = async ({ id }, secret) => {
   console.log("deleteContactInfo request");
   return executeQuery(
     `mutation DeleteContactInfo {
-		cascadeDeleteContactInfo(id: "${id}")
-	}`,
+			cascadeDeleteContactInfo(id: "${id}")
+		}`,
     secret
   );
 };
@@ -621,16 +619,16 @@ export const deleteContactInfo = async ({ id }, secret) => {
  */
 export const updateLayout = async ({ id, data }, secret) => {
   console.log("updateLayout request");
+  const { pairs, keys } = stringifyObject(data);
   return executeQuery(
     `mutation UpdateLayout {
-		updateLayout(id: "${id}", data: {
-			${stringifyObject(data)}
-		}) {
-			_id
-			name
-			value
-		}
-	}`,
+			updateLayout(id: "${id}", data: {
+				${pairs}
+			}) {
+				_id
+				${keys}
+			}
+		}`,
     secret
   );
 };
@@ -645,10 +643,10 @@ export const faultyQuery = async () => {
 
   return executeQuery(
     `query PlausibleError{
-		plausibleError {
-			_id
-		}
-	}`,
+			plausibleError {
+				_id
+			}
+		}`,
     process.env.FAUNADB_SECRET_KEY
   );
 };

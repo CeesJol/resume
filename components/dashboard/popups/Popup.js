@@ -6,6 +6,7 @@ import Yearpicker from "../../general/Yearpicker";
 import { toast } from "react-toastify";
 import { fauna } from "../../../lib/api";
 import { GET_CATEGORY_ITEMS } from "../../../lib/constants";
+import randomId from "../../../lib/randomId";
 
 const Popup = () => {
   const {
@@ -17,13 +18,12 @@ const Popup = () => {
     resetPopups,
     getCategory,
     getItems,
+    storeStatus,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
-  const [isGoing, setIsGoing] = useState(true); // Seperate from fields, because DB doesn't take this value.
+  const [isGoing, setIsGoing] = useState(true); // Separate from fields, because DB doesn't take this value.
   const [fields, setFields] = useState({
     title: "",
-    month0: "",
-    year0: "",
     month1: "",
     year1: "",
     month2: "",
@@ -49,32 +49,7 @@ const Popup = () => {
 
     return false;
   };
-  const handleDelete = async (event) => {
-    if (event) event.preventDefault();
-    setWarning({
-      text: "Are you sure you want to delete this item?",
-      fn: async () => {
-        await fauna({ type: "DELETE_ITEM", id: editingItem._id }).then(
-          async (data) => {
-            storeItem(editingItem, { del: true });
-            resetPopups();
-            // Propagate priority updates
-            for (var item of getItems(category)) {
-              if (item.priority > editingItem.priority) {
-                const newPriority = item.priority - 1;
-                storeItem({ ...item, priority: newPriority }, {});
-              }
-            }
-          },
-          (err) => {
-            toast.error(`⚠️ ${err}`);
-            console.error("deleteItem err:", err);
-          }
-        );
-      },
-    });
-  };
-  const handleUpdate = async () => {
+  const handleCreate = () => {
     const validationError = validateInput();
     if (validationError) {
       toast.error(`⚠️ ${validationError}`);
@@ -82,63 +57,91 @@ const Popup = () => {
     }
 
     // Get relevant data
-    let myData = fields;
+    const tempId = randomId();
+    let myData = {
+      ...editingItem,
+      ...fields,
+      _id: tempId,
+    };
     Object.keys(myData).forEach(
       (key) => !categoryItems.includes(key) && delete myData[key]
     );
-    if (isGoing) {
+    if (isGoing && categoryItems.includes("month2")) {
       myData.month2 = "";
       myData.year2 = "";
     }
-    await fauna({
-      type: "UPDATE_ITEM",
-      id: editingItem._id,
-      data: { ...myData },
-    }).then(
-      async (data) => {
-        storeItem(data.updateItem, {});
-        resetPopups();
-      },
-      (err) => {
-        toast.error(`⚠️ ${err}`);
-        console.error("updateItem err:", err);
-      }
-    );
-  };
-  const handleCreate = async () => {
-    const validationError = validateInput();
-    if (validationError) {
-      toast.error(`⚠️ ${validationError}`);
-      return;
-    }
-
-    // Get relevant data
-    let myData = fields;
-    Object.keys(myData).forEach(
-      (key) => !categoryItems.includes(key) && delete myData[key]
-    );
-    if (isGoing) {
-      myData.month2 = "";
-      myData.year2 = "";
-    }
-    const categoryId = editingItem.category._id;
-    await fauna({
+    storeItem(myData, { add: true });
+    console.log("myData: ", { ...myData });
+    fauna({
       type: "CREATE_ITEM",
-      categoryId,
+      categoryId: editingItem.category._id,
       data: {
-        ...fields,
+        ...myData,
         priority: getItems(category).length + 1,
       },
     }).then(
-      async (data) => {
-        storeItem(data.createItem, { add: true });
-        resetPopups();
+      (data) => {
+        storeStatus("Saved");
+        storeItem(
+          {
+            category: {
+              _id: data.createItem.category._id,
+            },
+            _id: tempId,
+          },
+          { newId: data.createItem._id }
+        );
       },
-      (err) => {
-        toast.error(`⚠️ ${err}`);
-        console.error("createItem err:", err);
-      }
+      (err) => storeStatus("Error: could not save data", err)
     );
+  };
+  const handleUpdate = () => {
+    const validationError = validateInput();
+    if (validationError) {
+      toast.error(`⚠️ ${validationError}`);
+      return;
+    }
+
+    // Get relevant data
+    let myData = { ...editingItem, ...fields };
+    Object.keys(myData).forEach(
+      (key) => !categoryItems.includes(key) && delete myData[key]
+    );
+    if (isGoing && categoryItems.includes("month1")) {
+      myData.month2 = "";
+      myData.year2 = "";
+    }
+    console.log("myData", myData);
+    storeItem(myData, {});
+    fauna({
+      type: "UPDATE_ITEM",
+      id: myData._id,
+      data: myData,
+    }).then(
+      () => storeStatus("Saved."),
+      (err) => storeStatus("Error: could not save data", err)
+    );
+  };
+  const handleDelete = (event) => {
+    if (event) event.preventDefault();
+    setWarning({
+      text: "Are you sure you want to delete this item?",
+      fn: () => {
+        storeItem(editingItem, { del: true });
+        // Propagate priority updates
+        for (var item of getItems(category)) {
+          if (item.priority > editingItem.priority) {
+            const newPriority = item.priority - 1;
+            storeItem({ ...item, priority: newPriority }, {});
+          }
+        }
+
+        fauna({ type: "DELETE_ITEM", id: editingItem._id }).then(
+          () => storeStatus("Saved."),
+          (err) => storeStatus("Error: failed to save", err)
+        );
+      },
+    });
   };
   const handleCancel = () => {
     if (userMadeChanges) {

@@ -27,6 +27,21 @@ const UserContextProvider = (props) => {
   const [pdf, setPdf] = useState(null);
   const [loggingOut, setLoggingOut] = useState(null);
   const [templates, setTemplates] = useState([]);
+  const [status, setStatus] = useState(""); // Save status (saved / error)
+  const storeStatus = (data, err) => {
+    if (err) {
+      toast.error(`⚠️ ${err}`);
+      console.error("updateItem err:", err);
+    }
+
+    // Reset status
+    if (data === "RESET") setStatus("Saved successfully after error.");
+
+    // Dont update status if there is an error
+    if (status.startsWith("Error")) return;
+
+    setStatus(data);
+  };
   const forceRender = () => {
     setDummy(!dummy);
   };
@@ -64,7 +79,9 @@ const UserContextProvider = (props) => {
     if (resume) return resume.bio || "Bio";
     return editingResume.bio || "Bio";
   };
-  const storeResume = (resumeData, { add, del }) => {
+  const storeResume = (resumeData, { add, del, newId }) => {
+    storeStatus("Saving...");
+
     var user = getUser();
 
     if (del) {
@@ -74,29 +91,38 @@ const UserContextProvider = (props) => {
       );
       reset();
       setUser(() => user);
-      forceRender();
+      resetPopups();
       return;
     } else if (add) {
       // Add resume
       user.resumes.data.push(resumeData);
       setUser(() => user);
-      forceRender();
+      resetPopups();
       return;
     }
 
     user.resumes.data.forEach((resume, r) => {
       if (resume._id === resumeData._id) {
-        const newResume = { ...resume, ...resumeData };
-        user.resumes.data[r] = newResume;
-        setEditingResume(newResume);
+        if (newId) {
+          user.resumes.data[r]._id = newId;
+          setEditingResume(user.resumes.data[r]);
+        } else {
+          console.log();
+          const newResume = { ...resume, ...resumeData };
+          console.log("newResume:", newResume);
+          user.resumes.data[r] = newResume;
+          setEditingResume(newResume);
+        }
       }
     });
 
-    forceRender();
+    resetPopups();
 
     setUser(() => user);
   };
-  const storeCategory = (categoryData, { add, del }) => {
+  const storeCategory = (categoryData, { add, del, newId }) => {
+    storeStatus("Saving...");
+
     const resume = getUser().resumes.data.find(
       (res) => res._id === editingResume._id
     );
@@ -113,13 +139,21 @@ const UserContextProvider = (props) => {
       resume.categories.data.find((category, i) => {
         if (category._id === categoryData._id) {
           // Update category
-          const newCategory = { ...category, ...categoryData };
-          resume.categories.data[i] = newCategory;
+          if (newId) {
+            resume.categories.data[i]._id = newId;
+          } else {
+            const newCategory = { ...category, ...categoryData };
+            resume.categories.data[i] = newCategory;
+          }
         }
       });
     }
+
+    resetPopups();
   };
-  const storeItem = (itemData, { del, add }) => {
+  const storeItem = (itemData, { del, add, newId }) => {
+    storeStatus("Saving...");
+
     const resume = getUser().resumes.data.find(
       (res) => res._id === editingResume._id
     );
@@ -139,13 +173,21 @@ const UserContextProvider = (props) => {
       category.items.data.find((item, i) => {
         if (item._id === itemData._id) {
           // Update item
-          const newItem = { ...item, ...itemData };
-          category.items.data[i] = newItem;
+          if (newId) {
+            category.items.data[i]._id = newId;
+          } else {
+            const newItem = { ...item, ...itemData };
+            category.items.data[i] = newItem;
+          }
         }
       });
     }
+
+    resetPopups();
   };
-  const storeContactInfo = (contactInfoData, { add, del }) => {
+  const storeContactInfo = (contactInfoData, { add, del, newId }) => {
+    storeStatus("Saving...");
+
     const resume = getUser().resumes.data.find(
       (res) => res._id === editingResume._id
     );
@@ -162,20 +204,31 @@ const UserContextProvider = (props) => {
       resume.contactInfo.data.find((item, i) => {
         if (item._id === contactInfoData._id) {
           // Update contactInfo
-          const newItem = { ...contactInfo, ...contactInfoData };
-          resume.contactInfo.data[i] = newItem;
+          if (newId) {
+            resume.contactInfo.data[i]._id = newId;
+          } else {
+            const newItem = { ...item, ...contactInfoData };
+            resume.contactInfo.data[i] = newItem;
+          }
         }
       });
     }
+
+    resetPopups();
   };
   const storeLayout = (layoutData) => {
+    storeStatus("Saving...");
+
     var user = getUser();
 
     user.resumes.data.forEach((resume, r) => {
       if (resume._id === editingResume._id) {
         resume.layout.data.forEach((item, i) => {
           if (item._id === layoutData._id) {
-            user.resumes.data[r].layout.data[i] = layoutData;
+            user.resumes.data[r].layout.data[i] = {
+              ...user.resumes.data[r].layout.data[i],
+              ...layoutData,
+            };
             setEditingResume(user.resumes.data[r]);
           }
         });
@@ -288,7 +341,7 @@ const UserContextProvider = (props) => {
     setCreatingResume(-1);
     setWarning(false);
     setUserMadeChanges(false);
-    setSelectedTemplateId(0);
+    // setSelectedTemplateId(0);
   };
   const reset = () => {
     setChangingResume(false);
@@ -399,6 +452,9 @@ const UserContextProvider = (props) => {
         setTemplates,
         getLayoutItem,
         reset,
+        status,
+        setStatus,
+        storeStatus,
       }}
     >
       {props.children}

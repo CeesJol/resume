@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
-import { CONTACTPICKER_OPTIONS } from "../../lib/constants";
+import { getContactIcon } from "../../lib/constants";
 
 const ContactItem = ({ item, txt }) => {
   const { setEditingContactInfo, preview, getLayoutItem } = useContext(
@@ -25,9 +25,9 @@ const ContactItem = ({ item, txt }) => {
         !preview ? "resume--hoverable" : ""
       }`}
     >
-      {item.value
-        ? CONTACTPICKER_OPTIONS[item.value] &&
-          drawIcon(CONTACTPICKER_OPTIONS[item.value])
+      {console.log(getContactIcon(item.value))}
+      {item.value !== undefined
+        ? drawIcon(getContactIcon(item.value))
         : drawIcon("plus-square")}
       <p>{item.name ? item.name : txt}</p>
     </div>

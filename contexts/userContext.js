@@ -28,6 +28,7 @@ const UserContextProvider = (props) => {
   const [loggingOut, setLoggingOut] = useState(null);
   const [templates, setTemplates] = useState([]);
   const [status, setStatus] = useState(""); // Save status (saved / error)
+  const [moving, setMoving] = useState(false);
   const storeStatus = (data, err) => {
     if (err) {
       toast.error(`⚠️ ${err}`);
@@ -259,77 +260,110 @@ const UserContextProvider = (props) => {
     return !!user && user.username;
   };
   const moveItem = async (item, amount) => {
+    if (moving) return false;
+    setMoving(true);
+
     // Send to fauna
     await fauna({
       type: "MOVE_ITEM",
       id: item._id,
       amount,
-    }).then(() => {
-      // Find item with priority p
-      const p = item.priority + amount;
-      var otherItem = getCategory(item.category._id).items.data.find(
-        (item) => item.priority === p
-      );
+    }).then(
+      () => {
+        // Find item with priority p
+        const p = item.priority + amount;
+        var otherItem = getCategory(item.category._id).items.data.find(
+          (item) => item.priority === p
+        );
 
-      // Update priority
-      otherItem.priority -= amount;
-      item.priority += amount;
-      storeItem(otherItem, {});
-      storeItem(item, {});
+        // Update priority
+        otherItem.priority -= amount;
+        item.priority += amount;
+        storeItem(otherItem, {});
+        storeItem(item, {});
 
-      resetPopups();
-    });
+        resetPopups();
+        storeStatus("Saved.");
+      },
+      (err) => {
+        storeStatus("Error: failed to save", err);
+      }
+    );
+
+    setMoving(false);
   };
   const moveCategory = async (category, amount) => {
+    if (moving) return false;
+    setMoving(true);
+
     // Send to fauna
     await fauna({
       type: "MOVE_CATEGORY",
       id: category._id,
       amount,
-    }).then(() => {
-      // Find category with priority p
-      const p = category.priority + amount;
-      var otherCategory = editingResume.categories.data.find(
-        (cat) => cat.priority === p
-      );
+    }).then(
+      () => {
+        // Find category (in same bar) with priority p
+        const p = category.priority + amount;
+        var otherCategory = editingResume.categories.data.find(
+          (cat) => cat.priority === p && cat.sidebar === category.sidebar
+        );
 
-      // Update priority
-      var user = getUser();
-      user.resumes.data
-        .find((resume) => resume._id === editingResume._id)
-        .categories.data.find(
-          (cat) => cat._id === otherCategory._id
-        ).priority -= amount;
-      user.resumes.data
-        .find((resume) => resume._id === editingResume._id)
-        .categories.data.find(
-          (cat) => cat._id === category._id
-        ).priority += amount;
+        // Update priority
+        var user = getUser();
+        user.resumes.data
+          .find((resume) => resume._id === editingResume._id)
+          .categories.data.find(
+            (cat) => cat._id === otherCategory._id
+          ).priority -= amount;
+        user.resumes.data
+          .find((resume) => resume._id === editingResume._id)
+          .categories.data.find(
+            (cat) => cat._id === category._id
+          ).priority += amount;
 
-      resetPopups();
-    });
+        resetPopups();
+        storeStatus("Saved.");
+      },
+      (err) => {
+        storeStatus("Error: failed to save", err);
+      }
+    );
+
+    setMoving(false);
   };
   const moveResume = async (resume, amount) => {
+    if (moving) return false;
+    setMoving(true);
+
     // Send to fauna
     await fauna({
       type: "MOVE_RESUME",
       id: resume._id,
       amount,
-    }).then(() => {
-      // Find item with priority p
-      const p = resume.priority + amount;
-      var otherResume = getUser().resumes.data.find(
-        (resume) => resume.priority === p
-      );
+    }).then(
+      () => {
+        // Find item with priority p
+        const p = resume.priority + amount;
+        var otherResume = getUser().resumes.data.find(
+          (resume) => resume.priority === p
+        );
 
-      // Update priority
-      otherResume.priority -= amount;
-      resume.priority += amount;
-      storeResume(otherResume, {});
-      storeResume(resume, {});
+        // Update priority
+        otherResume.priority -= amount;
+        resume.priority += amount;
+        storeResume(otherResume, {});
+        storeResume(resume, {});
 
-      resetPopups();
-    });
+        resetPopups();
+        storeStatus("Saved.");
+      },
+      (err) => {
+        storeStatus("Error: failed to save", err);
+      }
+    );
+
+    setMoving(false);
   };
   const resetPopups = () => {
     setChangingInfo(false);
@@ -454,6 +488,8 @@ const UserContextProvider = (props) => {
         status,
         setStatus,
         storeStatus,
+        moving,
+        setMoving,
       }}
     >
       {props.children}

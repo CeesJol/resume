@@ -3,10 +3,13 @@ import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 
 const Warning = () => {
-  const { warning, setWarning, resetPopups } = useContext(UserContext);
+  const { warning, setWarning, resetPopups, storeStatus } = useContext(
+    UserContext
+  );
   const handleYes = async () => {
     if (warning.fn) await warning.fn();
     resetPopups();
+    storeStatus("Saved.");
   };
   const handleCancel = () => {
     setWarning(false);

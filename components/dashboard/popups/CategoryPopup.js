@@ -48,12 +48,16 @@ const CategoryPopup = () => {
     }
 
     const tempId = randomId();
+    const priority =
+      getCategories().filter((cat) => cat.sidebar === editingCategory.sidebar)
+        .length + 1;
+
     let myData = {
       ...editingCategory,
       name: name === "Other" ? customName : name,
       type,
       sidebar: editingCategory.sidebar,
-      priority: getCategories().length + 1,
+      priority,
       _id: tempId,
       items: {
         data: [],
@@ -82,11 +86,10 @@ const CategoryPopup = () => {
     }
 
     let myData = {
-      ...editingCategory,
+      _id: editingCategory._id,
       name: name === "Other" ? customName : name,
       type,
       sidebar: editingCategory.sidebar,
-      priority: getCategories().length + 1,
     };
 
     storeCategory(myData, {});
@@ -109,7 +112,10 @@ const CategoryPopup = () => {
         storeCategory(editingCategory, { del: true });
         // Propagate priority updates
         for (var category of getCategories()) {
-          if (category.priority > editingCategory.priority) {
+          if (
+            category.priority > editingCategory.priority &&
+            category.sidebar === editingCategory.sidebar
+          ) {
             const newPriority = category.priority - 1;
             storeCategory({ ...category, priority: newPriority }, {});
           }

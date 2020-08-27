@@ -31,6 +31,7 @@ const ResumePreview = ({ resume, index }) => {
       priority,
     }).then((data) => {
       storeResume(data.createResume, { add: true });
+      storeStatus("");
     });
   };
   const handleMove = async (resume, amount) => {

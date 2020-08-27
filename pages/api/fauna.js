@@ -243,12 +243,11 @@ export const createResume = async ({ userId, data }, secret) => {
 			categories: {
 				create: [
 					${DEFAULT_CATEGORIES.map(
-            (category, index) =>
-              `{ 
+            (category) => `{ 
 							name: "${category.name}" 
 							type: "${category.type}"
 							sidebar: ${category.sidebar}
-							priority: ${index + 1}
+							priority: ${category.priority}
 						}`
           )}
 				]

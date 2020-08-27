@@ -80,8 +80,8 @@ const Layout = () => {
       <h4>Template</h4>
       {templates.length > 0 ? (
         <>
-          {templates.map((template, i) => (
-            <Template template={template} key={template.id} />
+          {templates.map((template) => (
+            <Template template={template} key={`Layout-${template.id}`} />
           ))}
           {/* <br > to force button on new line */}
           <br />

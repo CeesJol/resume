@@ -72,21 +72,33 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
 
     const categories = sortByPriority(getCategories(resume));
 
-    if (!templateCSS.sidebar) {
+    const mainCategories = categories.filter((category) => !category.sidebar);
+    const sidebarCategories = categories.filter((category) => category.sidebar);
+
+    // If the template has no sidebar or there are no items in the sidebar,
+    // don't draw it
+    if (!templateCSS.sidebar || sidebarCategories.length === 0) {
       return (
         <div className="resume__container">
           {categories.map((category, index) => drawCategory(category, index))}
           {!preview && (
-            <p className="resume--hoverable" onClick={handleNewCategory}>
-              <i>Create new category</i>
-            </p>
+            <>
+              <p className="resume--hoverable" onClick={handleNewCategory}>
+                <i>Create new category</i>
+              </p>
+              {sidebarCategories.length === 0 && (
+                <p
+                  className="resume--hoverable"
+                  onClick={() => handleNewCategory({ sidebar: true })}
+                >
+                  <i>Create new category in sidebar</i>
+                </p>
+              )}
+            </>
           )}
         </div>
       );
     }
-
-    const mainCategories = categories.filter((category) => !category.sidebar);
-    const sidebarCategories = categories.filter((category) => category.sidebar);
 
     return (
       <>
@@ -118,8 +130,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
   };
   const handleNewCategory = ({ sidebar }) => {
     if (preview) return false;
-    setEditingCategory({});
-    if (sidebar) setEditingCategory({ sidebar: true });
+    setEditingCategory({ sidebar: sidebar ? true : false });
   };
   const result = (
     <div

@@ -5,7 +5,6 @@ import Template from "../Template";
 import { toast } from "react-toastify";
 import { fauna } from "../../../lib/api";
 import { TEMPLATES } from "../../../templates/templates";
-import randomId from "../../../lib/randomId";
 import { RESUME_SKELETON } from "../../../lib/constants";
 
 const ResumePopup = () => {
@@ -34,7 +33,7 @@ const ResumePopup = () => {
     if (!selectedTemplateId) return "Please choose a template";
     return false;
   };
-  const handleCreate = () => {
+  const handleCreate = async () => {
     const validationError = validateInput();
     if (validationError) {
       toast.error(`⚠️ ${validationError}`);
@@ -42,31 +41,30 @@ const ResumePopup = () => {
     }
 
     const user = getUser();
-    const tempId = randomId();
-    const myData = {
-      ...RESUME_SKELETON,
-      _id: tempId,
-      title,
-      jobTitle: user.jobTitle ? user.jobTitle : "",
-      bio: user.bio ? user.bio : "",
-      templateId: selectedTemplateId,
-      priority: getResumes().length + 1,
-    };
 
-    storeResume(myData, { add: true });
-    setEditingResume(myData);
-    setChangingResume(true);
-
-    fauna({
+    await fauna({
       type: "CREATE_RESUME",
       userId: user._id,
-      data: myData,
+      data: {
+        ...RESUME_SKELETON,
+        title,
+        jobTitle: user.jobTitle ? user.jobTitle : "",
+        bio: user.bio ? user.bio : "",
+        templateId: selectedTemplateId,
+        priority: getResumes().length + 1,
+      },
     }).then(
       (data) => {
         console.log("data", data);
-        storeResume({ _id: tempId }, { newId: data.createResume._id });
+        storeResume(data.createResume, { add: true });
+        setEditingResume(data.createResume);
+        setChangingResume(true);
+        storeStatus("");
       },
-      (err) => storeStatus("Error: failed to save", err)
+      (err) => {
+        console.log("err", err);
+        toast.error(`⚠️ ${err}`);
+      }
     );
   };
   const handleCancel = () => {
@@ -99,7 +97,10 @@ const ResumePopup = () => {
             <label>Template</label>
             {templates ? (
               templates.map((template) => (
-                <Template template={template} key={template.id} />
+                <Template
+                  template={template}
+                  key={`ResumePopup-${template.id}`}
+                />
               ))
             ) : (
               <p>Loading templates...</p>

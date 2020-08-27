@@ -35,7 +35,7 @@ const Options = () => {
       data: myData,
     }).then(
       () => storeStatus("Saved."),
-      () => storeStatus("Failed to save", err)
+      (err) => storeStatus("Failed to save", err)
     );
   };
   const handleDelete = async (event) => {
@@ -49,6 +49,7 @@ const Options = () => {
             storeResume(editingResume, { del: true });
             resetPopups();
             setPreview(true);
+            storeStatus("Saved.");
             // Propagate priority updates
             for (var resume of getResumes()) {
               if (resume.priority > editingResume.priority) {

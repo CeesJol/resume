@@ -15,13 +15,8 @@ const UserPopup = () => {
     storeStatus,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
-  const [title, setTitle] = useState("");
   const [jobTitle, setJobTitle] = useState("");
   const [bio, setBio] = useState("");
-  const handleChangeTitle = (event) => {
-    setTitle(event.target.value);
-    setUserMadeChanges(true);
-  };
   const handleChangeJobTitle = (event) => {
     setJobTitle(event.target.value);
     setUserMadeChanges(true);
@@ -31,7 +26,6 @@ const UserPopup = () => {
     setUserMadeChanges(true);
   };
   const validateInput = () => {
-    if (!title) return "Please provide a resume title";
     if (!jobTitle) return "Please provide a job title";
     if (!bio) return "Please provide a bio";
     return false;
@@ -45,7 +39,6 @@ const UserPopup = () => {
 
     const myData = {
       _id: editingResume._id,
-      title,
       jobTitle,
       bio,
     };
@@ -75,7 +68,6 @@ const UserPopup = () => {
     if (!filled) {
       setFilled(true);
 
-      setTitle(editingResume.title);
       setJobTitle(editingResume.jobTitle);
       setBio(editingResume.bio);
     }
@@ -86,15 +78,6 @@ const UserPopup = () => {
         <h4>Update info</h4>
         <form>
           <div>
-            <label>Resume Title</label>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              value={title}
-              onChange={handleChangeTitle}
-            />
-
             <label>Job Title</label>
             <input
               type="text"

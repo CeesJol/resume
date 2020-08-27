@@ -107,9 +107,7 @@ const UserContextProvider = (props) => {
           user.resumes.data[r]._id = newId;
           setEditingResume(user.resumes.data[r]);
         } else {
-          console.log();
           const newResume = { ...resume, ...resumeData };
-          console.log("newResume:", newResume);
           user.resumes.data[r] = newResume;
           setEditingResume(newResume);
         }
@@ -348,6 +346,7 @@ const UserContextProvider = (props) => {
     // setEditingResume(-1);
     if (user && user.resumes.data.length === 0) setEditingResume(DUMMY_RESUME);
     setNav(0);
+    setStatus("");
     resetPopups();
   };
   const getLayoutItem = (name) => {

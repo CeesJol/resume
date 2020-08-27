@@ -71,7 +71,6 @@ const Popup = () => {
       myData.year2 = "";
     }
     storeItem(myData, { add: true });
-    console.log("myData: ", { ...myData });
     fauna({
       type: "CREATE_ITEM",
       categoryId: editingItem.category._id,
@@ -111,7 +110,6 @@ const Popup = () => {
       myData.month2 = "";
       myData.year2 = "";
     }
-    console.log("myData", myData);
     storeItem(myData, {});
     fauna({
       type: "UPDATE_ITEM",

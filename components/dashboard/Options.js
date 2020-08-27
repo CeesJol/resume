@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
 import { fauna } from "../../lib/api";
@@ -12,7 +12,32 @@ const Options = () => {
     resetPopups,
     getResumes,
     setPreview,
+    storeStatus,
   } = useContext(UserContext);
+  const [filled, setFilled] = useState(false);
+  const [title, setTitle] = useState("");
+  const handleChangeTitle = (event) => {
+    setTitle(event.target.value);
+  };
+  const handleUpdate = () => {
+    if (!title) return "Please provide a resume title";
+
+    const myData = {
+      _id: editingResume._id,
+      title,
+    };
+
+    storeResume(myData, {});
+
+    fauna({
+      type: "UPDATE_RESUME",
+      id: myData._id,
+      data: myData,
+    }).then(
+      () => storeStatus("Saved."),
+      () => storeStatus("Failed to save", err)
+    );
+  };
   const handleDelete = async (event) => {
     if (event) event.preventDefault();
     setWarning({
@@ -40,10 +65,30 @@ const Options = () => {
       },
     });
   };
+  useEffect(() => {
+    if (!filled && editingResume) {
+      setFilled(true);
+      setTitle(editingResume.title);
+    }
+  });
   return (
     <>
       <div className="dashboard__item">
-        <h4 className="dashboard__item--title">Options</h4>
+        <h4 className="dashboard__item--title">Rename</h4>
+        <label>Resume Title</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          value={title}
+          onChange={handleChangeTitle}
+        />
+
+        <Button text="Update" altText="Updating..." fn={handleUpdate} />
+      </div>
+      <div className="dashboard__item">
+        <h4 className="dashboard__item--title">Delete</h4>
+        <p>Deleting a resume cannot be undone.</p>
         <Button fn={handleDelete} text="Delete" color="red" />
       </div>
     </>

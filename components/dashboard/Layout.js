@@ -42,8 +42,6 @@ const Layout = () => {
     setItems(newArr);
   };
   const handleUpdateLayout = (item) => {
-    console.log("item:", item);
-
     const myData = {
       value: item.value,
       _id: item._id,

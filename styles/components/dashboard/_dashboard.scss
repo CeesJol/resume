@@ -1,7 +1,7 @@
 .dashboard-container {
 	// @include content-container;
 
-	height: 100vh;
+	min-height: 100vh;
 }
 
 .dashboard {
@@ -91,7 +91,6 @@
 		margin-left: auto;
 		margin-right: auto;
 		display: inline-block;
-		position: absolute;
 
 		&--noscale {
 			transform: none !important;

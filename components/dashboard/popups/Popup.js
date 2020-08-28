@@ -80,7 +80,6 @@ const Popup = () => {
       },
     }).then(
       (data) => {
-        storeStatus("Saved");
         storeItem(
           {
             category: {
@@ -90,6 +89,7 @@ const Popup = () => {
           },
           { newId: data.createItem._id }
         );
+        storeStatus("Saved");
       },
       (err) => storeStatus("Error: could not save data", err)
     );

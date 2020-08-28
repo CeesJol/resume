@@ -57,11 +57,24 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
     return (
       <div className="resume__contact-info">
         <div className="resume__contact-info__content">
+          {templateCSS.contactInfo === "SIDEBAR" && (
+            <h3 className="resume__category--name">Personal info</h3>
+          )}
           {sortByPriority(getContactInfo(resume)).map((item) => (
-            <ContactItem item={item} key={`${item.name}-${item.value}`} />
+            <ContactItem
+              template={templateCSS}
+              item={item}
+              key={`${item.name}-${item.value}`}
+            />
           ))}
           <span>
-            {!preview && <ContactItem item={{}} txt={"Add contact info"} />}
+            {!preview && (
+              <ContactItem
+                template={templateCSS}
+                item={{}}
+                txt={"Add contact info"}
+              />
+            )}
           </span>
         </div>
       </div>
@@ -75,9 +88,13 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
     const mainCategories = categories.filter((category) => !category.sidebar);
     const sidebarCategories = categories.filter((category) => category.sidebar);
 
+    // If the template draws contact info at the top (so not in the sidebar)
     // If the template has no sidebar or there are no items in the sidebar,
     // don't draw it
-    if (!templateCSS.sidebar || sidebarCategories.length === 0) {
+    if (
+      templateCSS.contactInfo === "TOP" &&
+      (!templateCSS.sidebar || sidebarCategories.length === 0)
+    ) {
       return (
         <div className="resume__container">
           {categories.map((category, index) => drawCategory(category, index))}
@@ -113,6 +130,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
           )}
         </div>
         <div className="resume__container resume__container--right">
+          {templateCSS.contactInfo === "SIDEBAR" && drawContactInfo()}
           {sidebarCategories.map((category, index) =>
             drawCategory(category, index)
           )}
@@ -142,8 +160,8 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
         }
       >
         {drawHeader()}
-        {drawContactInfo()}
-        {drawCategories()}
+        {templateCSS.contactInfo === "TOP" && drawContactInfo()}
+        <div class="resume__body">{drawCategories()}</div>
       </div>
     </div>
   );

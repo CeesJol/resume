@@ -70,7 +70,7 @@ const Category = ({ category, index }) => {
             />
             {index > 0 && (
               <>
-                <i className="separator">‒</i>
+                <p className="separator">‒</p>
                 <Button
                   fn={() => handleMove(category, -1)}
                   text="Move up"

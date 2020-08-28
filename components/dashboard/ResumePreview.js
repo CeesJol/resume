@@ -70,7 +70,7 @@ const ResumePreview = ({ resume, index }) => {
 
           {index !== 0 && (
             <>
-              <i className="separator">‒</i>
+              <p className="separator">‒</p>
               <span onClick={(event) => event.stopPropagation()}>
                 <Button
                   fn={() => handleMove(resume, -1)}

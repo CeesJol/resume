@@ -55,11 +55,11 @@ const ContactPopup = () => {
       data: myData,
     }).then(
       (data) => {
-        storeStatus("Saved."),
-          storeContactInfo(
-            { _id: tempId },
-            { newId: data.createContactInfo._id }
-          );
+        storeContactInfo(
+          { _id: tempId },
+          { newId: data.createContactInfo._id }
+        );
+        storeStatus("Saved.");
       },
       (err) => storeStatus("Error: failed to save", err)
     );

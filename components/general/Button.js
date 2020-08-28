@@ -14,10 +14,12 @@ const Button = ({ text, altText, fn, color, textual }) => {
   };
   if (textual)
     return (
-      <p disabled={disabled} className="resume--hoverable resume--action">
-        <i onClick={handleClick} style={{ cursor: "pointer" }}>
-          {disabled && altText ? altText : text}
-        </i>
+      <p
+        disabled={disabled}
+        onClick={handleClick}
+        className="resume--hoverable resume--action"
+      >
+        {disabled && altText ? altText : text}
       </p>
     );
   return (

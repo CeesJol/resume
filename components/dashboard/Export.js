@@ -25,6 +25,8 @@ const Export = () => {
 
       {/* Resume export item */}
       <ResumeWrapper exportpdf={true} noscale={true} />
+
+      {/* <ResumeWrapper exportpdf={true} noscale={true} /> */}
     </>
   );
 };

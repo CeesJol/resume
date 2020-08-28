@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import { getContactIcon } from "../../lib/constants";
 
-const ContactItem = ({ item, txt }) => {
+const ContactItem = ({ template, item, txt }) => {
   const { setEditingContactInfo, preview, getLayoutItem } = useContext(
     UserContext
   );
@@ -25,9 +25,17 @@ const ContactItem = ({ item, txt }) => {
         !preview ? "resume--hoverable" : ""
       }`}
     >
-      {item.value !== undefined
-        ? drawIcon(getContactIcon(item.value))
-        : drawIcon("plus-square")}
+      {template.contactInfo === "TOP" ? (
+        // Draw icon
+        item.value !== undefined ? (
+          drawIcon(getContactIcon(item.value))
+        ) : (
+          drawIcon("plus-square")
+        )
+      ) : (
+        // Draw text
+        <h4 className="resume__contact-info--title">{item.value}</h4>
+      )}
       <p>{item.name ? item.name : txt}</p>
     </div>
   );

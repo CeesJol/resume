@@ -1,19 +1,16 @@
 import Resume from "./Resume";
 
-const ResumeWrapper = ({ noscale, exportpdf }) => {
-  return noscale ? (
-    <div style={{ position: "absolute", left: "-10000px", top: "0" }}>
+const ResumeWrapper = ({ noscale, exportpdf, hidden }) => {
+  return (
+    <div style={{ display: "flex", justifyContent: "center" }}>
       <div
-        className={
-          "dashboard__resume-wrapper dashboard__resume-wrapper--noscale"
+        className={`dashboard__resume-wrapper ${
+          noscale ? "dashboard__resume-wrapper--noscale" : ""
+        }`}
+        style={
+          hidden ? { position: "absolute", left: "-10000px", top: "0" } : {}
         }
       >
-        <Resume exportpdf={exportpdf} />
-      </div>
-    </div>
-  ) : (
-    <div style={{ display: "flex", justifyContent: "center" }}>
-      <div className={"dashboard__resume-wrapper "}>
         <Resume exportpdf={exportpdf} />
       </div>
     </div>

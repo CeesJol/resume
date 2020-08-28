@@ -1,11 +1,6 @@
 .resume-container {
 	height: calc(84.2rem * #{$resume-scale});
 	width: calc(59.5rem * #{$resume-scale});
-	overflow-x: hidden;
-
-	& > * {
-		overflow-x: hidden !important;
-	}
 	background-color: white;
 
 	&--tiny {
@@ -21,6 +16,20 @@
 }
 
 .resume {
+	background-color: white;
+	overflow: auto;
+	font-family: Helvetica, Arial, sans-serif;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+
+	&__body {
+		flex: 1;
+		height: 300px;
+		overflow: auto;
+	}
+
 	&--tiny {
 		transform: scale(0.51 / $resume-scale);
 		@media (min-width: 56rem) {
@@ -56,20 +65,24 @@
 	}
 
 	&__category--name,
-	&__item--title,
-	&--action {
+	&__item--title {
 		margin-top: 0;
 		margin-bottom: 0;
+		display: flex;
+	}
+
+	&--action {
+		cursor: pointer;
 		display: inline-flex;
+		line-height: 1 !important;
+		margin: 0 !important;
+		padding: 0 !important;
+		font-style: italic;
 	}
 
 	&--action[disabled] > i {
 		color: lighten($light-grey-3, 10%);
 	}
-
-	background-color: white;
-	overflow: auto;
-	font-family: Helvetica, Arial, sans-serif;
 
 	&--hoverable {
 		// Remove weird effect where after 'transform: scale' the left pixel column is cut off
@@ -83,12 +96,10 @@
 
 		&--left {
 			float: left;
-			width: 50%;
 		}
 
 		&--right {
 			float: right;
-			width: 50%;
 		}
 	}
 
@@ -98,45 +109,12 @@
 		}
 
 		&--job-title {
-			color: grey;
 			font-weight: 400;
 		}
 	}
 
-	&__contact-info {
-		background-color: rgb(239, 240, 241);
-		padding: calc(#{$xs-size} * #{$resume-scale});
-		height: calc(2.5rem * #{$resume-scale});
-		display: flex;
-		justify-content: center;
-		align-items: center;
-
-		&__content {
-			display: flex;
-			justify-content: space-evenly;
-		}
-
-		&--item {
-			position: relative;
-			padding: 0 calc(#{$s-size} * #{$resume-scale});
-			display: flex;
-			align-items: center;
-			vertical-align: middle;
-		}
-
-		&--icon {
-			padding-right: calc(#{$s-size} * #{$resume-scale}) !important;
-			margin-top: calc(-0.15rem * #{$resume-scale}) !important; // beun solution to get the icon aligned with the text
-		}
-	}
-
-	&__actions {
-		margin-left: calc(#{$xs-size} * #{$resume-scale});
-	}
-
 	&__category {
 		&--name {
-			text-transform: uppercase;
 			margin-bottom: calc(#{$xs-size} * #{$resume-scale});
 
 			// @include hover;
@@ -158,6 +136,7 @@
 
 		// Actions separator
 		.separator {
+			display: inline;
 			margin: 0 calc(#{$xs-size} * #{$resume-scale});
 		}
 	}

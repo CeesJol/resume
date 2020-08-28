@@ -45,7 +45,7 @@ const Dashboard = () => {
         style={{
           position: "sticky",
           top: "0",
-          zIndex: "1",
+          zIndex: "12",
           boxShadow: `0px -10px 
 						${Math.min((20 * scroll) / 200, 20)}px  
 						${Math.min((10 * scroll) / 200, 10)}px 

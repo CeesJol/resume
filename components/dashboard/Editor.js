@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { UserContext } from "../../contexts/userContext";
 import ResumeWrapper from "./ResumeWrapper";
+import Button from "../general/Button";
 
 const Editor = () => {
   const { editingResume, setChangingResume, setPreview } = useContext(

@@ -1,7 +1,9 @@
 .resume-container {
+	// max-height: calc(84.2rem * #{$resume-scale});
 	height: calc(84.2rem * #{$resume-scale});
 	width: calc(59.5rem * #{$resume-scale});
 	background-color: white;
+	overflow: hidden;
 
 	&--tiny {
 		height: 15rem;
@@ -17,7 +19,7 @@
 
 .resume {
 	background-color: white;
-	overflow: auto;
+	overflow: hidden;
 	font-family: Helvetica, Arial, sans-serif;
 	height: 100%;
 	display: flex;
@@ -25,9 +27,9 @@
 	width: 100%;
 
 	&__body {
-		flex: 1;
-		height: 300px;
-		overflow: auto;
+		// flex: 1;
+		height: 100%;
+		display: flex;
 	}
 
 	&--tiny {
@@ -95,11 +97,11 @@
 		padding: calc(#{$l-size} * #{#{$resume-scale}});
 
 		&--left {
-			float: left;
+			// float: left;
 		}
 
 		&--right {
-			float: right;
+			// float: right;
 		}
 	}
 
@@ -121,10 +123,10 @@
 		}
 
 		border-radius: 3px;
-		border: 1px solid transparent;
+		// border: 1px solid transparent;
 
 		&--hoverable:hover {
-			border: 1px solid $light-grey-2;
+			// border: 1px solid $light-grey-2;
 		}
 
 		// Specific categories

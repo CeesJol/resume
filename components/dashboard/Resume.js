@@ -161,7 +161,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
       >
         {drawHeader()}
         {templateCSS.contactInfo === "TOP" && drawContactInfo()}
-        <div class="resume__body">{drawCategories()}</div>
+        <div className="resume__body">{drawCategories()}</div>
       </div>
     </div>
   );

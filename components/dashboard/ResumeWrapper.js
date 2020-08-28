@@ -8,7 +8,9 @@ const ResumeWrapper = ({ noscale, exportpdf, hidden }) => {
           noscale ? "dashboard__resume-wrapper--noscale" : ""
         }`}
         style={
-          hidden ? { position: "absolute", left: "-10000px", top: "0" } : {}
+          hidden
+            ? { position: "absolute", left: "-10000px", top: "-10000px" }
+            : {}
         }
       >
         <Resume exportpdf={exportpdf} />

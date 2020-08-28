@@ -22,6 +22,7 @@
 	&__container {
 		&--left {
 			width: calc(100% - #{$sidebar});
+			height: 100%;
 		}
 
 		&--right {

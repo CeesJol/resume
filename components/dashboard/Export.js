@@ -21,12 +21,12 @@ const Export = () => {
         <Button fn={exportPDF} text="Export" altText="Exporting..." />
       </div>
       {/* Resume preview */}
-      <ResumeWrapper exportpdf={false} />
+      {/* <ResumeWrapper exportpdf={false} /> */}
 
       {/* Resume export item */}
-      <ResumeWrapper exportpdf={true} noscale={true} />
+      {/* <ResumeWrapper exportpdf={true} noscale={true} hidden={true} /> */}
 
-      {/* <ResumeWrapper exportpdf={true} noscale={true} /> */}
+      <ResumeWrapper exportpdf={true} noscale={true} />
     </>
   );
 };

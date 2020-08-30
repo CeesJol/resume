@@ -41,7 +41,7 @@ const Layout = () => {
     newArr[i].value = event.target.value;
     setItems(newArr);
   };
-  const handleUpdateLayout = (item) => {
+  const handleUpdateLayout = async (item) => {
     const myData = {
       value: item.value,
       _id: item._id,
@@ -49,7 +49,7 @@ const Layout = () => {
 
     storeLayout(myData);
 
-    fauna({
+    await fauna({
       type: "UPDATE_LAYOUT",
       id: item._id,
       data: myData,
@@ -58,7 +58,7 @@ const Layout = () => {
       (err) => storeStatus("Error: failed to save", err)
     );
   };
-  const handleUpdateTemplate = () => {
+  const handleUpdateTemplate = async () => {
     const myData = {
       templateId: selectedTemplateId,
       _id: editingResume._id,
@@ -66,7 +66,7 @@ const Layout = () => {
 
     storeResume(myData, {});
 
-    fauna({
+    await fauna({
       type: "UPDATE_RESUME",
       id: editingResume._id,
       data: myData,

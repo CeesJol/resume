@@ -5,6 +5,7 @@ import Contactpicker from "../../general/Contactpicker";
 import { toast } from "react-toastify";
 import { fauna } from "../../../lib/api";
 import randomId from "../../../lib/randomId";
+import { CONTACTPICKER_OPTIONS } from "../../../lib/constants";
 
 const ContactPopup = () => {
   const {
@@ -20,10 +21,14 @@ const ContactPopup = () => {
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [name, setName] = useState("");
-  const [value, setValue] = useState("");
+  const [customValue, setCustomValue] = useState("");
+  const [value, setValue] = useState("Email");
   const handleChangeName = (event) => {
     setName(event.target.value);
     setUserMadeChanges(true);
+  };
+  const handleChangeCustomValue = (event) => {
+    setCustomValue(event.target.value);
   };
   const handleChangeValue = (event) => {
     setValue(event.target.value);
@@ -43,7 +48,7 @@ const ContactPopup = () => {
     const myData = {
       _id: tempId,
       name,
-      value,
+      value: value ? value : customValue,
       priority: getContactInfo().length + 1,
     };
 
@@ -74,7 +79,7 @@ const ContactPopup = () => {
     const myData = {
       ...editingContactInfo,
       name,
-      value,
+      value: value ? value : customValue,
     };
 
     storeContactInfo(myData, {});
@@ -128,7 +133,12 @@ const ContactPopup = () => {
       setFilled(true);
 
       setName(editingContactInfo.name);
-      setValue(editingContactInfo.value);
+      if (CONTACTPICKER_OPTIONS[value]) {
+        setValue(editingContactInfo.value);
+      } else {
+        setValue("");
+        setCustomValue(editingContactInfo.value);
+      }
     }
   });
   return (
@@ -139,6 +149,19 @@ const ContactPopup = () => {
           <div>
             <label>Type</label>
             <Contactpicker val={value} fn={handleChangeValue} />
+
+            {value == "" && (
+              <>
+                <label>Contact type</label>
+                <input
+                  type="text"
+                  id="customValue"
+                  name="customValue"
+                  value={customValue}
+                  onChange={handleChangeCustomValue}
+                />
+              </>
+            )}
 
             <label>Contact information</label>
             <input

@@ -39,7 +39,6 @@
 		}
 		transform-origin: top left;
 
-		// COMMENT OUT THIS LINE TO DISABLE SCROLLING IN RESUME PREVIEW
 		height: calc(30rem * #{$resume-scale});
 	}
 
@@ -95,14 +94,6 @@
 
 	&__container {
 		padding: calc(#{$l-size} * #{#{$resume-scale}});
-
-		&--left {
-			// float: left;
-		}
-
-		&--right {
-			// float: right;
-		}
 	}
 
 	&__header {
@@ -123,10 +114,10 @@
 		}
 
 		border-radius: 3px;
-		// border: 1px solid transparent;
+		border: 1px solid transparent;
 
 		&--hoverable:hover {
-			// border: 1px solid $light-grey-2;
+			border: 1px solid $light-grey-2;
 		}
 
 		// Specific categories

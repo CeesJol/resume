@@ -22,6 +22,7 @@
 	max-width: calc(#{$max-width} - 3rem);
 	height: auto;
 	max-height: calc(100vh - 3rem);
+	z-index: 758493;
 
 	&--medium {
 		width: 40rem;

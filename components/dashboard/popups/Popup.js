@@ -21,7 +21,7 @@ const Popup = () => {
     storeStatus,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
-  const [isGoing, setIsGoing] = useState(true); // Separate from fields, because DB doesn't take this value.
+  const [isGoing, setIsGoing] = useState(true); // Separated from fields, because DB doesn't take this value.
   const [fields, setFields] = useState({
     title: "",
     month1: "",

@@ -19,7 +19,7 @@ const Options = () => {
   const handleChangeTitle = (event) => {
     setTitle(event.target.value);
   };
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     if (!title) return "Please provide a resume title";
 
     const myData = {
@@ -29,7 +29,7 @@ const Options = () => {
 
     storeResume(myData, {});
 
-    fauna({
+    await fauna({
       type: "UPDATE_RESUME",
       id: myData._id,
       data: myData,
@@ -45,7 +45,7 @@ const Options = () => {
         "Are you sure you want to delete this resume? All the data of the resume will be lost.",
       fn: async () => {
         await fauna({ type: "DELETE_RESUME", id: editingResume._id }).then(
-          async (data) => {
+          async () => {
             storeResume(editingResume, { del: true });
             resetPopups();
             setPreview(true);

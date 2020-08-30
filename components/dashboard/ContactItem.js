@@ -27,7 +27,7 @@ const ContactItem = ({ template, item, txt }) => {
     >
       {template.contactInfo === "TOP" ? (
         // Draw icon
-        item.value !== undefined ? (
+        item.value ? (
           drawIcon(getContactIcon(item.value))
         ) : (
           drawIcon("plus-square")

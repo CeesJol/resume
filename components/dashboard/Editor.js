@@ -17,7 +17,7 @@ const Editor = () => {
   return (
     <>
       <div className="dashboard__item">
-        <h4>{editingResume.title}</h4>
+        <h4 className="dashboard__item--title">{editingResume.title}</h4>
         <a onClick={handleGoBack}>All resumes</a>
       </div>
       <ResumeWrapper exportpdf={false} />

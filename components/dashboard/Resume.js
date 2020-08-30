@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { UserContext } from "../../contexts/userContext";
 import Category from "./Category";
 import ContactItem from "./ContactItem";
@@ -22,6 +22,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
     getJobTitle,
     getBio,
   } = useContext(UserContext);
+  const [hovering, setHovering] = useState(false);
   const handleChangeInfo = () => {
     if (preview) return false;
     setChangingInfo(true);
@@ -55,7 +56,11 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
   };
   const drawContactInfo = () => {
     return (
-      <div className="resume__contact-info">
+      <div
+        className="resume__contact-info"
+        onMouseEnter={() => setHovering(true)}
+        onMouseLeave={() => setHovering(false)}
+      >
         <div className="resume__contact-info__content">
           {templateCSS.contactInfo === "SIDEBAR" && (
             <h3 className="resume__category--name">Personal info</h3>
@@ -68,7 +73,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
             />
           ))}
           <span>
-            {!preview && (
+            {hovering && !preview && (
               <ContactItem
                 template={templateCSS}
                 item={{}}

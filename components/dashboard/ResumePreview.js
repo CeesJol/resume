@@ -14,6 +14,7 @@ const ResumePreview = ({ resume, index }) => {
     moveResume,
     forceRender,
     storeResume,
+    storeStatus,
   } = useContext(UserContext);
   const handleClick = (e, resume) => {
     e.preventDefault();

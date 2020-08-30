@@ -77,7 +77,7 @@ const Layout = () => {
   };
   const drawTemplates = () => (
     <div className="dashboard__item">
-      <h4>Template</h4>
+      <h4 className="dashboard__item--title">Template</h4>
       {templates.length > 0 ? (
         <>
           {templates.map((template) => (
@@ -99,7 +99,7 @@ const Layout = () => {
   const drawLayout = () =>
     items.map((item, i) => (
       <div className="dashboard__item" key={item._id}>
-        <h4>{item.name}</h4>
+        <h4 className="dashboard__item--title">{item.name}</h4>
         <form>
           <input
             type="text"

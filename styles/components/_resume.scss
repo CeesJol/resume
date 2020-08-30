@@ -136,7 +136,7 @@
 
 	&__item {
 		position: relative;
-		padding-bottom: calc(#{$font-size-default} * #{$resume-scale});
+		padding-bottom: calc(#{$s-size} * #{$resume-scale});
 
 		&--title {
 			font-weight: bold;
@@ -161,8 +161,8 @@
 			border-radius: 5px;
 			width: auto;
 
-			h3 {
-				font-size: calc(1.2rem * #{$resume-scale});
+			h4 {
+				font-size: calc(1rem * #{$resume-scale});
 			}
 		}
 	}

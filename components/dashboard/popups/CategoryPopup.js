@@ -167,7 +167,9 @@ const CategoryPopup = () => {
   return (
     <div className="popup-container" onClick={handleCancel}>
       <div className="popup" onClick={(e) => e.stopPropagation()}>
-        <h4>{editingCategory.name ? "Edit category" : "Create category"}</h4>
+        <h4 className="popup--title">
+          {editingCategory.name ? "Edit category" : "Create category"}
+        </h4>
         <form>
           <div>
             <label>Category name</label>

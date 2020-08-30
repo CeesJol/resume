@@ -287,12 +287,12 @@ export const duplicateResume = async (
 					${resumeData.categories.data.map(
             (category) =>
               `{ 
-								${stringifyObject(category)}
+								${stringifyObject(category).pairs}
 								items: {
 									create: [
 										${category.items.data.map(
                       (item) => `{
-												${stringifyObject(item)}
+												${stringifyObject(item).pairs}
 										}`
                     )}
 								]
@@ -305,7 +305,7 @@ export const duplicateResume = async (
 				create: [
 					${resumeData.layout.data.map(
             (layoutItem) => `{
-							${stringifyObject(layoutItem)}
+							${stringifyObject(layoutItem).pairs}
 						}`
           )}
 				]
@@ -314,7 +314,7 @@ export const duplicateResume = async (
 				create: [
 					${resumeData.contactInfo.data.map(
             (contactInfoItem) => `{
-							${stringifyObject(contactInfoItem)}
+							${stringifyObject(contactInfoItem).pairs}
 						}`
           )}
 				]
@@ -324,6 +324,7 @@ export const duplicateResume = async (
 			${RESUME_DATA}
 		}
 	}`;
+  console.log("query:", query);
   return executeQuery(query, secret);
 };
 

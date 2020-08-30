@@ -28,7 +28,7 @@ const Resumes = () => {
 
   return (
     <div className="dashboard__item">
-      <h4>Your resumes</h4>
+      <h4 className="dashboard__item--title">Your resumes</h4>
       {drawResumePreviews()}
       {getResumes().length < MAX_NUMBER_OF_RESUMES ? (
         <Button text="Create a resume" fn={handleCreate} />

@@ -144,7 +144,7 @@ const ContactPopup = () => {
   return (
     <div className="popup-container" onClick={handleCancel}>
       <div className="popup" onClick={(e) => e.stopPropagation()}>
-        <h4>Update info</h4>
+        <h4 className="popup--title">Update info</h4>
         <form>
           <div>
             <label>Type</label>

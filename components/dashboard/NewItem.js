@@ -46,7 +46,7 @@ const NewItem = ({ category, item, index, dummy, hovering }) => {
       onClick={(e) => handleClick(e, item)}
       key={item._id}
     >
-      <h3 className="resume__item--title">{item.title}</h3>
+      <h4 className="resume__item--title">{item.title}</h4>
       {hovering &&
         index > 0 &&
         !preview &&
@@ -64,7 +64,7 @@ const NewItem = ({ category, item, index, dummy, hovering }) => {
             />
           </span>
         )}
-      <h3 className="resume__item--location">{item.location}</h3>
+      <h4 className="resume__item--location">{item.location}</h4>
       {item.year1 && (
         <p className="resume__item--date">
           {item.month1 ? item.month1 + "/" : ""}

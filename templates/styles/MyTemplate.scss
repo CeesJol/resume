@@ -2,6 +2,7 @@
 	$sidebar: 50%;
 
 	&__container {
+		background-color: white;
 		&--left {
 			width: calc(100% - #{$sidebar});
 		}

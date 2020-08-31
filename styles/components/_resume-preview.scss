@@ -58,10 +58,6 @@
 			font-weight: 300;
 		}
 
-		&--bio {
-			margin: 0;
-		}
-
 		footer {
 			margin-top: $s-size;
 
@@ -75,11 +71,6 @@
 			a:hover {
 				text-decoration: underline;
 				opacity: 1;
-			}
-
-			// Actions separator
-			.separator {
-				margin: 0 $m-size;
 			}
 		}
 	}

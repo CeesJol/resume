@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import { GET_CATEGORY_ITEMS } from "../../lib/constants";
 import Button from "../general/Button";
+import Separator from "./Separator";
 
 const NewItem = ({ category, item, index, dummy, hovering }) => {
   const {
@@ -52,17 +53,15 @@ const NewItem = ({ category, item, index, dummy, hovering }) => {
         !preview &&
         !dummy &&
         getTypeClassName() !== "title-and-value" && (
-          <span
-            className="resume__actions"
-            onClick={(event) => event.stopPropagation()}
-          >
+          <>
+            <Separator />
             <Button
               fn={() => handleMove(item, -1)}
               text="Move up"
               altText="Moving..."
               textual={true}
             />
-          </span>
+          </>
         )}
       <h4 className="resume__item--location">{item.location}</h4>
       {item.year1 && (

@@ -4,6 +4,7 @@ import Button from "../general/Button";
 import { fauna } from "../../lib/api";
 import Resume from "./Resume";
 import { getTemplate } from "../../templates/templates";
+import Separator from "./Separator";
 
 const ResumePreview = ({ resume, index }) => {
   const {
@@ -71,7 +72,7 @@ const ResumePreview = ({ resume, index }) => {
 
           {index !== 0 && (
             <>
-              <p className="separator">‒</p>
+              <Separator />
               <span onClick={(event) => event.stopPropagation()}>
                 <Button
                   fn={() => handleMove(resume, -1)}

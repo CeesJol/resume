@@ -92,7 +92,7 @@ const Layout = () => {
           />
         </>
       ) : (
-        <p>Loading...</p>
+        <p>Loading templates...</p>
       )}
     </div>
   );

@@ -39,7 +39,7 @@ const DashboardHeader = () => {
             <h3>
               <a className="header__title" onClick={handleGoBack}>
                 <img className="icon--large" src="../images/icon-small.png" />
-                {userExists() ? getUser().username : "Loading..."}
+                {userExists() ? getUser().username : "Affilas"}
               </a>
             </h3>
             {changingResume && (

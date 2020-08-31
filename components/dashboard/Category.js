@@ -3,6 +3,7 @@ import { UserContext } from "../../contexts/userContext";
 import NewItem from "./NewItem";
 import { GET_DUMMY_ITEM } from "../../lib/constants";
 import Button from "../general/Button";
+import Separator from "./Separator";
 
 const Category = ({ category, index }) => {
   const {
@@ -49,6 +50,26 @@ const Category = ({ category, index }) => {
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
     >
+      {hovering && !preview && (
+        <span className="resume__actions">
+          <Button
+            fn={() => handleNewItem(category)}
+            text={` Add ${category.name.toLowerCase()}`}
+            textual={true}
+          />
+          {index > 0 && (
+            <>
+              <Separator />
+              <Button
+                fn={() => handleMove(category, -1)}
+                text="Move up"
+                altText="Moving..."
+                textual={true}
+              />
+            </>
+          )}
+        </span>
+      )}
       <div>
         <h3
           className={`resume__category--name ${
@@ -61,26 +82,6 @@ const Category = ({ category, index }) => {
         >
           {category.name}
         </h3>
-        {hovering && !preview && (
-          <span className="resume__actions">
-            <Button
-              fn={() => handleNewItem(category)}
-              text={` Add ${category.name.toLowerCase()}`}
-              textual={true}
-            />
-            {index > 0 && (
-              <>
-                <p className="separator">‒</p>
-                <Button
-                  fn={() => handleMove(category, -1)}
-                  text="Move up"
-                  altText="Moving..."
-                  textual={true}
-                />
-              </>
-            )}
-          </span>
-        )}
         {getItems(category) && getItems(category).length > 0 ? (
           <div className="resume__category--items-container">
             {sortByPriority(getItems(category)).map((item, index) => (

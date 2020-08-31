@@ -1,58 +1,59 @@
 .box {
-  background-color: $light-grey;
-  border: 1px solid $light-grey-2;
-  border-radius: 5px;
-  overflow: hidden;
-  @include hover;
-  display: inline-block;
-  width: 100%;
-  margin-bottom: $m-size;
+	background-color: $light-grey;
+	border: 1px solid $light-grey-2;
+	border-radius: 5px;
+	overflow: hidden;
+	@include hover;
+	display: inline-block;
+	width: 100%;
+	margin-bottom: $m-size;
 
-  // @media (min-width: 25rem) and (max-width: calc(#{$desktop-breakpoint} - .1rem)) {
-  // 	width: calc(50% - #{$m-size} / 2);
+	// @media (min-width: 25rem) and (max-width: calc(#{$desktop-breakpoint} - .1rem)) {
+	// 	width: calc(50% - #{$m-size} / 2);
 
-  // 	&:not(:nth-child(2n+1)) {
-  // 		margin-right: $m-size;
-  // 	}
-  // }
-  width: 30.375rem;
-  @media (min-width: 45rem) {
-    width: 30.375rem;
+	// 	&:not(:nth-child(2n+1)) {
+	// 		margin-right: $m-size;
+	// 	}
+	// }
+	width: 30.375rem;
+	@media (min-width: 45rem) {
+		width: 30.375rem;
 
-    &:not(:nth-child(2n + 1)) {
-      margin-right: $m-size;
-    }
-  }
+		&:not(:nth-child(2n + 1)) {
+			margin-right: $m-size;
+		}
+	}
 
-  @media (min-width: 56rem) {
-    width: 40.5rem;
+	@media (min-width: 56rem) {
+		width: 40.5rem;
 
-    &:not(:nth-child(2n + 1)) {
-      margin-right: $m-size;
-    }
-  }
+		&:not(:nth-child(2n + 1)) {
+			margin-right: $m-size;
+		}
+	}
 
-  // @media (min-width: $desktop-breakpoint) {
-  // 	width: calc(100%/3 - #{$m-size} * 2/3);
+	// @media (min-width: $desktop-breakpoint) {
+	// 	width: calc(100%/3 - #{$m-size} * 2/3);
 
-  // 	&:not(:nth-child(3n)) {
-  // 		margin-right: $m-size;
-  // 	}
-  // }
+	// 	&:not(:nth-child(3n)) {
+	// 		margin-right: $m-size;
+	// 	}
+	// }
 
-  &--title {
-    margin: 0.75rem $s-size;
-  }
+	&--title {
+		position: relative;
+		margin: 0.75rem $s-size;
+	}
 
-  &--img {
-    width: 100%;
-  }
+	&--img {
+		width: 100%;
+	}
 
-  &--selected {
-    background-color: $light-green;
-    border: 1px solid $light-green;
-    & > p {
-      color: white;
-    }
-  }
+	&--selected {
+		background-color: $light-green;
+		border: 1px solid $light-green;
+		& > p {
+			color: white;
+		}
+	}
 }

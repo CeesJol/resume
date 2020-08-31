@@ -21,6 +21,7 @@
 
 	&__container {
 		&--left {
+			background-color: white;
 			width: calc(100% - #{$sidebar});
 			height: 100%;
 		}
@@ -50,17 +51,17 @@
 		}
 
 		&--item {
-			// 		position: relative;
-			// 		padding: 0 calc(#{$s-size} * #{$resume-scale});
-			// 		display: flex;
-			// 		align-items: center;
-			// 		vertical-align: middle;
-			margin-bottom: calc(1rem * #{$resume-scale});
+			// position: relative;
+			// padding: 0 calc(#{$s-size} * #{$resume-scale});
+			// display: flex;
+			// align-items: center;
+			// vertical-align: middle;
+			// margin-bottom: calc(1rem * #{$resume-scale});
 		}
 
 		&--icon {
-			// 		padding-right: calc(#{$s-size} * #{$resume-scale}) !important;
-			// 		margin-top: calc(-0.15rem * #{$resume-scale}) !important; // beun solution to get the icon aligned with the text
+			// padding-right: calc(#{$s-size} * #{$resume-scale}) !important;
+			// margin-top: calc(-0.15rem * #{$resume-scale}) !important; // beun solution to get the icon aligned with the text
 		}
 	}
 }

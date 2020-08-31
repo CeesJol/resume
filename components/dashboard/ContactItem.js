@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import { getContactIcon } from "../../lib/constants";
 
-const ContactItem = ({ template, item, txt }) => {
+const ContactItem = ({ template, item, add }) => {
   const { setEditingContactInfo, preview, getLayoutItem } = useContext(
     UserContext
   );
@@ -36,7 +36,7 @@ const ContactItem = ({ template, item, txt }) => {
         // Draw text
         <h4 className="resume__contact-info--title">{item.value}</h4>
       )}
-      <p>{item.name ? item.name : txt}</p>
+      <p>{item.name}</p>
     </div>
   );
 };

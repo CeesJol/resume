@@ -73,11 +73,11 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
             />
           ))}
           <span>
-            {hovering && !preview && (
+            {true && !preview && (
               <ContactItem
                 template={templateCSS}
-                item={{}}
-                txt={"Add contact info"}
+                item={{ name: "Add contact info" }}
+                add={true}
               />
             )}
           </span>
@@ -106,14 +106,16 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
           {!preview && (
             <>
               <p className="resume--hoverable" onClick={handleNewCategory}>
-                <i>Create new category</i>
+                <p className="resume--action">Create new category</p>
               </p>
               {sidebarCategories.length === 0 && (
                 <p
                   className="resume--hoverable"
                   onClick={() => handleNewCategory({ sidebar: true })}
                 >
-                  <i>Create new category in sidebar</i>
+                  <p className="resume--action">
+                    Create new category in sidebar
+                  </p>
                 </p>
               )}
             </>
@@ -130,7 +132,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
           )}
           {!preview && (
             <p className="resume--hoverable" onClick={handleNewCategory}>
-              <i>Create new category</i>
+              <p className="resume--action">Create new category</p>
             </p>
           )}
         </div>
@@ -144,7 +146,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
               className="resume--hoverable"
               onClick={() => handleNewCategory({ sidebar: true })}
             >
-              <i>Create new category</i>
+              <p className="resume--action">Create new category</p>
             </p>
           )}
         </div>

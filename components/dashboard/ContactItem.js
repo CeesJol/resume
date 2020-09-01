@@ -3,7 +3,7 @@ import { UserContext } from "../../contexts/userContext";
 import { getContactIcon } from "../../lib/constants";
 import { isMobile } from "react-device-detect";
 
-const ContactItem = ({ template, item, add }) => {
+const ContactItem = ({ template, item, text }) => {
   const { setEditingContactInfo, preview, getLayoutItem } = useContext(
     UserContext
   );
@@ -37,7 +37,7 @@ const ContactItem = ({ template, item, add }) => {
         // Draw text
         <h4 className="resume__contact-info--title">{item.value}</h4>
       )}
-      <p>{item.name}</p>
+      <p>{item.name ? item.name : text}</p>
     </div>
   );
 };

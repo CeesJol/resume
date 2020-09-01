@@ -3,7 +3,7 @@ import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import { toast } from "react-toastify";
 import { fauna } from "../../../lib/api";
-import { DEFAULT_CATEGORIES, CATEGORY_TYPES } from "../../../lib/constants";
+import { ALL_CATEGORIES } from "../../../lib/constants";
 import Categorypicker from "../../general/Categorypicker";
 import Typepicker from "../../general/Typepicker";
 import randomId from "../../../lib/randomId";
@@ -142,11 +142,15 @@ const CategoryPopup = () => {
     if (!filled) {
       setFilled(true);
       const name = editingCategory.name;
-      if (name) {
+      if (!name) {
+        // The category is being created
+        setName(ALL_CATEGORIES[0].name);
+        setType(ALL_CATEGORIES[0].type);
+      } else {
         // If category already exists (it's being updated)
         setType(editingCategory.type);
         if (
-          DEFAULT_CATEGORIES.find(
+          ALL_CATEGORIES.find(
             (cat) => cat.name.toLowerCase() === name.toLowerCase()
           )
         ) {
@@ -157,10 +161,6 @@ const CategoryPopup = () => {
           setName("Other");
           setCustomName(name);
         }
-      } else {
-        // The category is being created
-        setName(DEFAULT_CATEGORIES[0].name);
-        setType(CATEGORY_TYPES[0]);
       }
     }
   });

@@ -77,8 +77,8 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
             {true && !preview && !isMobile && (
               <ContactItem
                 template={templateCSS}
-                item={{ name: "Add contact info" }}
-                add={true}
+                item={{}}
+                text={"Add contact info"}
               />
             )}
           </span>

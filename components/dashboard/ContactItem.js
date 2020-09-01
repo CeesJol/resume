@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import { getContactIcon } from "../../lib/constants";
+import { isMobile } from "react-device-detect";
 
 const ContactItem = ({ template, item, add }) => {
   const { setEditingContactInfo, preview, getLayoutItem } = useContext(
@@ -22,7 +23,7 @@ const ContactItem = ({ template, item, add }) => {
     <div
       onClick={() => handleChangeContactInfo(item)}
       className={`resume__contact-info--item ${
-        !preview ? "resume--hoverable" : ""
+        !preview && !isMobile ? "resume--hoverable" : ""
       }`}
     >
       {template.contactInfo === "TOP" ? (

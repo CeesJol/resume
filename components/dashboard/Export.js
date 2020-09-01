@@ -2,11 +2,18 @@ import React, { useContext, useEffect } from "react";
 import { UserContext } from "../../contexts/userContext";
 import ResumeWrapper from "./ResumeWrapper";
 import Button from "../general/Button";
+import { isIOS } from "react-device-detect";
 
 const Export = () => {
   const { setPreview, changingResume, pdf } = useContext(UserContext);
   const exportPDF = async () => {
-    await pdf.save();
+    if (isIOS) {
+      alert(
+        "iOS does not support exporting to PDF. Please log in on your desktop and try it there."
+      );
+    } else {
+      await pdf.save();
+    }
   };
   useEffect(() => {
     setPreview(true);

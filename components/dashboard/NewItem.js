@@ -3,6 +3,7 @@ import { UserContext } from "../../contexts/userContext";
 import { GET_CATEGORY_ITEMS } from "../../lib/constants";
 import Button from "../general/Button";
 import Separator from "./Separator";
+import { isMobile } from "react-device-detect";
 
 const NewItem = ({ category, item, index, dummy, hovering }) => {
   const {
@@ -35,7 +36,7 @@ const NewItem = ({ category, item, index, dummy, hovering }) => {
   return (
     <div
       className={`resume__item resume__item--${getTypeClassName()} ${
-        !preview ? "resume--hoverable" : ""
+        !preview && !isMobile ? "resume--hoverable" : ""
       }`}
       style={
         getTypeClassName() === "title-and-value"
@@ -49,6 +50,7 @@ const NewItem = ({ category, item, index, dummy, hovering }) => {
     >
       <h4 className="resume__item--title">{item.title}</h4>
       {hovering &&
+        !isMobile &&
         index > 0 &&
         !preview &&
         !dummy &&

@@ -4,6 +4,7 @@ import Category from "./Category";
 import ContactItem from "./ContactItem";
 import { PDFExport } from "@progress/kendo-react-pdf";
 import { getTemplate } from "../../templates/templates";
+import { isMobile } from "react-device-detect";
 
 // PDF Export source
 // https://blog.usejournal.com/lets-make-a-resume-in-react-2c9c5540f51a
@@ -42,7 +43,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
     return (
       <div
         className={`resume__header resume__container ${
-          !preview ? "resume--hoverable" : ""
+          !preview && !isMobile ? "resume--hoverable" : ""
         }`}
         onClick={handleChangeInfo}
       >
@@ -73,7 +74,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
             />
           ))}
           <span>
-            {true && !preview && (
+            {true && !preview && !isMobile && (
               <ContactItem
                 template={templateCSS}
                 item={{ name: "Add contact info" }}
@@ -103,7 +104,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
       return (
         <div className="resume__container">
           {categories.map((category, index) => drawCategory(category, index))}
-          {!preview && (
+          {!preview && !isMobile && (
             <>
               <p className="resume--hoverable" onClick={handleNewCategory}>
                 <p className="resume--action">Create new category</p>
@@ -130,10 +131,10 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
           {mainCategories.map((category, index) =>
             drawCategory(category, index)
           )}
-          {!preview && (
-            <p className="resume--hoverable" onClick={handleNewCategory}>
+          {!preview && !isMobile && (
+            <span className="resume--hoverable" onClick={handleNewCategory}>
               <p className="resume--action">Create new category</p>
-            </p>
+            </span>
           )}
         </div>
         <div className="resume__container resume__container--right">
@@ -141,13 +142,13 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
           {sidebarCategories.map((category, index) =>
             drawCategory(category, index)
           )}
-          {!preview && (
-            <p
+          {!preview && !isMobile && (
+            <span
               className="resume--hoverable"
               onClick={() => handleNewCategory({ sidebar: true })}
             >
               <p className="resume--action">Create new category</p>
-            </p>
+            </span>
           )}
         </div>
       </>

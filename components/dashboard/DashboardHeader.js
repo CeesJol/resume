@@ -39,12 +39,12 @@ const DashboardHeader = () => {
             <h3>
               <a className="header__title" onClick={handleGoBack}>
                 <img className="icon--large" src="../images/icon-small.png" />
-                {userExists() ? getUser().username : "Affilas"}
+                <span className="header__title--text">
+                  {userExists() ? getUser().username : "Affilas"}
+                </span>
               </a>
             </h3>
-            {changingResume && (
-              <span style={{ marginLeft: "2rem" }}>{status}</span>
-            )}
+            {changingResume && <span className="header--status">{status}</span>}
           </div>
         </div>
         <div className="header__right">

@@ -4,6 +4,7 @@ import NewItem from "./NewItem";
 import { GET_DUMMY_ITEM } from "../../lib/constants";
 import Button from "../general/Button";
 import Separator from "./Separator";
+import { isMobile } from "react-device-detect";
 
 const Category = ({ category, index }) => {
   const {
@@ -45,12 +46,12 @@ const Category = ({ category, index }) => {
   return (
     <div
       className={`resume__category ${
-        !preview ? "resume__category--hoverable" : ""
+        !preview && !isMobile ? "resume__category--hoverable" : ""
       } resume__category--${getTypeClassName()}`}
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
     >
-      {hovering && !preview && (
+      {hovering && !isMobile && !preview && (
         <span className="resume__actions">
           <Button
             fn={() => handleNewItem(category)}
@@ -73,7 +74,7 @@ const Category = ({ category, index }) => {
       <div>
         <h3
           className={`resume__category--name ${
-            !preview ? "resume--hoverable" : ""
+            !preview && !isMobile ? "resume--hoverable" : ""
           }`}
           onClick={(e) => handleClick(e, category)}
           style={{

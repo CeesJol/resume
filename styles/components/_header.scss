@@ -30,6 +30,20 @@
 		font-weight: 500;
 		text-decoration: none;
 		color: white;
+
+		// Dashboard
+		&--text {
+			@media (max-width: $mobile-breakpoint) {
+				display: none;
+			}
+		}
+	}
+
+	&--status {
+		margin-left: 2rem;
+		@media (max-width: $mobile-breakpoint) {
+			margin-left: 0;
+		}
 	}
 
 	h3,

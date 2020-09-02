@@ -1,4 +1,7 @@
 .MyTemplate .resume {
+	$primary: rgb(62, 207, 142);
+	$secondary: rgb(239, 241, 245);
+	$tertiary: rgb(204, 205, 209);
 	$sidebar: 50%;
 
 	&__container {
@@ -13,12 +16,22 @@
 		}
 	}
 
+	&__item {
+		&--value-box {
+			background-color: $primary;
+
+			&--colored {
+				background-color: $tertiary;
+			}
+		}
+	}
+
 	&__category--name,
 	&__contact-info--icon {
-		color: rgb(62, 207, 142);
+		color: $primary;
 	}
-	&__item--title-and-value {
-		background-color: rgb(62, 207, 142);
+	&__item--title-without-value {
+		background-color: $primary;
 	}
 	&__header--job-title {
 		color: grey;

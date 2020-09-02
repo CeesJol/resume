@@ -3,7 +3,7 @@ import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import { toast } from "react-toastify";
 import { fauna } from "../../../lib/api";
-import { ALL_CATEGORIES } from "../../../lib/constants";
+import { ALL_CATEGORIES, getCategoryType } from "../../../lib/constants";
 import Categorypicker from "../../general/Categorypicker";
 import Typepicker from "../../general/Typepicker";
 import randomId from "../../../lib/randomId";
@@ -24,8 +24,10 @@ const CategoryPopup = () => {
   const [name, setName] = useState("");
   const [customName, setCustomName] = useState("");
   const [type, setType] = useState("");
+  const [showValue, setShowValue] = useState(true); // Should value be shown for title/value types?
   const handleChangeName = (event) => {
     setName(event.target.value);
+    setType(getCategoryType(event.target.value));
   };
   const handleChangeCustomName = (event) => {
     setCustomName(event.target.value);
@@ -33,6 +35,15 @@ const CategoryPopup = () => {
   };
   const handleChangeType = (event) => {
     setType(event.target.value);
+  };
+  const handleChangeShowValue = () => {
+    if (showValue) {
+      setShowValue(false);
+      setType("Title without value");
+    } else {
+      setShowValue(true);
+      setType("Title and value");
+    }
   };
   const validateInput = () => {
     if (!name) return "Please provide a name";
@@ -148,7 +159,8 @@ const CategoryPopup = () => {
         setType(ALL_CATEGORIES[0].type);
       } else {
         // If category already exists (it's being updated)
-        setType(editingCategory.type);
+        const ty = editingCategory.type;
+        setType(ty);
         if (
           ALL_CATEGORIES.find(
             (cat) => cat.name.toLowerCase() === name.toLowerCase()
@@ -156,6 +168,10 @@ const CategoryPopup = () => {
         ) {
           // If the category is a default category
           setName(name);
+
+          if (ty === "Title and value" || ty === "Title without value") {
+            setShowValue(ty === "Title and value");
+          }
         } else {
           // The category is a custom category
           setName("Other");
@@ -188,6 +204,21 @@ const CategoryPopup = () => {
                   value={customName}
                   onChange={handleChangeCustomName}
                 />
+              </>
+            )}
+
+            {(type === "Title and value" || type === "Title without value") && (
+              <>
+                <label htmlFor="isGoing">
+                  <input
+                    name="isGoing"
+                    id="isGoing"
+                    type="checkbox"
+                    checked={showValue}
+                    onChange={handleChangeShowValue}
+                  />
+                  Show value for {name}
+                </label>
               </>
             )}
 

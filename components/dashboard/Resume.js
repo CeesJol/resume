@@ -106,18 +106,18 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
           {categories.map((category, index) => drawCategory(category, index))}
           {!preview && !isMobile && (
             <>
-              <p className="resume--hoverable" onClick={handleNewCategory}>
+              <span className="resume--hoverable" onClick={handleNewCategory}>
                 <p className="resume--action">Create new category</p>
-              </p>
+              </span>
               {sidebarCategories.length === 0 && (
-                <p
+                <span
                   className="resume--hoverable"
                   onClick={() => handleNewCategory({ sidebar: true })}
                 >
                   <p className="resume--action">
                     Create new category in sidebar
                   </p>
-                </p>
+                </span>
               )}
             </>
           )}

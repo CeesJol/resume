@@ -135,7 +135,7 @@
 		}
 
 		// Specific categories
-		&--title-and-value {
+		&--title-without-value {
 			display: flex;
 			flex-direction: column;
 			// margin-bottom: calc((#{$font-size-default} - #{$xs-size}) * #{$resume-scale});
@@ -169,8 +169,32 @@
 			line-height: 1;
 		}
 
+		&--value {
+			text-align: right;
+			line-height: 1 !important;
+			margin-top: calc(#{$xs-size} * #{$resume-scale});
+
+			&--title {
+				margin: 0;
+			}
+		}
+
+		&--value-box {
+			position: relative;
+			display: inline-flex;
+			margin-left: 0.25rem;
+			width: 0.8rem;
+			height: 0.8rem;
+			background-color: navy;
+			border-radius: 0.8rem;
+
+			&--colored {
+				background-color: grey;
+			}
+		}
+
 		// Specific items
-		&--title-and-value {
+		&--title-without-value {
 			background-color: red;
 			color: white;
 			display: inline-flex;

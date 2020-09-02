@@ -3,6 +3,7 @@ import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import Monthpicker from "../../general/Monthpicker";
 import Yearpicker from "../../general/Yearpicker";
+import Valuepicker from "../../general/Valuepicker";
 import { toast } from "react-toastify";
 import { fauna } from "../../../lib/api";
 import { GET_CATEGORY_ITEMS } from "../../../lib/constants";
@@ -30,7 +31,7 @@ const Popup = () => {
     year2: "",
     location: "",
     description: "",
-    value: "",
+    value: "1",
   });
   const category = getCategory(editingItem.category._id);
   const categoryItems = GET_CATEGORY_ITEMS(category.type);
@@ -62,6 +63,7 @@ const Popup = () => {
       ...editingItem,
       ...fields,
       _id: tempId,
+      priority: getItems(category).length + 1,
     };
     Object.keys(myData).forEach(
       (key) => !categoryItems.includes(key) && delete myData[key]
@@ -74,10 +76,7 @@ const Popup = () => {
     fauna({
       type: "CREATE_ITEM",
       categoryId: editingItem.category._id,
-      data: {
-        ...myData,
-        priority: getItems(category).length + 1,
-      },
+      data: myData,
     }).then(
       (data) => {
         storeItem(
@@ -263,12 +262,10 @@ const Popup = () => {
             {categoryItems.includes("value") && (
               <>
                 <label>Value</label>
-                <input
-                  type="text"
-                  id="value"
-                  name="value"
-                  value={fields.value}
-                  onChange={handleChange}
+                <Valuepicker
+                  val={fields.value}
+                  name={"value"}
+                  fn={handleChange}
                 />
               </>
             )}

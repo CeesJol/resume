@@ -1,6 +1,7 @@
 .AnotherTemplate .resume {
 	$primary: rgb(46, 49, 69);
 	$secondary: rgb(239, 241, 245);
+	$tertiary: rgb(204, 205, 209);
 	$sidebar: 33%;
 
 	&__header {
@@ -9,13 +10,23 @@
 		z-index: 1 !important; // Prevents PDF rendering bug
 	}
 
-	&__item--title-and-value {
+	&__item--title-without-value {
 		background-color: $primary;
 	}
 
 	&__category {
 		&--name {
 			border-bottom: 1px solid darken($secondary, 10%);
+		}
+	}
+
+	&__item {
+		&--value-box {
+			background-color: $primary;
+
+			&--colored {
+				background-color: $tertiary;
+			}
 		}
 	}
 

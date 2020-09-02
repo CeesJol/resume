@@ -9,12 +9,14 @@ export const TEMPLATES = [
     id: "MyTemplate",
     name: "My Template",
     sidebar: true,
+    skillsWithValue: false,
     contactInfo: "TOP",
   },
   {
     id: "AnotherTemplate",
     name: "Another Template",
     sidebar: true,
+    skillsWithValue: true,
     contactInfo: "SIDEBAR",
   },
 ];

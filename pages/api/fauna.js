@@ -7,6 +7,7 @@ import {
   validateLogin,
   validatePassword,
 } from "../../lib/validate";
+import { getTemplate } from "../../templates/templates";
 
 const ITEM_DATA = `_id
 title
@@ -237,12 +238,24 @@ export const deleteResume = async ({ id }, secret) => {
 export const createResume = async ({ userId, data }, secret) => {
   console.log("createResume request");
   const { pairs, keys } = stringifyObject(data);
+
+  // Set whether to show value depending on resume property
+  const template = getTemplate(data.templateId);
+  const categories = DEFAULT_CATEGORIES.map((cat) => {
+    if (template.skillsWithValue === false && cat.type === "Title and value") {
+      return { ...cat, type: "Title without value" };
+    } else {
+      return cat;
+    }
+  });
+  console.log("categories:", categories);
+
   var query = `mutation CreateResume {
 		createResume(data: {
 			${pairs}
 			categories: {
 				create: [
-					${DEFAULT_CATEGORIES.map(
+					${categories.map(
             (category) => `{ 
 							name: "${category.name}" 
 							type: "${category.type}"

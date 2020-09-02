@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
-import { GET_CATEGORY_ITEMS } from "../../lib/constants";
+import { GET_CATEGORY_ITEMS, getValueDescription } from "../../lib/constants";
 import Button from "../general/Button";
 import Separator from "./Separator";
 import { isMobile } from "react-device-detect";
@@ -33,13 +33,28 @@ const NewItem = ({ category, item, index, dummy, hovering }) => {
     await moveItem(item, amount);
     forceRender();
   };
+  const drawValue = () => {
+    const values = [];
+    for (var i = 0; i < 5; i++) {
+      values.push(i >= item.value);
+    }
+
+    return values.map((value, i) => (
+      <div
+        key={`${item._id}-${i}`}
+        className={`resume__item--value-box ${
+          value ? "resume__item--value-box--colored" : ""
+        }`}
+      ></div>
+    ));
+  };
   return (
     <div
       className={`resume__item resume__item--${getTypeClassName()} ${
         !preview && !isMobile ? "resume--hoverable" : ""
       }`}
       style={
-        getTypeClassName() === "title-and-value"
+        getTypeClassName() === "title-without-value"
           ? {
               backgroundColor: getLayoutItem("Primary Color"),
             }
@@ -54,8 +69,8 @@ const NewItem = ({ category, item, index, dummy, hovering }) => {
         index > 0 &&
         !preview &&
         !dummy &&
-        getTypeClassName() !== "title-and-value" && (
-          <>
+        getTypeClassName() !== "title-without-value" && (
+          <span onClick={(e) => e.stopPropagation()}>
             <Separator />
             <Button
               fn={() => handleMove(item, -1)}
@@ -63,7 +78,7 @@ const NewItem = ({ category, item, index, dummy, hovering }) => {
               altText="Moving..."
               textual={true}
             />
-          </>
+          </span>
         )}
       <h4 className="resume__item--location">{item.location}</h4>
       {item.year1 && (
@@ -75,7 +90,14 @@ const NewItem = ({ category, item, index, dummy, hovering }) => {
           {!item.year2 && categoryItems.includes("year2") && " - Present"}
         </p>
       )}
-      {item.value && item.value}
+      {item.value && category.type === "Title and value" && (
+        <div className="resume__item--value">
+          {drawValue()}
+          <p className="resume__item--value--title">
+            {getValueDescription(item.value)}
+          </p>
+        </div>
+      )}
       {item.description && (
         <p className="resume__item--description multiline">
           {item.description}

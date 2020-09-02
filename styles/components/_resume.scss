@@ -1,223 +1,223 @@
 .resume-container {
-	// max-height: calc(84.2rem * #{$resume-scale});
-	height: calc(84.2rem * #{$resume-scale});
-	width: calc(59.5rem * #{$resume-scale});
-	background-color: white;
-	// overflow: hidden;
+  // max-height: calc(84.2rem * #{$resume-scale});
+  height: calc(84.2rem * #{$resume-scale});
+  width: calc(59.5rem * #{$resume-scale});
+  background-color: white;
+  // overflow: hidden;
 
-	&--tiny {
-		height: 15rem;
-		padding: none;
-		margin: auto;
-		overflow: hidden;
+  &--tiny {
+    height: 15rem;
+    padding: none;
+    margin: auto;
+    overflow: hidden;
 
-		@media (min-width: 56rem) {
-			height: 20rem;
-		}
-	}
+    @media (min-width: 56rem) {
+      height: 20rem;
+    }
+  }
 }
 
 .resume {
-	background-color: white;
-	// overflow: hidden;
-	font-family: Helvetica, Arial, sans-serif;
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	width: 100%;
+  background-color: white;
+  // overflow: hidden;
+  font-family: Helvetica, Arial, sans-serif;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 
-	&__body {
-		// flex: 1;
-		height: 100%;
-		display: flex;
-		// overflow: hidden;
-	}
+  &__body {
+    // flex: 1;
+    height: 100%;
+    display: flex;
+    // overflow: hidden;
+  }
 
-	&--tiny {
-		transform: scale(0.51 / $resume-scale);
-		@media (min-width: 56rem) {
-			transform: scale(0.68 / $resume-scale);
-		}
-		transform-origin: top left;
+  &--tiny {
+    transform: scale(0.51 / $resume-scale);
+    @media (min-width: 56rem) {
+      transform: scale(0.68 / $resume-scale);
+    }
+    transform-origin: top left;
 
-		height: calc(30rem * #{$resume-scale});
-	}
+    height: calc(30rem * #{$resume-scale});
+  }
 
-	h1 {
-		font-size: calc(3rem * #{$resume-scale});
-	}
+  h1 {
+    font-size: calc(3rem * #{$resume-scale});
+  }
 
-	h2 {
-		font-size: calc(2rem * #{$resume-scale});
-	}
+  h2 {
+    font-size: calc(2rem * #{$resume-scale});
+  }
 
-	h3 {
-		font-size: calc(1.5rem * #{$resume-scale});
-	}
+  h3 {
+    font-size: calc(1.5rem * #{$resume-scale});
+  }
 
-	h4 {
-		font-size: calc(1.2rem * #{$resume-scale});
-	}
+  h4 {
+    font-size: calc(1.2rem * #{$resume-scale});
+  }
 
-	p,
-	i,
-	a {
-		font-size: calc(1rem * #{$resume-scale});
-	}
+  p,
+  i,
+  a {
+    font-size: calc(1rem * #{$resume-scale});
+  }
 
-	&__category--name,
-	&__item--title {
-		margin-top: 0;
-		margin-bottom: 0;
-		display: flex;
-	}
+  &__category--name,
+  &__item--title {
+    margin-top: 0;
+    margin-bottom: 0;
+    display: flex;
+  }
 
-	line-height: 0px;
+  line-height: 0px;
 
-	&--action {
-		cursor: pointer;
-		display: inline-flex;
-		line-height: 1 !important;
-		margin: 0 !important;
-		padding: 0 !important;
-		font-style: italic;
-		color: blue;
-	}
+  &--action {
+    cursor: pointer;
+    display: inline-flex;
+    line-height: 1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-style: italic;
+    color: blue;
+  }
 
-	&--action[disabled] > i {
-		color: lighten($light-grey-3, 10%);
-	}
+  &--action[disabled] > i {
+    color: lighten($light-grey-3, 10%);
+  }
 
-	&--hoverable {
-		// Remove weird effect where after 'transform: scale' the left pixel column is cut off
-		// padding-left: 1px;
+  &--hoverable {
+    // Remove weird effect where after 'transform: scale' the left pixel column is cut off
+    // padding-left: 1px;
 
-		@include hover;
-	}
+    @include hover;
+  }
 
-	&__container {
-		// overflow: hidden;
-		padding: calc(#{$l-size} * #{#{$resume-scale}});
-	}
+  &__container {
+    // overflow: hidden;
+    padding: calc(#{$l-size} * #{#{$resume-scale}});
+  }
 
-	&__header {
-		&--name {
-			font-weight: 400;
-		}
+  &__header {
+    &--name {
+      font-weight: 400;
+    }
 
-		&--job-title {
-			font-weight: 400;
-		}
+    &--job-title {
+      font-weight: 400;
+    }
 
-		&--bio {
-			margin: 0;
-		}
-	}
+    &--bio {
+      margin: 0;
+    }
+  }
 
-	&__category {
-		position: relative;
-		border-radius: 3px;
-		border: 1px solid transparent;
-		background-color: inherit;
+  &__category {
+    position: relative;
+    border-radius: 3px;
+    border: 1px solid transparent;
+    background-color: inherit;
 
-		&--name {
-			margin-bottom: calc(#{$xs-size} * #{$resume-scale});
-		}
+    &--name {
+      margin-bottom: calc(#{$xs-size} * #{$resume-scale});
+    }
 
-		&--hoverable:hover {
-			border: 1px solid $light-grey-2;
-			background-color: inherit;
-			margin: -#{$hover-margin} -#{$hover-margin} 0 -#{$hover-margin};
-			padding: $hover-margin $hover-margin 0 $hover-margin;
-			border-radius: 0;
-			z-index: 2 !important;
-			box-shadow: 0px 0px 10px 1px rgba(white, 0.75);
-		}
+    &--hoverable:hover {
+      border: 1px solid $light-grey-2;
+      background-color: inherit;
+      margin: -#{$hover-margin} -#{$hover-margin} 0 -#{$hover-margin};
+      padding: $hover-margin $hover-margin 0 $hover-margin;
+      border-radius: 0;
+      z-index: 2 !important;
+      box-shadow: 0px 0px 10px 1px rgba(white, 0.75);
+    }
 
-		// Specific categories
-		&--title-without-value {
-			display: flex;
-			flex-direction: column;
-			// margin-bottom: calc((#{$font-size-default} - #{$xs-size}) * #{$resume-scale});
-		}
-	}
+    // Specific categories
+    &--title-without-value {
+      display: flex;
+      flex-direction: column;
+      // margin-bottom: calc((#{$font-size-default} - #{$xs-size}) * #{$resume-scale});
+    }
+  }
 
-	&__item {
-		position: relative;
-		padding-bottom: calc(#{$s-size} * #{$resume-scale});
-		line-height: 0px;
+  &__item {
+    position: relative;
+    padding-bottom: calc(#{$s-size} * #{$resume-scale});
+    line-height: 0px;
 
-		&--date,
-		&--description {
-			margin: 0;
-		}
+    &--date,
+    &--description {
+      margin: 0;
+    }
 
-		&--title {
-			font-weight: bold;
-			display: inline-flex;
-			line-height: 1;
-		}
+    &--title {
+      font-weight: bold;
+      display: inline-flex;
+      line-height: 1;
+    }
 
-		&--location {
-			font-weight: 300;
-		}
+    &--location {
+      font-weight: 300;
+    }
 
-		&--date {
-			font-style: italic;
-			color: grey;
-			display: flex;
-			line-height: 1;
-		}
+    &--date {
+      font-style: italic;
+      color: grey;
+      display: flex;
+      line-height: 1;
+    }
 
-		&--value {
-			text-align: right;
-			line-height: 1 !important;
-			margin-top: calc(#{$xs-size} * #{$resume-scale});
+    &--value {
+      text-align: right;
+      line-height: 1 !important;
 
-			&--title {
-				margin: 0;
-			}
-		}
+      &--title {
+        margin: 0;
+      }
+    }
 
-		&--value-box {
-			position: relative;
-			display: inline-flex;
-			margin-left: 0.25rem;
-			width: 0.8rem;
-			height: 0.8rem;
-			background-color: navy;
-			border-radius: 0.8rem;
+    &--value-box {
+      position: relative;
+      display: inline-flex;
+      margin-left: 0.25rem;
+      width: 0.8rem;
+      height: 0.8rem;
+      background-color: navy;
+      border-radius: 0.8rem;
 
-			&--colored {
-				background-color: grey;
-			}
-		}
+      &--colored {
+        background-color: grey;
+      }
+    }
 
-		// Specific items
-		&--title-without-value {
-			background-color: red;
-			color: white;
-			display: inline-flex;
-			padding: calc(#{$xs-size} * #{$resume-scale});
-			margin: 0 calc(#{$xs-size} * #{$resume-scale}) calc(#{$xs-size} * #{$resume-scale}) 0;
-			border-radius: 5px;
-			width: auto;
+    // Specific items
+    &--title-without-value {
+      background-color: red;
+      color: white;
+      display: inline-flex;
+      padding: calc(#{$xs-size} * #{$resume-scale});
+      margin: 0 calc(#{$xs-size} * #{$resume-scale})
+        calc(#{$xs-size} * #{$resume-scale}) 0;
+      border-radius: 5px;
+      width: auto;
 
-			h4 {
-				font-size: calc(1rem * #{$resume-scale});
-			}
-		}
-	}
+      h4 {
+        font-size: calc(1rem * #{$resume-scale});
+      }
+    }
+  }
 
-	&__contact-info {
-		line-height: 0px;
-		&--item {
-			padding-bottom: calc(#{$xs-size} * #{$resume-scale});
-		}
-	}
+  &__contact-info {
+    line-height: 0px;
+    &--item {
+      padding-bottom: calc(#{$xs-size} * #{$resume-scale});
+    }
+  }
 
-	&__actions {
-		position: absolute;
-		margin-top: -2rem;
-	}
+  &__actions {
+    position: absolute;
+    margin-top: -2rem;
+  }
 }

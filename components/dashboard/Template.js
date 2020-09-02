@@ -2,14 +2,10 @@ import React, { useContext, useState } from "react";
 import { UserContext } from "../../contexts/userContext";
 import Resume from "./Resume";
 import { getTemplate } from "../../templates/templates";
+import { getDummyResume, DUMMY_RESUME } from "../../lib/constants";
 
 const Template = ({ template }) => {
-  const {
-    selectedTemplateId,
-    setSelectedTemplateId,
-    editingResume,
-    changingResume,
-  } = useContext(UserContext);
+  const { selectedTemplateId, setSelectedTemplateId } = useContext(UserContext);
   const handleClick = (e, templateId) => {
     e.preventDefault();
     setSelectedTemplateId(templateId);
@@ -25,7 +21,11 @@ const Template = ({ template }) => {
       className={"box " + (isSelected() ? "box--selected" : "")}
       onClick={(e) => handleClick(e, template.id)}
     >
-      <Resume tiny={true} template={template} />
+      <Resume
+        resume={getDummyResume(template)}
+        tiny={true}
+        template={template}
+      />
       <p className="box--title">{template.name}</p>
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
-import Contactpicker from "../../general/Contactpicker";
+import Contactpicker from "../../dashboard/pickers/Contactpicker";
 import { toast } from "react-toastify";
 import { fauna } from "../../../lib/api";
 import randomId from "../../../lib/randomId";

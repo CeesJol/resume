@@ -1,5 +1,5 @@
 import React from "react";
-import { CATEGORY_TYPES } from "../../lib/constants";
+import { CATEGORY_TYPES } from "../../../lib/constants";
 
 const Typepicker = ({ val, fn }) => (
   <select name={val} id={val} value={val} onChange={fn}>

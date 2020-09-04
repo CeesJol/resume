@@ -37,7 +37,13 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
     });
   };
   const drawCategory = (category, index) => {
-    return <Category key={category._id} category={category} index={index} />;
+    return (
+      <Category
+        key={category._id || category.name}
+        category={category}
+        index={index}
+      />
+    );
   };
   const drawHeader = () => {
     return (

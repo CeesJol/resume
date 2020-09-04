@@ -1,5 +1,5 @@
 import React from "react";
-import { CONTACTPICKER_OPTIONS } from "../../lib/constants";
+import { CONTACTPICKER_OPTIONS } from "../../../lib/constants";
 
 const Contactpicker = ({ val, fn }) => (
   <select name={val} id={val} value={val} onChange={fn}>

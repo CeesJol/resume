@@ -1,5 +1,5 @@
 import React from "react";
-import { ALL_CATEGORIES } from "../../lib/constants";
+import { ALL_CATEGORIES } from "../../../lib/constants";
 
 const Categorypicker = ({ val, fn }) => (
   <select name={val} id={val} value={val} onChange={fn}>

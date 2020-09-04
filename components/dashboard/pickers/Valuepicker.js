@@ -1,5 +1,5 @@
 import React from "react";
-import { VALUE_DESCRIPTIONS } from "../../lib/constants";
+import { VALUE_DESCRIPTIONS } from "../../../lib/constants";
 
 const Valuepicker = ({ val, fn, name }) => (
   <select name={name} id={val} value={val} onChange={fn}>

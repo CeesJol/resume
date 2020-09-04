@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
-import Monthpicker from "../../general/Monthpicker";
-import Yearpicker from "../../general/Yearpicker";
-import Valuepicker from "../../general/Valuepicker";
+import Monthpicker from "../pickers/Monthpicker";
+import Yearpicker from "../pickers/Yearpicker";
+import Valuepicker from "../pickers/Valuepicker";
 import { toast } from "react-toastify";
 import { fauna } from "../../../lib/api";
 import { GET_CATEGORY_ITEMS } from "../../../lib/constants";

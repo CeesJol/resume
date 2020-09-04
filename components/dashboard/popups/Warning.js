@@ -1,6 +1,8 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
+import ReactModal from "react-modal";
+ReactModal.setAppElement("#__next");
 
 const Warning = () => {
   const { warning, setWarning, resetPopups, storeStatus } = useContext(
@@ -15,17 +17,20 @@ const Warning = () => {
     setWarning(false);
   };
   return (
-    <div className="popup-container" onClick={handleCancel}>
-      <div className="popup popup--medium" onClick={(e) => e.stopPropagation()}>
-        <p>
-          <b>{warning.text}</b>
-        </p>
-        <form>
-          <Button text="Yes" fn={handleYes} />
-          <Button text="Cancel" color="red" fn={handleCancel} />
-        </form>
-      </div>
-    </div>
+    <ReactModal
+      className="popup"
+      isOpen={true}
+      overlayClassName="popup-container"
+      onRequestClose={handleCancel}
+    >
+      <p>
+        <b>{warning.text}</b>
+      </p>
+      <form>
+        <Button text="Yes" fn={handleYes} />
+        <Button text="Cancel" color="red" fn={handleCancel} />
+      </form>
+    </ReactModal>
   );
 };
 

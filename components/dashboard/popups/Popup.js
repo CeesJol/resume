@@ -8,6 +8,8 @@ import { toast } from "react-toastify";
 import { fauna } from "../../../lib/api";
 import { GET_CATEGORY_ITEMS } from "../../../lib/constants";
 import randomId from "../../../lib/randomId";
+import ReactModal from "react-modal";
+ReactModal.setAppElement("#__next");
 
 const Popup = () => {
   const {
@@ -169,124 +171,127 @@ const Popup = () => {
     }
   });
   return (
-    <div className="popup-container" onClick={handleCancel}>
-      <div className="popup" onClick={(e) => e.stopPropagation()}>
-        <h4 className="popup--title">
-          {editingItem.title ? "Edit item" : "Create item"}
-        </h4>
-        <form>
-          <div>
-            <label>Title</label>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              value={fields.title}
-              onChange={handleChange}
-            />
-            {categoryItems.includes("location") && (
-              <>
-                <label>Location</label>
+    <ReactModal
+      className="popup"
+      isOpen={true}
+      overlayClassName="popup-container"
+      onRequestClose={handleCancel}
+    >
+      <h4 className="popup--title">
+        {editingItem.title ? "Edit item" : "Create item"}
+      </h4>
+      <form>
+        <div>
+          <label>Title</label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            value={fields.title}
+            onChange={handleChange}
+          />
+          {categoryItems.includes("location") && (
+            <>
+              <label>Location</label>
+              <input
+                type="text"
+                id="location"
+                name="location"
+                value={fields.location}
+                onChange={handleChange}
+              />
+            </>
+          )}
+          {categoryItems.includes("year2") && (
+            <>
+              <label htmlFor="isGoing">
                 <input
-                  type="text"
-                  id="location"
-                  name="location"
-                  value={fields.location}
-                  onChange={handleChange}
+                  name="isGoing"
+                  id="isGoing"
+                  type="checkbox"
+                  checked={isGoing}
+                  onChange={handleChangeIsGoing}
                 />
-              </>
-            )}
-            {categoryItems.includes("year2") && (
-              <>
-                <label htmlFor="isGoing">
-                  <input
-                    name="isGoing"
-                    id="isGoing"
-                    type="checkbox"
-                    checked={isGoing}
-                    onChange={handleChangeIsGoing}
-                  />
-                  I'm currently working here
-                </label>
-              </>
-            )}
+                I'm currently working here
+              </label>
+            </>
+          )}
 
-            {categoryItems.includes("year1") && (
-              <>
-                <div>
-                  <label>Start date</label>
-                  <Monthpicker
-                    val={fields.month1}
-                    name={"month1"}
-                    fn={handleChange}
-                  />
-                  <Yearpicker
-                    val={fields.year1}
-                    name={"year1"}
-                    fn={handleChange}
-                  />
-                </div>
-              </>
-            )}
-
-            {categoryItems.includes("year1") && !isGoing && (
-              <>
-                <div>
-                  <label>End date</label>
-                  <Monthpicker
-                    val={fields.month2}
-                    name={"month2"}
-                    fn={handleChange}
-                  />
-                  <Yearpicker
-                    val={fields.year2}
-                    name={"year2"}
-                    fn={handleChange}
-                  />
-                </div>
-              </>
-            )}
-
-            {categoryItems.includes("description") && (
-              <>
-                <label>Description</label>
-                <textarea
-                  type="text"
-                  id="description"
-                  name="description"
-                  value={fields.description}
-                  onChange={handleChange}
-                />
-              </>
-            )}
-            {categoryItems.includes("value") && (
-              <>
-                <label>Value</label>
-                <Valuepicker
-                  val={fields.value}
-                  name={"value"}
+          {categoryItems.includes("year1") && (
+            <>
+              <div>
+                <label>Start date</label>
+                <Monthpicker
+                  val={fields.month1}
+                  name={"month1"}
                   fn={handleChange}
                 />
-              </>
-            )}
-
-            {editingItem.title ? (
-              <>
-                <Button text="Save" altText="Saving..." fn={handleUpdate} />
-                <Button
-                  text="Delete"
-                  altText="Deleting..."
-                  color="red"
-                  fn={handleDelete}
+                <Yearpicker
+                  val={fields.year1}
+                  name={"year1"}
+                  fn={handleChange}
                 />
-              </>
-            ) : (
-              <Button text="Add" altText="Adding..." fn={handleCreate} />
-            )}
-          </div>
-        </form>
-      </div>
-    </div>
+              </div>
+            </>
+          )}
+
+          {categoryItems.includes("year1") && !isGoing && (
+            <>
+              <div>
+                <label>End date</label>
+                <Monthpicker
+                  val={fields.month2}
+                  name={"month2"}
+                  fn={handleChange}
+                />
+                <Yearpicker
+                  val={fields.year2}
+                  name={"year2"}
+                  fn={handleChange}
+                />
+              </div>
+            </>
+          )}
+
+          {categoryItems.includes("description") && (
+            <>
+              <label>Description</label>
+              <textarea
+                type="text"
+                id="description"
+                name="description"
+                value={fields.description}
+                onChange={handleChange}
+              />
+            </>
+          )}
+          {categoryItems.includes("value") && (
+            <>
+              <label>Value</label>
+              <Valuepicker
+                val={fields.value}
+                name={"value"}
+                fn={handleChange}
+              />
+            </>
+          )}
+
+          {editingItem.title ? (
+            <>
+              <Button text="Save" altText="Saving..." fn={handleUpdate} />
+              <Button
+                text="Delete"
+                altText="Deleting..."
+                color="red"
+                fn={handleDelete}
+              />
+            </>
+          ) : (
+            <Button text="Add" altText="Adding..." fn={handleCreate} />
+          )}
+        </div>
+      </form>
+    </ReactModal>
   );
 };
 

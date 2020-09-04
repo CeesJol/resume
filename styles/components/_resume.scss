@@ -25,6 +25,23 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+
+  &__header {
+    &--name {
+      font-weight: 400;
+    }
+
+    &--job-title {
+      font-weight: 400;
+    }
+
+    &--bio {
+      margin: 0;
+    }
+  }
 
   &__body {
     // flex: 1;
@@ -98,20 +115,6 @@
   &__container {
     // overflow: hidden;
     padding: calc(#{$l-size} * #{#{$resume-scale}});
-  }
-
-  &__header {
-    &--name {
-      font-weight: 400;
-    }
-
-    &--job-title {
-      font-weight: 400;
-    }
-
-    &--bio {
-      margin: 0;
-    }
   }
 
   &__category {

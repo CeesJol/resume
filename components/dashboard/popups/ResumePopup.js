@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import { fauna } from "../../../lib/api";
 import { TEMPLATES } from "../../../templates/templates";
 import { RESUME_SKELETON } from "../../../lib/constants";
+import ReactModal from "react-modal";
+ReactModal.setAppElement("#__next");
 
 const ResumePopup = () => {
   const {
@@ -80,37 +82,40 @@ const ResumePopup = () => {
     setTemplates(TEMPLATES);
   }, []);
   return (
-    <div className="popup-container" onClick={handleCancel}>
-      <div className="popup" onClick={(e) => e.stopPropagation()}>
-        <h4 className="popup--title">Create resume</h4>
-        <form>
-          <div>
-            <label>Title</label>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              value={title}
-              onChange={handleChangeTitle}
-            />
+    <ReactModal
+      className="popup"
+      isOpen={true}
+      overlayClassName="popup-container"
+      onRequestClose={handleCancel}
+    >
+      <h4 className="popup--title">Create resume</h4>
+      <form>
+        <div>
+          <label>Title</label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            value={title}
+            onChange={handleChangeTitle}
+          />
 
-            <label>Template</label>
-            {templates ? (
-              templates.map((template) => (
-                <Template
-                  template={template}
-                  key={`ResumePopup-${template.id}`}
-                />
-              ))
-            ) : (
-              <p>Loading templates...</p>
-            )}
-            <br />
-            <Button text="Create" altText="Creating..." fn={handleCreate} />
-          </div>
-        </form>
-      </div>
-    </div>
+          <label>Template</label>
+          {templates ? (
+            templates.map((template) => (
+              <Template
+                template={template}
+                key={`ResumePopup-${template.id}`}
+              />
+            ))
+          ) : (
+            <p>Loading templates...</p>
+          )}
+          <br />
+          <Button text="Create" altText="Creating..." fn={handleCreate} />
+        </div>
+      </form>
+    </ReactModal>
   );
 };
 

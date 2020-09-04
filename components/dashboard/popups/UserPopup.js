@@ -3,6 +3,8 @@ import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import { toast } from "react-toastify";
 import { fauna } from "../../../lib/api";
+import ReactModal from "react-modal";
+ReactModal.setAppElement("#__next");
 
 const UserPopup = () => {
   const {
@@ -73,34 +75,37 @@ const UserPopup = () => {
     }
   });
   return (
-    <div className="popup-container" onClick={handleCancel}>
-      <div className="popup" onClick={(e) => e.stopPropagation()}>
-        <h4 className="popup--title">Update info</h4>
-        <form>
-          <div>
-            <label>Job Title</label>
-            <input
-              type="text"
-              id="jobTitle"
-              name="jobTitle"
-              value={jobTitle}
-              onChange={handleChangeJobTitle}
-            />
+    <ReactModal
+      className="popup"
+      isOpen={true}
+      overlayClassName="popup-container"
+      onRequestClose={handleCancel}
+    >
+      <h4 className="popup--title">Update info</h4>
+      <form>
+        <div>
+          <label>Job Title</label>
+          <input
+            type="text"
+            id="jobTitle"
+            name="jobTitle"
+            value={jobTitle}
+            onChange={handleChangeJobTitle}
+          />
 
-            <label>Bio</label>
-            <textarea
-              type="text"
-              id="bio"
-              name="bio"
-              value={bio}
-              onChange={handleChangeBio}
-            />
+          <label>Bio</label>
+          <textarea
+            type="text"
+            id="bio"
+            name="bio"
+            value={bio}
+            onChange={handleChangeBio}
+          />
 
-            <Button text="Update" altText="Updating..." fn={handleUpdate} />
-          </div>
-        </form>
-      </div>
-    </div>
+          <Button text="Update" altText="Updating..." fn={handleUpdate} />
+        </div>
+      </form>
+    </ReactModal>
   );
 };
 

@@ -35,16 +35,12 @@
       background-color: white;
       width: calc(100% - #{$sidebar});
       height: 100%;
-      position: absolute;
-      left: 0;
     }
 
     &--right {
       width: $sidebar;
       background-color: $secondary;
-      height: 100%; // TODO fix this
-      position: absolute;
-      right: 0;
+      height: 100%;
     }
   }
 

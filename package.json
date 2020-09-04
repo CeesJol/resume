@@ -26,6 +26,7 @@
     "react-device-detect": "^1.13.1",
     "react-dom": "^16.13.1",
     "react-image-crop": "^8.6.4",
+    "react-modal": "^3.11.2",
     "react-toastify": "^6.0.8",
     "sass": "^1.26.8"
   },

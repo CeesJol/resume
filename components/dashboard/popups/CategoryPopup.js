@@ -7,6 +7,8 @@ import { ALL_CATEGORIES, getCategoryType } from "../../../lib/constants";
 import Categorypicker from "../../general/Categorypicker";
 import Typepicker from "../../general/Typepicker";
 import randomId from "../../../lib/randomId";
+import ReactModal from "react-modal";
+ReactModal.setAppElement("#__next");
 
 const CategoryPopup = () => {
   const {
@@ -181,64 +183,67 @@ const CategoryPopup = () => {
     }
   });
   return (
-    <div className="popup-container" onClick={handleCancel}>
-      <div className="popup" onClick={(e) => e.stopPropagation()}>
-        <h4 className="popup--title">
-          {editingCategory.name ? "Edit category" : "Create category"}
-        </h4>
-        <form>
-          <div>
-            <label>Category name</label>
-            <Categorypicker val={name} fn={handleChangeName} />
+    <ReactModal
+      className="popup"
+      isOpen={true}
+      overlayClassName="popup-container"
+      onRequestClose={handleCancel}
+    >
+      <h4 className="popup--title">
+        {editingCategory.name ? "Edit category" : "Create category"}
+      </h4>
+      <form>
+        <div>
+          <label>Category name</label>
+          <Categorypicker val={name} fn={handleChangeName} />
 
-            {name === "Other" && (
-              <>
-                <label>Custom type</label>
-                <Typepicker val={type} fn={handleChangeType} />
+          {name === "Other" && (
+            <>
+              <label>Custom type</label>
+              <Typepicker val={type} fn={handleChangeType} />
 
-                <label>Custom name</label>
+              <label>Custom name</label>
+              <input
+                type="text"
+                id="customName"
+                name="customName"
+                value={customName}
+                onChange={handleChangeCustomName}
+              />
+            </>
+          )}
+
+          {(type === "Title and value" || type === "Title without value") && (
+            <>
+              <label htmlFor="isGoing">
                 <input
-                  type="text"
-                  id="customName"
-                  name="customName"
-                  value={customName}
-                  onChange={handleChangeCustomName}
+                  name="isGoing"
+                  id="isGoing"
+                  type="checkbox"
+                  checked={showValue}
+                  onChange={handleChangeShowValue}
                 />
-              </>
-            )}
+                Show value for {name}
+              </label>
+            </>
+          )}
 
-            {(type === "Title and value" || type === "Title without value") && (
-              <>
-                <label htmlFor="isGoing">
-                  <input
-                    name="isGoing"
-                    id="isGoing"
-                    type="checkbox"
-                    checked={showValue}
-                    onChange={handleChangeShowValue}
-                  />
-                  Show value for {name}
-                </label>
-              </>
-            )}
-
-            {editingCategory.name ? (
-              <>
-                <Button text="Update" altText="Updating..." fn={handleUpdate} />
-                <Button
-                  text="Delete"
-                  altText="Deleting..."
-                  color="red"
-                  fn={handleDelete}
-                />
-              </>
-            ) : (
-              <Button text="Add" altText="Adding..." fn={handleCreate} />
-            )}
-          </div>
-        </form>
-      </div>
-    </div>
+          {editingCategory.name ? (
+            <>
+              <Button text="Update" altText="Updating..." fn={handleUpdate} />
+              <Button
+                text="Delete"
+                altText="Deleting..."
+                color="red"
+                fn={handleDelete}
+              />
+            </>
+          ) : (
+            <Button text="Add" altText="Adding..." fn={handleCreate} />
+          )}
+        </div>
+      </form>
+    </ReactModal>
   );
 };
 

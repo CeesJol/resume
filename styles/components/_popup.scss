@@ -24,6 +24,21 @@
   max-height: calc(100vh - 3rem);
   z-index: 13;
 
+  &__header {
+    display: flex;
+    justify-content: space-between;
+
+    &--close {
+      font-size: 2rem !important;
+      cursor: pointer;
+      color: grey;
+
+      // Add padding around close button to make it easier to click
+      padding: $l-size;
+      margin: -#{$l-size} -#{$l-size} 0 0;
+    }
+  }
+
   &--medium {
     width: 40rem;
     text-align: center;
@@ -32,10 +47,6 @@
   &--small {
     width: 25rem;
     text-align: center;
-  }
-
-  &--title {
-    margin-bottom: $m-size;
   }
 }
 

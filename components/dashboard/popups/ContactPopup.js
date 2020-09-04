@@ -150,7 +150,13 @@ const ContactPopup = () => {
       overlayClassName="popup-container"
       onRequestClose={handleCancel}
     >
-      <h4 className="popup--title">Update info</h4>
+      <div className="popup__header">
+        <h4 className="popup__header--title">Update info</h4>
+        <i
+          onClick={handleCancel}
+          className={`fa fa-close popup__header--close`}
+        ></i>
+      </div>
       <form>
         <div>
           <label>Type</label>

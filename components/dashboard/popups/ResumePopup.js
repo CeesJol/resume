@@ -88,7 +88,13 @@ const ResumePopup = () => {
       overlayClassName="popup-container"
       onRequestClose={handleCancel}
     >
-      <h4 className="popup--title">Create resume</h4>
+      <div className="popup__header">
+        <h4 className="popup__header--title">Create resume</h4>
+        <i
+          onClick={handleCancel}
+          className={`fa fa-close popup__header--close`}
+        ></i>
+      </div>
       <form>
         <div>
           <label>Title</label>

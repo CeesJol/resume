@@ -189,9 +189,15 @@ const CategoryPopup = () => {
       overlayClassName="popup-container"
       onRequestClose={handleCancel}
     >
-      <h4 className="popup--title">
-        {editingCategory.name ? "Edit category" : "Create category"}
-      </h4>
+      <div className="popup__header">
+        <h4 className="popup__header--title">
+          {editingCategory.title ? "Edit category" : "Create category"}
+        </h4>
+        <i
+          onClick={handleCancel}
+          className={`fa fa-close popup__header--close`}
+        ></i>
+      </div>
       <form>
         <div>
           <label>Category name</label>

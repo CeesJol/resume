@@ -123,8 +123,8 @@
     cursor: pointer;
     display: inline-flex;
     line-height: 1 !important;
-    margin: 0 !important;
-    padding: 0 !important;
+    margin: 0;
+    padding: 0;
     font-style: italic;
     color: blue;
   }
@@ -161,7 +161,7 @@
       margin: -#{$hover-margin} -#{$hover-margin} 0 -#{$hover-margin};
       padding: $hover-margin $hover-margin 0 $hover-margin;
       border-radius: 0;
-      z-index: 2 !important;
+      z-index: 2;
       box-shadow: 0px 0px 10px 1px rgba(white, 0.75);
     }
 
@@ -185,6 +185,7 @@
 
     &--title {
       font-weight: bold;
+      display: inline-flex;
       line-height: 1;
     }
 
@@ -244,6 +245,10 @@
     line-height: 0px;
     &--item {
       padding-bottom: calc(#{$xs-size} * #{$resume-scale});
+    }
+
+    &--body {
+      margin: 0;
     }
   }
 

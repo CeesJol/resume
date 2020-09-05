@@ -37,7 +37,9 @@ const ContactItem = ({ template, item, text }) => {
         // Draw text
         <h4 className="resume__contact-info--title">{item.value}</h4>
       )}
-      <p>{item.name ? item.name : text}</p>
+      <p className="resume__contact-info--body">
+        {item.name ? item.name : text}
+      </p>
     </div>
   );
 };

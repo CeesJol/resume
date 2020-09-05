@@ -18,7 +18,7 @@ const Warning = () => {
   };
   return (
     <ReactModal
-      className="popup popup--small"
+      className="popup popup--medium"
       isOpen={true}
       overlayClassName="popup-container"
       onRequestClose={handleCancel}

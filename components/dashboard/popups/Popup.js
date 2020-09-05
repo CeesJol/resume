@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import Monthpicker from "../pickers/Monthpicker";
@@ -12,6 +12,8 @@ import ReactModal from "react-modal";
 ReactModal.setAppElement("#__next");
 
 const Popup = () => {
+  const textareaRef = useRef();
+  const cursorPosition = 0;
   const {
     editingItem,
     setWarning,
@@ -33,7 +35,7 @@ const Popup = () => {
     year2: "",
     location: "",
     description: "",
-    value: "1",
+    value: "3",
   });
   const category = getCategory(editingItem.category._id);
   const categoryItems = GET_CATEGORY_ITEMS(category.type);
@@ -41,6 +43,42 @@ const Popup = () => {
     setFields({
       ...fields,
       [event.target.name]: event.target.value,
+    });
+    if (!userMadeChanges) setUserMadeChanges(true);
+  };
+  const insertList = () => {
+    let cursor = textareaRef.current.selectionStart;
+    setFields({
+      ...fields,
+      ["description"]:
+        fields.description.slice(0, cursor) +
+        "\n- item 1\n- item 2\n" +
+        fields.description.slice(cursor),
+    });
+    if (!userMadeChanges) setUserMadeChanges(true);
+  };
+  const insertBoldText = () => {
+    let cursorStart = textareaRef.current.selectionStart;
+    let cursorEnd = textareaRef.current.selectionEnd;
+    let newDescription;
+    if (cursorStart === cursorEnd) {
+      // Append to cursor
+      newDescription =
+        fields.description.slice(0, cursorStart) +
+        "**Bold text**" +
+        fields.description.slice(cursorStart);
+    } else {
+      // Make selection bold
+      newDescription =
+        fields.description.slice(0, cursorStart) +
+        "**" +
+        fields.description.slice(cursorStart, cursorEnd) +
+        "**" +
+        fields.description.slice(cursorEnd);
+    }
+    setFields({
+      ...fields,
+      ["description"]: newDescription,
     });
     if (!userMadeChanges) setUserMadeChanges(true);
   };
@@ -153,21 +191,28 @@ const Popup = () => {
     }
   };
   useEffect(() => {
-    if (editingItem.title && !filled) {
+    if (!filled) {
       // Updating item
       setFilled(true);
 
       setFields({
-        title: editingItem.title,
-        month1: editingItem.month1,
-        year1: editingItem.year1,
-        month2: editingItem.month2,
-        year2: editingItem.year2,
-        location: editingItem.location,
         description: editingItem.description,
-        value: editingItem.value,
       });
-      setIsGoing(!editingItem.year2);
+
+      if (editingItem.title) {
+        setFields({
+          title: editingItem.title,
+          month1: editingItem.month1,
+          year1: editingItem.year1,
+          month2: editingItem.month2,
+          year2: editingItem.year2,
+          location: editingItem.location,
+          description: editingItem.description,
+          value: editingItem.value,
+        });
+
+        setIsGoing(!editingItem.year2);
+      }
     }
   });
   return (
@@ -261,13 +306,23 @@ const Popup = () => {
 
           {categoryItems.includes("description") && (
             <>
-              <label>Description</label>
+              <label>
+                Description -{" "}
+                <a style={{ color: "blue" }} onClick={insertList}>
+                  Insert list
+                </a>{" "}
+                -{" "}
+                <a style={{ color: "blue" }} onClick={insertBoldText}>
+                  Insert bold text
+                </a>
+              </label>
               <textarea
                 type="text"
                 id="description"
                 name="description"
                 value={fields.description}
                 onChange={handleChange}
+                ref={textareaRef}
               />
             </>
           )}

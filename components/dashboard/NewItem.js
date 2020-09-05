@@ -4,6 +4,7 @@ import { GET_CATEGORY_ITEMS, getValueDescription } from "../../lib/constants";
 import Button from "../general/Button";
 import Separator from "./Separator";
 import { isMobile } from "react-device-detect";
+import ReactMarkdown from "react-markdown";
 
 const NewItem = ({ category, item, index, dummy, hovering }) => {
   const {
@@ -99,9 +100,16 @@ const NewItem = ({ category, item, index, dummy, hovering }) => {
         </div>
       )}
       {item.description && (
-        <p className="resume__item--description multiline">
-          {item.description}
-        </p>
+        // No markdown
+        // <p className="resume__item--description multiline">
+        //   {item.description}
+        // </p>
+        // Markdown
+        <ReactMarkdown
+          source={item.description}
+          className="resume__item--description multiline"
+          escapeHtml={false}
+        />
       )}
     </div>
   );

@@ -23,6 +23,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
     getJobTitle,
     getBio,
   } = useContext(UserContext);
+  const curResume = resume || editingResume;
   const [hovering, setHovering] = useState(false);
   const handleChangeInfo = () => {
     if (preview) return false;
@@ -42,6 +43,8 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
         key={category._id || category.name}
         category={category}
         index={index}
+        primaryColor={curResume.primaryColor}
+        backgroundColor={curResume.backgroundColor}
       />
     );
   };
@@ -52,12 +55,15 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
           !preview && !isMobile ? "resume--hoverable" : ""
         }`}
         onClick={handleChangeInfo}
+        style={{
+          backgroundColor: curResume.backgroundColor,
+        }}
       >
         <h1 className="resume__header--name">
           {userExists() && getUser().username}
         </h1>
-        <h3 className="resume__header--job-title">{getJobTitle(resume)}</h3>
-        <p className="resume__header--bio multiline">{getBio(resume)}</p>
+        <h3 className="resume__header--job-title">{getJobTitle(curResume)}</h3>
+        <p className="resume__header--bio multiline">{getBio(curResume)}</p>
       </div>
     );
   };
@@ -70,13 +76,21 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
       >
         <div className="resume__contact-info__content">
           {templateCSS.contactInfo === "SIDEBAR" && (
-            <h3 className="resume__category--name">Personal info</h3>
+            <h3
+              className="resume__category--name"
+              style={{
+                color: curResume.primaryColor,
+              }}
+            >
+              Personal info
+            </h3>
           )}
-          {sortByPriority(getContactInfo(resume)).map((item) => (
+          {sortByPriority(getContactInfo(curResume)).map((item) => (
             <ContactItem
               template={templateCSS}
               item={item}
               key={`${item.name}-${item.value}`}
+              primaryColor={curResume.primaryColor}
             />
           ))}
           <span>
@@ -85,6 +99,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
                 template={templateCSS}
                 item={{}}
                 text={"Add contact info"}
+                primaryColor={curResume.primaryColor}
               />
             )}
           </span>
@@ -93,9 +108,9 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
     );
   };
   const drawCategories = () => {
-    if (!getCategories(resume)) return <p>Nothing here yet</p>;
+    if (!getCategories(curResume)) return <p>Nothing here yet</p>;
 
-    const categories = sortByPriority(getCategories(resume));
+    const categories = sortByPriority(getCategories(curResume));
 
     const mainCategories = categories.filter((category) => !category.sidebar);
     const sidebarCategories = categories.filter((category) => category.sidebar);

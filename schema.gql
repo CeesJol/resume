@@ -16,7 +16,8 @@ type Resume {
   categories: [Category] @relation
   templateId: String
   contactInfo: [ContactInfo] @relation
-  layout: [Layout] @relation
+  primaryColor: String
+  backgroundColor: String
 }
 
 type Category {
@@ -46,12 +47,6 @@ type ContactInfo {
   name: String
   value: String
   priority: Int
-}
-
-type Layout {
-  resume: Resume
-  name: String
-  value: String
 }
 
 type AuthPayload {

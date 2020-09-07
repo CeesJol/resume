@@ -6,13 +6,21 @@ import Separator from "./Separator";
 import { isMobile } from "react-device-detect";
 import ReactMarkdown from "react-markdown";
 
-const NewItem = ({ category, item, index, dummy, hovering }) => {
+const NewItem = ({
+  category,
+  item,
+  index,
+  dummy,
+  hovering,
+  backgroundColor,
+  primaryColor,
+}) => {
   const {
     setEditingItem,
     moveItem,
     forceRender,
     preview,
-    getLayoutItem,
+    editingResume,
   } = useContext(UserContext);
   const categoryItems = GET_CATEGORY_ITEMS(category.type);
   const getTypeClassName = () => {
@@ -46,6 +54,9 @@ const NewItem = ({ category, item, index, dummy, hovering }) => {
         className={`resume__item--value-box ${
           value ? "resume__item--value-box--colored" : ""
         }`}
+        style={{
+          backgroundColor: primaryColor,
+        }}
       ></div>
     ));
   };
@@ -57,7 +68,7 @@ const NewItem = ({ category, item, index, dummy, hovering }) => {
       style={
         getTypeClassName() === "title-without-value"
           ? {
-              backgroundColor: getLayoutItem("Primary Color"),
+              backgroundColor: primaryColor,
             }
           : {}
       }

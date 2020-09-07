@@ -45,34 +45,8 @@
   }
 
   &__contact-info {
-    // 	background-color: rgb(239, 240, 241);
-    // 	padding: calc(#{$xs-size} * #{$resume-scale});
-    // 	height: calc(2.5rem * #{$resume-scale});
-    // 	display: flex;
-    // 	justify-content: center;
-    // 	align-items: center;
-
     &--title {
       font-weight: bold;
-    }
-
-    &__content {
-      // 		display: flex;
-      // 		justify-content: space-evenly;
-    }
-
-    &--item {
-      // position: relative;
-      // padding: 0 calc(#{$s-size} * #{$resume-scale});
-      // display: flex;
-      // align-items: center;
-      // vertical-align: middle;
-      // margin-bottom: calc(1rem * #{$resume-scale});
-    }
-
-    &--icon {
-      // padding-right: calc(#{$s-size} * #{$resume-scale}) !important;
-      // margin-top: calc(-0.15rem * #{$resume-scale}) !important; // beun solution to get the icon aligned with the text
     }
   }
 }

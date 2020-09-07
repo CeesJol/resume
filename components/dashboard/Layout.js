@@ -3,15 +3,13 @@ import { fauna } from "../../lib/api";
 import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
 import Template from "./Template";
-import { TEMPLATES } from "../../templates/templates";
-import { cloneDeep } from "lodash";
+import { TEMPLATES, getTemplate } from "../../templates/templates";
+// import { cloneDeep } from "lodash";
 
 const Layout = () => {
   const {
     editingResume,
-    storeLayout,
     storeResume,
-    getLayout,
     templates,
     setTemplates,
     setPreview,
@@ -21,6 +19,12 @@ const Layout = () => {
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [items, setItems] = useState([]);
+  const handleChangeItem = (event) => {
+    setItems({
+      ...items,
+      [event.target.name]: event.target.value,
+    });
+  };
   useEffect(() => {
     setPreview(true);
 
@@ -31,27 +35,36 @@ const Layout = () => {
       setFilled(true);
 
       // cloneDeep to avoid shallow copy
-      setItems(cloneDeep(getLayout()));
+      // setItems(cloneDeep(getLayout()));
+      setItems({
+        primaryColor: editingResume.primaryColor,
+        backgroundColor: editingResume.backgroundColor,
+      });
     }
 
     setTemplates(TEMPLATES);
   }, []);
-  const handleChangeItem = (i) => {
-    let newArr = [...items];
-    newArr[i].value = event.target.value;
-    setItems(newArr);
-  };
-  const handleUpdateLayout = async (item) => {
-    const myData = {
-      value: item.value,
-      _id: item._id,
-    };
+  const handleResetLayout = (key) => {
+    const value = getTemplate(editingResume.templateId).styles[key];
 
-    storeLayout(myData);
+    // Store in Layout tab
+    let newItems = items;
+    newItems[key] = value;
+    setItems(newItems);
+
+    handleUpdateLayout(key, value);
+  };
+  const handleUpdateLayout = async (key, value) => {
+    let myData = {
+      _id: editingResume._id,
+    };
+    myData[key] = value;
+
+    storeResume(myData, {});
 
     await fauna({
-      type: "UPDATE_LAYOUT",
-      id: item._id,
+      type: "UPDATE_RESUME",
+      id: editingResume._id,
       data: myData,
     }).then(
       () => storeStatus("Saved."),
@@ -81,7 +94,7 @@ const Layout = () => {
       {templates.length > 0 ? (
         <>
           {templates.map((template) => (
-            <Template template={template} key={`Layout-${template.id}`} />
+            <Template template={template} key={`Template-${template.id}`} />
           ))}
           {/* <br > to force button on new line */}
           <br />
@@ -96,31 +109,61 @@ const Layout = () => {
       )}
     </div>
   );
-  const drawLayout = () =>
-    items.map((item, i) => (
-      <div className="dashboard__item" key={item._id}>
-        <h4 className="dashboard__item--title">{item.name}</h4>
+  return editingResume !== -1 ? (
+    <>
+      {drawTemplates()}
+
+      <div className="dashboard__item">
+        <h4 className="dashboard__item--title">Primary Color</h4>
         <form>
           <input
             type="text"
-            id="value"
-            name="value"
-            value={item.value}
-            onChange={() => handleChangeItem(i)}
+            id="primaryColor"
+            name="primaryColor"
+            value={items.primaryColor}
+            onChange={handleChangeItem}
           />
 
           <Button
             text="Update"
             altText="Updating..."
-            fn={() => handleUpdateLayout(item)}
+            fn={() => handleUpdateLayout("primaryColor", items.primaryColor)}
+          />
+          <Button
+            text="Reset"
+            altText="Resetting..."
+            color="red"
+            fn={() => handleResetLayout("primaryColor")}
           />
         </form>
       </div>
-    ));
-  return editingResume !== -1 ? (
-    <>
-      {drawTemplates()}
-      {drawLayout()}
+
+      <div className="dashboard__item">
+        <h4 className="dashboard__item--title">Background Color</h4>
+        <form>
+          <input
+            type="text"
+            id="backgroundColor"
+            name="backgroundColor"
+            value={items.backgroundColor}
+            onChange={handleChangeItem}
+          />
+
+          <Button
+            text="Update"
+            altText="Updating..."
+            fn={() =>
+              handleUpdateLayout("backgroundColor", items.backgroundColor)
+            }
+          />
+          <Button
+            text="Reset"
+            altText="Resetting..."
+            color="red"
+            fn={() => handleResetLayout("backgroundColor")}
+          />
+        </form>
+      </div>
     </>
   ) : (
     <p>Select a resume to edit the layout</p>

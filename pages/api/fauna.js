@@ -33,13 +33,8 @@ jobTitle
 bio
 priority
 templateId
-layout {
-	data {
-		_id
-		name
-		value
-	}
-}
+primaryColor
+backgroundColor
 contactInfo {
 	data {
 		_id
@@ -262,16 +257,6 @@ export const createResume = async ({ userId, data }, secret) => {
           )}
 				]
 			}
-			layout: {
-				create: [
-					${data.layout.data.map(
-            (item) => `{
-						name: "${item.name}"
-						value: "${item.value}"
-					}`
-          )}
-				]
-			}
 			user: { connect: "${userId}" }
 		}) {
 			${RESUME_DATA}
@@ -311,15 +296,8 @@ export const duplicateResume = async (
           )}
 				]
 			}
-			layout: {
-				create: [
-					${resumeData.layout.data.map(
-            (layoutItem) => `{
-							${stringifyObject(layoutItem).pairs}
-						}`
-          )}
-				]
-			}
+			primaryColor: "",
+			backgroundColor: "",
 			contactInfo: {
 				create: [
 					${resumeData.contactInfo.data.map(
@@ -623,26 +601,6 @@ export const deleteContactInfo = async ({ id }, secret) => {
   );
 };
 
-/** |----------------------------
- *  | LAYOUT
- *  |----------------------------
- */
-export const updateLayout = async ({ id, data }, secret) => {
-  console.log("updateLayout request");
-  const { pairs, keys } = stringifyObject(data);
-  return executeQuery(
-    `mutation UpdateLayout {
-			updateLayout(id: "${id}", data: {
-				${pairs}
-			}) {
-				_id
-				${keys}
-			}
-		}`,
-    secret
-  );
-};
-
 export const faultyQuery = async () => {
   console.log("faultyQuery request");
   // try {
@@ -788,11 +746,8 @@ const fauna = async (req, res) => {
         result = await deleteContactInfo(req.body, userSecret);
         break;
       // ----------
-      // LAYOUT
+      // MISC
       // ----------
-      case "UPDATE_LAYOUT":
-        result = await updateLayout(req.body, userSecret);
-        break;
       case "FAULTY_QUERY":
         result = await faultyQuery();
         break;

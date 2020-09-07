@@ -6,14 +6,14 @@ import Button from "../general/Button";
 import Separator from "./Separator";
 import { isMobile } from "react-device-detect";
 
-const Category = ({ category, index }) => {
+const Category = ({ category, index, primaryColor, backgroundColor }) => {
   const {
     setEditingCategory,
     setEditingItem,
     moveCategory,
     forceRender,
     preview,
-    getLayoutItem,
+    editingResume,
     getItems,
   } = useContext(UserContext);
   const [hovering, setHovering] = useState(false);
@@ -78,7 +78,7 @@ const Category = ({ category, index }) => {
           }`}
           onClick={(e) => handleClick(e, category)}
           style={{
-            color: getLayoutItem("Primary Color"),
+            color: primaryColor,
           }}
         >
           {category.name}
@@ -92,6 +92,8 @@ const Category = ({ category, index }) => {
                 index={index}
                 key={item._id}
                 hovering={hovering}
+                backgroundColor={backgroundColor}
+                primaryColor={primaryColor}
               />
             ))}
           </div>
@@ -103,6 +105,8 @@ const Category = ({ category, index }) => {
               index={0}
               dummy={true}
               hovering={hovering}
+              backgroundColor={backgroundColor}
+              primaryColor={primaryColor}
             />
           </div>
         )}

@@ -57,10 +57,6 @@ const UserContextProvider = (props) => {
   const getResumes = () => {
     return userExists() && getUser().resumes.data;
   };
-  const getLayout = (resume) => {
-    if (resume) return resume.layout.data;
-    return editingResume.layout.data;
-  };
   const getContactInfo = (resume) => {
     if (resume) return resume.contactInfo.data;
     return editingResume.contactInfo.data;
@@ -215,25 +211,6 @@ const UserContextProvider = (props) => {
 
     resetPopups();
   };
-  const storeLayout = (layoutData) => {
-    storeStatus("Saving...");
-
-    var user = getUser();
-
-    user.resumes.data.forEach((resume, r) => {
-      if (resume._id === editingResume._id) {
-        resume.layout.data.forEach((item, i) => {
-          if (item._id === layoutData._id) {
-            user.resumes.data[r].layout.data[i] = {
-              ...user.resumes.data[r].layout.data[i],
-              ...layoutData,
-            };
-            setEditingResume(user.resumes.data[r]);
-          }
-        });
-      }
-    });
-  };
   const getUser = () => {
     return user;
   };
@@ -383,9 +360,6 @@ const UserContextProvider = (props) => {
     setStatus("");
     resetPopups();
   };
-  const getLayoutItem = (name) => {
-    return editingResume.layout.data.find((item) => item.name === name).value;
-  };
   useEffect(() => {
     if (user == null) {
       const userId = JSON.parse(localStorage.getItem("userId"));
@@ -459,7 +433,6 @@ const UserContextProvider = (props) => {
         moveResume,
         storeItem,
         storeResume,
-        storeLayout,
         storeCategory,
         userMadeChanges,
         setUserMadeChanges,
@@ -470,7 +443,6 @@ const UserContextProvider = (props) => {
         getCategories,
         getItems,
         getResumes,
-        getLayout,
         getContactInfo,
         getJobTitle,
         getBio,
@@ -483,7 +455,6 @@ const UserContextProvider = (props) => {
         setLoggingOut,
         templates,
         setTemplates,
-        getLayoutItem,
         reset,
         status,
         setStatus,

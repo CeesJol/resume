@@ -3,8 +3,8 @@ import { UserContext } from "../../contexts/userContext";
 import { getContactIcon } from "../../lib/constants";
 import { isMobile } from "react-device-detect";
 
-const ContactItem = ({ template, item, text }) => {
-  const { setEditingContactInfo, preview, getLayoutItem } = useContext(
+const ContactItem = ({ template, item, text, primaryColor }) => {
+  const { setEditingContactInfo, preview, editingResume } = useContext(
     UserContext
   );
   const handleChangeContactInfo = (item) => {
@@ -15,7 +15,7 @@ const ContactItem = ({ template, item, text }) => {
     <i
       className={`fa fa-${name} resume__contact-info--icon`}
       style={{
-        color: getLayoutItem("Primary Color"),
+        color: primaryColor,
       }}
     ></i>
   );

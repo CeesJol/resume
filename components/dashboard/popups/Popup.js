@@ -208,7 +208,7 @@ const Popup = () => {
           year2: editingItem.year2,
           location: editingItem.location,
           description: editingItem.description,
-          value: editingItem.value,
+          value: editingItem.value || "3",
         });
 
         setIsGoing(!editingItem.year2);
@@ -330,7 +330,7 @@ const Popup = () => {
             <>
               <label>Value</label>
               <Valuepicker
-                val={fields.value}
+                val={fields.value || "3"}
                 name={"value"}
                 fn={handleChange}
               />

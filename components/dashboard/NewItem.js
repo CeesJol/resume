@@ -45,7 +45,7 @@ const NewItem = ({
   const drawValue = () => {
     const values = [];
     for (var i = 0; i < 5; i++) {
-      values.push(i >= item.value);
+      values.push(i >= (item.value || 3));
     }
 
     return values.map((value, i) => (
@@ -55,7 +55,7 @@ const NewItem = ({
           value ? "resume__item--value-box--colored" : ""
         }`}
         style={{
-          backgroundColor: primaryColor,
+          backgroundColor: !value ? primaryColor : "",
         }}
       ></div>
     ));
@@ -102,7 +102,7 @@ const NewItem = ({
           {!item.year2 && categoryItems.includes("year2") && " - Present"}
         </p>
       )}
-      {item.value && category.type === "Title and value" && (
+      {category.type === "Title and value" && (
         <div className="resume__item--value">
           {drawValue()}
           <p className="resume__item--value--title">

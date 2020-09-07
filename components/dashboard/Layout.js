@@ -44,7 +44,7 @@ const Layout = () => {
 
     setTemplates(TEMPLATES);
   }, []);
-  const handleResetLayout = (key) => {
+  const handleResetLayout = async (key) => {
     const value = getTemplate(editingResume.templateId).styles[key];
 
     // Store in Layout tab
@@ -52,7 +52,7 @@ const Layout = () => {
     newItems[key] = value;
     setItems(newItems);
 
-    handleUpdateLayout(key, value);
+    await handleUpdateLayout(key, value);
   };
   const handleUpdateLayout = async (key, value) => {
     let myData = {

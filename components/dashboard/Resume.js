@@ -98,7 +98,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
           >
             Personal info
           </h3>
-          {getContactInfo(curResume).length > 0 ? (
+          {getContactInfo(curResume).length > 0 || preview ? (
             drawContactInfoItems()
           ) : (
             <ContactItem

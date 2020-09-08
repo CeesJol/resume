@@ -55,8 +55,7 @@ const ResumePopup = () => {
         jobTitle: user.jobTitle ? user.jobTitle : "",
         bio: user.bio ? user.bio : "",
         templateId: selectedTemplateId,
-        primaryColor: styles.primaryColor,
-        backgroundColor: styles.backgroundColor,
+        ...styles,
         priority: getResumes().length + 1,
       },
     }).then(

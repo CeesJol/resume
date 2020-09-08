@@ -149,7 +149,6 @@ export const updateUser = async ({ id, data }, secret) => {
   console.log("updateUser request", id, data);
   if (data.email) data.email.toLowerCase();
   const { pairs, keys } = stringifyObject(data);
-  console.log("pairs, keys:", pairs, keys);
   return executeQuery(
     `mutation UpdateUser {
 			updateUser(id: "${id}", data: {
@@ -465,7 +464,6 @@ export const moveCategory = async ({ id, amount }, secret) => {
 export const createItem = async ({ categoryId, data }, secret) => {
   console.log("createItem request");
   const { pairs, keys } = stringifyObject(data);
-  console.log("{ pairs, keys }:", pairs, keys);
 
   return executeQuery(
     `mutation CreateItem {

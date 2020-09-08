@@ -47,7 +47,6 @@ const Popup = () => {
     if (!userMadeChanges) setUserMadeChanges(true);
   };
   const insertList = () => {
-    console.log("fields", fields);
     let cursor = textareaRef.current.selectionStart;
     setFields({
       ...fields,

@@ -72,9 +72,11 @@ const Layout = () => {
     );
   };
   const handleUpdateTemplate = async () => {
+    const styles = getTemplate(selectedTemplateId).styles;
     const myData = {
       templateId: selectedTemplateId,
       _id: editingResume._id,
+      ...styles,
     };
 
     storeResume(myData, {});
@@ -84,7 +86,14 @@ const Layout = () => {
       id: editingResume._id,
       data: myData,
     }).then(
-      () => storeStatus("Saved."),
+      () => {
+        storeStatus("Saved.");
+        // Store in textfields
+        setItems({
+          ...items,
+          ...styles,
+        });
+      },
       (err) => storeStatus("Error: failed to save", err)
     );
   };

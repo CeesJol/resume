@@ -244,7 +244,7 @@
   &__contact-info {
     line-height: 0px;
     &--item {
-      padding-bottom: calc(#{$xs-size} * #{$resume-scale});
+      padding-bottom: calc(#{$s-size} * #{$resume-scale});
     }
 
     &--body {

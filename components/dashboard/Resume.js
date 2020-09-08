@@ -6,6 +6,7 @@ import { PDFExport } from "@progress/kendo-react-pdf";
 import { getTemplate } from "../../templates/templates";
 import { isMobile } from "react-device-detect";
 import Button from "../general/Button";
+import { GET_DUMMY_ITEM } from "../../lib/constants";
 
 // PDF Export source
 // https://blog.usejournal.com/lets-make-a-resume-in-react-2c9c5540f51a
@@ -97,7 +98,16 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
           >
             Personal info
           </h3>
-          {drawContactInfoItems()}
+          {getContactInfo(curResume).length > 0 ? (
+            drawContactInfoItems()
+          ) : (
+            <ContactItem
+              template={templateCSS}
+              item={GET_DUMMY_ITEM("Contact info")}
+              primaryColor={curResume.primaryColor}
+              dummy={true}
+            />
+          )}
         </div>
       );
     }

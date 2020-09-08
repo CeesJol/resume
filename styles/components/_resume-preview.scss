@@ -1,77 +1,78 @@
 .resume-preview {
-	border: 1px solid $light-grey-2;
-	border-radius: 3px;
-	margin-bottom: $m-size;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	overflow: hidden;
+  border: 1px solid $light-grey-2;
+  border-radius: 3px;
+  margin-bottom: $m-size;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 
-	@media (max-width: $desktop-breakpoint) {
-		background-color: white;
-	}
-	background-color: $light-grey;
+  @media (max-width: $desktop-breakpoint) {
+    background-color: white;
+  }
+  background-color: $light-grey;
 
-	&__head {
-		@media (max-width: $desktop-breakpoint) {
-			display: none;
-		}
-		overflow: hidden;
-		display: inline-block;
-		width: 100%;
-		border-right: 1px solid $light-grey-2;
+  &__head {
+    @media (max-width: $desktop-breakpoint) {
+      display: none;
+    }
+    overflow: hidden;
+    display: inline-block;
+    border-right: 1px solid $light-grey-2;
 
-		width: 30.375rem;
-		@media (min-width: 45rem) {
-			&:not(:nth-child(2n + 1)) {
-				margin-right: $m-size;
-			}
-		}
+    min-width: 30.375rem;
+    max-width: 30.375rem;
+    @media (min-width: 45rem) {
+      &:not(:nth-child(2n + 1)) {
+        margin-right: $m-size;
+      }
+    }
 
-		@media (min-width: 56rem) {
-			width: 40.5rem;
+    @media (min-width: 56rem) {
+      min-width: 40.5rem;
+      max-width: 40.5rem;
 
-			&:not(:nth-child(2n + 1)) {
-				margin-right: $m-size;
-			}
-		}
+      &:not(:nth-child(2n + 1)) {
+        margin-right: $m-size;
+      }
+    }
 
-		&--title {
-			margin: 0.75rem $s-size;
-		}
+    &--title {
+      margin: 0.75rem $s-size;
+    }
 
-		&--img {
-			width: 100%;
-		}
-	}
+    &--img {
+      width: 100%;
+    }
+  }
 
-	&__body {
-		padding: $m-size;
-		flex-grow: 1;
-		max-height: 15rem;
-		@media (min-width: 56rem) {
-			max-height: 20rem;
-		}
-		overflow-y: scroll;
+  &__body {
+    padding: $m-size;
+    flex-grow: 1;
+    max-height: 15rem;
+    @media (min-width: 56rem) {
+      max-height: 20rem;
+    }
+    overflow-y: scroll;
 
-		&--job-title {
-			font-weight: 300;
-		}
+    &--job-title {
+      font-weight: 300;
+    }
 
-		footer {
-			margin-top: $s-size;
+    footer {
+      margin-top: $s-size;
 
-			a,
-			i {
-				color: $light-grey-3;
-				text-transform: uppercase;
-				font-size: 1.4rem;
-			}
+      a,
+      i {
+        color: $light-grey-3;
+        text-transform: uppercase;
+        font-size: 1.4rem;
+      }
 
-			a:hover {
-				text-decoration: underline;
-				opacity: 1;
-			}
-		}
-	}
+      a:hover {
+        text-decoration: underline;
+        opacity: 1;
+      }
+    }
+  }
 }

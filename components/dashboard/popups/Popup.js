@@ -47,6 +47,7 @@ const Popup = () => {
     if (!userMadeChanges) setUserMadeChanges(true);
   };
   const insertList = () => {
+    console.log("fields", fields);
     let cursor = textareaRef.current.selectionStart;
     setFields({
       ...fields,
@@ -196,18 +197,18 @@ const Popup = () => {
       setFilled(true);
 
       setFields({
-        description: editingItem.description,
+        description: editingItem.description || "",
       });
 
       if (editingItem.title) {
         setFields({
-          title: editingItem.title,
-          month1: editingItem.month1,
-          year1: editingItem.year1,
-          month2: editingItem.month2,
-          year2: editingItem.year2,
-          location: editingItem.location,
-          description: editingItem.description,
+          title: editingItem.title || "",
+          month1: editingItem.month1 || "",
+          year1: editingItem.year1 || "",
+          month2: editingItem.month2 || "",
+          year2: editingItem.year2 || "",
+          location: editingItem.location || "",
+          description: editingItem.description || "",
           value: editingItem.value || "3",
         });
 

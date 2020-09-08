@@ -27,6 +27,9 @@ const CategoryPopup = () => {
   const [customName, setCustomName] = useState("");
   const [type, setType] = useState("");
   const [showValue, setShowValue] = useState(true); // Should value be shown for title/value types?
+  const getRealName = () => {
+    return name === "Other" ? customName : name;
+  };
   const handleChangeName = (event) => {
     setName(event.target.value);
     setType(getCategoryType(event.target.value));
@@ -67,7 +70,7 @@ const CategoryPopup = () => {
 
     let myData = {
       ...editingCategory,
-      name: name === "Other" ? customName : name,
+      name: getRealName(),
       type,
       sidebar: editingCategory.sidebar,
       priority,
@@ -100,7 +103,7 @@ const CategoryPopup = () => {
 
     let myData = {
       _id: editingCategory._id,
-      name: name === "Other" ? customName : name,
+      name: getRealName(),
       type,
       sidebar: editingCategory.sidebar,
     };
@@ -229,7 +232,7 @@ const CategoryPopup = () => {
                   checked={showValue}
                   onChange={handleChangeShowValue}
                 />
-                Show value for {name}
+                Show value for {getRealName()}
               </label>
             </>
           )}

@@ -4,7 +4,7 @@ import Button from "../../general/Button";
 import Template from "../Template";
 import { toast } from "react-toastify";
 import { fauna } from "../../../lib/api";
-import { TEMPLATES } from "../../../templates/templates";
+import { TEMPLATES, getTemplate } from "../../../templates/templates";
 import { RESUME_SKELETON } from "../../../lib/constants";
 import ReactModal from "react-modal";
 ReactModal.setAppElement("#__next");
@@ -44,6 +44,8 @@ const ResumePopup = () => {
 
     const user = getUser();
 
+    const styles = getTemplate(selectedTemplateId).styles;
+    console.log("styles:", styles);
     await fauna({
       type: "CREATE_RESUME",
       userId: user._id,
@@ -53,6 +55,8 @@ const ResumePopup = () => {
         jobTitle: user.jobTitle ? user.jobTitle : "",
         bio: user.bio ? user.bio : "",
         templateId: selectedTemplateId,
+        primaryColor: styles.primaryColor,
+        backgroundColor: styles.backgroundColor,
         priority: getResumes().length + 1,
       },
     }).then(

@@ -3,13 +3,14 @@ import { UserContext } from "../../contexts/userContext";
 import { getContactIcon } from "../../lib/constants";
 import { isMobile } from "react-device-detect";
 
-const ContactItem = ({ template, item, text, primaryColor }) => {
+const ContactItem = ({ template, item, text, dummy, primaryColor }) => {
   const { setEditingContactInfo, preview, editingResume } = useContext(
     UserContext
   );
   const handleChangeContactInfo = (item) => {
     if (preview) return false;
-    setEditingContactInfo(item);
+    if (dummy) setEditingContactInfo({});
+    else setEditingContactInfo(item);
   };
   const drawIcon = (name) => (
     <i

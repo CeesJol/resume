@@ -277,6 +277,8 @@ export const duplicateResume = async (
 			bio: "${resumeData.bio ? resumeData.bio : ``}"
 			templateId: "${resumeData.templateId}"
 			priority: ${priority}
+			primaryColor: "${resumeData.primaryColor}"
+			backgroundColor: "${resumeData.backgroundColor}"
 			categories: {
 				create: [
 					${resumeData.categories.data.map(
@@ -296,8 +298,6 @@ export const duplicateResume = async (
           )}
 				]
 			}
-			primaryColor: "",
-			backgroundColor: "",
 			contactInfo: {
 				create: [
 					${resumeData.contactInfo.data.map(

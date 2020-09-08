@@ -5,6 +5,7 @@ import ContactItem from "./ContactItem";
 import { PDFExport } from "@progress/kendo-react-pdf";
 import { getTemplate } from "../../templates/templates";
 import { isMobile } from "react-device-detect";
+import Button from "../general/Button";
 
 // PDF Export source
 // https://blog.usejournal.com/lets-make-a-resume-in-react-2c9c5540f51a
@@ -22,6 +23,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
     getContactInfo,
     getJobTitle,
     getBio,
+    setEditingContactInfo,
   } = useContext(UserContext);
   const curResume = resume || editingResume;
   const [hovering, setHovering] = useState(false);
@@ -68,6 +70,38 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
     );
   };
   const drawContactInfo = () => {
+    if (templateCSS.contactInfo === "SIDEBAR") {
+      // Draw as category
+      return (
+        <div
+          className={`resume__category ${
+            !preview && !isMobile ? "resume__category--hoverable" : ""
+          }`}
+          onMouseEnter={() => setHovering(true)}
+          onMouseLeave={() => setHovering(false)}
+        >
+          {hovering && !isMobile && !preview && (
+            <span className="resume__actions">
+              <Button
+                fn={() => setEditingContactInfo({})}
+                text={`Add contact info`}
+                textual={true}
+              />
+            </span>
+          )}
+          <h3
+            className="resume__category--name"
+            style={{
+              color: curResume.primaryColor,
+            }}
+          >
+            Personal info
+          </h3>
+          {drawContactInfoItems()}
+        </div>
+      );
+    }
+    // Draw at top
     return (
       <div
         className="resume__contact-info"
@@ -85,14 +119,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
               Personal info
             </h3>
           )}
-          {sortByPriority(getContactInfo(curResume)).map((item) => (
-            <ContactItem
-              template={templateCSS}
-              item={item}
-              key={`${item.name}-${item.value}`}
-              primaryColor={curResume.primaryColor}
-            />
-          ))}
+          {drawContactInfoItems()}
           <span>
             {true && !preview && !isMobile && (
               <ContactItem
@@ -106,6 +133,16 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
         </div>
       </div>
     );
+  };
+  const drawContactInfoItems = () => {
+    return sortByPriority(getContactInfo(curResume)).map((item) => (
+      <ContactItem
+        template={templateCSS}
+        item={item}
+        key={`${item.name}-${item.value}`}
+        primaryColor={curResume.primaryColor}
+      />
+    ));
   };
   const drawCategories = () => {
     if (!getCategories(curResume)) return <p>Nothing here yet</p>;

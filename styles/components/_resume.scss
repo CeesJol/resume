@@ -61,26 +61,22 @@
   }
 
   h1 {
-    font-size: calc(3rem * #{$resume-scale});
-  }
-
-  h2 {
-    font-size: calc(2rem * #{$resume-scale});
+    font-size: calc(2.5rem * #{$resume-scale});
   }
 
   h3 {
-    font-size: calc(1.5rem * #{$resume-scale});
+    font-size: calc(1.2rem * #{$resume-scale});
   }
 
   h4 {
-    font-size: calc(1.2rem * #{$resume-scale});
+    font-size: calc(1rem * #{$resume-scale});
   }
 
   p,
   i,
   a,
   li {
-    font-size: calc(1rem * #{$resume-scale});
+    font-size: calc(0.8rem * #{$resume-scale});
     margin: 0;
   }
 
@@ -142,7 +138,12 @@
 
   &__container {
     // overflow: hidden;
-    padding: calc(#{$l-size} * #{#{$resume-scale}});
+    padding: calc(#{$m-size} * #{#{$resume-scale}});
+
+    &--small {
+      padding: calc(#{$m-size} * #{#{$resume-scale}})
+        calc(#{$s-size} * #{#{$resume-scale}});
+    }
   }
 
   &__category {

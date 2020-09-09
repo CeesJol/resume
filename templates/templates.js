@@ -2,7 +2,7 @@ export const TEMPLATES = [
   // {
   //   id: The unique identifier for this resume (String, unique, no spaces)
   //   name: The name displayed for this resume (String)
-  //   sidebar: Does this resume use a sidebar? (Boolean)
+  //   sidebar: Sidebar percentage (Int) (Duplicated in SCSS file)
   //   skillsWithValue: Should skills display a value?
   //   contactInfo: where contact info is placed (TOP | SIDEBAR)
   //   styles: customizable layout styles (Object)
@@ -10,7 +10,7 @@ export const TEMPLATES = [
   {
     id: "SimpleGreen",
     name: "Simple Green",
-    sidebar: true,
+    sidebar: 50,
     skillsWithValue: false,
     contactInfo: "TOP",
     styles: {
@@ -21,7 +21,7 @@ export const TEMPLATES = [
   {
     id: "NavyBlue",
     name: "Navy Blue",
-    sidebar: true,
+    sidebar: 33,
     skillsWithValue: true,
     contactInfo: "SIDEBAR",
     styles: {

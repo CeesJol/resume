@@ -311,7 +311,6 @@ export const duplicateResume = async (
 			${RESUME_DATA}
 		}
 	}`;
-  console.log("query:", query);
   return executeQuery(query, secret);
 };
 

@@ -367,7 +367,7 @@ const UserContextProvider = (props) => {
         fauna({ type: "READ_USER", id: userId }).then(
           (data) => {
             if (!data.findUserByID) {
-              console.log("data", data);
+              console.error("Unauthenticated. Data:", data);
               toast.error(`⚠️ Unauthenticated`);
               clearUser();
               return;

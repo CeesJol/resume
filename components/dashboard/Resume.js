@@ -195,7 +195,11 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
 
     return (
       <>
-        <div className="resume__container resume__container--left">
+        <div
+          className={`resume__container resume__container--left ${
+            templateCSS.sidebar > 50 ? "resume__container--small" : ""
+          }`}
+        >
           {mainCategories.map((category, index) =>
             drawCategory(category, index)
           )}
@@ -205,7 +209,11 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
             </span>
           )}
         </div>
-        <div className="resume__container resume__container--right">
+        <div
+          className={`resume__container resume__container--right ${
+            templateCSS.sidebar < 50 ? "resume__container--small" : ""
+          }`}
+        >
           {templateCSS.contactInfo === "SIDEBAR" && drawContactInfo()}
           {sidebarCategories.map((category, index) =>
             drawCategory(category, index)

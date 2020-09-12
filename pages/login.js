@@ -18,8 +18,8 @@ const Login = () => {
       async (data) => {
         setAuth(true);
         console.log("loginUser", data);
-        storeUser(data.loginUser.user);
-        const id = data.loginUser.user._id;
+        storeUser(data);
+        const id = data._id;
         storeUser({ id });
         localStorage.setItem("userId", JSON.stringify(id));
         Router.push("/dashboard");

@@ -18,8 +18,8 @@ const Signup = () => {
         setAuth(true);
         send({ type: "SEND_CONFIRMATION_EMAIL", id, email });
         console.log("getUserByEmail", data);
-        storeUser(data.loginUser.user);
-        const id = data.loginUser.user._id;
+        storeUser(data);
+        const id = data._id;
         localStorage.setItem("userId", JSON.stringify(id));
         storeUser({ id });
         Router.push("/dashboard");

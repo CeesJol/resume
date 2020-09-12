@@ -648,17 +648,19 @@ const fauna = async (req, res) => {
       // USERS
       // ----------
       case "LOGIN_USER":
-        result = await loginUser(req.body);
+        let loginResult = await loginUser(req.body);
         // Set secret cookie
         const encryptedToken = jwt.sign(
           {
-            token: result.loginUser.token,
+            token: loginResult.loginUser.token,
           },
           process.env.COOKIE_SECRET
         );
         res.setHeader("Set-Cookie", [
           `secret=${encryptedToken}; HttpOnly; Max-Age=${COOKIE_MAX_AGE}`,
         ]);
+        // Don't send token to user
+        result = loginResult.loginUser.user;
         break;
       case "LOGOUT_USER":
         result = await logoutUser(userSecret);

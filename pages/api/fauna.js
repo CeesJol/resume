@@ -625,9 +625,22 @@ function getCookie(name, cookies) {
 }
 
 const fauna = async (req, res) => {
-  const userSecret = getCookie("secret", req.headers.cookie);
-  const { type } = req.body;
+  const userSecretEncrypted = getCookie("secret", req.headers.cookie);
+  let userSecret;
+
   let result;
+  if (userSecretEncrypted) {
+    try {
+      userSecret = jwt.verify(userSecretEncrypted, process.env.COOKIE_SECRET)
+        .token;
+    } catch (e) {
+      console.log("Error: invalid authentication token: ", e);
+      result = [{ message: "Error: invalid authentication token" }];
+      res.end(JSON.stringify(result));
+      return;
+    }
+  }
+  const { type } = req.body;
 
   try {
     switch (type) {
@@ -637,8 +650,14 @@ const fauna = async (req, res) => {
       case "LOGIN_USER":
         result = await loginUser(req.body);
         // Set secret cookie
+        const encryptedToken = jwt.sign(
+          {
+            token: result.loginUser.token,
+          },
+          process.env.COOKIE_SECRET
+        );
         res.setHeader("Set-Cookie", [
-          `secret=${result.loginUser.token}; HttpOnly; Max-Age=${COOKIE_MAX_AGE}`,
+          `secret=${encryptedToken}; HttpOnly; Max-Age=${COOKIE_MAX_AGE}`,
         ]);
         break;
       case "LOGOUT_USER":

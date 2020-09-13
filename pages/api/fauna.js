@@ -625,9 +625,14 @@ function getCookie(name, cookies) {
 }
 
 const fauna = async (req, res) => {
+  const deleteCookie = () => {
+    // Delete secret cookie
+    res.setHeader("Set-Cookie", [
+      `secret=deleted; expires=Thu, 01 Jan 1970 00:00:00 GMT`,
+    ]);
+  };
   const userSecretEncrypted = getCookie("secret", req.headers.cookie);
   let userSecret;
-
   let result;
   if (userSecretEncrypted) {
     try {
@@ -635,6 +640,7 @@ const fauna = async (req, res) => {
         .token;
     } catch (e) {
       console.log("Error: invalid authentication token: ", e);
+      deleteCookie();
       result = [{ message: "Error: invalid authentication token" }];
       res.end(JSON.stringify(result));
       return;
@@ -664,10 +670,7 @@ const fauna = async (req, res) => {
         break;
       case "LOGOUT_USER":
         result = await logoutUser(userSecret);
-        // Delete secret cookie
-        res.setHeader("Set-Cookie", [
-          `secret=deleted; expires=Thu, 01 Jan 1970 00:00:00 GMT`,
-        ]);
+        deleteCookie();
         break;
       case "CREATE_USER":
         result = await createUser(req.body);

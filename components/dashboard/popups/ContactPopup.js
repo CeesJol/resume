@@ -68,7 +68,7 @@ const ContactPopup = () => {
         );
         storeStatus("Saved.");
       },
-      (err) => storeStatus("Error: failed to save", err)
+      (err) => storeStatus(`Error: failed to save: ${err}`)
     );
   };
   const handleUpdate = () => {
@@ -92,7 +92,7 @@ const ContactPopup = () => {
       data: myData,
     }).then(
       () => storeStatus("Saved."),
-      (err) => storeStatus("Error: failed to save", err)
+      (err) => storeStatus(`Error: failed to save: ${err}`)
     );
   };
   const handleDelete = (event) => {
@@ -115,7 +115,7 @@ const ContactPopup = () => {
           id: editingContactInfo._id,
         }).then(
           () => storeStatus("Saved."),
-          (err) => storeStatus("Error: failed to save", err)
+          (err) => storeStatus(`Error: failed to save: ${err}`)
         );
       },
     });

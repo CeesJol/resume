@@ -263,7 +263,7 @@ const UserContextProvider = (props) => {
         storeStatus("Saved.");
       },
       (err) => {
-        storeStatus("Error: failed to save", err);
+        storeStatus(`Error: failed to save: ${err}`);
       }
     );
 
@@ -303,7 +303,7 @@ const UserContextProvider = (props) => {
         storeStatus("Saved.");
       },
       (err) => {
-        storeStatus("Error: failed to save", err);
+        storeStatus(`Error: failed to save: ${err}`);
       }
     );
 
@@ -336,7 +336,7 @@ const UserContextProvider = (props) => {
         storeStatus("Saved.");
       },
       (err) => {
-        storeStatus("Error: failed to save", err);
+        storeStatus(`Error: failed to save: ${err}`);
       }
     );
 
@@ -385,7 +385,7 @@ const UserContextProvider = (props) => {
           },
           (err) => {
             toast.error(`⚠️ ${err}`);
-            console.error("Failed getting the user data", err);
+            console.error("Failed getting the user data:", err);
             clearUser();
           }
         );

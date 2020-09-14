@@ -91,7 +91,7 @@ const CategoryPopup = () => {
         storeCategory({ _id: tempId }, { newId: data.createCategory._id });
         storeStatus("Saved.");
       },
-      (err) => storeStatus("Error: some error", err)
+      (err) => storeStatus(`Error: failed to save: ${err}`)
     );
   };
   const handleUpdate = () => {
@@ -116,7 +116,7 @@ const CategoryPopup = () => {
       data: myData,
     }).then(
       () => storeStatus("Saved."),
-      (err) => storeStatus("Error: failed to save", err)
+      (err) => storeStatus(`Error: failed to save: ${err}`)
     );
   };
   const handleDelete = (event) => {
@@ -139,7 +139,7 @@ const CategoryPopup = () => {
 
         fauna({ type: "DELETE_CATEGORY", id: editingCategory._id }).then(
           () => storeStatus("Saved."),
-          (err) => storeStatus("Error: failed to save", err)
+          (err) => storeStatus(`Error: failed to save: ${err}`)
         );
       },
     });

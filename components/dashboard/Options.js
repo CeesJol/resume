@@ -35,7 +35,7 @@ const Options = () => {
       data: myData,
     }).then(
       () => storeStatus("Saved."),
-      (err) => storeStatus("Failed to save", err)
+      (err) => storeStatus(`Error: failed to save: ${err}`)
     );
   };
   const handleDelete = async (event) => {

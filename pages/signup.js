@@ -25,7 +25,7 @@ const Signup = () => {
         Router.push("/dashboard");
       },
       (err) => {
-        toast.error("⚠️ " + err);
+        toast.error(`⚠️ ${err}`);
         console.error("(Signup) login err", err);
       }
     );
@@ -37,7 +37,7 @@ const Signup = () => {
         await handleLogin();
       },
       (err) => {
-        toast.error("⚠️ " + err);
+        toast.error(`⚠️ ${err}`);
         console.log("signup err", err);
       }
     );

@@ -68,7 +68,7 @@ const Layout = () => {
       data: myData,
     }).then(
       () => storeStatus("Saved."),
-      (err) => storeStatus("Error: failed to save", err)
+      (err) => storeStatus(`Error: failed to save: ${err}`)
     );
   };
   const handleUpdateTemplate = async () => {
@@ -94,7 +94,7 @@ const Layout = () => {
           ...styles,
         });
       },
-      (err) => storeStatus("Error: failed to save", err)
+      (err) => storeStatus(`Error: failed to save: ${err}`)
     );
   };
   const drawTemplates = () => (

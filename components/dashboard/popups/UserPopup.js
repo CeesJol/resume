@@ -53,7 +53,7 @@ const UserPopup = () => {
       data: myData,
     }).then(
       () => storeStatus("Saved."),
-      (err) => storeStatus("Error: failed to save", err)
+      (err) => storeStatus(`Error: failed to save: ${err}`)
     );
   };
   const handleCancel = () => {

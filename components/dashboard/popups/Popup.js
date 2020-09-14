@@ -128,9 +128,9 @@ const Popup = () => {
           },
           { newId: data.createItem._id }
         );
-        storeStatus("Saved");
+        storeStatus("Saved.");
       },
-      (err) => storeStatus("Error: could not save data", err)
+      (err) => storeStatus(`Error: failed to save: ${err}`)
     );
   };
   const handleUpdate = () => {
@@ -156,7 +156,7 @@ const Popup = () => {
       data: myData,
     }).then(
       () => storeStatus("Saved."),
-      (err) => storeStatus("Error: could not save data", err)
+      (err) => storeStatus(`Error: failed to save: ${err}`)
     );
   };
   const handleDelete = (event) => {
@@ -175,7 +175,7 @@ const Popup = () => {
 
         fauna({ type: "DELETE_ITEM", id: editingItem._id }).then(
           () => storeStatus("Saved."),
-          (err) => storeStatus("Error: failed to save", err)
+          (err) => storeStatus(`Error: failed to save: ${err}`)
         );
       },
     });

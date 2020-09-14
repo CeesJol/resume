@@ -82,7 +82,7 @@ export const loginUser = ({ email, password }) => {
   console.log("loginUser request");
   email = email.toLowerCase();
   const validationError = validateLogin(email, password);
-  if (validationError) return Promise.reject(validationError);
+  if (validationError) return [{ message: validationError }];
   return executeQuery(
     `mutation LoginUser {
 			loginUser(email:"${email}", password: "${password}") {
@@ -110,7 +110,7 @@ export const createUser = ({ email, username, password }) => {
   console.log("createUser request");
   email = email.toLowerCase();
   const validationError = validateSignup(email, username, password);
-  if (validationError) return Promise.reject(validationError);
+  if (validationError) return [{ message: validationError }];
   return executeQuery(
     `mutation CreateUser {
 			createUser(email: "${email}", username: "${username}", password: "${password}") {
@@ -129,7 +129,7 @@ export const createUser = ({ email, username, password }) => {
 export const updateUserPassword = ({ id, password }, secret) => {
   console.log("updateUserPassword request");
   const validationError = validatePassword(password);
-  if (validationError) return Promise.reject(validationError);
+  if (validationError) return [{ message: validationError }];
   return executeQuery(
     `mutation UpdateUserPassword {
 			updateUserPassword(id: "${id}", password: "${password}") {
@@ -654,19 +654,22 @@ const fauna = async (req, res) => {
       // USERS
       // ----------
       case "LOGIN_USER":
-        let loginResult = await loginUser(req.body);
-        // Set secret cookie
-        const encryptedToken = jwt.sign(
-          {
-            token: loginResult.loginUser.token,
-          },
-          process.env.COOKIE_SECRET
-        );
-        res.setHeader("Set-Cookie", [
-          `secret=${encryptedToken}; HttpOnly; Max-Age=${COOKIE_MAX_AGE}`,
-        ]);
-        // Don't send token to user
-        result = loginResult.loginUser.user;
+        result = await loginUser(req.body);
+        // If no validation error, set cookie
+        if (!result[0]) {
+          // Set secret cookie
+          const encryptedToken = jwt.sign(
+            {
+              token: result.loginUser.token,
+            },
+            process.env.COOKIE_SECRET
+          );
+          res.setHeader("Set-Cookie", [
+            `secret=${encryptedToken}; HttpOnly; Max-Age=${COOKIE_MAX_AGE}`,
+          ]);
+          // Don't send token to user
+          result = result.loginUser.user;
+        }
         break;
       case "LOGOUT_USER":
         result = await logoutUser(userSecret);
@@ -776,7 +779,7 @@ const fauna = async (req, res) => {
         result = [{ message: "Error: No such type in /api/fauna: " + type }];
     }
   } catch (e) {
-    result = e;
+    result = [{ message: e }];
   }
   res.end(JSON.stringify(result));
 };

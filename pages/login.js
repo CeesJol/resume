@@ -16,6 +16,8 @@ const Login = () => {
     if (event) event.preventDefault();
     await fauna({ type: "LOGIN_USER", email, password }).then(
       async (data) => {
+        console.log("data:", data);
+
         setAuth(true);
         console.log("loginUser", data);
         storeUser(data);
@@ -25,8 +27,8 @@ const Login = () => {
         Router.push("/dashboard");
       },
       (err) => {
+        toast.error("⚠️ " + err);
         console.error("login err", err);
-        toast.error("⚠️ Login failed");
       }
     );
   };

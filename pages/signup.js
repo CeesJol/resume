@@ -25,8 +25,8 @@ const Signup = () => {
         Router.push("/dashboard");
       },
       (err) => {
+        toast.error("⚠️ " + err);
         console.error("(Signup) login err", err);
-        toast.error("⚠️ Login failed");
       }
     );
   };
@@ -37,7 +37,7 @@ const Signup = () => {
         await handleLogin();
       },
       (err) => {
-        toast.error("⚠️ Signup failed");
+        toast.error("⚠️ " + err);
         console.log("signup err", err);
       }
     );
@@ -60,7 +60,6 @@ const Signup = () => {
       Router.push("/dashboard");
     }
   });
-
   return (
     <div className="login">
       <div className="login__box">

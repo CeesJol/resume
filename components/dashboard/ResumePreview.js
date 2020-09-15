@@ -70,14 +70,27 @@ const ResumePreview = ({ resume, index }) => {
             />
           </span>
 
-          {index !== 0 && (
+          {index > 0 && (
             <>
               <Separator />
               <span onClick={(event) => event.stopPropagation()}>
                 <Button
                   fn={() => handleMove(resume, -1)}
                   text="Move up"
-                  altText="Moving up..."
+                  altText="Moving..."
+                  textual={true}
+                />
+              </span>
+            </>
+          )}
+          {index < getResumes().length - 1 && (
+            <>
+              <Separator />
+              <span onClick={(event) => event.stopPropagation()}>
+                <Button
+                  fn={() => handleMove(resume, 1)}
+                  text="Move down"
+                  altText="Moving..."
                   textual={true}
                 />
               </span>

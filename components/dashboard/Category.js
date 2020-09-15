@@ -15,6 +15,7 @@ const Category = ({ category, index, primaryColor, backgroundColor }) => {
     preview,
     editingResume,
     getItems,
+    getCategories,
   } = useContext(UserContext);
   const [hovering, setHovering] = useState(false);
   const getTypeClassName = () => {
@@ -64,6 +65,18 @@ const Category = ({ category, index, primaryColor, backgroundColor }) => {
               <Button
                 fn={() => handleMove(category, -1)}
                 text="Move up"
+                altText="Moving..."
+                textual={true}
+              />
+            </>
+          )}
+          {index <
+            getCategories(editingResume, category.sidebar).length - 1 && (
+            <>
+              <Separator />
+              <Button
+                fn={() => handleMove(category, 1)}
+                text="Move down"
                 altText="Moving..."
                 textual={true}
               />

@@ -6,14 +6,16 @@ import Yearpicker from "../pickers/Yearpicker";
 import Valuepicker from "../pickers/Valuepicker";
 import { toast } from "react-toastify";
 import { fauna } from "../../../lib/api";
-import { GET_CATEGORY_ITEMS } from "../../../lib/constants";
+import {
+  GET_CATEGORY_ITEMS,
+  getCategoryIsGoingText,
+} from "../../../lib/constants";
 import randomId from "../../../lib/randomId";
 import ReactModal from "react-modal";
 ReactModal.setAppElement("#__next");
 
 const Popup = () => {
   const textareaRef = useRef();
-  const cursorPosition = 0;
   const {
     editingItem,
     setWarning,
@@ -263,7 +265,7 @@ const Popup = () => {
                   checked={isGoing}
                   onChange={handleChangeIsGoing}
                 />
-                I'm currently working here
+                {getCategoryIsGoingText(category.name)}
               </label>
             </>
           )}
@@ -271,7 +273,11 @@ const Popup = () => {
           {categoryItems.includes("year1") && (
             <>
               <div>
-                <label>Start date</label>
+                <label>
+                  {category.type === "Title and date"
+                    ? "Achieved on"
+                    : "Start date"}
+                </label>
                 <Monthpicker
                   val={fields.month1}
                   name={"month1"}

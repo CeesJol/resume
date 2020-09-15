@@ -21,6 +21,7 @@ const NewItem = ({
     forceRender,
     preview,
     editingResume,
+    getItems,
   } = useContext(UserContext);
   const categoryItems = GET_CATEGORY_ITEMS(category.type);
   const getTypeClassName = () => {
@@ -78,19 +79,33 @@ const NewItem = ({
       <h4 className="resume__item--title">{item.title}</h4>
       {hovering &&
         !isMobile &&
-        index > 0 &&
         !preview &&
         !dummy &&
         getTypeClassName() !== "title-without-value" && (
-          <span onClick={(e) => e.stopPropagation()}>
-            <Separator />
-            <Button
-              fn={() => handleMove(item, -1)}
-              text="Move up"
-              altText="Moving..."
-              textual={true}
-            />
-          </span>
+          <>
+            {index > 0 && (
+              <span onClick={(e) => e.stopPropagation()}>
+                <Separator />
+                <Button
+                  fn={() => handleMove(item, -1)}
+                  text="Move up"
+                  altText="Moving..."
+                  textual={true}
+                />
+              </span>
+            )}
+            {index < getItems(category).length - 1 && (
+              <span onClick={(e) => e.stopPropagation()}>
+                <Separator />
+                <Button
+                  fn={() => handleMove(item, 1)}
+                  text="Move down"
+                  altText="Moving..."
+                  textual={true}
+                />
+              </span>
+            )}
+          </>
         )}
       <h4 className="resume__item--location">{item.location}</h4>
       {item.year1 && (

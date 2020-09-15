@@ -194,7 +194,7 @@ const CategoryPopup = () => {
     >
       <div className="popup__header">
         <h4 className="popup__header--title">
-          {editingCategory.title ? "Edit category" : "Create category"}
+          {editingCategory.name ? "Edit category" : "Create category"}
         </h4>
         <i
           onClick={handleCancel}

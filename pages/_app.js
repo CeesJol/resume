@@ -16,6 +16,21 @@ class MyApp extends App {
       <div>
         <div>
           <Head>
+            <script
+              async
+              src="https://www.googletagmanager.com/gtag/js?id=UA-129727291-3"
+            ></script>
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+									window.dataLayer = window.dataLayer || [];
+									function gtag(){dataLayer.push(arguments);}
+									gtag('js', new Date());
+
+									gtag('config', 'UA-129727291-3');
+								`,
+              }}
+            />
             <meta
               name="viewport"
               content="width=device-width, initial-scale=1"

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
-import { UserContext } from "../../contexts/userContext";
-import ResumeWrapper from "./ResumeWrapper";
-import Button from "../general/Button";
+import { UserContext } from "../../../contexts/userContext";
+import ResumeWrapper from "../ResumeWrapper";
+import Button from "../../general/Button";
 import { isIOS } from "react-device-detect";
 
 const Export = () => {
@@ -18,7 +18,7 @@ const Export = () => {
   useEffect(() => {
     setPreview(true);
   }, []);
-  return changingResume === -1 ? (
+  return !changingResume ? (
     <p>Select a resume to preview it</p>
   ) : (
     <>

@@ -1,8 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import Resume from "./Resume";
-import { getTemplate } from "../../templates/templates";
-import { getDummyResume, DUMMY_RESUME } from "../../lib/constants";
+import { getDummyResume } from "../../lib/constants";
 
 const Template = ({ template }) => {
   const { selectedTemplateId, setSelectedTemplateId } = useContext(UserContext);

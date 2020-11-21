@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { UserContext } from "../../contexts/userContext";
-import NewItem from "./NewItem";
-import { GET_DUMMY_ITEM } from "../../lib/constants";
+import Item from "./Item";
+import { getDummyItem, sortByPriority } from "../../lib/constants";
 import Button from "../general/Button";
 import Separator from "./Separator";
 import { isMobile } from "react-device-detect";
@@ -26,7 +26,7 @@ const Category = ({ category, index, primaryColor, backgroundColor }) => {
     if (preview) return false;
     setEditingCategory(category);
   };
-  const handleNewItem = (category) => {
+  const handleItem = (category) => {
     if (preview) return false;
     setEditingItem({
       category: {
@@ -34,16 +34,23 @@ const Category = ({ category, index, primaryColor, backgroundColor }) => {
       },
     });
   };
-  const sortByPriority = (list) => {
-    return list.sort((item1, item2) => {
-      return item1.priority < item2.priority ? -1 : 1;
-    });
-  };
   const handleMove = async (category, amount) => {
     if (preview) return false;
     await moveCategory(category, amount);
     forceRender();
   };
+  const drawItem = (category, item, index, dummy) => (
+    <Item
+      category={category}
+      item={item}
+      index={index}
+      key={`item-${item._id}`}
+      hovering={hovering}
+      backgroundColor={backgroundColor}
+      primaryColor={primaryColor}
+      dummy={dummy}
+    />
+  );
   return (
     <div
       className={`resume__category ${
@@ -55,8 +62,8 @@ const Category = ({ category, index, primaryColor, backgroundColor }) => {
       {hovering && !isMobile && !preview && (
         <span className="resume__actions">
           <Button
-            fn={() => handleNewItem(category)}
-            text={` Add ${category.name.toLowerCase()}`}
+            fn={() => handleItem(category)}
+            text={`Add ${category.name.toLowerCase()}`}
             textual={true}
           />
           {index > 0 && (
@@ -96,33 +103,13 @@ const Category = ({ category, index, primaryColor, backgroundColor }) => {
         >
           {category.name}
         </h3>
-        {getItems(category) && getItems(category).length > 0 ? (
-          <div className="resume__category--items-container">
-            {sortByPriority(getItems(category)).map((item, index) => (
-              <NewItem
-                category={category}
-                item={item}
-                index={index}
-                key={item._id}
-                hovering={hovering}
-                backgroundColor={backgroundColor}
-                primaryColor={primaryColor}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="resume__category--items-container">
-            <NewItem
-              category={category}
-              item={GET_DUMMY_ITEM(category.name)}
-              index={0}
-              dummy={true}
-              hovering={hovering}
-              backgroundColor={backgroundColor}
-              primaryColor={primaryColor}
-            />
-          </div>
-        )}
+        <div className="resume__category--items-container">
+          {getItems(category) && getItems(category).length > 0
+            ? sortByPriority(getItems(category)).map((item, index) =>
+                drawItem(category, item, index, false)
+              )
+            : drawItem(category, getDummyItem(category.name), 0, true)}
+        </div>
       </div>
     </div>
   );

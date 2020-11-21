@@ -3,7 +3,7 @@ import Link from "next/link";
 import { UserContext } from "../../contexts/userContext";
 
 const Header = ({ transparentHeader = false }) => {
-  const { getUser, userExists } = useContext(UserContext);
+  const { user, userExists } = useContext(UserContext);
   useEffect(() => {});
 
   return (
@@ -25,7 +25,7 @@ const Header = ({ transparentHeader = false }) => {
           <h4>
             {userExists() ? (
               <Link href="/dashboard">
-                <a>{getUser().username}</a>
+                <a>{user.username}</a>
               </Link>
             ) : (
               <>

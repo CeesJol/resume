@@ -1,12 +1,11 @@
-import React, { useContext, useState } from "react";
-import Router from "next/router";
+import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import { fauna } from "../../lib/api";
 
 const DashboardHeader = () => {
   const {
     userExists,
-    getUser,
+    user,
     clearUser,
     setLoggingOut,
     setAuth,
@@ -40,7 +39,7 @@ const DashboardHeader = () => {
               <a className="header__title" onClick={handleGoBack}>
                 <img className="icon--large" src="../images/icon-small.png" />
                 <span className="header__title--text">
-                  {userExists() ? getUser().username : "Affilas"}
+                  {userExists() ? user.username : "Affilas"}
                 </span>
               </a>
             </h3>

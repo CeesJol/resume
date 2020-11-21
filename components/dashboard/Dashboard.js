@@ -1,16 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import DashboardHeader from "./DashboardHeader";
 import Resumes from "./Resumes";
-import Editor from "./Editor";
 import Layout from "./Layout";
-import Export from "./Export";
-import Options from "./Options";
-import Settings from "./Settings";
+import Editor from "./nav/Editor";
+import Export from "./nav/Export";
+import Options from "./nav/Options";
+import Settings from "./nav/Settings";
 import Nav from "./Nav";
 import { UserContext } from "../../contexts/userContext";
 import Warning from "./popups/Warning";
 import ResumePopup from "./popups/ResumePopup";
-import Popup from "./popups/Popup";
+import ItemPopup from "./popups/ItemPopup";
 import CategoryPopup from "./popups/CategoryPopup";
 import UserPopup from "./popups/UserPopup";
 import ContactPopup from "./popups/ContactPopup";
@@ -69,11 +69,11 @@ const Dashboard = () => {
         </div>
       </main>
       {/* Draw popups */}
-      {creatingResume !== -1 && <ResumePopup />}
-      {editingItem !== -1 && <Popup />}
-      {editingCategory !== -1 && editingItem === -1 && <CategoryPopup />}
+      {creatingResume && <ResumePopup />}
+      {editingItem && <ItemPopup />}
+      {editingCategory && !editingItem && <CategoryPopup />}
       {changingInfo && <UserPopup />}
-      {editingContactInfo !== -1 && <ContactPopup />}
+      {editingContactInfo && <ContactPopup />}
       {warning && <Warning />}
     </div>
   );

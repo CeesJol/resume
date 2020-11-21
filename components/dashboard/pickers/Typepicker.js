@@ -5,7 +5,7 @@ const Typepicker = ({ val, fn }) => (
   <select name={val} id={val} value={val} onChange={fn}>
     {CATEGORY_TYPES.map((cat) => {
       return (
-        <option key={cat} value={cat}>
+        <option key={`cat-${cat}`} value={cat}>
           {cat}
         </option>
       );

@@ -6,14 +6,14 @@ import { PDFExport } from "@progress/kendo-react-pdf";
 import { getTemplate } from "../../templates/templates";
 import { isMobile } from "react-device-detect";
 import Button from "../general/Button";
-import { GET_DUMMY_ITEM } from "../../lib/constants";
+import { getDummyItem, sortByPriority } from "../../lib/constants";
 
 // PDF Export source
 // https://blog.usejournal.com/lets-make-a-resume-in-react-2c9c5540f51a
 
 const Resume = ({ resume, tiny, template, exportpdf }) => {
   const {
-    getUser,
+    user,
     userExists,
     setEditingCategory,
     editingResume,
@@ -35,15 +35,10 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
   const templateCSS = template
     ? template
     : getTemplate(editingResume.templateId);
-  const sortByPriority = (list) => {
-    return list.sort((item1, item2) => {
-      return item1.priority < item2.priority ? -1 : 1;
-    });
-  };
   const drawCategory = (category, index) => {
     return (
       <Category
-        key={category._id || category.name}
+        key={`category-${category._id || category.name}`}
         category={category}
         index={index}
         primaryColor={curResume.primaryColor}
@@ -63,7 +58,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
         }}
       >
         <h1 className="resume__header--name">
-          {userExists() && getUser().username}
+          {userExists() && user.username}
         </h1>
         <h3 className="resume__header--job-title">{getJobTitle(curResume)}</h3>
         <p className="resume__header--bio multiline">{getBio(curResume)}</p>
@@ -103,7 +98,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
           ) : (
             <ContactItem
               template={templateCSS}
-              item={GET_DUMMY_ITEM("Contact info")}
+              item={getDummyItem("Contact info")}
               primaryColor={curResume.primaryColor}
               dummy={true}
             />
@@ -149,7 +144,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
       <ContactItem
         template={templateCSS}
         item={item}
-        key={`${item.name}-${item.value}`}
+        key={`contactItem-${item.name}-${item.value}`}
         primaryColor={curResume.primaryColor}
       />
     ));

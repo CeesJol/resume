@@ -103,7 +103,7 @@ const ContactPopup = () => {
         storeContactInfo(editingContactInfo, { del: true });
         resetPopups();
         // Propagate priority updates
-        for (var item of getContactInfo()) {
+        for (let item of getContactInfo()) {
           if (item.priority > editingContactInfo.priority) {
             const newPriority = item.priority - 1;
             storeContactInfo({ ...item, priority: newPriority }, {});

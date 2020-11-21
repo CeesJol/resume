@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import Email from "../../emails/confirm";
+import Email from "../../lib/emails/confirm";
 
 const sgMail = require("@sendgrid/mail");
 

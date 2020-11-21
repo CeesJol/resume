@@ -11,16 +11,16 @@ const UserContextProvider = (props) => {
   const [user, setUser] = useState(null);
   const [auth, setAuth] = useState(false);
   const [nav, setNav] = useState(0);
-  const [editingItem, setEditingItem] = useState(-1);
-  const [editingCategory, setEditingCategory] = useState(-1);
+  const [editingItem, setEditingItem] = useState(false);
+  const [editingCategory, setEditingCategory] = useState(false);
   const [editingResume, setEditingResume] = useState(DUMMY_RESUME); // Most recently edited resume
   const [changingResume, setChangingResume] = useState(false); // Whether user is changing a resume
-  const [creatingResume, setCreatingResume] = useState(-1);
+  const [creatingResume, setCreatingResume] = useState(false);
   const [data, setData] = useState(false);
   const [error, setError] = useState(false);
   const [warning, setWarning] = useState(false);
   const [changingInfo, setChangingInfo] = useState(false);
-  const [editingContactInfo, setEditingContactInfo] = useState(-1);
+  const [editingContactInfo, setEditingContactInfo] = useState(false);
   const [userMadeChanges, setUserMadeChanges] = useState(false);
   const [selectedTemplateId, setSelectedTemplateId] = useState(0);
   const [preview, setPreview] = useState(true);
@@ -55,7 +55,7 @@ const UserContextProvider = (props) => {
     );
   };
   const getResumes = () => {
-    return userExists() && getUser().resumes.data;
+    return userExists() && user.resumes.data;
   };
   const getContactInfo = (resume) => {
     if (resume) return resume.contactInfo.data;
@@ -80,8 +80,6 @@ const UserContextProvider = (props) => {
   };
   const storeResume = (resumeData, { add, del, newId }) => {
     storeStatus("Saving...");
-
-    var user = getUser();
 
     if (del) {
       // Delete resume
@@ -120,7 +118,7 @@ const UserContextProvider = (props) => {
   const storeCategory = (categoryData, { add, del, newId }) => {
     storeStatus("Saving...");
 
-    const resume = getUser().resumes.data.find(
+    const resume = user.resumes.data.find(
       (res) => res._id === editingResume._id
     );
 
@@ -151,7 +149,7 @@ const UserContextProvider = (props) => {
   const storeItem = (itemData, { del, add, newId }) => {
     storeStatus("Saving...");
 
-    const resume = getUser().resumes.data.find(
+    const resume = user.resumes.data.find(
       (res) => res._id === editingResume._id
     );
     const category = resume.categories.data.find(
@@ -185,7 +183,7 @@ const UserContextProvider = (props) => {
   const storeContactInfo = (contactInfoData, { add, del, newId }) => {
     storeStatus("Saving...");
 
-    const resume = getUser().resumes.data.find(
+    const resume = user.resumes.data.find(
       (res) => res._id === editingResume._id
     );
 
@@ -212,9 +210,6 @@ const UserContextProvider = (props) => {
     }
 
     resetPopups();
-  };
-  const getUser = () => {
-    return user;
   };
   const clearUser = () => {
     console.log("clearUser");
@@ -251,7 +246,7 @@ const UserContextProvider = (props) => {
       () => {
         // Find item with priority p
         const p = item.priority + amount;
-        var otherItem = getCategory(item.category._id).items.data.find(
+        let otherItem = getCategory(item.category._id).items.data.find(
           (item) => item.priority === p
         );
 
@@ -284,12 +279,11 @@ const UserContextProvider = (props) => {
       () => {
         // Find category (in same bar) with priority p
         const p = category.priority + amount;
-        var otherCategory = editingResume.categories.data.find(
+        let otherCategory = editingResume.categories.data.find(
           (cat) => cat.priority === p && cat.sidebar === category.sidebar
         );
 
         // Update priority
-        var user = getUser();
         user.resumes.data
           .find((resume) => resume._id === editingResume._id)
           .categories.data.find(
@@ -324,7 +318,7 @@ const UserContextProvider = (props) => {
       () => {
         // Find item with priority p
         const p = resume.priority + amount;
-        var otherResume = getUser().resumes.data.find(
+        let otherResume = user.resumes.data.find(
           (resume) => resume.priority === p
         );
 
@@ -346,17 +340,17 @@ const UserContextProvider = (props) => {
   };
   const resetPopups = () => {
     setChangingInfo(false);
-    setEditingContactInfo(-1);
-    setEditingItem(-1);
-    setEditingCategory(-1);
-    setCreatingResume(-1);
+    setEditingContactInfo(false);
+    setEditingItem(false);
+    setEditingCategory(false);
+    setCreatingResume(false);
     setWarning(false);
     setUserMadeChanges(false);
     // setSelectedTemplateId(0);
   };
   const reset = () => {
     setChangingResume(false);
-    // setEditingResume(-1);
+    // setEditingResume(false);
     if (user && user.resumes.data.length === 0) setEditingResume(DUMMY_RESUME);
     setNav(0);
     setStatus("");
@@ -403,7 +397,7 @@ const UserContextProvider = (props) => {
       value={{
         forceRender,
         storeUser,
-        getUser,
+        user,
         clearUser,
         userExists,
         auth,

@@ -6,7 +6,7 @@ const Contactpicker = ({ val, fn }) => (
     {Object.keys(CONTACTPICKER_OPTIONS).map((key) => {
       if (key !== "")
         return (
-          <option key={key} value={key}>
+          <option key={`contactpicker-${key}`} value={key}>
             {key}
           </option>
         );

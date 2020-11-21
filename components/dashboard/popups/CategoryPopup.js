@@ -127,7 +127,7 @@ const CategoryPopup = () => {
       fn: () => {
         storeCategory(editingCategory, { del: true });
         // Propagate priority updates
-        for (var category of getCategories()) {
+        for (let category of getCategories()) {
           if (
             category.priority > editingCategory.priority &&
             category.sidebar === editingCategory.sidebar

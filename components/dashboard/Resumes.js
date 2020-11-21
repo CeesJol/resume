@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
 import ResumePreview from "./ResumePreview";
-import { MAX_NUMBER_OF_RESUMES } from "../../lib/constants";
+import { MAX_NUMBER_OF_RESUMES, sortByPriority } from "../../lib/constants";
 
 const Resumes = () => {
   const { setCreatingResume, getResumes, setPreview } = useContext(UserContext);
@@ -10,17 +10,16 @@ const Resumes = () => {
     setPreview(true);
     setCreatingResume({});
   };
-  const sortByPriority = (list) => {
-    return list.sort((item1, item2) => {
-      return item1.priority < item2.priority ? -1 : 1;
-    });
-  };
   const drawResumePreviews = () => {
     const resumes = getResumes();
 
     if (resumes.length > 0) {
       return sortByPriority(resumes).map((resume, index) => (
-        <ResumePreview resume={resume} key={resume._id} index={index} />
+        <ResumePreview
+          resume={resume}
+          key={`resume-${resume._id}`}
+          index={index}
+        />
       ));
     }
     return <p>Get started by creating your resume</p>;

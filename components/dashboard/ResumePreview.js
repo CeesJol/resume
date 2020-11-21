@@ -8,7 +8,7 @@ import Separator from "./Separator";
 
 const ResumePreview = ({ resume, index }) => {
   const {
-    getUser,
+    user,
     setEditingResume,
     getResumes,
     setChangingResume,
@@ -27,7 +27,7 @@ const ResumePreview = ({ resume, index }) => {
     const priority = getResumes().length + 1;
     await fauna({
       type: "DUPLICATE_RESUME",
-      userId: getUser()._id,
+      userId: user._id,
       resumeData: resume,
       title,
       priority,
@@ -43,7 +43,7 @@ const ResumePreview = ({ resume, index }) => {
   return (
     <div
       className="resume-preview resume--hoverable"
-      key={resume._id}
+      key={`resumePreview-${resume._id}`}
       onClick={(e) => handleClick(e, resume)}
     >
       <div className="resume-preview__head">

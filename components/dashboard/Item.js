@@ -1,29 +1,20 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
-import { GET_CATEGORY_ITEMS, getValueDescription } from "../../lib/constants";
+import { getCategoryItems, getValueDescription } from "../../lib/constants";
 import Button from "../general/Button";
 import Separator from "./Separator";
 import { isMobile } from "react-device-detect";
 import ReactMarkdown from "react-markdown";
 
-const NewItem = ({
-  category,
-  item,
-  index,
-  dummy,
-  hovering,
-  backgroundColor,
-  primaryColor,
-}) => {
+const Item = ({ category, item, index, dummy, hovering, primaryColor }) => {
   const {
     setEditingItem,
     moveItem,
     forceRender,
     preview,
-    editingResume,
     getItems,
   } = useContext(UserContext);
-  const categoryItems = GET_CATEGORY_ITEMS(category.type);
+  const categoryItems = getCategoryItems(category.type);
   const getTypeClassName = () => {
     return category.type.toLowerCase().replace(/\s/g, "-");
   };
@@ -45,7 +36,7 @@ const NewItem = ({
   };
   const drawValue = () => {
     const values = [];
-    for (var i = 0; i < 5; i++) {
+    for (let i = 0; i < 5; i++) {
       values.push(i >= (item.value || 3));
     }
 
@@ -141,4 +132,4 @@ const NewItem = ({
   );
 };
 
-export default NewItem;
+export default Item;

@@ -241,7 +241,7 @@ export const createResume = async ({ userId, data }, secret) => {
   const template = getTemplate(data.templateId);
   const categories = convertToTemplate(DEFAULT_CATEGORIES, template);
 
-  var query = `mutation CreateResume {
+  const query = `mutation CreateResume {
 		createResume(data: {
 			${pairs}
 			categories: {
@@ -269,7 +269,7 @@ export const duplicateResume = async (
   secret
 ) => {
   console.log("duplicateResume request");
-  var query = `mutation DuplicateResume {
+  const query = `mutation DuplicateResume {
 		createResume(data: {
 			title: "${title}"
 			jobTitle: "${resumeData.jobTitle ? resumeData.jobTitle : ``}"

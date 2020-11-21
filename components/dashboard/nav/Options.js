@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
-import { UserContext } from "../../contexts/userContext";
-import Button from "../general/Button";
-import { fauna } from "../../lib/api";
+import { UserContext } from "../../../contexts/userContext";
+import Button from "../../general/Button";
+import { fauna } from "../../../lib/api";
 import { toast } from "react-toastify";
 
 const Options = () => {
@@ -51,7 +51,7 @@ const Options = () => {
             setPreview(true);
             storeStatus("Saved.");
             // Propagate priority updates
-            for (var resume of getResumes()) {
+            for (let resume of getResumes()) {
               if (resume.priority > editingResume.priority) {
                 const newPriority = resume.priority - 1;
                 storeResume({ ...resume, priority: newPriority }, {});

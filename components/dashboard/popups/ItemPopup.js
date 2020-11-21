@@ -7,14 +7,15 @@ import Valuepicker from "../pickers/Valuepicker";
 import { toast } from "react-toastify";
 import { fauna } from "../../../lib/api";
 import {
-  GET_CATEGORY_ITEMS,
+  getCategoryItems,
   getCategoryIsGoingText,
 } from "../../../lib/constants";
 import randomId from "../../../lib/randomId";
 import ReactModal from "react-modal";
+import markdownActions from "../../../lib/markdownActions";
 ReactModal.setAppElement("#__next");
 
-const Popup = () => {
+const ItemPopup = () => {
   const textareaRef = useRef();
   const {
     editingItem,
@@ -40,7 +41,7 @@ const Popup = () => {
     value: "3",
   });
   const category = getCategory(editingItem.category._id);
-  const categoryItems = GET_CATEGORY_ITEMS(category.type);
+  const categoryItems = getCategoryItems(category.type);
   const handleChange = (event) => {
     setFields({
       ...fields,
@@ -50,34 +51,21 @@ const Popup = () => {
   };
   const insertList = () => {
     let cursor = textareaRef.current.selectionStart;
+    let newDescription = markdownActions.list(fields.description, cursor);
     setFields({
       ...fields,
-      ["description"]:
-        fields.description.slice(0, cursor) +
-        "\n- item 1\n- item 2\n" +
-        fields.description.slice(cursor),
+      ["description"]: newDescription,
     });
     if (!userMadeChanges) setUserMadeChanges(true);
   };
   const insertBoldText = () => {
     let cursorStart = textareaRef.current.selectionStart;
     let cursorEnd = textareaRef.current.selectionEnd;
-    let newDescription;
-    if (cursorStart === cursorEnd) {
-      // Append to cursor
-      newDescription =
-        fields.description.slice(0, cursorStart) +
-        "**Bold text**" +
-        fields.description.slice(cursorStart);
-    } else {
-      // Make selection bold
-      newDescription =
-        fields.description.slice(0, cursorStart) +
-        "**" +
-        fields.description.slice(cursorStart, cursorEnd) +
-        "**" +
-        fields.description.slice(cursorEnd);
-    }
+    let newDescription = markdownActions.bold(
+      fields.description,
+      cursorStart,
+      cursorEnd
+    );
     setFields({
       ...fields,
       ["description"]: newDescription,
@@ -168,7 +156,7 @@ const Popup = () => {
       fn: () => {
         storeItem(editingItem, { del: true });
         // Propagate priority updates
-        for (var item of getItems(category)) {
+        for (let item of getItems(category)) {
           if (item.priority > editingItem.priority) {
             const newPriority = item.priority - 1;
             storeItem({ ...item, priority: newPriority }, {});
@@ -362,4 +350,4 @@ const Popup = () => {
   );
 };
 
-export default Popup;
+export default ItemPopup;

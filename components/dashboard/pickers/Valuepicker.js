@@ -5,7 +5,7 @@ const Valuepicker = ({ val, fn, name }) => (
   <select name={name} id={val} value={val} onChange={fn}>
     {VALUE_DESCRIPTIONS.map((v) => {
       return (
-        <option key={v.value} value={v.value}>
+        <option key={`valuepicker-${v.value}`} value={v.value}>
           {`${v.value} (${v.description})`}
         </option>
       );

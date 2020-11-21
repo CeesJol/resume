@@ -11,7 +11,7 @@ ReactModal.setAppElement("#__next");
 
 const ResumePopup = () => {
   const {
-    getUser,
+    user,
     setWarning,
     userMadeChanges,
     setUserMadeChanges,
@@ -41,8 +41,6 @@ const ResumePopup = () => {
       toast.error(`⚠️ ${validationError}`);
       return;
     }
-
-    const user = getUser();
 
     const styles = getTemplate(selectedTemplateId).styles;
     console.log("styles:", styles);
@@ -114,7 +112,7 @@ const ResumePopup = () => {
             templates.map((template) => (
               <Template
                 template={template}
-                key={`ResumePopup-${template.id}`}
+                key={`resumePopup-${template.id}`}
               />
             ))
           ) : (

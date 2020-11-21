@@ -2,13 +2,13 @@ import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 
 const TopBox = () => {
-  const { getUser } = useContext(UserContext);
+  const { user, userExists } = useContext(UserContext);
   return (
-    getUser() &&
-    (getUser().confirmed ? (
+    userExists() &&
+    (user.confirmed ? (
       <div className="dashboard__item dashboard__item--green">
         View{" "}
-        <a href={getUser().username} target="_blank">
+        <a href={user.username} target="_blank">
           your resume
         </a>{" "}
         live

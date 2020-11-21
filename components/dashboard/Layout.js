@@ -4,7 +4,6 @@ import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
 import Template from "./Template";
 import { TEMPLATES, getTemplate } from "../../templates/templates";
-// import { cloneDeep } from "lodash";
 
 const Layout = () => {
   const {
@@ -31,11 +30,9 @@ const Layout = () => {
     setSelectedTemplateId(editingResume.templateId);
 
     // load layout
-    if (!filled && editingResume !== -1) {
+    if (!filled && !editingResume) {
       setFilled(true);
 
-      // cloneDeep to avoid shallow copy
-      // setItems(cloneDeep(getLayout()));
       setItems({
         primaryColor: editingResume.primaryColor,
         backgroundColor: editingResume.backgroundColor,
@@ -103,7 +100,7 @@ const Layout = () => {
       {templates.length > 0 ? (
         <>
           {templates.map((template) => (
-            <Template template={template} key={`Template-${template.id}`} />
+            <Template template={template} key={`template-${template.id}`} />
           ))}
           {/* <br > to force button on new line */}
           <br />
@@ -118,7 +115,7 @@ const Layout = () => {
       )}
     </div>
   );
-  return editingResume !== -1 ? (
+  return !editingResume ? (
     <>
       {drawTemplates()}
 

@@ -4,9 +4,7 @@ import { getContactIcon } from "../../lib/constants";
 import { isMobile } from "react-device-detect";
 
 const ContactItem = ({ template, item, text, dummy, primaryColor }) => {
-  const { setEditingContactInfo, preview, editingResume } = useContext(
-    UserContext
-  );
+  const { setEditingContactInfo, preview } = useContext(UserContext);
   const handleChangeContactInfo = (item) => {
     if (preview) return false;
     if (dummy) setEditingContactInfo({});

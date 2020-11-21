@@ -1,49 +1,37 @@
 import React, { useState, useEffect, useContext } from "react";
-import Button from "../general/Button";
-import { UserContext } from "../../contexts/userContext";
-import { validateUpdate, validatePassword } from "../../lib/validate";
+import Button from "../../general/Button";
+import { UserContext } from "../../../contexts/userContext";
+import { validateUpdate, validatePassword } from "../../../lib/validate";
 import { toast } from "react-toastify";
-import { send, fauna, auth } from "../../lib/api";
+import { send, fauna } from "../../../lib/api";
 
 const Settings = () => {
-  const { storeUser, getUser } = useContext(UserContext);
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [bio, setBio] = useState("");
-  const [jobTitle, setJobTitle] = useState("");
-  const [password, setPassword] = useState("");
-  const handleChangeUsername = (event) => {
-    setUsername(event.target.value);
-  };
-  const handleChangeEmail = (event) => {
-    setEmail(event.target.value.toLowerCase());
-  };
-  const handleChangeJobTitle = (event) => {
-    setJobTitle(event.target.value);
-  };
-  const handleChangeBio = (event) => {
-    setBio(event.target.value);
-  };
-  const handleChangePassword = (event) => {
-    setPassword(event.target.value);
+  const { storeUser, user } = useContext(UserContext);
+  const [fields, setFields] = useState({
+    username: "",
+    email: "",
+    bio: "",
+    jobTitle: "",
+    password: "",
+  });
+  const handleChange = (event) => {
+    setFields({
+      ...fields,
+      [event.target.name]: event.target.value,
+    });
   };
   const handleSave = async (event) => {
     if (event) event.preventDefault();
-    const validationError = validateUpdate(username, email);
+    const validationError = validateUpdate(fields.username, fields.email);
     if (validationError) {
       toast.error(`⚠️ ${validationError}`);
       return;
     }
-    const user = getUser();
+    const { password, ...visibleData } = fields;
     await fauna({
       type: "UPDATE_USER",
       id: user._id,
-      data: {
-        username,
-        email,
-        jobTitle,
-        bio,
-      },
+      data: visibleData,
     }).then(
       (data) => {
         if (data == -1) {
@@ -81,14 +69,14 @@ const Settings = () => {
   };
   const handleSavePassword = async (event) => {
     if (event) event.preventDefault();
-    const validationError = validatePassword(password);
+    const validationError = validatePassword(fields.password);
     if (validationError) {
       toast.error(`⚠️ ${validationError}`);
       return false;
     }
     await fauna({
       type: "UPDATE_USER_PASSWORD",
-      id: getUser()._id,
+      id: user._id,
       password,
     }).then(
       () => {
@@ -103,12 +91,14 @@ const Settings = () => {
     );
   };
   useEffect(() => {
-    if (!username && !email) {
-      const user = getUser();
-      setUsername(user.username);
-      setEmail(user.email);
-      setJobTitle(user.jobTitle ? user.jobTitle : "");
-      setBio(user.bio ? user.bio : "");
+    if (!fields.username && !fields.email) {
+      setFields({
+        ...fields,
+        username: user.username,
+        email: user.email,
+        jobTitle: user.jobTitle,
+        bio: user.bio,
+      });
     }
   });
 
@@ -122,8 +112,8 @@ const Settings = () => {
             type="text"
             id="username"
             name="name"
-            value={username}
-            onChange={handleChangeUsername}
+            value={fields.username}
+            onChange={handleChange}
           />
 
           <label>E-mail address</label>
@@ -131,8 +121,8 @@ const Settings = () => {
             type="text"
             id="email"
             name="email"
-            value={email}
-            onChange={handleChangeEmail}
+            value={fields.email}
+            onChange={handleChange}
           />
 
           <label>Job title</label>
@@ -140,8 +130,8 @@ const Settings = () => {
             type="text"
             id="jobTitle"
             name="jobTitle"
-            value={jobTitle}
-            onChange={handleChangeJobTitle}
+            value={fields.jobTitle}
+            onChange={handleChange}
           />
 
           <label>Bio</label>
@@ -149,8 +139,8 @@ const Settings = () => {
             type="text"
             id="bio"
             name="bio"
-            value={bio}
-            onChange={handleChangeBio}
+            value={fields.bio}
+            onChange={handleChange}
           />
 
           <label>
@@ -171,8 +161,8 @@ const Settings = () => {
             type="password"
             id="password"
             name="password"
-            value={password}
-            onChange={handleChangePassword}
+            value={fields.password}
+            onChange={handleChange}
           />
 
           <Button text="Save" altText="Saving..." fn={handleSavePassword} />

@@ -16,7 +16,7 @@ const Nav = () => {
               (nav === i && " dashboard__nav--item-selected")
             }
             onClick={() => setNav(i)}
-            key={i}
+            key={`nav-${i}`}
           >
             {navItem}
           </div>

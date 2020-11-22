@@ -4,6 +4,7 @@ import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
 import Template from "./Template";
 import { TEMPLATES, getTemplate } from "../../templates/templates";
+import { SketchPicker } from "react-color";
 
 const Layout = () => {
   const {
@@ -18,10 +19,16 @@ const Layout = () => {
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [items, setItems] = useState([]);
-  const handleChangeItem = (event) => {
+  const handleChangePrimaryColor = (color) => {
     setItems({
       ...items,
-      [event.target.name]: event.target.value,
+      primaryColor: color.hex,
+    });
+  };
+  const handleChangeBackgroundColor = (color) => {
+    setItems({
+      ...items,
+      backgroundColor: color.hex,
     });
   };
   useEffect(() => {
@@ -30,7 +37,7 @@ const Layout = () => {
     setSelectedTemplateId(editingResume.templateId);
 
     // load layout
-    if (!filled && !editingResume) {
+    if (!filled && editingResume) {
       setFilled(true);
 
       setItems({
@@ -115,19 +122,16 @@ const Layout = () => {
       )}
     </div>
   );
-  return !editingResume ? (
+  return editingResume ? (
     <>
       {drawTemplates()}
 
       <div className="dashboard__item">
         <h4 className="dashboard__item--title">Primary Color</h4>
         <form>
-          <input
-            type="text"
-            id="primaryColor"
-            name="primaryColor"
-            value={items.primaryColor}
-            onChange={handleChangeItem}
+          <SketchPicker
+            color={items.primaryColor}
+            onChangeComplete={handleChangePrimaryColor}
           />
 
           <Button
@@ -147,12 +151,9 @@ const Layout = () => {
       <div className="dashboard__item">
         <h4 className="dashboard__item--title">Background Color</h4>
         <form>
-          <input
-            type="text"
-            id="backgroundColor"
-            name="backgroundColor"
-            value={items.backgroundColor}
-            onChange={handleChangeItem}
+          <SketchPicker
+            color={items.backgroundColor}
+            onChangeComplete={handleChangeBackgroundColor}
           />
 
           <Button

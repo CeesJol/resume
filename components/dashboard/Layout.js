@@ -122,7 +122,8 @@ const Layout = () => {
       )}
     </div>
   );
-  return editingResume ? (
+  if (!editingResume) return <p>Select a resume to edit the layout</p>;
+  return (
     <>
       {drawTemplates()}
 
@@ -172,8 +173,6 @@ const Layout = () => {
         </form>
       </div>
     </>
-  ) : (
-    <p>Select a resume to edit the layout</p>
   );
 };
 

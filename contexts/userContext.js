@@ -212,10 +212,10 @@ const UserContextProvider = (props) => {
     resetPopups();
   };
   const clearUser = () => {
-    console.log("clearUser");
+    console.info("clearUser");
 
     const userId = JSON.parse(localStorage.getItem("userId"));
-    console.log("userId", userId);
+    console.info("userId", userId);
 
     // Get user away from dashboard
     if (Router.pathname.startsWith("/dashboard")) {
@@ -374,7 +374,7 @@ const UserContextProvider = (props) => {
               setEditingResume(DUMMY_RESUME);
             }
             storeUser(data.findUserByID);
-            console.log("readUser");
+            console.info("readUser");
             console.table(data.findUserByID);
 
             setAuth(true);
@@ -387,7 +387,7 @@ const UserContextProvider = (props) => {
         );
       } else {
         // There is no user data
-        console.log("No user data");
+        console.info("No user data");
         clearUser();
       }
     }

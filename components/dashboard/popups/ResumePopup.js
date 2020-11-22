@@ -43,7 +43,6 @@ const ResumePopup = () => {
     }
 
     const styles = getTemplate(selectedTemplateId).styles;
-    console.log("styles:", styles);
     await fauna({
       type: "CREATE_RESUME",
       userId: user._id,
@@ -58,14 +57,14 @@ const ResumePopup = () => {
       },
     }).then(
       (data) => {
-        console.log("data", data);
+        console.info("CREATE_RESUME data", data);
         storeResume(data.createResume, { add: true });
         setEditingResume(data.createResume);
         setChangingResume(true);
         storeStatus("");
       },
       (err) => {
-        console.log("err", err);
+        console.error("err", err);
         toast.error(`⚠️ ${err}`);
       }
     );

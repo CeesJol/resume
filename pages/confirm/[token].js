@@ -9,12 +9,12 @@ const Token = () => {
 
   useEffect(() => {
     if (token) {
-      console.log("token", token);
+      console.info("token", token);
       // Decode the token
       try {
         fauna({ type: "CONFIRM_USER", token }).then(
           (data) => {
-            console.log("data [token]", data);
+            console.info("data [token]", data);
             setStatus(
               "Email confirmed successfully! You can close this tab now."
             );
@@ -27,7 +27,7 @@ const Token = () => {
           }
         );
       } catch (e) {
-        console.log("Token confirmation error", e);
+        console.error("Token confirmation error", e);
         setStatus("Something went wrong. Please contact us for help. " + err);
       }
     }

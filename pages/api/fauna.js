@@ -79,7 +79,7 @@ resumes {
  *  |----------------------------
  */
 export const loginUser = ({ email, password }) => {
-  console.log("loginUser request");
+  console.info("loginUser request");
   email = email.toLowerCase();
   const validationError = validateLogin(email, password);
   if (validationError) return [{ message: validationError }];
@@ -97,7 +97,7 @@ export const loginUser = ({ email, password }) => {
 };
 
 export const logoutUser = (secret) => {
-  console.log("logoutUser request");
+  console.info("logoutUser request");
   return executeQuery(
     `mutation LogoutUser {
 			logoutUser
@@ -107,7 +107,7 @@ export const logoutUser = (secret) => {
 };
 
 export const createUser = ({ email, username, password }) => {
-  console.log("createUser request");
+  console.info("createUser request");
   email = email.toLowerCase();
   const validationError = validateSignup(email, username, password);
   if (validationError) return [{ message: validationError }];
@@ -127,7 +127,7 @@ export const createUser = ({ email, username, password }) => {
 };
 
 export const updateUserPassword = ({ id, password }, secret) => {
-  console.log("updateUserPassword request");
+  console.info("updateUserPassword request");
   const validationError = validatePassword(password);
   if (validationError) return [{ message: validationError }];
   return executeQuery(
@@ -146,7 +146,7 @@ export const updateUserPassword = ({ id, password }, secret) => {
 };
 
 export const updateUser = async ({ id, data }, secret) => {
-  console.log("updateUser request", id, data);
+  console.info("updateUser request", id, data);
   if (data.email) data.email.toLowerCase();
   const { pairs, keys } = stringifyObject(data);
   return executeQuery(
@@ -163,7 +163,7 @@ export const updateUser = async ({ id, data }, secret) => {
 };
 
 export const readUser = async ({ id }, secret) => {
-  console.log("readUser request");
+  console.info("readUser request");
   return executeQuery(
     `query FindAUserByID {
 			findUserByID(id: "${id}") {
@@ -175,7 +175,7 @@ export const readUser = async ({ id }, secret) => {
 };
 
 export const getUserByEmail = async ({ email }, secret) => {
-  console.log("getUserByEmail request");
+  console.info("getUserByEmail request");
   email = email.toLowerCase();
   return executeQuery(
     `query FindAUserByEmail {
@@ -188,7 +188,7 @@ export const getUserByEmail = async ({ email }, secret) => {
 };
 
 export const confirmUser = async ({ token }, secret) => {
-  console.log("confirmUser request");
+  console.info("confirmUser request");
   try {
     const decoded = jwt.verify(token, process.env.EMAIL_SECRET);
     const id = decoded.id;
@@ -212,7 +212,7 @@ export const confirmUser = async ({ token }, secret) => {
  *  |----------------------------
  */
 export const getResume = async ({ id }, secret) => {
-  console.log("getResume request");
+  console.info("getResume request");
   return executeQuery(
     `query GetResume {
 			findResumeByID(id: "${id}") {
@@ -224,7 +224,7 @@ export const getResume = async ({ id }, secret) => {
 };
 
 export const deleteResume = async ({ id }, secret) => {
-  console.log("deleteResume request");
+  console.info("deleteResume request");
   return executeQuery(
     `mutation DeleteResume {
 			cascadeDeleteResume(id: "${id}")
@@ -234,7 +234,7 @@ export const deleteResume = async ({ id }, secret) => {
 };
 
 export const createResume = async ({ userId, data }, secret) => {
-  console.log("createResume request");
+  console.info("createResume request");
   const { pairs } = stringifyObject(data);
 
   // Set whether to show value depending on resume property
@@ -268,7 +268,7 @@ export const duplicateResume = async (
   { userId, resumeData, title, priority },
   secret
 ) => {
-  console.log("duplicateResume request");
+  console.info("duplicateResume request");
   const query = `mutation DuplicateResume {
 		createResume(data: {
 			title: "${title}"
@@ -315,7 +315,7 @@ export const duplicateResume = async (
 };
 
 export const updateResume = async ({ id, data }, secret) => {
-  console.log("updateResume request");
+  console.info("updateResume request");
   const { pairs, keys } = stringifyObject(data);
   return executeQuery(
     `mutation UpdateResume {
@@ -331,7 +331,7 @@ export const updateResume = async ({ id, data }, secret) => {
 };
 
 export const moveResume = async ({ id, amount }, secret) => {
-  console.log("moveResume request");
+  console.info("moveResume request");
   return executeQuery(
     `mutation MoveResume {
 			moveResume(id: "${id}", amount: ${amount})
@@ -341,7 +341,7 @@ export const moveResume = async ({ id, amount }, secret) => {
 };
 
 // export const updateResumeTemplate = async ({ id, templateId }, secret) => {
-//   console.log("updateResumeTemplate request");
+//   console.info("updateResumeTemplate request");
 //   return executeQuery(`mutation UpdateResumeTemplate {
 // 		updateResume(id: "${id}", data: {
 // 			template: { connect: "${templateId}" }
@@ -358,7 +358,7 @@ export const moveResume = async ({ id, amount }, secret) => {
  *  |----------------------------
  */
 export const createCategory = async ({ resumeId, data }, secret) => {
-  console.log("createCategory request");
+  console.info("createCategory request");
   const { pairs, keys } = stringifyObject(data);
   return executeQuery(
     `mutation CreateCategory {
@@ -387,7 +387,7 @@ export const createCategory = async ({ resumeId, data }, secret) => {
 //   categoryName,
 //   data,
 // }, secret) => {
-//   console.log("createCategoryWithItem request");
+//   console.info("createCategoryWithItem request");
 //   return executeQuery(`mutation CreateCategoryWithItem {
 // 		createCategory(data: {
 // 			name: "${categoryName}"
@@ -421,7 +421,7 @@ export const createCategory = async ({ resumeId, data }, secret) => {
 // };
 
 export const updateCategory = async ({ id, data }, secret) => {
-  console.log("updateCategory request");
+  console.info("updateCategory request");
   const { pairs, keys } = stringifyObject(data);
   return executeQuery(
     `mutation UpdateCategory {
@@ -437,7 +437,7 @@ export const updateCategory = async ({ id, data }, secret) => {
 };
 
 export const deleteCategory = async ({ id }, secret) => {
-  console.log("deleteCategory request");
+  console.info("deleteCategory request");
   return executeQuery(
     `mutation DeleteCategory {
 			cascadeDeleteCategory(id: "${id}")
@@ -447,7 +447,7 @@ export const deleteCategory = async ({ id }, secret) => {
 };
 
 export const moveCategory = async ({ id, amount }, secret) => {
-  console.log("moveCategory request");
+  console.info("moveCategory request");
   return executeQuery(
     `mutation MoveCategory {
 			moveCategory(id: "${id}", amount: ${amount})
@@ -461,7 +461,7 @@ export const moveCategory = async ({ id, amount }, secret) => {
  *  |----------------------------
  */
 export const createItem = async ({ categoryId, data }, secret) => {
-  console.log("createItem request");
+  console.info("createItem request");
   const { pairs, keys } = stringifyObject(data);
 
   return executeQuery(
@@ -482,7 +482,7 @@ export const createItem = async ({ categoryId, data }, secret) => {
 };
 
 export const updateItem = async ({ id, data }, secret) => {
-  console.log("updateItem request");
+  console.info("updateItem request");
   const { pairs, keys } = stringifyObject(data);
   return executeQuery(
     `mutation UpdateItem {
@@ -498,7 +498,7 @@ export const updateItem = async ({ id, data }, secret) => {
 };
 
 export const deleteItem = async ({ id }, secret) => {
-  console.log("deleteItem request");
+  console.info("deleteItem request");
   return executeQuery(
     `mutation DeleteItem {
 			cascadeDeleteItem(id: "${id}")
@@ -508,7 +508,7 @@ export const deleteItem = async ({ id }, secret) => {
 };
 
 export const moveItem = async ({ id, amount }, secret) => {
-  console.log("moveItem request");
+  console.info("moveItem request");
   return executeQuery(
     `mutation MoveItem {
 			moveItem(id: "${id}", amount: ${amount})
@@ -522,7 +522,7 @@ export const moveItem = async ({ id, amount }, secret) => {
  *  |----------------------------
  */
 // export const getTemplates = () => {
-//   console.log("getTemplates request");
+//   console.info("getTemplates request");
 //   return executeQuery(`query GetTemplates {
 // 		templates {
 // 			data {
@@ -536,7 +536,7 @@ export const moveItem = async ({ id, amount }, secret) => {
 // };
 
 // export const updateTemplate = async ({ id, data }, secret) => {
-//   console.log("updateTemplate request");
+//   console.info("updateTemplate request");
 //   return executeQuery(`mutation UpdateTemplate {
 // 		updateTemplate(id: "${id}", data: {
 // 			${stringifyObject(data)}
@@ -553,7 +553,7 @@ export const moveItem = async ({ id, amount }, secret) => {
  *  |----------------------------
  */
 export const createContactInfo = async ({ resumeId, data }, secret) => {
-  console.log("createContactInfo request");
+  console.info("createContactInfo request");
   const { pairs, keys } = stringifyObject(data);
   return executeQuery(
     `mutation UpdateContactInfo {
@@ -570,7 +570,7 @@ export const createContactInfo = async ({ resumeId, data }, secret) => {
 };
 
 export const updateContactInfo = async ({ id, data }, secret) => {
-  console.log("updateContactInfo request");
+  console.info("updateContactInfo request");
   const { pairs, keys } = stringifyObject(data);
   return executeQuery(
     `mutation UpdateContactInfo {
@@ -589,7 +589,7 @@ export const updateContactInfo = async ({ id, data }, secret) => {
 };
 
 export const deleteContactInfo = async ({ id }, secret) => {
-  console.log("deleteContactInfo request");
+  console.info("deleteContactInfo request");
   return executeQuery(
     `mutation DeleteContactInfo {
 			cascadeDeleteContactInfo(id: "${id}")
@@ -599,7 +599,7 @@ export const deleteContactInfo = async ({ id }, secret) => {
 };
 
 export const faultyQuery = async () => {
-  console.log("faultyQuery request");
+  console.info("faultyQuery request");
   // try {
   //   throw new Error("NO.");
   // } catch (err) {
@@ -639,7 +639,7 @@ const fauna = async (req, res) => {
       userSecret = jwt.verify(userSecretEncrypted, process.env.COOKIE_SECRET)
         .token;
     } catch (e) {
-      console.log("Error: invalid authentication token: ", e);
+      console.error("Error: invalid authentication token: ", e);
       deleteCookie();
       result = [{ message: "Error: invalid authentication token" }];
       res.end(JSON.stringify(result));

@@ -17,7 +17,7 @@ const Login = () => {
     await fauna({ type: "LOGIN_USER", email, password }).then(
       async (data) => {
         setAuth(true);
-        console.log("loginUser", data);
+        console.info("loginUser", data);
         storeUser(data);
         const id = data._id;
         storeUser({ id });

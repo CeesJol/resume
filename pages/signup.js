@@ -17,7 +17,7 @@ const Signup = () => {
       async (data) => {
         setAuth(true);
         send({ type: "SEND_CONFIRMATION_EMAIL", id, email });
-        console.log("getUserByEmail", data);
+        console.info("getUserByEmail", data);
         storeUser(data);
         const id = data._id;
         localStorage.setItem("userId", JSON.stringify(id));
@@ -38,7 +38,7 @@ const Signup = () => {
       },
       (err) => {
         toast.error(`⚠️ ${err}`);
-        console.log("signup err", err);
+        console.error("signup err", err);
       }
     );
   };

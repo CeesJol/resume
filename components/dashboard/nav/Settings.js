@@ -48,7 +48,7 @@ const Settings = () => {
             data: { confirmed: false },
           });
           send({ type: "SEND_CONFIRMATION_EMAIL", id: user._id, email });
-          console.log("user disconfirmed");
+          console.info("user disconfirmed");
         }
 
         // Update user locally

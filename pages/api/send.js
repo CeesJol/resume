@@ -35,7 +35,7 @@ export const sendConfirmationEmail = async ({ id, email }) => {
 
   try {
     await sgMail.send(content);
-    console.log("Message sent successfully.");
+    console.info("Message sent successfully.");
     return { message: "Message sent successfully." };
   } catch (err) {
     console.error("send ERROR", err);
@@ -52,7 +52,7 @@ const send = async (req, res) => {
       break;
     default:
       result = "Error: No such type in /api/send: " + type;
-      console.log(result);
+      console.error(result);
   }
   const json = JSON.stringify(result);
   res.end(json);

@@ -28,7 +28,7 @@ const Token = () => {
     );
   };
   const handleChangePassword = (event) => {
-    setPassword(event.target.value.toLowerCase());
+    setPassword(event.target.value);
   };
   useEffect(() => {
     setLoggingOut(false);

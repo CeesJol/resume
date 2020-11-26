@@ -147,12 +147,13 @@ export const updateUserPassword = ({ id, password }, secret) => {
 
 export const updateUserPasswordNoSecret = ({ token, password }) => {
   console.info("updateUserPasswordNoSecret request");
-  const validationError = validatePassword(password);
-  if (validationError) return [{ message: validationError }];
-  const decoded = jwt.verify(token, process.env.EMAIL_SECRET);
-  const id = decoded.id;
-  return executeQuery(
-    `mutation UpdateUserPassword {
+  try {
+    const validationError = validatePassword(password);
+    if (validationError) return [{ message: validationError }];
+    const decoded = jwt.verify(token, process.env.EMAIL_SECRET);
+    const id = decoded.id;
+    return executeQuery(
+      `mutation UpdateUserPassword {
 			updateUserPassword(id: "${id}", password: "${password}") {
 				_id
 				username
@@ -162,8 +163,11 @@ export const updateUserPasswordNoSecret = ({ token, password }) => {
 				confirmed
 			}
 		}`,
-    process.env.FAUNADB_SECRET_KEY
-  );
+      process.env.FAUNADB_SECRET_KEY
+    );
+  } catch (err) {
+    return [{ message: "Reset password error: " + err }];
+  }
 };
 
 export const updateUser = async ({ id, data }, secret) => {
@@ -224,7 +228,7 @@ export const confirmUser = async ({ token }, secret) => {
       secret
     );
   } catch (err) {
-    return [{ message: "Confirm user error:" + err }];
+    return [{ message: "Confirm user error: " + err }];
   }
 };
 
@@ -637,7 +641,7 @@ export const faultyQuery = async () => {
   // try {
   //   throw new Error("NO.");
   // } catch (err) {
-  //   return [{ message: "Confirm user error:" + err }];
+  //   return [{ message: "Confirm user error: " + err }];
   // }
 
   return executeQuery(

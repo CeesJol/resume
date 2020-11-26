@@ -48,7 +48,6 @@ export const sendResetLink = async ({ id, email }) => {
   email = email.toLowerCase();
 
   const token = generateToken(id, "30m");
-  console.log("token:", token);
   const message = ResetPasswordEmail(token);
 
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);

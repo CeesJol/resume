@@ -31,7 +31,6 @@ const Token = () => {
     setPassword(event.target.value.toLowerCase());
   };
   useEffect(() => {
-    console.log("url", window.location.pathname.substring(16));
     setLoggingOut(false);
     if (userExists()) {
       // User is already logged in

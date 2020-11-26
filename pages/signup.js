@@ -16,7 +16,6 @@ const Signup = () => {
     await fauna({ type: "LOGIN_USER", email, password }).then(
       async (data) => {
         setAuth(true);
-        send({ type: "SEND_CONFIRMATION_EMAIL", id, email });
         console.info("getUserByEmail", data);
         storeUser(data);
         const id = data._id;
@@ -33,7 +32,9 @@ const Signup = () => {
   const handleSignUp = async (event) => {
     if (event) event.preventDefault();
     await fauna({ type: "CREATE_USER", email, username, password }).then(
-      async () => {
+      async (data) => {
+        const id = data.createUser._id;
+        send({ type: "SEND_CONFIRMATION_EMAIL", id, email });
         await handleLogin();
       },
       (err) => {

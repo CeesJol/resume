@@ -17,7 +17,7 @@ const ForgotPassword = () => {
 
     setPressedButton(true);
 
-    if (!data.userByEmail.email) {
+    if (!data.userByEmail || !data.userByEmail.email) {
       // Account does not exist
       return;
     }

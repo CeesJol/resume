@@ -145,6 +145,27 @@ export const updateUserPassword = ({ id, password }, secret) => {
   );
 };
 
+export const updateUserPasswordNoSecret = ({ token, password }) => {
+  console.info("updateUserPasswordNoSecret request");
+  const validationError = validatePassword(password);
+  if (validationError) return [{ message: validationError }];
+  const decoded = jwt.verify(token, process.env.EMAIL_SECRET);
+  const id = decoded.id;
+  return executeQuery(
+    `mutation UpdateUserPassword {
+			updateUserPassword(id: "${id}", password: "${password}") {
+				_id
+				username
+				email
+				jobTitle
+				bio
+				confirmed
+			}
+		}`,
+    process.env.FAUNADB_SECRET_KEY
+  );
+};
+
 export const updateUser = async ({ id, data }, secret) => {
   console.info("updateUser request", id, data);
   if (data.email) data.email.toLowerCase();
@@ -205,6 +226,19 @@ export const confirmUser = async ({ token }, secret) => {
   } catch (err) {
     return [{ message: "Confirm user error:" + err }];
   }
+};
+
+export const checkUserEmail = async ({ email }) => {
+  console.info("checkUserEmail request");
+  return executeQuery(
+    `query {
+			userByEmail(email: "${email}") {
+				_id
+				email
+			}
+		}`,
+    process.env.FAUNADB_SECRET_KEY
+  );
 };
 
 /** |----------------------------
@@ -681,6 +715,9 @@ const fauna = async (req, res) => {
       case "UPDATE_USER_PASSWORD":
         result = await updateUserPassword(req.body, userSecret);
         break;
+      case "UPDATE_USER_PASSWORD_NO_SECRET":
+        result = await updateUserPasswordNoSecret(req.body);
+        break;
       case "UPDATE_USER":
         result = await updateUser(req.body, userSecret);
         break;
@@ -692,6 +729,9 @@ const fauna = async (req, res) => {
         break;
       case "CONFIRM_USER":
         result = await confirmUser(req.body, userSecret);
+        break;
+      case "CHECK_USER_EMAIL":
+        result = await checkUserEmail(req.body);
         break;
       // ----------
       // RESUMES

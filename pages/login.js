@@ -74,6 +74,14 @@ const Login = () => {
               onChange={handleChangePassword}
             />
 
+            <p
+              style={{ fontSize: "1.4rem", marginBottom: "0", marginTop: "0" }}
+            >
+              <Link href="/forgot-password">
+                <a>Forgot your password?</a>
+              </Link>
+            </p>
+
             <Button fn={handleLogin} text="Log in" altText="Logging in..." />
           </form>
         </div>

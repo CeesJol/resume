@@ -3,6 +3,7 @@ import { UserContext } from "../../../contexts/userContext";
 import ResumeWrapper from "../ResumeWrapper";
 import Button from "../../general/Button";
 import { isIOS } from "react-device-detect";
+import { PDF } from "../../../lib/api";
 
 const Export = () => {
   const { setPreview, changingResume, pdf } = useContext(UserContext);
@@ -14,6 +15,17 @@ const Export = () => {
     } else {
       await pdf.save();
     }
+    // await PDF({
+    //   type: "EXPORT_PDF",
+    //   html: '<h1 style="color: blue;">Hi there!2</h1>',
+    // }).then(
+    //   () => {
+    //     console.info("success");
+    //   },
+    //   (err) => {
+    //     console.error(err);
+    //   }
+    // );
   };
   useEffect(() => {
     setPreview(true);

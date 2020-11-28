@@ -77,7 +77,7 @@ const Settings = () => {
     await fauna({
       type: "UPDATE_USER_PASSWORD",
       id: user._id,
-      password,
+      password: fields.password,
     }).then(
       () => {
         toast.success("💾 Updated successfully!");

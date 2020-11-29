@@ -29,7 +29,7 @@ export const sendConfirmationEmail = async ({ id, email }) => {
   const content = {
     to: email,
     from: process.env.FROM_EMAIL,
-    subject: `Confirm your account on Affilas`,
+    subject: `Confirm your account on ${process.env.APP_NAME}`,
     text: message,
     html: `<p>${message}</p>`,
   };

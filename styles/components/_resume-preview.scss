@@ -3,75 +3,67 @@
   border-radius: 3px;
   margin-bottom: $m-size;
   display: flex;
-  justify-content: center;
-  align-items: center;
   overflow: hidden;
+  background-color: $light-grey;
 
   @media (max-width: $desktop-breakpoint) {
     background-color: white;
   }
-  background-color: $light-grey;
 
+  // HEAD = the resume preview
   &__head {
-    @media (max-width: $desktop-breakpoint) {
-      display: none;
-    }
     overflow: hidden;
     display: inline-block;
     border-right: 1px solid $light-grey-2;
 
-    min-width: 30.375rem;
-    max-width: 30.375rem;
-    @media (min-width: 45rem) {
-      &:not(:nth-child(2n + 1)) {
-        margin-right: $m-size;
-      }
+    // Don't show preview on mobile
+    @media (max-width: $desktop-breakpoint) {
+      display: none;
     }
 
+    // Small size
+    min-width: 30.375rem;
+    max-width: 30.375rem;
+
+    // Large size
     @media (min-width: 56rem) {
       min-width: 40.5rem;
       max-width: 40.5rem;
-
-      &:not(:nth-child(2n + 1)) {
-        margin-right: $m-size;
-      }
     }
 
+    // Resume title
     &--title {
       margin: 0.75rem $s-size;
     }
-
-    &--img {
-      width: 100%;
-    }
   }
 
+  // BODY = some relevant resume contents and actions
   &__body {
     padding: $m-size;
     flex-grow: 1;
     max-height: 15rem;
+    overflow-y: scroll; // Scroll if too much content
     @media (min-width: 56rem) {
       max-height: 20rem;
     }
-    overflow-y: scroll;
 
     &--job-title {
       font-weight: 300;
     }
 
+    // BODY actions
     footer {
       margin-top: $s-size;
 
-      a,
-      i {
+      a {
         color: $light-grey-3;
         text-transform: uppercase;
         font-size: 1.4rem;
-      }
 
-      a:hover {
-        text-decoration: underline;
-        opacity: 1;
+        &:hover {
+          text-decoration: underline;
+          opacity: 1;
+        }
       }
     }
   }

@@ -4,6 +4,12 @@ import Button from "../general/Button";
 import ResumePreview from "./ResumePreview";
 import { MAX_NUMBER_OF_RESUMES, sortByPriority } from "../../lib/constants";
 
+/**
+ * List of resume previews on the main page of the dashboard.
+ * Functionality:
+ * - Sorts the resumes by priority and draws a preview for each one
+ * - Allows resume creation, if user has less than MAX_NUMBER_OF_RESUMES resumes.
+ */
 const Resumes = () => {
   const { setCreatingResume, getResumes, setPreview } = useContext(UserContext);
   const handleCreate = () => {

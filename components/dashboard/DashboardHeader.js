@@ -39,7 +39,7 @@ const DashboardHeader = () => {
               <a className="header__title" onClick={handleGoBack}>
                 <img className="icon--large" src="../images/icon-small.png" />
                 <span className="header__title--text">
-                  {userExists() ? user.username : "Affilas"}
+                  {userExists() ? user.username : process.env.APP_NAME}
                 </span>
               </a>
             </h3>

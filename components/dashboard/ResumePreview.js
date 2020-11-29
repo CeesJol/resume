@@ -6,6 +6,16 @@ import Resume from "./Resume";
 import { getTemplate } from "../../templates/templates";
 import Separator from "./Separator";
 
+/**
+ * Show a preview of a resume in the main page of the dashboard.
+ * Functionality:
+ * - Show a preview of the resume
+ * - Duplicating resume
+ * - Moving resume
+ * - Clicking a resume to edit it
+ * Styling:
+ * -
+ */
 const ResumePreview = ({ resume, index }) => {
   const {
     user,

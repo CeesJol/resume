@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import DashboardHeader from "./DashboardHeader";
 import Resumes from "./Resumes";
-import Layout from "./Layout";
+import Layout from "./nav/Layout";
 import Editor from "./nav/Editor";
 import Export from "./nav/Export";
 import Options from "./nav/Options";
 import Settings from "./nav/Settings";
-import Nav from "./Nav";
+import Nav from "./nav/Nav";
 import { UserContext } from "../../contexts/userContext";
 import Warning from "./popups/Warning";
 import ResumePopup from "./popups/ResumePopup";
@@ -57,14 +57,12 @@ const Dashboard = () => {
       </div>
       <main>
         <div className="dashboard">
-          <div className="dashboard__main">
-            <div className="dashboard__main__content">
-              {nav == 0 && (!changingResume ? <Resumes /> : <Editor />)}
-              {nav == 1 && <Layout />}
-              {nav == 2 && <Export />}
-              {nav == 3 && <Options />}
-              {nav == 1000 && <Settings />}
-            </div>
+          <div className="dashboard__content">
+            {nav == 0 && (!changingResume ? <Resumes /> : <Editor />)}
+            {nav == 1 && <Layout />}
+            {nav == 2 && <Export />}
+            {nav == 3 && <Options />}
+            {nav == 1000 && <Settings />}
           </div>
         </div>
       </main>

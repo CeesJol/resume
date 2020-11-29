@@ -1,9 +1,9 @@
 import React, { useContext, useState, useEffect } from "react";
-import { fauna } from "../../lib/api";
-import { UserContext } from "../../contexts/userContext";
-import Button from "../general/Button";
-import Template from "./Template";
-import { TEMPLATES, getTemplate } from "../../templates/templates";
+import { fauna } from "../../../lib/api";
+import { UserContext } from "../../../contexts/userContext";
+import Button from "../../general/Button";
+import Template from "../Template";
+import { TEMPLATES, getTemplate } from "../../../templates/templates";
 import { SketchPicker } from "react-color";
 
 const Layout = () => {

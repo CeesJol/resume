@@ -11,6 +11,16 @@ import { getDummyItem, sortByPriority } from "../../lib/constants";
 // PDF Export source
 // https://blog.usejournal.com/lets-make-a-resume-in-react-2c9c5540f51a
 
+/**
+ * Container for the resume.
+ * Functionality:
+ * - Draws each item of the resume
+ * - "tiny": a smaller version, used in Template and ResumePreview
+ * - "template": specifies which template the resume uses (eg. SimpleGreen)
+ * - "exportpdf": add ExportPDF element if true
+ * Styling:
+ * - Sets width and height of the resume
+ */
 const Resume = ({ resume, tiny, template, exportpdf }) => {
   const {
     user,

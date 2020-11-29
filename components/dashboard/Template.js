@@ -11,9 +11,8 @@ const Template = ({ template }) => {
   };
   const isSelected = () => {
     // If the user is creating a resume and clicked this template
-    if (template.id === selectedTemplateId) return true;
-
-    return false;
+    // Used to give a color to the selected template
+    return template.id === selectedTemplateId;
   };
   return (
     <div

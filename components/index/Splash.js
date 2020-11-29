@@ -21,8 +21,8 @@ const Splash = () => {
                   Create a professional resume in minutes
                 </h1>
                 <p>
-                  Affilas is an online resume builder that creates resumes
-                  quickly.
+                  {process.env.APP_NAME} is an online resume builder that
+                  creates resumes quickly.
                 </p>
               </div>
               <footer>

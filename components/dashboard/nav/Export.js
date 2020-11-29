@@ -3,7 +3,7 @@ import { UserContext } from "../../../contexts/userContext";
 import ResumeWrapper from "../ResumeWrapper";
 import Button from "../../general/Button";
 import { isIOS } from "react-device-detect";
-import { PDF } from "../../../lib/api";
+// import { PDF } from "../../../lib/api";
 
 const Export = () => {
   const { setPreview, changingResume, pdf } = useContext(UserContext);

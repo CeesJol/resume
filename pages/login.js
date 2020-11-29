@@ -51,7 +51,7 @@ const Login = () => {
           <form>
             <div className="icon-container">
               <img className="icon--large" src="../images/icon-small.png" />
-              <h3 className="login__box--title">Affilas</h3>
+              <h3 className="login__box--title">{process.env.APP_NAME}</h3>
             </div>
             <h4 className="login__box--subtitle">
               Log in with your email address and password

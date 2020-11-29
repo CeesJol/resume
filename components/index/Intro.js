@@ -10,8 +10,9 @@ const Intro = () => (
       </p> */}
       <h2>Create a resume that clicks with recruiters</h2>
       <p>
-        Affilas builds resumes that allow you to express yourself while staying
-        within the borders of what recruiters expect from a resume.
+        {process.env.APP_NAME} builds resumes that allow you to express yourself
+        while staying within the borders of what recruiters expect from a
+        resume.
       </p>
     </div>
   </div>

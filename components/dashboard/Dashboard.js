@@ -15,6 +15,7 @@ import CategoryPopup from "./popups/CategoryPopup";
 import UserPopup from "./popups/UserPopup";
 import ContactPopup from "./popups/ContactPopup";
 import LoadingPopup from "./popups/LoadingPopup";
+import Feedback from "./Feedback";
 
 const Dashboard = () => {
   const {
@@ -41,6 +42,7 @@ const Dashboard = () => {
   if (!auth) return <LoadingPopup text={`Authenticating...`} />;
   return (
     <div className="dashboard-container">
+      <Feedback />
       <div
         style={{
           position: "sticky",

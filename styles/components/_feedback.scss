@@ -1,0 +1,102 @@
+.feedback {
+  // To open the form
+  &--button {
+    position: fixed;
+    bottom: 0;
+    left: 10rem;
+    background-color: $light-grey-2;
+    padding: 0.5rem 1rem;
+    border-radius: 3px 3px 0 0;
+    cursor: pointer;
+  }
+
+  &--close {
+    margin-left: 1rem;
+  }
+
+  // The form itself
+  position: fixed;
+  bottom: 0;
+  left: 10rem;
+  margin: 1rem 1rem 0 1rem;
+  z-index: 3;
+  width: 40rem;
+  transition: 0.3s;
+  -webkit-box-shadow: 0px 0px 14px -4px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 14px -4px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 14px -4px rgba(0, 0, 0, 0.75);
+
+  p {
+    margin: 0;
+  }
+
+  &__header {
+    background-color: $light-grey-2;
+    padding: 1.5rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+
+    &--close {
+      cursor: pointer;
+    }
+  }
+
+  &__body {
+    background-color: white;
+    padding: 1.5rem 1.5rem;
+    padding-top: 1rem;
+
+    &--actions {
+      padding-top: 1rem;
+    }
+
+    p {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  &__grades-container {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+
+  &__grade-container {
+    max-width: 4rem;
+  }
+
+  &__grade {
+    position: relative;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 99rem;
+    border: 2px solid $light-grey-2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    flex-direction: column;
+    margin-bottom: 0.5rem;
+    transition: 0.3s;
+
+    // The grade the user hovers on
+    &:not(&--selected):hover {
+      border: 2px solid $light-green;
+    }
+
+    // The grade the user has selected
+    &--selected {
+      border: 2px solid $light-green;
+      background-color: $light-green;
+      color: white;
+    }
+
+    // Feedback text for a grade (eg. "Very satisfied")
+    &--gradeText {
+      font-size: 1rem;
+      color: grey;
+      text-align: center;
+    }
+  }
+}

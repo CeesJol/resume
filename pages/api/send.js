@@ -1,8 +1,9 @@
 import jwt from "jsonwebtoken";
 import ConfirmEmail from "../../lib/emails/confirm";
 import ResetPasswordEmail from "../../lib/emails/reset-password";
+import FeedbackEmail from "../../lib/emails/feedback";
 
-const sgMail = require("@sendgrid/mail");
+import sendEmail from "../../lib/sendEmail";
 
 export const generateToken = (id, expiresIn) => {
   return jwt.sign(
@@ -18,13 +19,15 @@ export const generateToken = (id, expiresIn) => {
 
 // Source
 // https://vercel.com/guides/deploying-nextjs-nodejs-and-sendgrid-with-vercel
+
+/**
+ * Sent to user to confirm their email address.
+ */
 export const sendConfirmationEmail = async ({ id, email }) => {
   email = email.toLowerCase();
 
   const token = generateToken(id, "30d");
   const message = ConfirmEmail(token);
-
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
   const content = {
     to: email,
@@ -35,7 +38,7 @@ export const sendConfirmationEmail = async ({ id, email }) => {
   };
 
   try {
-    await sgMail.send(content);
+    await sendEmail(content);
     console.info("Message sent successfully.");
     return { message: "Message sent successfully." };
   } catch (err) {
@@ -44,13 +47,14 @@ export const sendConfirmationEmail = async ({ id, email }) => {
   }
 };
 
+/**
+ * Send to user to access a link to reset their password.
+ */
 export const sendResetLink = async ({ id, email }) => {
   email = email.toLowerCase();
 
   const token = generateToken(id, "30m");
   const message = ResetPasswordEmail(token);
-
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
   const content = {
     to: email,
@@ -61,7 +65,43 @@ export const sendResetLink = async ({ id, email }) => {
   };
 
   try {
-    await sgMail.send(content);
+    await sendEmail(content);
+    console.info("Message sent successfully.");
+    return { message: "Message sent successfully." };
+  } catch (err) {
+    console.error("send ERROR", err);
+    return [{ message: "Message not sent: " + err }];
+  }
+};
+
+/**
+ * Sent to host to receive user's feedback
+ */
+export const sendFeedback = async ({
+  id,
+  username,
+  email,
+  feedbackText,
+  feedbackGrade,
+}) => {
+  const message = FeedbackEmail(
+    id,
+    username,
+    email,
+    feedbackText,
+    feedbackGrade
+  );
+
+  const content = {
+    to: process.env.FROM_EMAIL,
+    from: process.env.FROM_EMAIL,
+    subject: `Feedback on ${process.env.APP_NAME}`,
+    text: message,
+    html: `<p>${message}</p>`,
+  };
+
+  try {
+    await sendEmail(content);
     console.info("Message sent successfully.");
     return { message: "Message sent successfully." };
   } catch (err) {
@@ -79,6 +119,9 @@ const send = async (req, res) => {
       break;
     case "SEND_RESET_LINK":
       result = await sendResetLink(req.body);
+      break;
+    case "SEND_FEEDBACK":
+      result = await sendFeedback(req.body);
       break;
     default:
       result = "Error: No such type in /api/send: " + type;

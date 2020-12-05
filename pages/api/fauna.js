@@ -636,6 +636,33 @@ export const deleteContactInfo = async ({ id }, secret) => {
   );
 };
 
+/** |----------------------------
+ *  | FEEDBACK
+ *  |----------------------------
+ */
+export const sendFeedback = async (
+  { id, feedbackGrade, feedbackText },
+  secret
+) => {
+  console.info("sendFeedback request");
+  return executeQuery(
+    `mutation CreateFeedback {
+			createFeedback(data: {
+				user: { connect: "${id}" }
+				grade: ${feedbackGrade}
+				text: "${feedbackText}"
+			}) {
+				_id
+			}
+		}`,
+    secret
+  );
+};
+
+/** |----------------------------
+ *  | MISC
+ *  |----------------------------
+ */
 export const faultyQuery = async () => {
   console.info("faultyQuery request");
   // try {
@@ -812,6 +839,12 @@ const fauna = async (req, res) => {
         break;
       case "DELETE_CONTACT_INFO":
         result = await deleteContactInfo(req.body, userSecret);
+        break;
+      // ----------
+      // FEEDBACK
+      // ----------
+      case "SEND_FEEDBACK":
+        result = await sendFeedback(req.body, userSecret);
         break;
       // ----------
       // MISC

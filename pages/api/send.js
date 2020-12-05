@@ -1,9 +1,7 @@
 import jwt from "jsonwebtoken";
+import sendEmail from "../../lib/sendEmail";
 import ConfirmEmail from "../../lib/emails/confirm";
 import ResetPasswordEmail from "../../lib/emails/reset-password";
-import FeedbackEmail from "../../lib/emails/feedback";
-
-import sendEmail from "../../lib/sendEmail";
 
 export const generateToken = (id, expiresIn) => {
   return jwt.sign(
@@ -74,42 +72,6 @@ export const sendResetLink = async ({ id, email }) => {
   }
 };
 
-/**
- * Sent to host to receive user's feedback
- */
-export const sendFeedback = async ({
-  id,
-  username,
-  email,
-  feedbackText,
-  feedbackGrade,
-}) => {
-  const message = FeedbackEmail(
-    id,
-    username,
-    email,
-    feedbackText,
-    feedbackGrade
-  );
-
-  const content = {
-    to: process.env.FEEDBACK_EMAIL,
-    from: process.env.FROM_EMAIL,
-    subject: `Feedback on ${process.env.APP_NAME}`,
-    text: message,
-    html: `<p>${message}</p>`,
-  };
-
-  try {
-    await sendEmail(content);
-    console.info("Message sent successfully.");
-    return { message: "Message sent successfully." };
-  } catch (err) {
-    console.error("send ERROR", err);
-    return [{ message: "Message not sent: " + err }];
-  }
-};
-
 const send = async (req, res) => {
   const { type } = req.body;
   let result;
@@ -119,9 +81,6 @@ const send = async (req, res) => {
       break;
     case "SEND_RESET_LINK":
       result = await sendResetLink(req.body);
-      break;
-    case "SEND_FEEDBACK":
-      result = await sendFeedback(req.body);
       break;
     default:
       result = "Error: No such type in /api/send: " + type;

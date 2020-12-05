@@ -5,6 +5,7 @@ type User {
   confirmed: Boolean
   jobTitle: String
   bio: String
+  feedback: [Feedback] @relation
 }
 
 type Resume {
@@ -49,6 +50,12 @@ type ContactInfo {
   priority: Int
 }
 
+type Feedback {
+  user: User
+  grade: Int
+  text: String
+}
+
 type AuthPayload {
   token: String!
   user: User!
@@ -59,6 +66,7 @@ type Query {
   usersByConfirmStatus(confirmed: Boolean!): [User]
   userByEmail(email: String!): User
   resumeByTitle(title: String!): Resume
+  feedback: [Feedback]
 }
 
 type Mutation {

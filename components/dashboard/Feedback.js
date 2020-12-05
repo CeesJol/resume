@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import Button from "../general/Button";
-import { send } from "../../lib/api";
+import { fauna } from "../../lib/api";
 import { UserContext } from "../../contexts/userContext";
 import { toast } from "react-toastify";
 
@@ -55,16 +55,13 @@ const Feedback = () => {
       return toast.error("⚠️ Please provide a grade");
     }
 
-    const { _id: id, username, email } = user;
-    await send({
+    await fauna({
       type: "SEND_FEEDBACK",
-      id,
-      username,
-      email,
+      id: user._id,
       feedbackGrade,
       feedbackText,
     }).then(
-      (data) => {
+      () => {
         toast.success("✅ Thank you for your feedback!");
         hideForAWhile();
       },
@@ -74,7 +71,7 @@ const Feedback = () => {
       }
     );
   };
-  // Hide the feedback button for a set time
+  // Hide the feedback button and store date of hiding
   const hideForAWhile = () => {
     setHidden(true);
     localStorage.setItem("feedback", JSON.stringify(Date.now()));
@@ -82,7 +79,7 @@ const Feedback = () => {
   // See if timeout is over; only then show the feedback button again
   const shouldShow = () => {
     const date = JSON.parse(localStorage.getItem("feedback"));
-    const timeout = 1; // 24 hours
+    const timeout = 1000 * 3600 * 24; // 24 hours
     return Date.now() - date > timeout;
   };
   useEffect(() => {

@@ -16,6 +16,7 @@ const Layout = () => {
     selectedTemplateId,
     setSelectedTemplateId,
     storeStatus,
+    setWarning,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [items, setItems] = useState([]);
@@ -76,30 +77,36 @@ const Layout = () => {
     );
   };
   const handleUpdateTemplate = async () => {
-    const styles = getTemplate(selectedTemplateId).styles;
-    const myData = {
-      templateId: selectedTemplateId,
-      _id: editingResume._id,
-      ...styles,
-    };
-
-    storeResume(myData, {});
-
-    await fauna({
-      type: "UPDATE_RESUME",
-      id: editingResume._id,
-      data: myData,
-    }).then(
-      () => {
-        storeStatus("Saved.");
-        // Store in textfields
-        setItems({
-          ...items,
+    setWarning({
+      text:
+        "Are you sure you want to update your template? Any custom colors will be replaced with this template's colors.",
+      fn: async () => {
+        const styles = getTemplate(selectedTemplateId).styles;
+        const myData = {
+          templateId: selectedTemplateId,
+          _id: editingResume._id,
           ...styles,
-        });
+        };
+
+        storeResume(myData, {});
+
+        await fauna({
+          type: "UPDATE_RESUME",
+          id: editingResume._id,
+          data: myData,
+        }).then(
+          () => {
+            storeStatus("Saved.");
+            // Store in textfields
+            setItems({
+              ...items,
+              ...styles,
+            });
+          },
+          (err) => storeStatus(`Error: failed to save: ${err}`)
+        );
       },
-      (err) => storeStatus(`Error: failed to save: ${err}`)
-    );
+    });
   };
   const drawTemplates = () => (
     <div className="dashboard__item">

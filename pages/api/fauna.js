@@ -650,7 +650,7 @@ export const sendFeedback = async (
 			createFeedback(data: {
 				user: { connect: "${id}" }
 				grade: ${feedbackGrade}
-				text: "${feedbackText}"
+				text: """${feedbackText}"""
 			}) {
 				_id
 			}

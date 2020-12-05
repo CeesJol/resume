@@ -8,7 +8,6 @@ module.exports = {
     EMAIL_SECRET: process.env.EMAIL_SECRET,
     SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
     FROM_EMAIL: process.env.FROM_EMAIL,
-    FEEDBACK_EMAIL: process.env.FEEDBACK_EMAIL,
     DOMAIN_NAME: process.env.DOMAIN_NAME,
     APP_NAME: "Affilas",
   },

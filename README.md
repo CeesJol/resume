@@ -9,6 +9,5 @@
    COOKIE_SECRET: any string value  
    SENDGRID_API_KEY: your sendgrid secret key  
    FROM_EMAIL: your sendgrid email  
-   FEEDBACK_EMAIL: email you want feedback to be sent to  
    DOMAIN_NAME: your production url
 3. Run `yarn install`

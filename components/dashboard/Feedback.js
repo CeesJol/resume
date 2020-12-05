@@ -65,7 +65,6 @@ const Feedback = () => {
       feedbackText,
     }).then(
       (data) => {
-        console.log("data:", data);
         toast.success("✅ Thank you for your feedback!");
         hideForAWhile();
       },

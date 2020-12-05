@@ -93,7 +93,7 @@ export const sendFeedback = async ({
   );
 
   const content = {
-    to: process.env.FROM_EMAIL,
+    to: process.env.FEEDBACK_EMAIL,
     from: process.env.FROM_EMAIL,
     subject: `Feedback on ${process.env.APP_NAME}`,
     text: message,

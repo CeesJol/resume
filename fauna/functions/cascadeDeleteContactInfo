@@ -1,0 +1,50 @@
+Query(
+  Lambda(
+    ["contactInfoId"],
+    Let(
+      {
+        contactInfoRef: Ref(Collection("ContactInfo"), Var("contactInfoId")),
+        resumeRef: Select(
+          ["data", "resume"],
+          Get(Var("contactInfoRef")),
+          false
+        ),
+        resumeId: Select(["id"], Var("resumeRef"), false),
+        resumeContactInfoRefs: Paginate(
+          Match(Index("contactInfoByResume"), Var("resumeId"))
+        ),
+        priority: Select(
+          ["data", "priority"],
+          Get(Var("contactInfoRef")),
+          false
+        ),
+        resumeContactInfoRefsFiltered: Filter(
+          Var("resumeContactInfoRefs"),
+          Lambda(
+            "i",
+            GT(
+              Select(["data", "priority"], Get(Var("i")), false),
+              Var("priority")
+            )
+          )
+        ),
+        updateContactInfoResults: Map(
+          Var("resumeContactInfoRefsFiltered"),
+          Lambda(
+            ["ref"],
+            Update(Var("ref"), {
+              data: {
+                priority: Subtract(
+                  Select(["data", "priority"], Get(Var("ref")), false),
+                  1
+                )
+              }
+            })
+          )
+        ),
+        deleteContactInfoResults: Delete(Var("contactInfoRef"))
+      },
+      Var("contactInfoId")
+    )
+  )
+)

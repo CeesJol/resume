@@ -41,7 +41,8 @@ const Settings = () => {
 
         // If email changed, set confirmed to false and
         // send a new confirmation email
-        if (email !== user.email) {
+        // TODO is there a bug here?
+        if (fields.email !== user.email) {
           fauna({
             type: "UPDATE_USER",
             id: user._id,

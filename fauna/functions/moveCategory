@@ -1,0 +1,55 @@
+Query(
+  Lambda(
+    ["categoryId", "amount"],
+    Let(
+      {
+        categoryRef: Ref(Collection("Category"), Var("categoryId")),
+        resumeRef: Select(["data", "resume"], Get(Var("categoryRef")), false),
+        resumeId: Select(["id"], Var("resumeRef"), false),
+        resumeCategoryRefs: Paginate(
+          Match(Index("categoriesByResume"), Var("resumeId"))
+        ),
+        priority: Select(["data", "priority"], Get(Var("categoryRef")), false),
+        otherCategory: Filter(
+          Var("resumeCategoryRefs"),
+          Lambda(
+            "i",
+            And(
+              Equals(
+                Select(["data", "priority"], Get(Var("i")), false),
+                Add(Var("priority"), Var("amount"))
+              ),
+              Equals(
+                Select(["data", "sidebar"], Get(Var("i")), false),
+                Select(["data", "sidebar"], Get(Var("categoryRef")), false)
+              )
+            )
+          )
+        ),
+        updateCategoryPriority: Update(Var("categoryRef"), {
+          data: {
+            priority: Add(
+              Select(["data", "priority"], Get(Var("categoryRef")), false),
+              Var("amount")
+            )
+          }
+        }),
+        updateOtherCategoryPriority: Map(
+          Var("otherCategory"),
+          Lambda(
+            ["ref"],
+            Update(Var("ref"), {
+              data: {
+                priority: Subtract(
+                  Select(["data", "priority"], Get(Var("ref")), false),
+                  Var("amount")
+                )
+              }
+            })
+          )
+        )
+      },
+      Var("categoryId")
+    )
+  )
+)

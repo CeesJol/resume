@@ -1,0 +1,70 @@
+Query(
+  Lambda(
+    ["resumeId"],
+    Let(
+      {
+        resumeRef: Ref(Collection("Resume"), Var("resumeId")),
+        resumeContactInfoRefs: Paginate(
+          Match(Index("contactInfoByResume"), Var("resumeId"))
+        ),
+        deleteContactInfoResults: Map(
+          Var("resumeContactInfoRefs"),
+          Lambda(["ref"], Delete(Var("ref")))
+        ),
+        resumeCategoryRefs: Paginate(
+          Match(Index("categoriesByResume"), Var("resumeId"))
+        ),
+        deleteCategoriesResults: Map(
+          Var("resumeCategoryRefs"),
+          Lambda(
+            ["categoryRef"],
+            Let(
+              {
+                categoryId: Select(["id"], Var("categoryRef"), false),
+                categoryItemsRefs: Paginate(
+                  Match(Index("itemsByCategory"), Var("categoryId"))
+                ),
+                deleteItemsResults: Map(
+                  Var("categoryItemsRefs"),
+                  Lambda(["ref"], Delete(Var("ref")))
+                ),
+                deleteCategory: Delete(Var("categoryRef"))
+              },
+              true
+            )
+          )
+        ),
+        userRef: Select(["data", "user"], Get(Var("resumeRef")), false),
+        userId: Select(["id"], Var("userRef"), false),
+        userResumeRefs: Paginate(Match(Index("resumesByUser"), Var("userId"))),
+        priority: Select(["data", "priority"], Get(Var("resumeRef")), false),
+        userResumeRefsFiltered: Filter(
+          Var("userResumeRefs"),
+          Lambda(
+            "i",
+            GT(
+              Select(["data", "priority"], Get(Var("i")), false),
+              Var("priority")
+            )
+          )
+        ),
+        updateResumeResults: Map(
+          Var("userResumeRefsFiltered"),
+          Lambda(
+            ["ref"],
+            Update(Var("ref"), {
+              data: {
+                priority: Subtract(
+                  Select(["data", "priority"], Get(Var("ref")), false),
+                  1
+                )
+              }
+            })
+          )
+        ),
+        deleteResumeResults: Delete(Var("resumeRef"))
+      },
+      Var("resumeId")
+    )
+  )
+)

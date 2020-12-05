@@ -1,0 +1,57 @@
+Query(
+  Lambda(
+    ["categoryId"],
+    Let(
+      {
+        categoryRef: Ref(Collection("Category"), Var("categoryId")),
+        categoryItemsRefs: Paginate(
+          Match(Index("itemsByCategory"), Var("categoryId"))
+        ),
+        deleteItemsResults: Map(
+          Var("categoryItemsRefs"),
+          Lambda(["ref"], Delete(Var("ref")))
+        ),
+        resumeRef: Select(["data", "resume"], Get(Var("categoryRef")), false),
+        resumeId: Select(["id"], Var("resumeRef"), false),
+        resumeCategoriesRefs: Paginate(
+          Match(Index("categoriesByResume"), Var("resumeId"))
+        ),
+        priority: Select(["data", "priority"], Get(Var("categoryRef")), false),
+        resumeCategoriesRefsFiltered: Filter(
+          Var("resumeCategoriesRefs"),
+          Lambda(
+            "i",
+            And(
+              Equals(
+                GT(
+                  Select(["data", "priority"], Get(Var("i")), false),
+                  Var("priority")
+                )
+              ),
+              Equals(
+                Select(["data", "sidebar"], Get(Var("i")), false),
+                Select(["data", "sidebar"], Get(Var("categoryRef")), false)
+              )
+            )
+          )
+        ),
+        updateCategoriesResults: Map(
+          Var("resumeCategoriesRefsFiltered"),
+          Lambda(
+            ["ref"],
+            Update(Var("ref"), {
+              data: {
+                priority: Subtract(
+                  Select(["data", "priority"], Get(Var("ref")), false),
+                  1
+                )
+              }
+            })
+          )
+        ),
+        deleteCategoryResults: Delete(Var("categoryRef"))
+      },
+      Var("categoryId")
+    )
+  )
+)

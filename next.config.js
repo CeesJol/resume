@@ -3,6 +3,7 @@ require("dotenv").config();
 module.exports = {
   env: {
     FAUNADB_SECRET_KEY: process.env.FAUNADB_SECRET_KEY,
+    FAUNADB_SECRET_KEY_DEV: process.env.FAUNADB_SECRET_KEY_DEV,
     FAUNADB_GRAPHQL_ENDPOINT: "https://graphql.fauna.com/graphql",
     COOKIE_SECRET: process.env.COOKIE_SECRET,
     EMAIL_SECRET: process.env.EMAIL_SECRET,

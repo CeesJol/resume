@@ -1,0 +1,18 @@
+Query(
+  Lambda(
+    ["email", "password"],
+    Let(
+      {
+        response: Login(Match(Index("userByEmail"), Var("email")), {
+          password: Var("password")
+        })
+      },
+      {
+        data: {
+          token: Select("secret", Var("response"), false),
+          user: Select("instance", Var("response"), false)
+        }
+      }
+    )
+  )
+)

@@ -1,0 +1,47 @@
+Query(
+  Lambda(
+    ["resumeId", "amount"],
+    Let(
+      {
+        resumeRef: Ref(Collection("Resume"), Var("resumeId")),
+        userRef: Select(["data", "user"], Get(Var("resumeRef")), false),
+        userId: Select(["id"], Var("userRef"), false),
+        userResumeRefs: Paginate(Match(Index("resumesByUser"), Var("userId"))),
+        priority: Select(["data", "priority"], Get(Var("resumeRef")), false),
+        otherResume: Filter(
+          Var("userResumeRefs"),
+          Lambda(
+            "i",
+            Equals(
+              Select(["data", "priority"], Get(Var("i")), false),
+              Add(Var("priority"), Var("amount"))
+            )
+          )
+        ),
+        updateResumePriority: Update(Var("resumeRef"), {
+          data: {
+            priority: Add(
+              Select(["data", "priority"], Get(Var("resumeRef")), false),
+              Var("amount")
+            )
+          }
+        }),
+        updateOtherResumePriority: Map(
+          Var("otherResume"),
+          Lambda(
+            ["ref"],
+            Update(Var("ref"), {
+              data: {
+                priority: Subtract(
+                  Select(["data", "priority"], Get(Var("ref")), false),
+                  Var("amount")
+                )
+              }
+            })
+          )
+        )
+      },
+      Var("resumeId")
+    )
+  )
+)

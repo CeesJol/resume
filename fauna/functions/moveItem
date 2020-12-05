@@ -1,0 +1,49 @@
+Query(
+  Lambda(
+    ["itemId", "amount"],
+    Let(
+      {
+        itemRef: Ref(Collection("Item"), Var("itemId")),
+        categoryRef: Select(["data", "category"], Get(Var("itemRef")), false),
+        categoryId: Select(["id"], Var("categoryRef"), false),
+        categoryItemRefs: Paginate(
+          Match(Index("itemsByCategory"), Var("categoryId"))
+        ),
+        priority: Select(["data", "priority"], Get(Var("itemRef")), false),
+        otherItem: Filter(
+          Var("categoryItemRefs"),
+          Lambda(
+            "i",
+            Equals(
+              Select(["data", "priority"], Get(Var("i")), false),
+              Add(Var("priority"), Var("amount"))
+            )
+          )
+        ),
+        updateItemPriority: Update(Var("itemRef"), {
+          data: {
+            priority: Add(
+              Select(["data", "priority"], Get(Var("itemRef")), false),
+              Var("amount")
+            )
+          }
+        }),
+        updateOtherItemPriority: Map(
+          Var("otherItem"),
+          Lambda(
+            ["ref"],
+            Update(Var("ref"), {
+              data: {
+                priority: Subtract(
+                  Select(["data", "priority"], Get(Var("ref")), false),
+                  Var("amount")
+                )
+              }
+            })
+          )
+        )
+      },
+      Var("itemId")
+    )
+  )
+)

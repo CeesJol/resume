@@ -51,25 +51,9 @@ const ContactPopup = () => {
       _id: tempId,
       name,
       value: value ? value : customValue,
-      priority: getContactInfo().length + 1,
     };
 
     storeContactInfo(myData, { add: true });
-
-    fauna({
-      type: "CREATE_CONTACT_INFO",
-      resumeId: editingResume._id,
-      data: myData,
-    }).then(
-      (data) => {
-        storeContactInfo(
-          { _id: tempId },
-          { newId: data.createContactInfo._id }
-        );
-        storeStatus("Saved.");
-      },
-      (err) => storeStatus(`Error: failed to save: ${err}`)
-    );
   };
   const handleUpdate = () => {
     const validationError = validateInput();
@@ -85,15 +69,6 @@ const ContactPopup = () => {
     };
 
     storeContactInfo(myData, {});
-
-    fauna({
-      type: "UPDATE_CONTACT_INFO",
-      id: editingContactInfo._id,
-      data: myData,
-    }).then(
-      () => storeStatus("Saved."),
-      (err) => storeStatus(`Error: failed to save: ${err}`)
-    );
   };
   const handleDelete = (event) => {
     if (event) event.preventDefault();
@@ -102,21 +77,6 @@ const ContactPopup = () => {
       fn: () => {
         storeContactInfo(editingContactInfo, { del: true });
         resetPopups();
-        // Propagate priority updates
-        for (let item of getContactInfo()) {
-          if (item.priority > editingContactInfo.priority) {
-            const newPriority = item.priority - 1;
-            storeContactInfo({ ...item, priority: newPriority }, {});
-          }
-        }
-
-        fauna({
-          type: "DELETE_CONTACT_INFO",
-          id: editingContactInfo._id,
-        }).then(
-          () => storeStatus("Saved."),
-          (err) => storeStatus(`Error: failed to save: ${err}`)
-        );
       },
     });
   };
@@ -131,10 +91,10 @@ const ContactPopup = () => {
     }
   };
   useEffect(() => {
-    if (editingContactInfo.name && !filled) {
+    if (editingContactInfo.title && !filled) {
       setFilled(true);
 
-      setName(editingContactInfo.name);
+      setName(editingContactInfo.title);
       if (CONTACTPICKER_OPTIONS[value]) {
         setValue(editingContactInfo.value);
       } else {
@@ -162,7 +122,7 @@ const ContactPopup = () => {
           <label>Type</label>
           <Contactpicker val={value} fn={handleChangeValue} />
 
-          {value == "" && (
+          {value === "" && (
             <>
               <label>Contact type</label>
               <input
@@ -184,7 +144,7 @@ const ContactPopup = () => {
             onChange={handleChangeName}
           />
 
-          {editingContactInfo.name ? (
+          {editingContactInfo.title ? (
             <>
               <Button text="Update" altText="Updating..." fn={handleUpdate} />
               <Button

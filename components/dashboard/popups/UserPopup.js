@@ -12,7 +12,7 @@ const UserPopup = () => {
     setWarning,
     userMadeChanges,
     setUserMadeChanges,
-    storeResume,
+    updateResume,
     resetPopups,
     storeStatus,
   } = useContext(UserContext);
@@ -45,7 +45,7 @@ const UserPopup = () => {
       bio,
     };
 
-    storeResume(myData, {});
+    updateResume(myData);
 
     fauna({
       type: "UPDATE_RESUME",

@@ -14,40 +14,10 @@ type Resume {
   bio: String
   title: String
   priority: Int
-  categories: [Category] @relation
   templateId: String
-  contactInfo: [ContactInfo] @relation
   primaryColor: String
   backgroundColor: String
-}
-
-type Category {
-  resume: Resume
-  name: String
-  type: String
-  priority: Int
-  items: [Item] @relation
-  sidebar: Boolean
-}
-
-type Item {
-  category: Category
-  title: String
-  location: String
-  description: String
-  month1: String
-  year1: String
-  month2: String
-  year2: String
-  value: String
-  priority: Int
-}
-
-type ContactInfo {
-  resume: Resume
-  name: String
-  value: String
-  priority: Int
+  data: String
 }
 
 type Feedback {
@@ -70,16 +40,6 @@ type Query {
 }
 
 type Mutation {
-  cascadeDeleteResume(id: ID!): ID! @resolver(name: "cascadeDeleteResume")
-  cascadeDeleteCategory(id: ID!): ID! @resolver(name: "cascadeDeleteCategory")
-  cascadeDeleteItem(id: ID!): ID! @resolver(name: "cascadeDeleteItem")
-  cascadeDeleteContactInfo(id: ID!): ID!
-    @resolver(name: "cascadeDeleteContactInfo")
-
-  moveResume(id: ID!, amount: Int!): ID! @resolver(name: "moveResume")
-  moveCategory(id: ID!, amount: Int!): ID! @resolver(name: "moveCategory")
-  moveItem(id: ID!, amount: Int!): ID! @resolver(name: "moveItem")
-
   loginUser(email: String!, password: String!): AuthPayload!
     @resolver(name: "loginUser")
   logoutUser: Boolean! @resolver(name: "logoutUser")

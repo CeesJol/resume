@@ -29,9 +29,7 @@ const Category = ({ category, index, primaryColor, backgroundColor }) => {
   const handleItem = (category) => {
     if (preview) return false;
     setEditingItem({
-      category: {
-        _id: category._id,
-      },
+      categoryId: category.id,
     });
   };
   const handleMove = async (category, amount) => {
@@ -44,7 +42,7 @@ const Category = ({ category, index, primaryColor, backgroundColor }) => {
       category={category}
       item={item}
       index={index}
-      key={`item-${item._id}`}
+      key={`item-${item.id}`}
       hovering={hovering}
       backgroundColor={backgroundColor}
       primaryColor={primaryColor}
@@ -63,7 +61,7 @@ const Category = ({ category, index, primaryColor, backgroundColor }) => {
         <span className="resume__actions">
           <Button
             fn={() => handleItem(category)}
-            text={`Add ${category.name.toLowerCase()}`}
+            text={`Add ${category.title.toLowerCase()}`}
             textual={true}
           />
           {index > 0 && (
@@ -101,14 +99,14 @@ const Category = ({ category, index, primaryColor, backgroundColor }) => {
             color: primaryColor,
           }}
         >
-          {category.name}
+          {category.title}
         </h3>
         <div className="resume__category--items-container">
           {getItems(category) && getItems(category).length > 0
             ? sortByPriority(getItems(category)).map((item, index) =>
                 drawItem(category, item, index, false)
               )
-            : drawItem(category, getDummyItem(category.name), 0, true)}
+            : drawItem(category, getDummyItem(category.title), 0, true)}
         </div>
       </div>
     </div>

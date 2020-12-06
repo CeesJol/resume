@@ -14,7 +14,9 @@ const CategoryPopup = () => {
   const {
     editingResume,
     setWarning,
-    storeCategory,
+    createCategory,
+    deleteCategory,
+    updateCategory,
     userMadeChanges,
     setUserMadeChanges,
     resetPopups,
@@ -23,19 +25,19 @@ const CategoryPopup = () => {
     storeStatus,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
-  const [name, setName] = useState("");
-  const [customName, setCustomName] = useState("");
+  const [title, setTitle] = useState("");
+  const [customTitle, setCustomTitle] = useState("");
   const [type, setType] = useState("");
   const [showValue, setShowValue] = useState(true); // Should value be shown for title/value types?
-  const getRealName = () => {
-    return name === "Other" ? customName : name;
+  const getRealTitle = () => {
+    return title === "Other" ? customTitle : title;
   };
-  const handleChangeName = (event) => {
-    setName(event.target.value);
+  const handleChangeTitle = (event) => {
+    setTitle(event.target.value);
     setType(getCategoryType(event.target.value));
   };
-  const handleChangeCustomName = (event) => {
-    setCustomName(event.target.value);
+  const handleChangeCustomTitle = (event) => {
+    setCustomTitle(event.target.value);
     setUserMadeChanges(true);
   };
   const handleChangeType = (event) => {
@@ -51,9 +53,9 @@ const CategoryPopup = () => {
     }
   };
   const validateInput = () => {
-    if (!name) return "Please provide a name";
-    if (name === "Other" && !customName)
-      return "Please provide a custom category name";
+    if (!title) return "Please provide a title";
+    if (title === "Other" && !customTitle)
+      return "Please provide a custom category title";
     return false;
   };
   const handleCreate = () => {
@@ -64,35 +66,18 @@ const CategoryPopup = () => {
     }
 
     const tempId = randomId();
-    const priority =
-      getCategories().filter((cat) => cat.sidebar === editingCategory.sidebar)
-        .length + 1;
 
     let myData = {
       ...editingCategory,
-      name: getRealName(),
+      title: getRealTitle(),
       type,
       sidebar: editingCategory.sidebar,
-      priority,
-      _id: tempId,
-      items: {
-        data: [],
-      },
+      id: tempId,
+      items: [],
     };
 
-    storeCategory(myData, { add: true });
-
-    fauna({
-      type: "CREATE_CATEGORY",
-      resumeId: editingResume._id,
-      data: myData,
-    }).then(
-      (data) => {
-        storeCategory({ _id: tempId }, { newId: data.createCategory._id });
-        storeStatus("Saved.");
-      },
-      (err) => storeStatus(`Error: failed to save: ${err}`)
-    );
+    createCategory(myData);
+    resetPopups();
   };
   const handleUpdate = () => {
     const validationError = validateInput();
@@ -102,22 +87,14 @@ const CategoryPopup = () => {
     }
 
     let myData = {
-      _id: editingCategory._id,
-      name: getRealName(),
+      id: editingCategory.id,
+      title: getRealTitle(),
       type,
       sidebar: editingCategory.sidebar,
     };
 
-    storeCategory(myData, {});
-
-    fauna({
-      type: "UPDATE_CATEGORY",
-      id: editingCategory._id,
-      data: myData,
-    }).then(
-      () => storeStatus("Saved."),
-      (err) => storeStatus(`Error: failed to save: ${err}`)
-    );
+    updateCategory(myData);
+    resetPopups();
   };
   const handleDelete = (event) => {
     if (event) event.preventDefault();
@@ -125,22 +102,8 @@ const CategoryPopup = () => {
       text:
         "Are you sure you want to delete this category? All the items in it will be lost.",
       fn: () => {
-        storeCategory(editingCategory, { del: true });
-        // Propagate priority updates
-        for (let category of getCategories()) {
-          if (
-            category.priority > editingCategory.priority &&
-            category.sidebar === editingCategory.sidebar
-          ) {
-            const newPriority = category.priority - 1;
-            storeCategory({ ...category, priority: newPriority }, {});
-          }
-        }
-
-        fauna({ type: "DELETE_CATEGORY", id: editingCategory._id }).then(
-          () => storeStatus("Saved."),
-          (err) => storeStatus(`Error: failed to save: ${err}`)
-        );
+        deleteCategory(editingCategory);
+        resetPopups();
       },
     });
   };
@@ -157,10 +120,10 @@ const CategoryPopup = () => {
   useEffect(() => {
     if (!filled) {
       setFilled(true);
-      const name = editingCategory.name;
-      if (!name) {
+      const title = editingCategory.title;
+      if (!title) {
         // The category is being created
-        setName(ALL_CATEGORIES[0].name);
+        setTitle(ALL_CATEGORIES[0].title);
         setType(ALL_CATEGORIES[0].type);
       } else {
         // If category already exists (it's being updated)
@@ -168,19 +131,19 @@ const CategoryPopup = () => {
         setType(ty);
         if (
           ALL_CATEGORIES.find(
-            (cat) => cat.name.toLowerCase() === name.toLowerCase()
+            (cat) => cat.title.toLowerCase() === title.toLowerCase()
           )
         ) {
           // If the category is a default category
-          setName(name);
+          setTitle(title);
 
           if (ty === "Title and value" || ty === "Title without value") {
             setShowValue(ty === "Title and value");
           }
         } else {
           // The category is a custom category
-          setName("Other");
-          setCustomName(name);
+          setTitle("Other");
+          setCustomTitle(title);
         }
       }
     }
@@ -194,7 +157,7 @@ const CategoryPopup = () => {
     >
       <div className="popup__header">
         <h4 className="popup__header--title">
-          {editingCategory.name ? "Edit category" : "Create category"}
+          {editingCategory.title ? "Edit category" : "Create category"}
         </h4>
         <i
           onClick={handleCancel}
@@ -203,21 +166,21 @@ const CategoryPopup = () => {
       </div>
       <form>
         <div>
-          <label>Category name</label>
-          <Categorypicker val={name} fn={handleChangeName} />
+          <label>Category title</label>
+          <Categorypicker val={title} fn={handleChangeTitle} />
 
-          {name === "Other" && (
+          {title === "Other" && (
             <>
               <label>Custom type</label>
               <Typepicker val={type} fn={handleChangeType} />
 
-              <label>Custom name</label>
+              <label>Custom title</label>
               <input
                 type="text"
-                id="customName"
-                name="customName"
-                value={customName}
-                onChange={handleChangeCustomName}
+                id="customTitle"
+                name="customTitle"
+                value={customTitle}
+                onChange={handleChangeCustomTitle}
               />
             </>
           )}
@@ -232,12 +195,12 @@ const CategoryPopup = () => {
                   checked={showValue}
                   onChange={handleChangeShowValue}
                 />
-                Show value for {getRealName()}
+                Show value for {getRealTitle()}
               </label>
             </>
           )}
 
-          {editingCategory.name ? (
+          {editingCategory.title ? (
             <>
               <Button text="Update" altText="Updating..." fn={handleUpdate} />
               <Button

@@ -9,7 +9,7 @@ import { SketchPicker } from "react-color";
 const Layout = () => {
   const {
     editingResume,
-    storeResume,
+    updateResume,
     templates,
     setTemplates,
     setPreview,
@@ -65,7 +65,7 @@ const Layout = () => {
     };
     myData[key] = value;
 
-    storeResume(myData, {});
+    updateResume(myData);
 
     await fauna({
       type: "UPDATE_RESUME",
@@ -88,7 +88,7 @@ const Layout = () => {
           ...styles,
         };
 
-        storeResume(myData, {});
+        updateResume(myData);
 
         await fauna({
           type: "UPDATE_RESUME",

@@ -34,7 +34,7 @@ const Settings = () => {
       data: visibleData,
     }).then(
       (data) => {
-        if (data == -1) {
+        if (data === -1) {
           toast.error("⚠️ That email is already taken");
           return;
         }

@@ -6,6 +6,7 @@ import { fauna } from "../lib/api";
 
 export const UserContext = createContext();
 
+// TODO: store and move functions
 const UserContextProvider = (props) => {
   const [dummy, setDummy] = useState(false);
   const [user, setUser] = useState(null);
@@ -50,25 +51,24 @@ const UserContextProvider = (props) => {
     setUser((prevUser) => ({ ...prevUser, ...data }));
   };
   const getCategory = (categoryId) => {
-    return editingResume.categories.data.find(
-      (category) => category._id === categoryId
+    return editingResume.data.categories.find(
+      (category) => category.id === categoryId
     );
   };
   const getResumes = () => {
     return userExists() && user.resumes.data;
   };
   const getContactInfo = (resume) => {
-    if (resume) return resume.contactInfo.data;
-    return editingResume.contactInfo.data;
+    return (resume || editingResume).data.contactInfo || [];
   };
   const getCategories = (resume, sidebar) => {
-    const cur = (resume || editingResume).categories.data;
+    const cur = (resume || editingResume).data.categories;
     if (sidebar !== undefined)
       return cur.filter((cat) => cat.sidebar === sidebar);
     return cur;
   };
   const getItems = (category) => {
-    return category && category.items && category.items.data;
+    return category && category.items;
   };
   const getJobTitle = (resume) => {
     if (resume) return resume.jobTitle || "Job Title";
@@ -78,107 +78,63 @@ const UserContextProvider = (props) => {
     if (resume) return resume.bio || "Bio";
     return editingResume.bio || "Bio";
   };
-  const storeResume = (resumeData, { add, del, newId }) => {
-    storeStatus("Saving...");
-
-    if (del) {
-      // Delete resume
-      user.resumes.data = user.resumes.data.filter(
-        (x) => x._id !== resumeData._id
-      );
-      reset();
-      setUser(() => user);
-      resetPopups();
-      return;
-    } else if (add) {
-      // Add resume
-      user.resumes.data.push(resumeData);
-      setUser(() => user);
-      resetPopups();
-      return;
-    }
-
+  const createResume = (resumeData) => {
+    user.resumes.data.push(resumeData);
+  };
+  const deleteResume = (resumeData) => {
+    user.resumes.data = user.resumes.data.filter(
+      (x) => x._id !== resumeData._id
+    );
+  };
+  const updateResume = (resumeData) => {
+    // user.resumes.data.forEach((resume, r) => {
+    //   if (resume._id === resumeData._id) {
+    //     const newResume = { ...resume, ...resumeData };
+    //     user.resumes.data[r] = newResume;
+    //     setEditingResume(newResume);
+    //   }
+    // });
+    setEditingResume({ ...editingResume, ...resumeData });
+  };
+  const updateSpecificResume = (resumeData) => {
     user.resumes.data.forEach((resume, r) => {
       if (resume._id === resumeData._id) {
-        if (newId) {
-          user.resumes.data[r]._id = newId;
-          setEditingResume(user.resumes.data[r]);
-        } else {
-          const newResume = { ...resume, ...resumeData };
-          user.resumes.data[r] = newResume;
-          setEditingResume(newResume);
-        }
+        const newResume = { ...resume, ...resumeData };
+        user.resumes.data[r] = newResume;
       }
     });
-
-    resetPopups();
-
-    setUser(() => user);
   };
-  const storeCategory = (categoryData, { add, del, newId }) => {
-    storeStatus("Saving...");
-
-    const resume = user.resumes.data.find(
-      (res) => res._id === editingResume._id
-    );
-
-    if (add) {
-      // Add category
-      resume.categories.data.push(categoryData);
-    } else if (del) {
-      // Delete category
-      resume.categories.data = resume.categories.data.filter(
-        (category) => category._id !== categoryData._id
-      );
-    } else {
-      resume.categories.data.find((category, i) => {
-        if (category._id === categoryData._id) {
-          // Update category
-          if (newId) {
-            resume.categories.data[i]._id = newId;
-          } else {
-            const newCategory = { ...category, ...categoryData };
-            resume.categories.data[i] = newCategory;
-          }
-        }
-      });
-    }
-
-    resetPopups();
+  const createCategory = (categoryData) => {
+    editingResume.data.categories.push(categoryData);
   };
-  const storeItem = (itemData, { del, add, newId }) => {
-    storeStatus("Saving...");
-
-    const resume = user.resumes.data.find(
-      (res) => res._id === editingResume._id
+  const deleteCategory = (categoryData) => {
+    editingResume.data.categories = editingResume.data.categories.filter(
+      (cat) => cat.id !== categoryData.id
     );
-    const category = resume.categories.data.find(
-      (cat) => cat._id === itemData.category._id
-    );
-
-    if (add) {
-      // Add item
-      category.items.data.push(itemData);
-    } else if (del) {
-      // Delete item
-      category.items.data = category.items.data.filter(
-        (item) => item._id !== itemData._id
-      );
-    } else {
-      category.items.data.find((item, i) => {
-        if (item._id === itemData._id) {
-          // Update item
-          if (newId) {
-            category.items.data[i]._id = newId;
-          } else {
-            const newItem = { ...item, ...itemData };
-            category.items.data[i] = newItem;
-          }
-        }
-      });
-    }
-
-    resetPopups();
+  };
+  const updateCategory = (categoryData) => {
+    editingResume.data.categories = editingResume.data.categories.map((cat) => {
+      if (cat.id === categoryData.id) {
+        return categoryData;
+      }
+      return cat;
+    });
+  };
+  const createItem = (itemData) => {
+    getCategory(itemData.categoryId).items.push(itemData);
+  };
+  const deleteItem = (itemData) => {
+    const category = getCategory(itemData.categoryId);
+    category.items = category.items.filter((item) => item.id !== itemData.id);
+  };
+  const updateItem = (itemData) => {
+    const category = getCategory(itemData.categoryId);
+    category.items = category.items.map((item) => {
+      if (item.id === itemData.id) {
+        return itemData;
+      }
+      return item;
+    });
   };
   const storeContactInfo = (contactInfoData, { add, del, newId }) => {
     storeStatus("Saving...");
@@ -273,7 +229,7 @@ const UserContextProvider = (props) => {
     // Send to fauna
     await fauna({
       type: "MOVE_CATEGORY",
-      id: category._id,
+      id: category.id,
       amount,
     }).then(
       () => {
@@ -287,12 +243,12 @@ const UserContextProvider = (props) => {
         user.resumes.data
           .find((resume) => resume._id === editingResume._id)
           .categories.data.find(
-            (cat) => cat._id === otherCategory._id
+            (cat) => cat.id === otherCategory.id
           ).priority -= amount;
         user.resumes.data
           .find((resume) => resume._id === editingResume._id)
           .categories.data.find(
-            (cat) => cat._id === category._id
+            (cat) => cat.id === category.id
           ).priority += amount;
 
         resetPopups();
@@ -325,8 +281,8 @@ const UserContextProvider = (props) => {
         // Update priority
         otherResume.priority -= amount;
         resume.priority += amount;
-        storeResume(otherResume, {});
-        storeResume(resume, {});
+        updateSpecificResume(otherResume);
+        updateSpecificResume(resume);
 
         resetPopups();
         storeStatus("Saved.");
@@ -357,7 +313,7 @@ const UserContextProvider = (props) => {
     resetPopups();
   };
   useEffect(() => {
-    if (user == null) {
+    if (user === null) {
       const userId = JSON.parse(localStorage.getItem("userId"));
       if (userId != null) {
         fauna({ type: "READ_USER", id: userId }).then(
@@ -373,9 +329,14 @@ const UserContextProvider = (props) => {
             } else {
               setEditingResume(DUMMY_RESUME);
             }
-            storeUser(data.findUserByID);
+            // Convert resume data
+            let newData = data;
+            newData.findUserByID.resumes.data = newData.findUserByID.resumes.data.map(
+              (res) => ({ ...res, data: JSON.parse(res.data) })
+            );
+            storeUser(newData.findUserByID);
             console.info("readUser");
-            console.table(data.findUserByID);
+            console.table(newData.findUserByID);
 
             setAuth(true);
           },
@@ -427,9 +388,15 @@ const UserContextProvider = (props) => {
         moveItem,
         moveCategory,
         moveResume,
-        storeItem,
-        storeResume,
-        storeCategory,
+        createItem,
+        deleteItem,
+        updateItem,
+        createResume,
+        deleteResume,
+        updateResume,
+        createCategory,
+        deleteCategory,
+        updateCategory,
         userMadeChanges,
         setUserMadeChanges,
         resetPopups,

@@ -24,7 +24,7 @@ const ResumePreview = ({ resume, index }) => {
     setChangingResume,
     moveResume,
     forceRender,
-    storeResume,
+    createResume,
     storeStatus,
   } = useContext(UserContext);
   const handleClick = (e, resume) => {
@@ -42,7 +42,7 @@ const ResumePreview = ({ resume, index }) => {
       title,
       priority,
     }).then((data) => {
-      storeResume(data.createResume, { add: true });
+      createResume(data.createResume);
       storeStatus("");
     });
   };

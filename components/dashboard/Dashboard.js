@@ -60,11 +60,11 @@ const Dashboard = () => {
       <main>
         <div className="dashboard">
           <div className="dashboard__content">
-            {nav == 0 && (!changingResume ? <Resumes /> : <Editor />)}
-            {nav == 1 && <Layout />}
-            {nav == 2 && <Export />}
-            {nav == 3 && <Options />}
-            {nav == 1000 && <Settings />}
+            {nav === 0 && (!changingResume ? <Resumes /> : <Editor />)}
+            {nav === 1 && <Layout />}
+            {nav === 2 && <Export />}
+            {nav === 3 && <Options />}
+            {nav === 1000 && <Settings />}
           </div>
         </div>
       </main>

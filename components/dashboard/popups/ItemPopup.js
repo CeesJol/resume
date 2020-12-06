@@ -94,11 +94,13 @@ const ItemPopup = () => {
     let myData = {
       ...editingItem,
       ...fields,
+      categoryId: category.id,
       id: tempId,
     };
     Object.keys(myData).forEach(
       (key) => myData[key] === "" && delete myData[key]
     );
+    console.log("myData:", myData);
     createItem(myData);
     resetPopups();
   };

@@ -161,7 +161,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
   };
   const drawCategories = () => {
     // TODO now you can't create a category...
-    if (!getCategories(curResume)) return <p>Nothing here yet</p>;
+    // if (!getCategories(curResume)) return <p>Nothing here yet</p>;
 
     const categories = sortByPriority(getCategories(curResume));
 

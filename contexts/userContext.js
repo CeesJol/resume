@@ -85,6 +85,7 @@ const UserContextProvider = (props) => {
     user.resumes.data = user.resumes.data.filter(
       (x) => x._id !== resumeData._id
     );
+    reset();
   };
   const updateResume = (resumeData) => {
     // user.resumes.data.forEach((resume, r) => {
@@ -190,76 +191,30 @@ const UserContextProvider = (props) => {
     return !!user && user.username;
   };
   const moveItem = async (item, amount) => {
-    if (moving) return false;
-    setMoving(true);
+    // Store item and current index
+    const movingItem = item;
+    const curIndex = getCategory(item.categoryId).items.indexOf(item);
 
-    // Send to fauna
-    await fauna({
-      type: "MOVE_ITEM",
-      id: item._id,
-      amount,
-    }).then(
-      () => {
-        // Find item with priority p
-        const p = item.priority + amount;
-        let otherItem = getCategory(item.category._id).items.data.find(
-          (item) => item.priority === p
-        );
+    // Remove item from array
+    getCategory(item.categoryId).items = getCategory(
+      item.categoryId
+    ).items.filter((i) => i.id !== item.id);
 
-        // Update priority
-        otherItem.priority -= amount;
-        item.priority += amount;
-        storeItem(otherItem, {});
-        storeItem(item, {});
-
-        resetPopups();
-        storeStatus("Saved.");
-      },
-      (err) => {
-        storeStatus(`Error: failed to save: ${err}`);
-      }
-    );
-
-    setMoving(false);
+    // Re-insert item at proper spot
+    getCategory(item.categoryId).items.splice(curIndex + amount, 0, movingItem);
   };
   const moveCategory = async (category, amount) => {
-    if (moving) return false;
-    setMoving(true);
+    // Store item and current index
+    const movingCategory = category;
+    const curIndex = editingResume.data.categories.indexOf(category);
 
-    // Send to fauna
-    await fauna({
-      type: "MOVE_CATEGORY",
-      id: category.id,
-      amount,
-    }).then(
-      () => {
-        // Find category (in same bar) with priority p
-        const p = category.priority + amount;
-        let otherCategory = editingResume.categories.data.find(
-          (cat) => cat.priority === p && cat.sidebar === category.sidebar
-        );
-
-        // Update priority
-        user.resumes.data
-          .find((resume) => resume._id === editingResume._id)
-          .categories.data.find(
-            (cat) => cat.id === otherCategory.id
-          ).priority -= amount;
-        user.resumes.data
-          .find((resume) => resume._id === editingResume._id)
-          .categories.data.find(
-            (cat) => cat.id === category.id
-          ).priority += amount;
-
-        resetPopups();
-        storeStatus("Saved.");
-      },
-      (err) => {
-        storeStatus(`Error: failed to save: ${err}`);
-      }
+    // Remove item from array
+    editingResume.data.categories = editingResume.data.categories.filter(
+      (c) => c.id !== category.id
     );
 
-    setMoving(false);
+    // Re-insert item at proper spot
+    editingResume.data.categories.splice(curIndex + amount, 0, movingCategory);
   };
   const moveResume = async (resume, amount) => {
     if (moving) return false;

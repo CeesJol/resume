@@ -63,11 +63,7 @@ const ResumePopup = () => {
         ...styles,
         priority: getResumes().length + 1,
         data: {
-          categories: categories.map((category) => ({
-            title: category.title,
-            type: category.type,
-            sidebar: category.sidebar,
-          })),
+          categories,
           contactInfo: [],
         },
       },

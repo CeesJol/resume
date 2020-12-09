@@ -42,12 +42,9 @@ const ResumePreview = ({ resume, index }) => {
       title,
       priority,
     }).then((data) => {
-      console.log("data:", data);
       // Convert resume data
-      let newData = data;
-      console.log("newData:", newData);
-      newData.createResume.data = JSON.parse(newData.createResume.data);
-      createResume(newData.createResume);
+      data.createResume.data = JSON.parse(data.createResume.data);
+      createResume(data.createResume);
       storeStatus("");
       forceRender();
     });

@@ -100,7 +100,6 @@ const ItemPopup = () => {
     Object.keys(myData).forEach(
       (key) => myData[key] === "" && delete myData[key]
     );
-    console.log("myData:", myData);
     createItem(myData);
     resetPopups();
   };

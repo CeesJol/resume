@@ -70,12 +70,10 @@ const ResumePopup = () => {
     }).then(
       (data) => {
         // Convert resume data
-        let newData = data;
-        newData.createResume.data = JSON.parse(newData.createResume.data);
-
-        console.info("CREATE_RESUME data", newData);
-        createResume(newData.createResume);
-        setEditingResume(newData.createResume);
+        data.createResume.data = JSON.parse(data.createResume.data);
+        console.info("CREATE_RESUME data", data);
+        createResume(data.createResume);
+        setEditingResume(data.createResume);
         setChangingResume(true);
         storeStatus("");
         resetPopups();

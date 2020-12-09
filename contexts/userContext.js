@@ -284,13 +284,12 @@ const UserContextProvider = (props) => {
               setEditingResume(DUMMY_RESUME);
             }
             // Convert resume data
-            let newData = data;
-            newData.findUserByID.resumes.data = newData.findUserByID.resumes.data.map(
+            data.findUserByID.resumes.data = data.findUserByID.resumes.data.map(
               (res) => ({ ...res, data: JSON.parse(res.data) })
             );
-            storeUser(newData.findUserByID);
+            storeUser(data.findUserByID);
             console.info("readUser");
-            console.table(newData.findUserByID);
+            console.table(data.findUserByID);
 
             setAuth(true);
           },

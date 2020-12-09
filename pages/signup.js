@@ -17,14 +17,13 @@ const Signup = () => {
       async (data) => {
         setAuth(true);
         // Convert resume data
-        let newData = data;
-        newData.resumes.data = newData.resumes.data.map((res) => ({
+        data.resumes.data = data.resumes.data.map((res) => ({
           ...res,
           data: JSON.parse(res.data),
         }));
-        console.info("getUserByEmail", newData);
-        storeUser(newData);
-        const id = newData._id;
+        console.info("getUserByEmail", data);
+        storeUser(data);
+        const id = data._id;
         localStorage.setItem("userId", JSON.stringify(id));
         storeUser({ id });
         Router.push("/dashboard");

@@ -251,6 +251,11 @@ export const duplicateResume = async (
   secret
 ) => {
   console.info("duplicateResume request");
+  console.log("resumeData.data:", resumeData.data);
+  console.log(
+    "JSON.stringify(resumeData.data):",
+    JSON.stringify(resumeData.data)
+  );
   const query = `mutation DuplicateResume {
 		createResume(data: {
 			title: "${title}"
@@ -260,7 +265,7 @@ export const duplicateResume = async (
 			priority: ${priority}
 			primaryColor: "${resumeData.primaryColor}"
 			backgroundColor: "${resumeData.backgroundColor}"
-			data: "${data}"
+			data: """${JSON.stringify(resumeData.data)}"""
 			user: { connect: "${userId}" }
 		}) {
 			${RESUME_DATA}

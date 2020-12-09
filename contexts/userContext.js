@@ -6,7 +6,6 @@ import { fauna } from "../lib/api";
 
 export const UserContext = createContext();
 
-// TODO: store and move functions
 const UserContextProvider = (props) => {
   const [dummy, setDummy] = useState(false);
   const [user, setUser] = useState(null);

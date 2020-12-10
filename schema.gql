@@ -47,4 +47,7 @@ type Mutation {
     @resolver(name: "createUser")
   updateUserPassword(id: ID!, password: String!): User!
     @resolver(name: "updateUserPassword")
+
+  cascadeDeleteResume(id: ID!): ID! @resolver(name: "cascadeDeleteResume")
+  moveResume(id: ID!, amount: Int!): ID! @resolver(name: "moveResume")
 }

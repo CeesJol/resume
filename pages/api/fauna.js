@@ -222,9 +222,7 @@ export const deleteResume = async ({ id }, secret) => {
   console.info("deleteResume request");
   return executeQuery(
     `mutation DeleteResume {
-			deleteResume(id:"${id}") {
-				_id
-			}
+			cascadeDeleteResume(id: "${id}")
 		}`,
     secret
   );

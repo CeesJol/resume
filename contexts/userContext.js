@@ -31,15 +31,8 @@ const UserContextProvider = (props) => {
   const [moving, setMoving] = useState(false);
   const storeStatus = (data, err) => {
     if (err) {
-      toast.error(`⚠️ ${err}`);
-      console.error("updateItem err:", err);
+      console.error("storeStatus err report:", err);
     }
-
-    // Reset status
-    if (data === "RESET") setStatus("Saved successfully after error.");
-
-    // Dont update status if there is an error
-    if (status.startsWith("Error")) return;
 
     setStatus(data);
   };
@@ -77,14 +70,20 @@ const UserContextProvider = (props) => {
     if (resume) return resume.bio || "Bio";
     return editingResume.bio || "Bio";
   };
+  const postResumeAction = () => {
+    resetPopups();
+    storeResume();
+  };
   const createResume = (resumeData) => {
     user.resumes.data.push(resumeData);
+    postResumeAction();
   };
   const deleteResume = (resumeData) => {
     user.resumes.data = user.resumes.data.filter(
       (x) => x._id !== resumeData._id
     );
     reset();
+    postResumeAction();
   };
   const updateResume = (resumeData) => {
     // user.resumes.data.forEach((resume, r) => {
@@ -95,6 +94,7 @@ const UserContextProvider = (props) => {
     //   }
     // });
     setEditingResume({ ...editingResume, ...resumeData });
+    postResumeAction();
   };
   const updateSpecificResume = (resumeData) => {
     user.resumes.data.forEach((resume, r) => {
@@ -103,14 +103,28 @@ const UserContextProvider = (props) => {
         user.resumes.data[r] = newResume;
       }
     });
+    postResumeAction();
+  };
+  const storeResume = () => {
+    storeStatus("Saving...");
+    fauna({
+      type: "UPDATE_RESUME",
+      id: editingResume._id,
+      data: editingResume,
+    }).then(
+      () => storeStatus("Saved."),
+      (err) => storeStatus("Error: failed to save", err)
+    );
   };
   const createCategory = (categoryData) => {
     editingResume.data.categories.push(categoryData);
+    postResumeAction();
   };
   const deleteCategory = (categoryData) => {
     editingResume.data.categories = editingResume.data.categories.filter(
       (cat) => cat.id !== categoryData.id
     );
+    postResumeAction();
   };
   const updateCategory = (categoryData) => {
     editingResume.data.categories = editingResume.data.categories.map((cat) => {
@@ -119,13 +133,16 @@ const UserContextProvider = (props) => {
       }
       return cat;
     });
+    postResumeAction();
   };
   const createItem = (itemData) => {
     getCategory(itemData.categoryId).items.push(itemData);
+    postResumeAction();
   };
   const deleteItem = (itemData) => {
     const category = getCategory(itemData.categoryId);
     category.items = category.items.filter((item) => item.id !== itemData.id);
+    postResumeAction();
   };
   const updateItem = (itemData) => {
     const category = getCategory(itemData.categoryId);
@@ -135,37 +152,28 @@ const UserContextProvider = (props) => {
       }
       return item;
     });
+    postResumeAction();
   };
-  const storeContactInfo = (contactInfoData, { add, del, newId }) => {
-    storeStatus("Saving...");
-
-    const resume = user.resumes.data.find(
-      (res) => res._id === editingResume._id
+  const createContactInfo = (contactInfoData) => {
+    editingResume.data.contactInfo.push(contactInfoData);
+    postResumeAction();
+  };
+  const deleteContactInfo = (contactInfoData) => {
+    editingResume.data.contactInfo = editingResume.data.contactInfo.filter(
+      (cat) => cat.id !== contactInfoData.id
     );
-
-    if (add) {
-      // Add contactInfo
-      resume.contactInfo.data.push(contactInfoData);
-    } else if (del) {
-      // Delete contactInfo
-      resume.contactInfo.data = resume.contactInfo.data.filter(
-        (item) => item._id !== contactInfoData._id
-      );
-    } else {
-      resume.contactInfo.data.find((item, i) => {
-        if (item._id === contactInfoData._id) {
-          // Update contactInfo
-          if (newId) {
-            resume.contactInfo.data[i]._id = newId;
-          } else {
-            const newItem = { ...item, ...contactInfoData };
-            resume.contactInfo.data[i] = newItem;
-          }
+    postResumeAction();
+  };
+  const updateContactInfo = (contactInfoData) => {
+    editingResume.data.contactInfo = editingResume.data.contactInfo.map(
+      (cat) => {
+        if (cat.id === contactInfoData.id) {
+          return contactInfoData;
         }
-      });
-    }
-
-    resetPopups();
+        return cat;
+      }
+    );
+    postResumeAction();
   };
   const clearUser = () => {
     console.info("clearUser");
@@ -201,6 +209,9 @@ const UserContextProvider = (props) => {
 
     // Re-insert item at proper spot
     getCategory(item.categoryId).items.splice(curIndex + amount, 0, movingItem);
+
+    // Send updates to fauna
+    storeResume();
   };
   const moveCategory = async (category, amount) => {
     // Store item and current index
@@ -214,6 +225,9 @@ const UserContextProvider = (props) => {
 
     // Re-insert item at proper spot
     editingResume.data.categories.splice(curIndex + amount, 0, movingCategory);
+
+    // Send updates to fauna
+    storeResume();
   };
   const moveResume = async (resume, amount) => {
     if (moving) return false;
@@ -241,9 +255,7 @@ const UserContextProvider = (props) => {
         resetPopups();
         storeStatus("Saved.");
       },
-      (err) => {
-        storeStatus(`Error: failed to save: ${err}`);
-      }
+      (err) => storeStatus("Error: failed to save", err)
     );
 
     setMoving(false);
@@ -347,9 +359,13 @@ const UserContextProvider = (props) => {
         createResume,
         deleteResume,
         updateResume,
+        storeResume,
         createCategory,
         deleteCategory,
         updateCategory,
+        createContactInfo,
+        deleteContactInfo,
+        updateContactInfo,
         userMadeChanges,
         setUserMadeChanges,
         resetPopups,
@@ -362,7 +378,6 @@ const UserContextProvider = (props) => {
         getContactInfo,
         getJobTitle,
         getBio,
-        storeContactInfo,
         preview,
         setPreview,
         pdf,

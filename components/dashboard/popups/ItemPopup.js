@@ -27,8 +27,6 @@ const ItemPopup = () => {
     setUserMadeChanges,
     resetPopups,
     getCategory,
-    getItems,
-    storeStatus,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [isGoing, setIsGoing] = useState(true); // Separated from fields, because DB doesn't take this value.
@@ -101,7 +99,6 @@ const ItemPopup = () => {
       (key) => myData[key] === "" && delete myData[key]
     );
     createItem(myData);
-    resetPopups();
   };
   const handleUpdate = () => {
     const validationError = validateInput();
@@ -116,7 +113,6 @@ const ItemPopup = () => {
       (key) => myData[key] === "" && delete myData[key]
     );
     updateItem(myData);
-    resetPopups();
   };
   const handleDelete = (event) => {
     if (event) event.preventDefault();
@@ -124,7 +120,6 @@ const ItemPopup = () => {
       text: "Are you sure you want to delete this item?",
       fn: () => {
         deleteItem(editingItem);
-        resetPopups();
       },
     });
   };

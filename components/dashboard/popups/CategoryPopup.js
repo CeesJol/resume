@@ -77,7 +77,6 @@ const CategoryPopup = () => {
     };
 
     createCategory(myData);
-    resetPopups();
   };
   const handleUpdate = () => {
     const validationError = validateInput();
@@ -87,6 +86,7 @@ const CategoryPopup = () => {
     }
 
     let myData = {
+      ...editingCategory,
       id: editingCategory.id,
       title: getRealTitle(),
       type,
@@ -94,7 +94,6 @@ const CategoryPopup = () => {
     };
 
     updateCategory(myData);
-    resetPopups();
   };
   const handleDelete = (event) => {
     if (event) event.preventDefault();
@@ -103,7 +102,6 @@ const CategoryPopup = () => {
         "Are you sure you want to delete this category? All the items in it will be lost.",
       fn: () => {
         deleteCategory(editingCategory);
-        resetPopups();
       },
     });
   };

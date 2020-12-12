@@ -36,7 +36,7 @@ const Options = () => {
       data: myData,
     }).then(
       () => storeStatus("Saved."),
-      (err) => storeStatus(`Error: failed to save: ${err}`)
+      (err) => storeStatus("Error: failed to save", err)
     );
   };
   const handleDelete = async (event) => {
@@ -48,9 +48,7 @@ const Options = () => {
         await fauna({ type: "DELETE_RESUME", id: editingResume._id }).then(
           async () => {
             deleteResume(editingResume);
-            resetPopups();
             setPreview(true);
-            storeStatus("Saved.");
             // Propagate priority updates
             for (let resume of getResumes()) {
               if (resume.priority > editingResume.priority) {

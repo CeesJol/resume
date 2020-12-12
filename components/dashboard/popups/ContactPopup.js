@@ -3,7 +3,6 @@ import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import Contactpicker from "../../dashboard/pickers/Contactpicker";
 import { toast } from "react-toastify";
-import { fauna } from "../../../lib/api";
 import randomId from "../../../lib/randomId";
 import { CONTACTPICKER_OPTIONS } from "../../../lib/constants";
 import ReactModal from "react-modal";
@@ -11,15 +10,14 @@ ReactModal.setAppElement("#__next");
 
 const ContactPopup = () => {
   const {
-    editingResume,
     setWarning,
     userMadeChanges,
     setUserMadeChanges,
-    storeContactInfo,
+    createContactInfo,
+    deleteContactInfo,
+    updateContactInfo,
     resetPopups,
     editingContactInfo,
-    getContactInfo,
-    storeStatus,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [name, setName] = useState("");
@@ -53,7 +51,7 @@ const ContactPopup = () => {
       value: value ? value : customValue,
     };
 
-    storeContactInfo(myData, { add: true });
+    createContactInfo(myData);
   };
   const handleUpdate = () => {
     const validationError = validateInput();
@@ -68,15 +66,14 @@ const ContactPopup = () => {
       value: value ? value : customValue,
     };
 
-    storeContactInfo(myData, {});
+    updateContactInfo(myData);
   };
   const handleDelete = (event) => {
     if (event) event.preventDefault();
     setWarning({
       text: "Are you sure you want to delete this item?",
       fn: () => {
-        storeContactInfo(editingContactInfo, { del: true });
-        resetPopups();
+        deleteContactInfo(editingContactInfo);
       },
     });
   };

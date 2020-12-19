@@ -46,7 +46,7 @@ const ContactPopup = () => {
 
     const tempId = randomId();
     const myData = {
-      _id: tempId,
+      id: tempId,
       name,
       value: value ? value : customValue,
     };

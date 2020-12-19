@@ -275,7 +275,7 @@ const UserContextProvider = (props) => {
     // setEditingResume(false);
     if (user && user.resumes.data.length === 0) setEditingResume(DUMMY_RESUME);
     setNav(0);
-    setStatus("");
+    storeStatus("");
     resetPopups();
   };
   useEffect(() => {
@@ -388,7 +388,6 @@ const UserContextProvider = (props) => {
         setTemplates,
         reset,
         status,
-        setStatus,
         storeStatus,
         moving,
         setMoving,

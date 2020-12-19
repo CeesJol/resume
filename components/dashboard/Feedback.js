@@ -27,7 +27,7 @@ const Feedback = () => {
         break;
     }
     return (
-      <div className="feedback__grade-container">
+      <div className="feedback__grade-container" key={`grade-${grade}`}>
         <div
           className={
             `feedback__grade ` +

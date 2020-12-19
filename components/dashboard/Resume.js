@@ -39,7 +39,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
   const curResume = resume || editingResume;
   const [hovering, setHovering] = useState(false);
   const handleChangeInfo = () => {
-    if (preview) return false;
+    if (preview) return;
     setChangingInfo(true);
   };
   const templateCSS = template
@@ -237,7 +237,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
     );
   };
   const handleNewCategory = ({ sidebar }) => {
-    if (preview) return false;
+    if (preview) return;
     setEditingCategory({ sidebar: sidebar ? true : false });
   };
   const result = (

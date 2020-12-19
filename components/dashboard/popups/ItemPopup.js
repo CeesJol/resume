@@ -5,7 +5,6 @@ import Monthpicker from "../pickers/Monthpicker";
 import Yearpicker from "../pickers/Yearpicker";
 import Valuepicker from "../pickers/Valuepicker";
 import { toast } from "react-toastify";
-import { fauna } from "../../../lib/api";
 import {
   getCategoryItems,
   getCategoryIsGoingText,
@@ -144,7 +143,7 @@ const ItemPopup = () => {
 
       if (editingItem.title) {
         setFields({
-          title: editingItem.title || "",
+          title: editingItem.title,
           month1: editingItem.month1 || "",
           year1: editingItem.year1 || "",
           month2: editingItem.month2 || "",

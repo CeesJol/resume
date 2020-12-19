@@ -1,9 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { UserContext } from "../../../contexts/userContext";
 import ResumeWrapper from "../ResumeWrapper";
-import { fauna } from "../../../lib/api";
-import Button from "../../general/Button";
-import { toast } from "react-toastify";
 
 const Editor = () => {
   const { editingResume, setChangingResume, setPreview } = useContext(

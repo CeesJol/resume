@@ -10,7 +10,6 @@ const Options = () => {
     deleteResume,
     setWarning,
     editingResume,
-    resetPopups,
     getResumes,
     setPreview,
     storeStatus,

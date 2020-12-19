@@ -23,9 +23,7 @@ const Item = ({ category, item, index, dummy, hovering, primaryColor }) => {
     if (preview) return false;
     if (dummy)
       setEditingItem({
-        category: {
-          _id: category._id,
-        },
+        categoryId: category.id,
       });
     else setEditingItem(item);
   };
@@ -42,7 +40,7 @@ const Item = ({ category, item, index, dummy, hovering, primaryColor }) => {
 
     return values.map((value, i) => (
       <div
-        key={`${item._id}-${i}`}
+        key={`${item.id}-${i}`}
         className={`resume__item--value-box ${
           value ? "resume__item--value-box--colored" : ""
         }`}
@@ -65,7 +63,7 @@ const Item = ({ category, item, index, dummy, hovering, primaryColor }) => {
           : {}
       }
       onClick={(e) => handleClick(e, item)}
-      key={item._id}
+      key={item.id}
     >
       <h4 className="resume__item--title">{item.title}</h4>
       {hovering &&

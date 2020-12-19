@@ -37,7 +37,7 @@ const ContactItem = ({ template, item, text, dummy, primaryColor }) => {
         <h4 className="resume__contact-info--title">{item.value}</h4>
       )}
       <p className="resume__contact-info--body">
-        {item.name ? item.name : text}
+        {item.title ? item.title : text}
       </p>
     </div>
   );

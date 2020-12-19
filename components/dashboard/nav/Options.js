@@ -6,7 +6,8 @@ import { toast } from "react-toastify";
 
 const Options = () => {
   const {
-    storeResume,
+    updateResume,
+    deleteResume,
     setWarning,
     editingResume,
     resetPopups,
@@ -27,7 +28,7 @@ const Options = () => {
       title,
     };
 
-    storeResume(myData, {});
+    updateResume(myData);
 
     await fauna({
       type: "UPDATE_RESUME",
@@ -35,7 +36,7 @@ const Options = () => {
       data: myData,
     }).then(
       () => storeStatus("Saved."),
-      (err) => storeStatus(`Error: failed to save: ${err}`)
+      (err) => storeStatus("Error: failed to save", err)
     );
   };
   const handleDelete = async (event) => {
@@ -46,15 +47,13 @@ const Options = () => {
       fn: async () => {
         await fauna({ type: "DELETE_RESUME", id: editingResume._id }).then(
           async () => {
-            storeResume(editingResume, { del: true });
-            resetPopups();
+            deleteResume(editingResume);
             setPreview(true);
-            storeStatus("Saved.");
             // Propagate priority updates
             for (let resume of getResumes()) {
               if (resume.priority > editingResume.priority) {
                 const newPriority = resume.priority - 1;
-                storeResume({ ...resume, priority: newPriority }, {});
+                updateResume({ ...resume, priority: newPriority });
               }
             }
           },

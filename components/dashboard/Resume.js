@@ -48,7 +48,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
   const drawCategory = (category, index) => {
     return (
       <Category
-        key={`category-${category._id || category.name}`}
+        key={`category-${category.id || category.title}`}
         category={category}
         index={index}
         primaryColor={curResume.primaryColor}
@@ -154,13 +154,14 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
       <ContactItem
         template={templateCSS}
         item={item}
-        key={`contactItem-${item.name}-${item.value}`}
+        key={`contactItem-${item.title}-${item.value}`}
         primaryColor={curResume.primaryColor}
       />
     ));
   };
   const drawCategories = () => {
-    if (!getCategories(curResume)) return <p>Nothing here yet</p>;
+    // TODO now you can't create a category...
+    // if (!getCategories(curResume)) return <p>Nothing here yet</p>;
 
     const categories = sortByPriority(getCategories(curResume));
 

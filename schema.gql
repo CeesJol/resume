@@ -19,6 +19,7 @@ type Resume {
   contactInfo: [ContactInfo] @relation
   primaryColor: String
   backgroundColor: String
+  data: String
 }
 
 type Category {

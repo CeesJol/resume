@@ -1,31 +1,12 @@
 import executeQuery from "../../lib/executeQuery";
 import stringifyObject from "../../lib/stringifyObject";
-import {
-  DEFAULT_CATEGORIES,
-  COOKIE_MAX_AGE,
-  convertToTemplate,
-} from "../../lib/constants";
+import { COOKIE_MAX_AGE } from "../../lib/constants";
 import jwt from "jsonwebtoken";
 import {
   validateSignup,
   validateLogin,
   validatePassword,
 } from "../../lib/validate";
-import { getTemplate } from "../../templates/templates";
-
-const ITEM_DATA = `_id
-title
-location
-month1
-year1
-month2
-year2
-value
-description
-priority
-category {
-	_id
-}`;
 
 const RESUME_DATA = `_id
 title
@@ -35,31 +16,7 @@ priority
 templateId
 primaryColor
 backgroundColor
-contactInfo {
-	data {
-		_id
-		name
-		value
-		priority
-		resume {
-			_id
-		}
-	}
-}
-categories {
-	data {
-		_id
-		name
-		type
-		priority
-		sidebar
-		items {
-			data {
-				${ITEM_DATA}
-			}
-		}
-	}
-}`;
+data`;
 
 // User data request data used by getUserByEmail and readUser
 const USER_DATA = `_id
@@ -275,25 +232,9 @@ export const createResume = async ({ userId, data }, secret) => {
   console.info("createResume request");
   const { pairs } = stringifyObject(data);
 
-  // Set whether to show value depending on resume property
-  const template = getTemplate(data.templateId);
-  const categories = convertToTemplate(DEFAULT_CATEGORIES, template);
-
   const query = `mutation CreateResume {
 		createResume(data: {
 			${pairs}
-			categories: {
-				create: [
-					${categories.map(
-            (category) => `{ 
-							name: "${category.name}" 
-							type: "${category.type}"
-							sidebar: ${category.sidebar}
-							priority: ${category.priority}
-						}`
-          )}
-				]
-			}
 			user: { connect: "${userId}" }
 		}) {
 			${RESUME_DATA}
@@ -316,34 +257,7 @@ export const duplicateResume = async (
 			priority: ${priority}
 			primaryColor: "${resumeData.primaryColor}"
 			backgroundColor: "${resumeData.backgroundColor}"
-			categories: {
-				create: [
-					${resumeData.categories.data.map(
-            (category) =>
-              `{ 
-								${stringifyObject(category).pairs}
-								items: {
-									create: [
-										${category.items.data.map(
-                      (item) => `{
-												${stringifyObject(item).pairs}
-										}`
-                    )}
-								]
-							}
-						}`
-          )}
-				]
-			}
-			contactInfo: {
-				create: [
-					${resumeData.contactInfo.data.map(
-            (contactInfoItem) => `{
-							${stringifyObject(contactInfoItem).pairs}
-						}`
-          )}
-				]
-			}
+			data: """${JSON.stringify(resumeData.data)}"""
 			user: { connect: "${userId}" }
 		}) {
 			${RESUME_DATA}
@@ -373,264 +287,6 @@ export const moveResume = async ({ id, amount }, secret) => {
   return executeQuery(
     `mutation MoveResume {
 			moveResume(id: "${id}", amount: ${amount})
-		}`,
-    secret
-  );
-};
-
-// export const updateResumeTemplate = async ({ id, templateId }, secret) => {
-//   console.info("updateResumeTemplate request");
-//   return executeQuery(`mutation UpdateResumeTemplate {
-// 		updateResume(id: "${id}", data: {
-// 			template: { connect: "${templateId}" }
-// 		}) {
-// 			template {
-// 				_id
-// 			}
-// 		}
-// 	}`, secret);
-// };
-
-/** |----------------------------
- *  | CATEGORIES
- *  |----------------------------
- */
-export const createCategory = async ({ resumeId, data }, secret) => {
-  console.info("createCategory request");
-  const { pairs, keys } = stringifyObject(data);
-  return executeQuery(
-    `mutation CreateCategory {
-			createCategory(data: {
-				${pairs}
-				resume: { connect: "${resumeId}" }
-			}) {
-				items {
-					data {
-						_id
-					}
-				}
-				resume {
-					_id
-				}
-				_id
-				${keys}
-			}
-		}`,
-    secret
-  );
-};
-
-// export const createCategoryWithItem = async ({
-//   resumeId,
-//   categoryName,
-//   data,
-// }, secret) => {
-//   console.info("createCategoryWithItem request");
-//   return executeQuery(`mutation CreateCategoryWithItem {
-// 		createCategory(data: {
-// 			name: "${categoryName}"
-// 			resume: { connect: "${resumeId}" },
-// 			items: {
-// 				create: [
-// 					{
-// 						title: "${data.title}"
-// 						location: "${data.location}"
-// 						from: "${data.from}"
-// 						to: "${data.to}"
-// 						description: """${data.description}"""
-// 					}
-// 				]
-// 			}
-// 		}) {
-// 			_id
-// 			name
-// 			items {
-// 				data {
-// 					_id
-// 					title
-// 					location
-// 					from
-// 					to
-// 					description
-// 				}
-// 			}
-// 		}
-// 	}`, secret);
-// };
-
-export const updateCategory = async ({ id, data }, secret) => {
-  console.info("updateCategory request");
-  const { pairs, keys } = stringifyObject(data);
-  return executeQuery(
-    `mutation UpdateCategory {
-			updateCategory(id: "${id}", data: {
-				${pairs}
-			}) {
-				_id
-				${keys}
-			}
-		}`,
-    secret
-  );
-};
-
-export const deleteCategory = async ({ id }, secret) => {
-  console.info("deleteCategory request");
-  return executeQuery(
-    `mutation DeleteCategory {
-			cascadeDeleteCategory(id: "${id}")
-		}`,
-    secret
-  );
-};
-
-export const moveCategory = async ({ id, amount }, secret) => {
-  console.info("moveCategory request");
-  return executeQuery(
-    `mutation MoveCategory {
-			moveCategory(id: "${id}", amount: ${amount})
-		}`,
-    secret
-  );
-};
-
-/** |----------------------------
- *  | ITEMS
- *  |----------------------------
- */
-export const createItem = async ({ categoryId, data }, secret) => {
-  console.info("createItem request");
-  const { pairs, keys } = stringifyObject(data);
-
-  return executeQuery(
-    `mutation CreateItem {
-			createItem(data: {
-				${pairs}
-				category: { connect: "${categoryId}" }
-			}) {
-				_id
-				category {
-					_id
-				}
-				${keys}
-			}
-		}`,
-    secret
-  );
-};
-
-export const updateItem = async ({ id, data }, secret) => {
-  console.info("updateItem request");
-  const { pairs, keys } = stringifyObject(data);
-  return executeQuery(
-    `mutation UpdateItem {
-			updateItem(id: "${id}", data: {
-				${pairs}
-			}) {
-				_id
-				${keys}
-			}
-		}`,
-    secret
-  );
-};
-
-export const deleteItem = async ({ id }, secret) => {
-  console.info("deleteItem request");
-  return executeQuery(
-    `mutation DeleteItem {
-			cascadeDeleteItem(id: "${id}")
-		}`,
-    secret
-  );
-};
-
-export const moveItem = async ({ id, amount }, secret) => {
-  console.info("moveItem request");
-  return executeQuery(
-    `mutation MoveItem {
-			moveItem(id: "${id}", amount: ${amount})
-		}`,
-    secret
-  );
-};
-
-/** |----------------------------
- *  | TEMPLATES
- *  |----------------------------
- */
-// export const getTemplates = () => {
-//   console.info("getTemplates request");
-//   return executeQuery(`query GetTemplates {
-// 		templates {
-// 			data {
-// 				_id
-// 				name
-// 				style
-// 				sidebar
-// 			}
-// 		}
-// 	}`, secret);
-// };
-
-// export const updateTemplate = async ({ id, data }, secret) => {
-//   console.info("updateTemplate request");
-//   return executeQuery(`mutation UpdateTemplate {
-// 		updateTemplate(id: "${id}", data: {
-// 			${stringifyObject(data)}
-// 		}) {
-// 			_id
-// 			name
-// 			style
-// 		}
-// 	}`, secret);
-// };
-
-/** |----------------------------
- *  | CONTACT INFO
- *  |----------------------------
- */
-export const createContactInfo = async ({ resumeId, data }, secret) => {
-  console.info("createContactInfo request");
-  const { pairs, keys } = stringifyObject(data);
-  return executeQuery(
-    `mutation UpdateContactInfo {
-			createContactInfo(data: {
-				${pairs}
-				resume: { connect: "${resumeId}" }
-			}) {
-				_id
-				${keys}
-			}
-		}`,
-    secret
-  );
-};
-
-export const updateContactInfo = async ({ id, data }, secret) => {
-  console.info("updateContactInfo request");
-  const { pairs, keys } = stringifyObject(data);
-  return executeQuery(
-    `mutation UpdateContactInfo {
-			updateContactInfo(id: "${id}", data: {
-				${pairs}
-			}) {
-				resume {
-					_id
-				}
-				_id
-				${keys}
-			}
-		}`,
-    secret
-  );
-};
-
-export const deleteContactInfo = async ({ id }, secret) => {
-  console.info("deleteContactInfo request");
-  return executeQuery(
-    `mutation DeleteContactInfo {
-			cascadeDeleteContactInfo(id: "${id}")
 		}`,
     secret
   );
@@ -784,61 +440,6 @@ const fauna = async (req, res) => {
         break;
       case "MOVE_RESUME":
         result = await moveResume(req.body, userSecret);
-        break;
-      // case "UPDATE_RESUME_TEMPLATE":
-      //   result = await updateResumeTemplate(req.body, userSecret);
-      //   break;
-      // ----------
-      // CATEGORIES
-      // ----------
-      case "CREATE_CATEGORY":
-        result = await createCategory(req.body, userSecret);
-        break;
-      // case "CREATE_CATEGORY_WITH_ITEM":
-      //   result = await createCategoryWithItem(req.body, userSecret);
-      //   break;
-      case "UPDATE_CATEGORY":
-        result = await updateCategory(req.body, userSecret);
-        break;
-      case "DELETE_CATEGORY":
-        result = await deleteCategory(req.body, userSecret);
-        break;
-      case "MOVE_CATEGORY":
-        result = await moveCategory(req.body, userSecret);
-        break;
-      // ----------
-      // ITEMS
-      // ----------
-      case "CREATE_ITEM":
-        result = await createItem(req.body, userSecret);
-        break;
-      case "UPDATE_ITEM":
-        result = await updateItem(req.body, userSecret);
-        break;
-      case "DELETE_ITEM":
-        result = await deleteItem(req.body, userSecret);
-        break;
-      case "MOVE_ITEM":
-        result = await moveItem(req.body, userSecret);
-        break;
-      // ----------
-      // TEMPLATES
-      // ----------
-      // case "GET_TEMPLATES":
-      //   result = await getTemplates(req.body, userSecret);
-      //   break;
-      // case "UPDATE_TEMPLATE":
-      //   result = await updateTemplate(req.body, userSecret);
-      //   break;
-      // CONTACT INFO
-      case "CREATE_CONTACT_INFO":
-        result = await createContactInfo(req.body, userSecret);
-        break;
-      case "UPDATE_CONTACT_INFO":
-        result = await updateContactInfo(req.body, userSecret);
-        break;
-      case "DELETE_CONTACT_INFO":
-        result = await deleteContactInfo(req.body, userSecret);
         break;
       // ----------
       // FEEDBACK

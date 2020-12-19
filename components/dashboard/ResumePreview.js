@@ -24,8 +24,7 @@ const ResumePreview = ({ resume, index }) => {
     setChangingResume,
     moveResume,
     forceRender,
-    storeResume,
-    storeStatus,
+    createResume,
   } = useContext(UserContext);
   const handleClick = (e, resume) => {
     e.preventDefault();
@@ -42,8 +41,10 @@ const ResumePreview = ({ resume, index }) => {
       title,
       priority,
     }).then((data) => {
-      storeResume(data.createResume, { add: true });
-      storeStatus("");
+      // Convert resume data
+      data.createResume.data = JSON.parse(data.createResume.data);
+      createResume(data.createResume);
+      forceRender();
     });
   };
   const handleMove = async (resume, amount) => {

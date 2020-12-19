@@ -9,7 +9,7 @@ import { SketchPicker } from "react-color";
 const Layout = () => {
   const {
     editingResume,
-    storeResume,
+    updateResume,
     templates,
     setTemplates,
     setPreview,
@@ -65,7 +65,7 @@ const Layout = () => {
     };
     myData[key] = value;
 
-    storeResume(myData, {});
+    updateResume(myData);
 
     await fauna({
       type: "UPDATE_RESUME",
@@ -73,7 +73,7 @@ const Layout = () => {
       data: myData,
     }).then(
       () => storeStatus("Saved."),
-      (err) => storeStatus(`Error: failed to save: ${err}`)
+      (err) => storeStatus("Error: failed to save", err)
     );
   };
   const handleUpdateTemplate = async () => {
@@ -88,7 +88,7 @@ const Layout = () => {
           ...styles,
         };
 
-        storeResume(myData, {});
+        updateResume(myData);
 
         await fauna({
           type: "UPDATE_RESUME",
@@ -103,7 +103,7 @@ const Layout = () => {
               ...styles,
             });
           },
-          (err) => storeStatus(`Error: failed to save: ${err}`)
+          (err) => storeStatus("Error: failed to save", err)
         );
       },
     });

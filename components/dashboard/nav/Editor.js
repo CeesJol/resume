@@ -1,6 +1,9 @@
 import React, { useContext, useEffect } from "react";
 import { UserContext } from "../../../contexts/userContext";
 import ResumeWrapper from "../ResumeWrapper";
+import { fauna } from "../../../lib/api";
+import Button from "../../general/Button";
+import { toast } from "react-toastify";
 
 const Editor = () => {
   const { editingResume, setChangingResume, setPreview } = useContext(
@@ -17,6 +20,7 @@ const Editor = () => {
     <>
       <div className="dashboard__item">
         <h4 className="dashboard__item--title">{editingResume.title}</h4>
+        <br />
         <a onClick={handleGoBack}>All resumes</a>
       </div>
       <ResumeWrapper exportpdf={false} />

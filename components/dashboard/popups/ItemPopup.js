@@ -20,13 +20,13 @@ const ItemPopup = () => {
   const {
     editingItem,
     setWarning,
-    storeItem,
+    createItem,
+    deleteItem,
+    updateItem,
     userMadeChanges,
     setUserMadeChanges,
     resetPopups,
     getCategory,
-    getItems,
-    storeStatus,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [isGoing, setIsGoing] = useState(true); // Separated from fields, because DB doesn't take this value.
@@ -40,7 +40,7 @@ const ItemPopup = () => {
     description: "",
     value: "3",
   });
-  const category = getCategory(editingItem.category._id);
+  const category = getCategory(editingItem.categoryId);
   const categoryItems = getCategoryItems(category.type);
   const handleChange = (event) => {
     setFields({
@@ -92,36 +92,13 @@ const ItemPopup = () => {
     let myData = {
       ...editingItem,
       ...fields,
-      _id: tempId,
-      priority: getItems(category).length + 1,
+      categoryId: category.id,
+      id: tempId,
     };
     Object.keys(myData).forEach(
-      (key) => !categoryItems.includes(key) && delete myData[key]
+      (key) => myData[key] === "" && delete myData[key]
     );
-    if (isGoing && categoryItems.includes("month2")) {
-      myData.month2 = "";
-      myData.year2 = "";
-    }
-    storeItem(myData, { add: true });
-    fauna({
-      type: "CREATE_ITEM",
-      categoryId: editingItem.category._id,
-      data: myData,
-    }).then(
-      (data) => {
-        storeItem(
-          {
-            category: {
-              _id: data.createItem.category._id,
-            },
-            _id: tempId,
-          },
-          { newId: data.createItem._id }
-        );
-        storeStatus("Saved.");
-      },
-      (err) => storeStatus(`Error: failed to save: ${err}`)
-    );
+    createItem(myData);
   };
   const handleUpdate = () => {
     const validationError = validateInput();
@@ -133,40 +110,16 @@ const ItemPopup = () => {
     // Get relevant data
     let myData = { ...editingItem, ...fields };
     Object.keys(myData).forEach(
-      (key) => !categoryItems.includes(key) && delete myData[key]
+      (key) => myData[key] === "" && delete myData[key]
     );
-    if (isGoing && categoryItems.includes("month1")) {
-      myData.month2 = "";
-      myData.year2 = "";
-    }
-    storeItem(myData, {});
-    fauna({
-      type: "UPDATE_ITEM",
-      id: myData._id,
-      data: myData,
-    }).then(
-      () => storeStatus("Saved."),
-      (err) => storeStatus(`Error: failed to save: ${err}`)
-    );
+    updateItem(myData);
   };
   const handleDelete = (event) => {
     if (event) event.preventDefault();
     setWarning({
       text: "Are you sure you want to delete this item?",
       fn: () => {
-        storeItem(editingItem, { del: true });
-        // Propagate priority updates
-        for (let item of getItems(category)) {
-          if (item.priority > editingItem.priority) {
-            const newPriority = item.priority - 1;
-            storeItem({ ...item, priority: newPriority }, {});
-          }
-        }
-
-        fauna({ type: "DELETE_ITEM", id: editingItem._id }).then(
-          () => storeStatus("Saved."),
-          (err) => storeStatus(`Error: failed to save: ${err}`)
-        );
+        deleteItem(editingItem);
       },
     });
   };
@@ -253,7 +206,7 @@ const ItemPopup = () => {
                   checked={isGoing}
                   onChange={handleChangeIsGoing}
                 />
-                {getCategoryIsGoingText(category.name)}
+                {getCategoryIsGoingText(category.title)}
               </label>
             </>
           )}

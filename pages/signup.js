@@ -16,6 +16,11 @@ const Signup = () => {
     await fauna({ type: "LOGIN_USER", email, password }).then(
       async (data) => {
         setAuth(true);
+        // Convert resume data
+        data.resumes.data = data.resumes.data.map((res) => ({
+          ...res,
+          data: JSON.parse(res.data),
+        }));
         console.info("getUserByEmail", data);
         storeUser(data);
         const id = data._id;

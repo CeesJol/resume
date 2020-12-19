@@ -15,6 +15,8 @@ const ForgotPassword = () => {
     // Check if account with that email exists
     const data = await fauna({ type: "CHECK_USER_EMAIL", email });
 
+    // Set button to pressed regardless if there's data, so user
+    // can't know if an account with that email exists.
     setPressedButton(true);
 
     if (!data.userByEmail || !data.userByEmail.email) {
@@ -29,7 +31,7 @@ const ForgotPassword = () => {
       () => {},
       (err) => {
         toast.error(`⚠️ ${err}`);
-        console.error("login err", err);
+        console.error("sendResetLink err", err);
       }
     );
   };

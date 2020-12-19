@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import { toast } from "react-toastify";
-import { fauna } from "../../../lib/api";
 import { ALL_CATEGORIES, getCategoryType } from "../../../lib/constants";
 import Categorypicker from "../pickers/Categorypicker";
 import Typepicker from "../pickers/Typepicker";
@@ -12,7 +11,6 @@ ReactModal.setAppElement("#__next");
 
 const CategoryPopup = () => {
   const {
-    editingResume,
     setWarning,
     createCategory,
     deleteCategory,
@@ -21,10 +19,7 @@ const CategoryPopup = () => {
     setUserMadeChanges,
     resetPopups,
     editingCategory,
-    getCategories,
-    storeStatus,
   } = useContext(UserContext);
-  const [filled, setFilled] = useState(false);
   const [title, setTitle] = useState("");
   const [customTitle, setCustomTitle] = useState("");
   const [type, setType] = useState("");
@@ -44,19 +39,22 @@ const CategoryPopup = () => {
     setType(event.target.value);
   };
   const handleChangeShowValue = () => {
-    if (showValue) {
-      setShowValue(false);
-      setType("Title without value");
-    } else {
-      setShowValue(true);
-      setType("Title and value");
-    }
+    setShowValue(!showValue);
   };
   const validateInput = () => {
     if (!title) return "Please provide a title";
     if (title === "Other" && !customTitle)
       return "Please provide a custom category title";
     return false;
+  };
+  const getType = () => {
+    if (type === "Title and value" && !showValue) {
+      return "Title without value";
+    } else if (type === "Title without value" && showValue) {
+      return "Title and value";
+    }
+
+    return type;
   };
   const handleCreate = () => {
     const validationError = validateInput();
@@ -70,7 +68,7 @@ const CategoryPopup = () => {
     let myData = {
       ...editingCategory,
       title: getRealTitle(),
-      type,
+      type: getType(),
       sidebar: editingCategory.sidebar,
       id: tempId,
       items: [],
@@ -89,7 +87,7 @@ const CategoryPopup = () => {
       ...editingCategory,
       id: editingCategory.id,
       title: getRealTitle(),
-      type,
+      type: getType(),
       sidebar: editingCategory.sidebar,
     };
 
@@ -115,37 +113,37 @@ const CategoryPopup = () => {
       resetPopups();
     }
   };
+  const isDefaultCategory = (title) => {
+    return !!ALL_CATEGORIES.find(
+      (cat) => cat.title.toLowerCase() === title.toLowerCase()
+    );
+  };
   useEffect(() => {
-    if (!filled) {
-      setFilled(true);
-      const title = editingCategory.title;
-      if (!title) {
-        // The category is being created
-        setTitle(ALL_CATEGORIES[0].title);
-        setType(ALL_CATEGORIES[0].type);
-      } else {
-        // If category already exists (it's being updated)
-        const ty = editingCategory.type;
-        setType(ty);
-        if (
-          ALL_CATEGORIES.find(
-            (cat) => cat.title.toLowerCase() === title.toLowerCase()
-          )
-        ) {
-          // If the category is a default category
-          setTitle(title);
+    const title = editingCategory.title;
+    if (!title) {
+      // The category is being created
+      setTitle(ALL_CATEGORIES[0].title);
+      setType(ALL_CATEGORIES[0].type);
+    } else {
+      // If category already exists (it's being updated)
+      const ty = editingCategory.type;
+      setType(ty);
 
-          if (ty === "Title and value" || ty === "Title without value") {
-            setShowValue(ty === "Title and value");
-          }
-        } else {
-          // The category is a custom category
-          setTitle("Other");
-          setCustomTitle(title);
+      if (isDefaultCategory(title)) {
+        // If the category is a default category
+        setTitle(title);
+      } else {
+        // The category is a custom category
+        setTitle("Other");
+        setCustomTitle(title);
+
+        if (ty === "Title and value" || ty === "Title without value") {
+          setShowValue(ty === "Title and value");
+          setType("Title and value");
         }
       }
     }
-  });
+  }, []);
   return (
     <ReactModal
       className="popup"
@@ -193,7 +191,7 @@ const CategoryPopup = () => {
                   checked={showValue}
                   onChange={handleChangeShowValue}
                 />
-                Show value for {getRealTitle()}
+                Show value from 1-5
               </label>
             </>
           )}

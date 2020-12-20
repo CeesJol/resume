@@ -7,28 +7,30 @@ import { fauna } from "../lib/api";
 export const UserContext = createContext();
 
 const UserContextProvider = (props) => {
-  const [dummy, setDummy] = useState(false);
+  // User
   const [user, setUser] = useState(null);
   const [auth, setAuth] = useState(false);
-  const [nav, setNav] = useState(0);
+  const [loggingOut, setLoggingOut] = useState(null);
+
+  // Resume
+  const [dummy, setDummy] = useState(false);
   const [editingItem, setEditingItem] = useState(false);
   const [editingCategory, setEditingCategory] = useState(false);
   const [editingResume, setEditingResume] = useState(DUMMY_RESUME); // Most recently edited resume
   const [changingResume, setChangingResume] = useState(false); // Whether user is changing a resume
   const [creatingResume, setCreatingResume] = useState(false);
-  const [data, setData] = useState(false);
-  const [error, setError] = useState(false);
-  const [warning, setWarning] = useState(false);
+  const [nav, setNav] = useState(0);
   const [changingInfo, setChangingInfo] = useState(false);
   const [editingContactInfo, setEditingContactInfo] = useState(false);
+  const [warning, setWarning] = useState(false);
   const [userMadeChanges, setUserMadeChanges] = useState(false);
   const [selectedTemplateId, setSelectedTemplateId] = useState(0);
   const [preview, setPreview] = useState(true);
   const [pdf, setPdf] = useState(null);
-  const [loggingOut, setLoggingOut] = useState(null);
   const [templates, setTemplates] = useState([]);
   const [status, setStatus] = useState(""); // Save status (saved / error)
   const [moving, setMoving] = useState(false);
+
   const storeStatus = (data, err) => {
     if (err) {
       console.error("storeStatus err report:", err);
@@ -63,12 +65,10 @@ const UserContextProvider = (props) => {
     return category && category.items;
   };
   const getJobTitle = (resume) => {
-    if (resume) return resume.jobTitle || "Job Title";
-    return editingResume.jobTitle || "Job Title";
+    return (resume || editingResume).jobTitle || "Job Title";
   };
   const getBio = (resume) => {
-    if (resume) return resume.bio || "Bio";
-    return editingResume.bio || "Bio";
+    return (resume || editingResume).bio || "Bio";
   };
   const postResumeAction = () => {
     resetPopups();
@@ -86,17 +86,11 @@ const UserContextProvider = (props) => {
     postResumeAction();
   };
   const updateResume = (resumeData) => {
-    // user.resumes.data.forEach((resume, r) => {
-    //   if (resume._id === resumeData._id) {
-    //     const newResume = { ...resume, ...resumeData };
-    //     user.resumes.data[r] = newResume;
-    //     setEditingResume(newResume);
-    //   }
-    // });
     setEditingResume({ ...editingResume, ...resumeData });
     postResumeAction();
   };
   const updateSpecificResume = (resumeData) => {
+    // Update a resume which is not per se editingResume
     user.resumes.data.forEach((resume, r) => {
       if (resume._id === resumeData._id) {
         const newResume = { ...resume, ...resumeData };
@@ -200,15 +194,17 @@ const UserContextProvider = (props) => {
   const moveItem = async (item, amount) => {
     // Store item and current index
     const movingItem = item;
-    const curIndex = getCategory(item.categoryId).items.indexOf(item);
+    let items = getCategory(item.categoryId).items;
+    const curIndex = items.indexOf(item);
 
     // Remove item from array
-    getCategory(item.categoryId).items = getCategory(
-      item.categoryId
-    ).items.filter((i) => i.id !== item.id);
+    items = items.filter((i) => i.id !== item.id);
 
     // Re-insert item at proper spot
-    getCategory(item.categoryId).items.splice(curIndex + amount, 0, movingItem);
+    items.splice(curIndex + amount, 0, movingItem);
+
+    // Save
+    getCategory(item.categoryId).items = items;
 
     // Send updates to fauna
     storeResume();
@@ -216,15 +212,17 @@ const UserContextProvider = (props) => {
   const moveCategory = async (category, amount) => {
     // Store item and current index
     const movingCategory = category;
-    const curIndex = editingResume.data.categories.indexOf(category);
+    let categories = editingResume.data.categories;
+    const curIndex = categories.indexOf(category);
 
     // Remove item from array
-    editingResume.data.categories = editingResume.data.categories.filter(
-      (c) => c.id !== category.id
-    );
+    categories = categories.filter((c) => c.id !== category.id);
 
     // Re-insert item at proper spot
-    editingResume.data.categories.splice(curIndex + amount, 0, movingCategory);
+    categories.splice(curIndex + amount, 0, movingCategory);
+
+    // Save
+    editingResume.data.categories = categories;
 
     // Send updates to fauna
     storeResume();
@@ -279,45 +277,42 @@ const UserContextProvider = (props) => {
     resetPopups();
   };
   useEffect(() => {
-    if (user === null) {
-      const userId = JSON.parse(localStorage.getItem("userId"));
-      if (userId != null) {
-        fauna({ type: "READ_USER", id: userId }).then(
-          (data) => {
-            if (!data.findUserByID) {
-              console.error("Unauthenticated. Data:", data);
-              toast.error(`⚠️ Unauthenticated`);
-              clearUser();
-              return;
-            }
-            if (data.findUserByID.resumes.data[0]) {
-              setEditingResume(data.findUserByID.resumes.data[0]);
-            } else {
-              setEditingResume(DUMMY_RESUME);
-            }
-            // Convert resume data
-            data.findUserByID.resumes.data = data.findUserByID.resumes.data.map(
-              (res) => ({ ...res, data: JSON.parse(res.data) })
-            );
-            storeUser(data.findUserByID);
-            console.info("readUser");
-            console.table(data.findUserByID);
-
-            setAuth(true);
-          },
-          (err) => {
-            toast.error(`⚠️ ${err}`);
-            console.error("Failed getting the user data:", err);
-            clearUser();
-          }
+    if (!!user) {
+      // User value is already read
+      return;
+    }
+    const userId = JSON.parse(localStorage.getItem("userId"));
+    if (userId === null) {
+      // There is no user data
+      console.info("No user data");
+      clearUser();
+      return;
+    }
+    fauna({ type: "READ_USER", id: userId }).then(
+      (data) => {
+        if (!data.findUserByID) {
+          console.error("Unauthenticated. Data:", data);
+          toast.error(`⚠️ Unauthenticated`);
+          clearUser();
+          return;
+        }
+        setEditingResume(data.findUserByID.resumes.data[0] || DUMMY_RESUME);
+        // Convert resume data
+        data.findUserByID.resumes.data = data.findUserByID.resumes.data.map(
+          (res) => ({ ...res, data: JSON.parse(res.data) })
         );
-      } else {
-        // There is no user data
-        console.info("No user data");
+        storeUser(data.findUserByID);
+        console.info("readUser");
+        console.table(data.findUserByID);
+        setAuth(true);
+      },
+      (err) => {
+        toast.error(`⚠️ ${err}`);
+        console.error("Failed getting the user data:", err);
         clearUser();
       }
-    }
-  }, [user]);
+    );
+  }, []);
   return (
     <UserContext.Provider
       value={{
@@ -340,10 +335,6 @@ const UserContextProvider = (props) => {
         setChangingResume,
         creatingResume,
         setCreatingResume,
-        data,
-        setData,
-        error,
-        setError,
         warning,
         setWarning,
         changingInfo,

@@ -18,7 +18,6 @@ const Layout = () => {
     storeStatus,
     setWarning,
   } = useContext(UserContext);
-  const [filled, setFilled] = useState(false);
   const [items, setItems] = useState([]);
   const handleChangePrimaryColor = (color) => {
     setItems({
@@ -35,12 +34,9 @@ const Layout = () => {
   useEffect(() => {
     setPreview(true);
 
-    setSelectedTemplateId(editingResume.templateId);
-
     // load layout
-    if (!filled && editingResume) {
-      setFilled(true);
-
+    if (editingResume) {
+      setSelectedTemplateId(editingResume.templateId);
       setItems({
         primaryColor: editingResume.primaryColor,
         backgroundColor: editingResume.backgroundColor,

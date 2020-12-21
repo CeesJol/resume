@@ -32,8 +32,9 @@ const Settings = () => {
     const validationError = validatePassword(fields.password);
     if (validationError) {
       toast.error(`⚠️ ${validationError}`);
-      return false;
+      return true;
     }
+    return false;
   };
   const handleSave = async () => {
     if (checkInvalidInput()) return;

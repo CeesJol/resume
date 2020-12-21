@@ -1,6 +1,6 @@
 const puppeteer = require("puppeteer");
 
-const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+// const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
 const exportPDF = async ({ html }) => {
   // Launch a new browser session.

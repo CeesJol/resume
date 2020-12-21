@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import Router from "next/router";
 import { DUMMY_RESUME } from "../lib/constants";
 import { fauna } from "../lib/api";
+import { isMobile } from "react-device-detect";
 
 export const UserContext = createContext();
 
@@ -276,6 +277,13 @@ const UserContextProvider = (props) => {
     storeStatus("");
     resetPopups();
   };
+  const isHoverable = () => {
+    return !preview && !isMobile;
+  };
+  const appendHoverToClassName = (className) => {
+    if (isHoverable()) return className + " resume--hoverable";
+    return className;
+  };
   useEffect(() => {
     if (!!user) {
       // User value is already read
@@ -382,6 +390,8 @@ const UserContextProvider = (props) => {
         storeStatus,
         moving,
         setMoving,
+        isHoverable,
+        appendHoverToClassName,
       }}
     >
       {props.children}

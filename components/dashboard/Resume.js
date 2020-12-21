@@ -4,7 +4,6 @@ import Category from "./Category";
 import ContactItem from "./ContactItem";
 import { PDFExport } from "@progress/kendo-react-pdf";
 import { getTemplate } from "../../templates/templates";
-import { isMobile } from "react-device-detect";
 import Button from "../general/Button";
 import { getDummyItem, sortByPriority } from "../../lib/constants";
 
@@ -35,6 +34,8 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
     getJobTitle,
     getBio,
     setEditingContactInfo,
+    isHoverable,
+    appendHoverToClassName,
   } = useContext(UserContext);
   const curResume = resume || editingResume;
   const [hovering, setHovering] = useState(false);
@@ -56,12 +57,14 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
       />
     );
   };
+  const getHeaderClassName = () => {
+    const className = "resume__header resume__container";
+    return appendHoverToClassName(className);
+  };
   const drawHeader = () => {
     return (
       <div
-        className={`resume__header resume__container ${
-          !preview && !isMobile ? "resume--hoverable" : ""
-        }`}
+        className={getHeaderClassName()}
         onClick={handleChangeInfo}
         style={{
           backgroundColor: curResume.backgroundColor,
@@ -77,30 +80,33 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
   };
   const drawContactInfo = () => {
     if (templateCSS.contactInfo === "SIDEBAR") {
+      const getClassName = () => {
+        let className = "resume__category";
+        if (isHoverable()) {
+          className += " resume__category--hoverable";
+        }
+        return className;
+      };
+      const getCategoryNameStyle = () => ({
+        color: curResume.primaryColor,
+      });
       // Draw as category
       return (
         <div
-          className={`resume__category ${
-            !preview && !isMobile ? "resume__category--hoverable" : ""
-          }`}
+          className={getClassName()}
           onMouseEnter={() => setHovering(true)}
           onMouseLeave={() => setHovering(false)}
         >
-          {hovering && !isMobile && !preview && (
+          {hovering && isHoverable() && (
             <span className="resume__actions">
               <Button
                 fn={() => setEditingContactInfo({})}
-                text={`Add contact info`}
+                text={"Add contact info"}
                 textual={true}
               />
             </span>
           )}
-          <h3
-            className="resume__category--name"
-            style={{
-              color: curResume.primaryColor,
-            }}
-          >
+          <h3 className="resume__category--name" style={getCategoryNameStyle()}>
             Personal info
           </h3>
           {getContactInfo(curResume).length > 0 || preview ? (
@@ -136,7 +142,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
           )}
           {drawContactInfoItems()}
           <span>
-            {true && !preview && !isMobile && (
+            {true && isHoverable() && (
               <ContactItem
                 template={templateCSS}
                 item={{}}
@@ -154,10 +160,34 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
       <ContactItem
         template={templateCSS}
         item={item}
-        key={`contactItem-${item.title}-${item.value}`}
+        key={`contactItem-${item.name}-${item.value}`}
         primaryColor={curResume.primaryColor}
       />
     ));
+  };
+  const drawResumeActions = (userCanAddSidebar, sidebar) => {
+    if (!isHoverable()) return;
+    return (
+      <>
+        <span
+          className="resume--hoverable"
+          onClick={() => handleNewCategory({ sidebar })}
+        >
+          <p className="resume--action">Create new category</p>
+        </span>
+        {userCanAddSidebar && (
+          <>
+            <br />
+            <span
+              className="resume--hoverable"
+              onClick={() => handleNewCategory({ sidebar: true })}
+            >
+              <p className="resume--action">Create sidebar and add category</p>
+            </span>
+          </>
+        )}
+      </>
+    );
   };
   const drawCategories = () => {
     // TODO now you can't create a category...
@@ -167,6 +197,9 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
 
     const mainCategories = categories.filter((category) => !category.sidebar);
     const sidebarCategories = categories.filter((category) => category.sidebar);
+    const userCanAddSidebar =
+      sidebarCategories.length === 0 &&
+      getTemplate(editingResume.templateId).sidebar;
 
     // If the template draws contact info at the top (so not in the sidebar)
     // If the template has no sidebar or there are no items in the sidebar,
@@ -178,60 +211,25 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
       return (
         <div className="resume__container">
           {categories.map((category, index) => drawCategory(category, index))}
-          {!preview && !isMobile && (
-            <>
-              <span className="resume--hoverable" onClick={handleNewCategory}>
-                <p className="resume--action">Create new category</p>
-              </span>
-              {sidebarCategories.length === 0 && (
-                <span
-                  className="resume--hoverable"
-                  onClick={() => handleNewCategory({ sidebar: true })}
-                >
-                  <p className="resume--action">
-                    Create new category in sidebar
-                  </p>
-                </span>
-              )}
-            </>
-          )}
+          {drawResumeActions(userCanAddSidebar, false)}
         </div>
       );
     }
 
     return (
       <>
-        <div
-          className={`resume__container resume__container--left ${
-            templateCSS.sidebar > 50 ? "resume__container--small" : ""
-          }`}
-        >
+        <div className={getResumeContainerClassName("left")}>
           {mainCategories.map((category, index) =>
             drawCategory(category, index)
           )}
-          {!preview && !isMobile && (
-            <span className="resume--hoverable" onClick={handleNewCategory}>
-              <p className="resume--action">Create new category</p>
-            </span>
-          )}
+          {drawResumeActions(userCanAddSidebar, false)}
         </div>
-        <div
-          className={`resume__container resume__container--right ${
-            templateCSS.sidebar < 50 ? "resume__container--small" : ""
-          }`}
-        >
+        <div className={getResumeContainerClassName("right")}>
           {templateCSS.contactInfo === "SIDEBAR" && drawContactInfo()}
           {sidebarCategories.map((category, index) =>
             drawCategory(category, index)
           )}
-          {!preview && !isMobile && (
-            <span
-              className="resume--hoverable"
-              onClick={() => handleNewCategory({ sidebar: true })}
-            >
-              <p className="resume--action">Create new category</p>
-            </span>
-          )}
+          {drawResumeActions(userCanAddSidebar, true)}
         </div>
       </>
     );
@@ -240,15 +238,33 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
     if (preview) return;
     setEditingCategory({ sidebar: sidebar ? true : false });
   };
+  const getResumeContainerClassName = (leftOrRight) => {
+    let className = `resume__container resume__container--${leftOrRight}`;
+    if (
+      (leftOrRight === "left" && templateCSS.sidebar > 50) ||
+      (leftOrRight === "right" && templateCSS.sidebar < 50)
+    ) {
+      className += " resume__container--small";
+    }
+    return className;
+  };
+  const getResumeParentClassName = () => {
+    let className = "resume-parent";
+    if (tiny) {
+      className += " resume-parent--tiny";
+    }
+    return className;
+  };
+  const getResumeClassName = () => {
+    let className = "resume " + templateCSS.id;
+    if (tiny) {
+      className += " resume--tiny";
+    }
+    return className;
+  };
   const result = (
-    <div
-      className={"resume-container " + (tiny ? "resume-container--tiny" : "")}
-    >
-      <div
-        className={
-          "resume " + (templateCSS.id + " ") + (tiny ? "resume--tiny" : "")
-        }
-      >
+    <div className={getResumeParentClassName()}>
+      <div className={getResumeClassName()}>
         {drawHeader()}
         {templateCSS.contactInfo === "TOP" && drawContactInfo()}
         <div className="resume__body">{drawCategories()}</div>

@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import randomId from "../../../lib/randomId";
 import { CONTACTPICKER_OPTIONS } from "../../../lib/constants";
 import ReactModal from "react-modal";
+import CloseButton from "../CloseButton";
 ReactModal.setAppElement("#__next");
 
 const ContactPopup = () => {
@@ -19,7 +20,6 @@ const ContactPopup = () => {
     resetPopups,
     editingContactInfo,
   } = useContext(UserContext);
-  const [filled, setFilled] = useState(false);
   const [name, setName] = useState("");
   const [customValue, setCustomValue] = useState("");
   const [value, setValue] = useState("Email");
@@ -88,10 +88,8 @@ const ContactPopup = () => {
     }
   };
   useEffect(() => {
-    if (editingContactInfo.title && !filled) {
-      setFilled(true);
-
-      setName(editingContactInfo.title);
+    if (editingContactInfo.name) {
+      setName(editingContactInfo.name);
       if (CONTACTPICKER_OPTIONS[value]) {
         setValue(editingContactInfo.value);
       } else {
@@ -99,7 +97,7 @@ const ContactPopup = () => {
         setCustomValue(editingContactInfo.value);
       }
     }
-  });
+  }, []);
   return (
     <ReactModal
       className="popup"
@@ -108,11 +106,10 @@ const ContactPopup = () => {
       onRequestClose={handleCancel}
     >
       <div className="popup__header">
-        <h4 className="popup__header--title">Update info</h4>
-        <i
-          onClick={handleCancel}
-          className={`fa fa-close popup__header--close`}
-        ></i>
+        <h4 className="popup__header--title">
+          {editingContactInfo.name ? "Update item" : "Create item"}
+        </h4>
+        <CloseButton fn={handleCancel} />
       </div>
       <form>
         <div>
@@ -141,7 +138,7 @@ const ContactPopup = () => {
             onChange={handleChangeName}
           />
 
-          {editingContactInfo.title ? (
+          {editingContactInfo.name ? (
             <>
               <Button text="Update" altText="Updating..." fn={handleUpdate} />
               <Button

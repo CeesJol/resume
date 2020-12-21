@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 const Yearpicker = ({ val, name, fn }) => {
   const items = [
@@ -6,14 +6,17 @@ const Yearpicker = ({ val, name, fn }) => {
       Year
     </option>,
   ];
-  let currentYear = new Date().getFullYear();
-  for (let i = currentYear; i >= 1960; i--) {
-    items.push(
-      <option value={i} key={`yearpicker-${val}-${i}`}>
-        {i}
-      </option>
-    );
-  }
+  useEffect(() => {
+    // Create list of year options
+    let currentYear = new Date().getFullYear();
+    for (let i = currentYear; i >= 1960; i--) {
+      items.push(
+        <option value={i} key={`yearpicker-${val}-${i}`}>
+          {i}
+        </option>
+      );
+    }
+  }, []);
   return (
     <select
       className="select-narrow"

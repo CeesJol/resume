@@ -7,6 +7,7 @@ import Categorypicker from "../pickers/Categorypicker";
 import Typepicker from "../pickers/Typepicker";
 import randomId from "../../../lib/randomId";
 import ReactModal from "react-modal";
+import CloseButton from "../CloseButton";
 ReactModal.setAppElement("#__next");
 
 const CategoryPopup = () => {
@@ -155,10 +156,7 @@ const CategoryPopup = () => {
         <h4 className="popup__header--title">
           {editingCategory.title ? "Edit category" : "Create category"}
         </h4>
-        <i
-          onClick={handleCancel}
-          className={`fa fa-close popup__header--close`}
-        ></i>
+        <CloseButton fn={handleCancel} />
       </div>
       <form>
         <div>

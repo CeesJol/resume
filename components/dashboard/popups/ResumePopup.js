@@ -11,6 +11,7 @@ import {
   convertToTemplate,
 } from "../../../lib/constants";
 import ReactModal from "react-modal";
+import CloseButton from "../CloseButton";
 ReactModal.setAppElement("#__next");
 
 const ResumePopup = () => {
@@ -38,12 +39,16 @@ const ResumePopup = () => {
     if (!selectedTemplateId) return "Please choose a template";
     return false;
   };
-  const handleCreate = async () => {
+  const checkInvalidInput = () => {
     const validationError = validateInput();
     if (validationError) {
       toast.error(`⚠️ ${validationError}`);
-      return;
+      return true;
     }
+    return false;
+  };
+  const handleCreate = async () => {
+    if (checkInvalidInput()) return;
 
     // Set whether to show value depending on resume property
     const template = getTemplate(selectedTemplateId);
@@ -103,10 +108,7 @@ const ResumePopup = () => {
     >
       <div className="popup__header">
         <h4 className="popup__header--title">Create resume</h4>
-        <i
-          onClick={handleCancel}
-          className={`fa fa-close popup__header--close`}
-        ></i>
+        <CloseButton fn={handleCancel} />
       </div>
       <form>
         <div>

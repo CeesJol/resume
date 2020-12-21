@@ -1,27 +1,42 @@
 import React from "react";
 
-const Monthpicker = ({ val, name, fn }) => (
-  <select
-    className="select-narrow"
-    name={name}
-    id={val}
-    value={val}
-    onChange={fn}
-  >
-    <option value="">Month</option>
-    <option value="01">January</option>
-    <option value="02">February</option>
-    <option value="03">March</option>
-    <option value="04">April</option>
-    <option value="05">May</option>
-    <option value="06">June</option>
-    <option value="07">July</option>
-    <option value="08">August</option>
-    <option value="09">September</option>
-    <option value="10">October</option>
-    <option value="11">November</option>
-    <option value="12">December</option>
-  </select>
-);
+const Monthpicker = ({ val, name, fn }) => {
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const getValue = (index) => {
+    const value = (index + 1).toString();
+    // Append a 0 before each single digit index month
+    if (index < 10) return "0" + value;
+    return value;
+  };
+  return (
+    <select
+      className="select-narrow"
+      name={name}
+      id={val}
+      value={val}
+      onChange={fn}
+    >
+      <option value="">Month</option>
+      {months.map((month, index) => (
+        <option value={getValue(index)} key={`month-${index}`}>
+          {month}
+        </option>
+      ))}
+    </select>
+  );
+};
 
 export default Monthpicker;

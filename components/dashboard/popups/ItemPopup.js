@@ -12,6 +12,7 @@ import {
 import randomId from "../../../lib/randomId";
 import ReactModal from "react-modal";
 import markdownActions from "../../../lib/markdownActions";
+import CloseButton from "../CloseButton";
 ReactModal.setAppElement("#__next");
 
 const ItemPopup = () => {
@@ -168,10 +169,7 @@ const ItemPopup = () => {
         <h4 className="popup__header--title">
           {editingItem.title ? "Edit item" : "Create item"}
         </h4>
-        <i
-          onClick={handleCancel}
-          className={`fa fa-close popup__header--close`}
-        ></i>
+        <CloseButton fn={handleCancel} />
       </div>
       <form>
         <div>

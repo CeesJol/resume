@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import { getContactIcon } from "../../lib/constants";
-import { isMobile } from "react-device-detect";
 
 const ContactItem = ({ template, item, text, dummy, primaryColor }) => {
-  const { setEditingContactInfo, preview } = useContext(UserContext);
+  const { setEditingContactInfo, preview, appendHoverToClassName } = useContext(
+    UserContext
+  );
   const handleChangeContactInfo = (item) => {
     if (preview) return false;
     if (dummy) setEditingContactInfo({});
@@ -18,17 +19,18 @@ const ContactItem = ({ template, item, text, dummy, primaryColor }) => {
       }}
     ></i>
   );
+  const getContactInfoClassName = () => {
+    return appendHoverToClassName("resume__contact-info--item");
+  };
   return (
     <div
       onClick={() => handleChangeContactInfo(item)}
-      className={`resume__contact-info--item ${
-        !preview && !isMobile ? "resume--hoverable" : ""
-      }`}
+      className={getContactInfoClassName()}
     >
       {template.contactInfo === "TOP" ? (
         // Draw icon
         item.value ? (
-          drawIcon(getContactIcon(item.value))
+          drawIcon(getContactIcon(item.name))
         ) : (
           drawIcon("plus-square")
         )

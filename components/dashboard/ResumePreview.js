@@ -24,8 +24,7 @@ const ResumePreview = ({ resume, index }) => {
     setChangingResume,
     moveResume,
     forceRender,
-    storeResume,
-    storeStatus,
+    createResume,
   } = useContext(UserContext);
   const handleClick = (e, resume) => {
     e.preventDefault();
@@ -42,13 +41,53 @@ const ResumePreview = ({ resume, index }) => {
       title,
       priority,
     }).then((data) => {
-      storeResume(data.createResume, { add: true });
-      storeStatus("");
+      // Convert resume data
+      data.createResume.data = JSON.parse(data.createResume.data);
+      createResume(data.createResume);
+      forceRender();
     });
   };
   const handleMove = async (resume, amount) => {
     await moveResume(resume, amount);
     forceRender();
+  };
+  const drawResumePreviewFooter = () => {
+    const drawMoveUp = () => (
+      <>
+        <Separator />
+        <Button
+          fn={() => handleMove(resume, -1)}
+          text="Move up"
+          altText="Moving..."
+          textual={true}
+        />
+      </>
+    );
+    const drawMoveDown = () => (
+      <>
+        <Separator />
+        <Button
+          fn={() => handleMove(resume, 1)}
+          text="Move down"
+          altText="Moving..."
+          textual={true}
+        />
+      </>
+    );
+    return (
+      <footer>
+        <span onClick={(event) => event.stopPropagation()}>
+          <Button
+            fn={() => handleDuplicate(resume)}
+            text="Create variation"
+            altText="Creating..."
+            textual={true}
+          />
+          {index > 0 && drawMoveUp()}
+          {index < getResumes().length - 1 && drawMoveDown()}
+        </span>
+      </footer>
+    );
   };
   return (
     <div
@@ -70,43 +109,7 @@ const ResumePreview = ({ resume, index }) => {
           {resume.jobTitle || "Job Title"}
         </h3>
 
-        <footer>
-          <span onClick={(event) => event.stopPropagation()}>
-            <Button
-              fn={() => handleDuplicate(resume)}
-              text="Create variation"
-              altText="Creating..."
-              textual={true}
-            />
-          </span>
-
-          {index > 0 && (
-            <>
-              <Separator />
-              <span onClick={(event) => event.stopPropagation()}>
-                <Button
-                  fn={() => handleMove(resume, -1)}
-                  text="Move up"
-                  altText="Moving..."
-                  textual={true}
-                />
-              </span>
-            </>
-          )}
-          {index < getResumes().length - 1 && (
-            <>
-              <Separator />
-              <span onClick={(event) => event.stopPropagation()}>
-                <Button
-                  fn={() => handleMove(resume, 1)}
-                  text="Move down"
-                  altText="Moving..."
-                  textual={true}
-                />
-              </span>
-            </>
-          )}
-        </footer>
+        {drawResumePreviewFooter()}
       </div>
     </div>
   );

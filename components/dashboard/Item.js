@@ -1,9 +1,12 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
-import { getCategoryItems, getValueDescription } from "../../lib/constants";
+import {
+  getCategoryItems,
+  getValueDescription,
+  getTypeClassName,
+} from "../../lib/constants";
 import Button from "../general/Button";
 import Separator from "./Separator";
-import { isMobile } from "react-device-detect";
 import ReactMarkdown from "react-markdown";
 
 const Item = ({ category, item, index, dummy, hovering, primaryColor }) => {
@@ -13,19 +16,16 @@ const Item = ({ category, item, index, dummy, hovering, primaryColor }) => {
     forceRender,
     preview,
     getItems,
+    isHoverable,
+    appendHoverToClassName,
   } = useContext(UserContext);
   const categoryItems = getCategoryItems(category.type);
-  const getTypeClassName = () => {
-    return category.type.toLowerCase().replace(/\s/g, "-");
-  };
   const handleClick = (e, item) => {
     e.preventDefault();
     if (preview) return false;
     if (dummy)
       setEditingItem({
-        category: {
-          _id: category._id,
-        },
+        categoryId: category.id,
       });
     else setEditingItem(item);
   };
@@ -37,97 +37,131 @@ const Item = ({ category, item, index, dummy, hovering, primaryColor }) => {
   const drawValue = () => {
     const values = [];
     for (let i = 0; i < 5; i++) {
+      // Set value to true if index is larger than the itemValue
+      // Then a dot will be colored if its index is larger than the given value
       values.push(i >= (item.value || 3));
     }
 
+    const getClassName = (value) => {
+      let className = "resume__item--value-box";
+      if (value) {
+        className += " resume__item--value-box--colored";
+      }
+      return className;
+    };
+
     return values.map((value, i) => (
       <div
-        key={`${item._id}-${i}`}
-        className={`resume__item--value-box ${
-          value ? "resume__item--value-box--colored" : ""
-        }`}
+        key={`${item.id}-${i}`}
+        className={getClassName(value)}
         style={{
           backgroundColor: !value ? primaryColor : "",
         }}
       ></div>
     ));
   };
+  const getItemClassName = () => {
+    let className = `resume__item resume__item--${getTypeClassName(category)}`;
+    return appendHoverToClassName(className);
+  };
+  const getItemStyle = () => {
+    if (item.type === "Title without value") {
+      return {
+        backgroundColor: primaryColor,
+      };
+    }
+    return {};
+  };
+  const drawItemTitle = () => {
+    return <h4 className="resume__item--title">{item.title}</h4>;
+  };
+  const drawItemActions = () => {
+    if (
+      !hovering ||
+      !isHoverable() ||
+      dummy ||
+      item.type === "Title without value"
+    ) {
+      return;
+    }
+    const drawMoveUp = () => (
+      <span onClick={(e) => e.stopPropagation()}>
+        <Separator />
+        <Button
+          fn={() => handleMove(item, -1)}
+          text="Move up"
+          altText="Moving..."
+          textual={true}
+        />
+      </span>
+    );
+    const drawMoveDown = () => (
+      <span onClick={(e) => e.stopPropagation()}>
+        <Separator />
+        <Button
+          fn={() => handleMove(item, 1)}
+          text="Move down"
+          altText="Moving..."
+          textual={true}
+        />
+      </span>
+    );
+    return (
+      <>
+        {index > 0 && drawMoveUp()}
+        {index < getItems(category).length - 1 && drawMoveDown()}
+      </>
+    );
+  };
+  const drawItemLocation = () => {
+    return <h4 className="resume__item--location">{item.location}</h4>;
+  };
+  const drawItemDate = () => {
+    if (!item.year1) return;
+    return (
+      <p className="resume__item--date">
+        {item.month1 ? item.month1 + "/" : ""}
+        {item.year1}
+        {item.year2 &&
+          " - " + (item.month2 ? item.month2 + "/" : "") + item.year2}
+        {!item.year2 && categoryItems.includes("year2") && " - Present"}
+      </p>
+    );
+  };
+  const drawItemValue = () => {
+    if (category.type !== "Title and value") return;
+    return (
+      <div className="resume__item--value">
+        {drawValue()}
+        <p className="resume__item--value--title">
+          {getValueDescription(item.value)}
+        </p>
+      </div>
+    );
+  };
+  const drawItemDescription = () => {
+    if (!item.description) return;
+    return (
+      <ReactMarkdown
+        source={item.description}
+        className="resume__item--description multiline"
+        escapeHtml={false}
+      />
+    );
+  };
   return (
     <div
-      className={`resume__item resume__item--${getTypeClassName()} ${
-        !preview && !isMobile ? "resume--hoverable" : ""
-      }`}
-      style={
-        getTypeClassName() === "title-without-value"
-          ? {
-              backgroundColor: primaryColor,
-            }
-          : {}
-      }
+      className={getItemClassName()}
+      style={getItemStyle()}
       onClick={(e) => handleClick(e, item)}
-      key={item._id}
+      key={item.id}
     >
-      <h4 className="resume__item--title">{item.title}</h4>
-      {hovering &&
-        !isMobile &&
-        !preview &&
-        !dummy &&
-        getTypeClassName() !== "title-without-value" && (
-          <>
-            {index > 0 && (
-              <span onClick={(e) => e.stopPropagation()}>
-                <Separator />
-                <Button
-                  fn={() => handleMove(item, -1)}
-                  text="Move up"
-                  altText="Moving..."
-                  textual={true}
-                />
-              </span>
-            )}
-            {index < getItems(category).length - 1 && (
-              <span onClick={(e) => e.stopPropagation()}>
-                <Separator />
-                <Button
-                  fn={() => handleMove(item, 1)}
-                  text="Move down"
-                  altText="Moving..."
-                  textual={true}
-                />
-              </span>
-            )}
-          </>
-        )}
-      <h4 className="resume__item--location">{item.location}</h4>
-      {item.year1 && (
-        <p className="resume__item--date">
-          {item.month1 ? item.month1 + "/" : ""}
-          {item.year1}
-          {item.year2 &&
-            " - " + (item.month2 ? item.month2 + "/" : "") + item.year2}
-          {!item.year2 && categoryItems.includes("year2") && " - Present"}
-        </p>
-      )}
-      {category.type === "Title and value" && (
-        <div className="resume__item--value">
-          {drawValue()}
-          <p className="resume__item--value--title">
-            {getValueDescription(item.value)}
-          </p>
-        </div>
-      )}
-      {item.description && (
-        // No markdown
-        // <p className="resume__item--description multiline">
-        //   {item.description}
-        // </p>
-        // Markdown
-        <ReactMarkdown
-          source={item.description}
-          className="resume__item--description multiline"
-          escapeHtml={false}
-        />
-      )}
+      {drawItemTitle()}
+      {drawItemActions()}
+      {drawItemLocation()}
+      {drawItemDate()}
+      {drawItemValue()}
+      {drawItemDescription()}
     </div>
   );
 };

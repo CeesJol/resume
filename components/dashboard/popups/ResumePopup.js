@@ -5,8 +5,13 @@ import Template from "../Template";
 import { toast } from "react-toastify";
 import { fauna } from "../../../lib/api";
 import { TEMPLATES, getTemplate } from "../../../templates/templates";
-import { RESUME_SKELETON } from "../../../lib/constants";
+import {
+  DEFAULT_CATEGORIES,
+  RESUME_SKELETON,
+  convertToTemplate,
+} from "../../../lib/constants";
 import ReactModal from "react-modal";
+import CloseButton from "../CloseButton";
 ReactModal.setAppElement("#__next");
 
 const ResumePopup = () => {
@@ -15,7 +20,7 @@ const ResumePopup = () => {
     setWarning,
     userMadeChanges,
     setUserMadeChanges,
-    storeResume,
+    createResume,
     resetPopups,
     selectedTemplateId,
     templates,
@@ -23,7 +28,6 @@ const ResumePopup = () => {
     setEditingResume,
     setChangingResume,
     getResumes,
-    storeStatus,
   } = useContext(UserContext);
   const [title, setTitle] = useState("");
   const handleChangeTitle = (event) => {
@@ -35,12 +39,20 @@ const ResumePopup = () => {
     if (!selectedTemplateId) return "Please choose a template";
     return false;
   };
-  const handleCreate = async () => {
+  const checkInvalidInput = () => {
     const validationError = validateInput();
     if (validationError) {
       toast.error(`⚠️ ${validationError}`);
-      return;
+      return true;
     }
+    return false;
+  };
+  const handleCreate = async () => {
+    if (checkInvalidInput()) return;
+
+    // Set whether to show value depending on resume property
+    const template = getTemplate(selectedTemplateId);
+    const categories = convertToTemplate(DEFAULT_CATEGORIES, template);
 
     const styles = getTemplate(selectedTemplateId).styles;
     await fauna({
@@ -54,14 +66,20 @@ const ResumePopup = () => {
         templateId: selectedTemplateId,
         ...styles,
         priority: getResumes().length + 1,
+        data: {
+          categories,
+          contactInfo: [],
+        },
       },
     }).then(
       (data) => {
+        // Convert resume data
+        data.createResume.data = JSON.parse(data.createResume.data);
         console.info("CREATE_RESUME data", data);
-        storeResume(data.createResume, { add: true });
+        createResume(data.createResume);
         setEditingResume(data.createResume);
         setChangingResume(true);
-        storeStatus("");
+        resetPopups();
       },
       (err) => {
         console.error("err", err);
@@ -90,10 +108,7 @@ const ResumePopup = () => {
     >
       <div className="popup__header">
         <h4 className="popup__header--title">Create resume</h4>
-        <i
-          onClick={handleCancel}
-          className={`fa fa-close popup__header--close`}
-        ></i>
+        <CloseButton fn={handleCancel} />
       </div>
       <form>
         <div>

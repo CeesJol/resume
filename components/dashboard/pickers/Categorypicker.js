@@ -5,8 +5,8 @@ const Categorypicker = ({ val, fn }) => (
   <select name={val} id={val} value={val} onChange={fn}>
     {ALL_CATEGORIES.map((cat) => {
       return (
-        <option key={`categorypicker-${cat.name}`} value={cat.name}>
-          {cat.name}
+        <option key={`categorypicker-${cat.title}`} value={cat.title}>
+          {cat.title}
         </option>
       );
     })}

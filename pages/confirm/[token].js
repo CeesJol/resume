@@ -5,7 +5,7 @@ import { fauna } from "../../lib/api";
 const Token = () => {
   const router = useRouter();
   const { token } = router.query;
-  const [status, setStatus] = useState("Confirming...");
+  const [confStatus, setConfStatus] = useState("Confirming...");
 
   useEffect(() => {
     if (token) {
@@ -15,25 +15,27 @@ const Token = () => {
         fauna({ type: "CONFIRM_USER", token }).then(
           (data) => {
             console.info("data [token]", data);
-            setStatus(
+            setConfStatus(
               "Email confirmed successfully! You can close this tab now."
             );
           },
           (err) => {
             console.error("err", err);
-            setStatus(
+            setConfStatus(
               "Something went wrong. Please contact us for help. " + err
             );
           }
         );
       } catch (e) {
         console.error("Token confirmation error", e);
-        setStatus("Something went wrong. Please contact us for help. " + err);
+        setConfStatus(
+          "Something went wrong. Please contact us for help. " + err
+        );
       }
     }
   }, [token]);
 
-  return <>{status}</>;
+  return <>{confStatus}</>;
 };
 
 export default Token;

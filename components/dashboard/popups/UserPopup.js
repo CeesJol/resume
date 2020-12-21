@@ -4,6 +4,7 @@ import Button from "../../general/Button";
 import { toast } from "react-toastify";
 import { fauna } from "../../../lib/api";
 import ReactModal from "react-modal";
+import CloseButton from "../CloseButton";
 ReactModal.setAppElement("#__next");
 
 const UserPopup = () => {
@@ -12,7 +13,7 @@ const UserPopup = () => {
     setWarning,
     userMadeChanges,
     setUserMadeChanges,
-    storeResume,
+    updateResume,
     resetPopups,
     storeStatus,
   } = useContext(UserContext);
@@ -32,12 +33,16 @@ const UserPopup = () => {
     if (!bio) return "Please provide a bio";
     return false;
   };
-  const handleUpdate = () => {
+  const checkInvalidInput = () => {
     const validationError = validateInput();
     if (validationError) {
       toast.error(`⚠️ ${validationError}`);
-      return;
+      return true;
     }
+    return false;
+  };
+  const handleUpdate = () => {
+    if (checkInvalidInput()) return false;
 
     const myData = {
       _id: editingResume._id,
@@ -45,7 +50,7 @@ const UserPopup = () => {
       bio,
     };
 
-    storeResume(myData, {});
+    updateResume(myData);
 
     fauna({
       type: "UPDATE_RESUME",
@@ -53,7 +58,7 @@ const UserPopup = () => {
       data: myData,
     }).then(
       () => storeStatus("Saved."),
-      (err) => storeStatus(`Error: failed to save: ${err}`)
+      (err) => storeStatus("Error: failed to save", err)
     );
   };
   const handleCancel = () => {
@@ -83,10 +88,7 @@ const UserPopup = () => {
     >
       <div className="popup__header">
         <h4 className="popup__header--title">Update info</h4>
-        <i
-          onClick={handleCancel}
-          className={`fa fa-close popup__header--close`}
-        ></i>
+        <CloseButton fn={handleCancel} />
       </div>
       <form>
         <div>

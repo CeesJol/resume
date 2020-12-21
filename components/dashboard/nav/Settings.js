@@ -20,13 +20,24 @@ const Settings = () => {
       [event.target.name]: event.target.value,
     });
   };
-  const handleSave = async (event) => {
-    if (event) event.preventDefault();
+  const checkInvalidInput = () => {
     const validationError = validateUpdate(fields.username, fields.email);
     if (validationError) {
       toast.error(`⚠️ ${validationError}`);
-      return;
+      return true;
     }
+    return false;
+  };
+  const checkInvalidInputPassword = () => {
+    const validationError = validatePassword(fields.password);
+    if (validationError) {
+      toast.error(`⚠️ ${validationError}`);
+      return true;
+    }
+    return false;
+  };
+  const handleSave = async () => {
+    if (checkInvalidInput()) return;
     const { password, ...visibleData } = fields;
     await fauna({
       type: "UPDATE_USER",
@@ -34,7 +45,7 @@ const Settings = () => {
       data: visibleData,
     }).then(
       (data) => {
-        if (data == -1) {
+        if (data === -1) {
           toast.error("⚠️ That email is already taken");
           return;
         }
@@ -68,13 +79,8 @@ const Settings = () => {
       }
     );
   };
-  const handleSavePassword = async (event) => {
-    if (event) event.preventDefault();
-    const validationError = validatePassword(fields.password);
-    if (validationError) {
-      toast.error(`⚠️ ${validationError}`);
-      return false;
-    }
+  const handleSavePassword = async () => {
+    if (checkInvalidInputPassword()) return;
     await fauna({
       type: "UPDATE_USER_PASSWORD",
       id: user._id,

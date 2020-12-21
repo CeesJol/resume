@@ -2,59 +2,60 @@ import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import { toast } from "react-toastify";
-import { fauna } from "../../../lib/api";
 import { ALL_CATEGORIES, getCategoryType } from "../../../lib/constants";
 import Categorypicker from "../pickers/Categorypicker";
 import Typepicker from "../pickers/Typepicker";
 import randomId from "../../../lib/randomId";
 import ReactModal from "react-modal";
+import CloseButton from "../CloseButton";
 ReactModal.setAppElement("#__next");
 
 const CategoryPopup = () => {
   const {
-    editingResume,
     setWarning,
-    storeCategory,
+    createCategory,
+    deleteCategory,
+    updateCategory,
     userMadeChanges,
     setUserMadeChanges,
     resetPopups,
     editingCategory,
-    getCategories,
-    storeStatus,
   } = useContext(UserContext);
-  const [filled, setFilled] = useState(false);
-  const [name, setName] = useState("");
-  const [customName, setCustomName] = useState("");
+  const [title, setTitle] = useState("");
+  const [customTitle, setCustomTitle] = useState("");
   const [type, setType] = useState("");
   const [showValue, setShowValue] = useState(true); // Should value be shown for title/value types?
-  const getRealName = () => {
-    return name === "Other" ? customName : name;
+  const getRealTitle = () => {
+    return title === "Other" ? customTitle : title;
   };
-  const handleChangeName = (event) => {
-    setName(event.target.value);
+  const handleChangeTitle = (event) => {
+    setTitle(event.target.value);
     setType(getCategoryType(event.target.value));
   };
-  const handleChangeCustomName = (event) => {
-    setCustomName(event.target.value);
+  const handleChangeCustomTitle = (event) => {
+    setCustomTitle(event.target.value);
     setUserMadeChanges(true);
   };
   const handleChangeType = (event) => {
     setType(event.target.value);
   };
   const handleChangeShowValue = () => {
-    if (showValue) {
-      setShowValue(false);
-      setType("Title without value");
-    } else {
-      setShowValue(true);
-      setType("Title and value");
-    }
+    setShowValue(!showValue);
   };
   const validateInput = () => {
-    if (!name) return "Please provide a name";
-    if (name === "Other" && !customName)
-      return "Please provide a custom category name";
+    if (!title) return "Please provide a title";
+    if (title === "Other" && !customTitle)
+      return "Please provide a custom category title";
     return false;
+  };
+  const getType = () => {
+    if (type === "Title and value" && !showValue) {
+      return "Title without value";
+    } else if (type === "Title without value" && showValue) {
+      return "Title and value";
+    }
+
+    return type;
   };
   const handleCreate = () => {
     const validationError = validateInput();
@@ -64,35 +65,17 @@ const CategoryPopup = () => {
     }
 
     const tempId = randomId();
-    const priority =
-      getCategories().filter((cat) => cat.sidebar === editingCategory.sidebar)
-        .length + 1;
 
     let myData = {
       ...editingCategory,
-      name: getRealName(),
-      type,
+      title: getRealTitle(),
+      type: getType(),
       sidebar: editingCategory.sidebar,
-      priority,
-      _id: tempId,
-      items: {
-        data: [],
-      },
+      id: tempId,
+      items: [],
     };
 
-    storeCategory(myData, { add: true });
-
-    fauna({
-      type: "CREATE_CATEGORY",
-      resumeId: editingResume._id,
-      data: myData,
-    }).then(
-      (data) => {
-        storeCategory({ _id: tempId }, { newId: data.createCategory._id });
-        storeStatus("Saved.");
-      },
-      (err) => storeStatus(`Error: failed to save: ${err}`)
-    );
+    createCategory(myData);
   };
   const handleUpdate = () => {
     const validationError = validateInput();
@@ -102,22 +85,14 @@ const CategoryPopup = () => {
     }
 
     let myData = {
-      _id: editingCategory._id,
-      name: getRealName(),
-      type,
+      ...editingCategory,
+      id: editingCategory.id,
+      title: getRealTitle(),
+      type: getType(),
       sidebar: editingCategory.sidebar,
     };
 
-    storeCategory(myData, {});
-
-    fauna({
-      type: "UPDATE_CATEGORY",
-      id: editingCategory._id,
-      data: myData,
-    }).then(
-      () => storeStatus("Saved."),
-      (err) => storeStatus(`Error: failed to save: ${err}`)
-    );
+    updateCategory(myData);
   };
   const handleDelete = (event) => {
     if (event) event.preventDefault();
@@ -125,22 +100,7 @@ const CategoryPopup = () => {
       text:
         "Are you sure you want to delete this category? All the items in it will be lost.",
       fn: () => {
-        storeCategory(editingCategory, { del: true });
-        // Propagate priority updates
-        for (let category of getCategories()) {
-          if (
-            category.priority > editingCategory.priority &&
-            category.sidebar === editingCategory.sidebar
-          ) {
-            const newPriority = category.priority - 1;
-            storeCategory({ ...category, priority: newPriority }, {});
-          }
-        }
-
-        fauna({ type: "DELETE_CATEGORY", id: editingCategory._id }).then(
-          () => storeStatus("Saved."),
-          (err) => storeStatus(`Error: failed to save: ${err}`)
-        );
+        deleteCategory(editingCategory);
       },
     });
   };
@@ -154,37 +114,37 @@ const CategoryPopup = () => {
       resetPopups();
     }
   };
+  const isDefaultCategory = (title) => {
+    return !!ALL_CATEGORIES.find(
+      (cat) => cat.title.toLowerCase() === title.toLowerCase()
+    );
+  };
   useEffect(() => {
-    if (!filled) {
-      setFilled(true);
-      const name = editingCategory.name;
-      if (!name) {
-        // The category is being created
-        setName(ALL_CATEGORIES[0].name);
-        setType(ALL_CATEGORIES[0].type);
-      } else {
-        // If category already exists (it's being updated)
-        const ty = editingCategory.type;
-        setType(ty);
-        if (
-          ALL_CATEGORIES.find(
-            (cat) => cat.name.toLowerCase() === name.toLowerCase()
-          )
-        ) {
-          // If the category is a default category
-          setName(name);
+    const title = editingCategory.title;
+    if (!title) {
+      // The category is being created
+      setTitle(ALL_CATEGORIES[0].title);
+      setType(ALL_CATEGORIES[0].type);
+    } else {
+      // If category already exists (it's being updated)
+      const ty = editingCategory.type;
+      setType(ty);
 
-          if (ty === "Title and value" || ty === "Title without value") {
-            setShowValue(ty === "Title and value");
-          }
-        } else {
-          // The category is a custom category
-          setName("Other");
-          setCustomName(name);
+      if (isDefaultCategory(title)) {
+        // If the category is a default category
+        setTitle(title);
+      } else {
+        // The category is a custom category
+        setTitle("Other");
+        setCustomTitle(title);
+
+        if (ty === "Title and value" || ty === "Title without value") {
+          setShowValue(ty === "Title and value");
+          setType("Title and value");
         }
       }
     }
-  });
+  }, []);
   return (
     <ReactModal
       className="popup"
@@ -194,30 +154,27 @@ const CategoryPopup = () => {
     >
       <div className="popup__header">
         <h4 className="popup__header--title">
-          {editingCategory.name ? "Edit category" : "Create category"}
+          {editingCategory.title ? "Edit category" : "Create category"}
         </h4>
-        <i
-          onClick={handleCancel}
-          className={`fa fa-close popup__header--close`}
-        ></i>
+        <CloseButton fn={handleCancel} />
       </div>
       <form>
         <div>
-          <label>Category name</label>
-          <Categorypicker val={name} fn={handleChangeName} />
+          <label>Category title</label>
+          <Categorypicker val={title} fn={handleChangeTitle} />
 
-          {name === "Other" && (
+          {title === "Other" && (
             <>
               <label>Custom type</label>
               <Typepicker val={type} fn={handleChangeType} />
 
-              <label>Custom name</label>
+              <label>Custom title</label>
               <input
                 type="text"
-                id="customName"
-                name="customName"
-                value={customName}
-                onChange={handleChangeCustomName}
+                id="customTitle"
+                name="customTitle"
+                value={customTitle}
+                onChange={handleChangeCustomTitle}
               />
             </>
           )}
@@ -232,12 +189,12 @@ const CategoryPopup = () => {
                   checked={showValue}
                   onChange={handleChangeShowValue}
                 />
-                Show value for {getRealName()}
+                Show value from 1-5
               </label>
             </>
           )}
 
-          {editingCategory.name ? (
+          {editingCategory.title ? (
             <>
               <Button text="Update" altText="Updating..." fn={handleUpdate} />
               <Button

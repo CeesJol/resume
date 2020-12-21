@@ -3,25 +3,23 @@ import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import Contactpicker from "../../dashboard/pickers/Contactpicker";
 import { toast } from "react-toastify";
-import { fauna } from "../../../lib/api";
 import randomId from "../../../lib/randomId";
 import { CONTACTPICKER_OPTIONS } from "../../../lib/constants";
 import ReactModal from "react-modal";
+import CloseButton from "../CloseButton";
 ReactModal.setAppElement("#__next");
 
 const ContactPopup = () => {
   const {
-    editingResume,
     setWarning,
     userMadeChanges,
     setUserMadeChanges,
-    storeContactInfo,
+    createContactInfo,
+    deleteContactInfo,
+    updateContactInfo,
     resetPopups,
     editingContactInfo,
-    getContactInfo,
-    storeStatus,
   } = useContext(UserContext);
-  const [filled, setFilled] = useState(false);
   const [name, setName] = useState("");
   const [customValue, setCustomValue] = useState("");
   const [value, setValue] = useState("Email");
@@ -48,28 +46,12 @@ const ContactPopup = () => {
 
     const tempId = randomId();
     const myData = {
-      _id: tempId,
+      id: tempId,
       name,
       value: value ? value : customValue,
-      priority: getContactInfo().length + 1,
     };
 
-    storeContactInfo(myData, { add: true });
-
-    fauna({
-      type: "CREATE_CONTACT_INFO",
-      resumeId: editingResume._id,
-      data: myData,
-    }).then(
-      (data) => {
-        storeContactInfo(
-          { _id: tempId },
-          { newId: data.createContactInfo._id }
-        );
-        storeStatus("Saved.");
-      },
-      (err) => storeStatus(`Error: failed to save: ${err}`)
-    );
+    createContactInfo(myData);
   };
   const handleUpdate = () => {
     const validationError = validateInput();
@@ -84,39 +66,14 @@ const ContactPopup = () => {
       value: value ? value : customValue,
     };
 
-    storeContactInfo(myData, {});
-
-    fauna({
-      type: "UPDATE_CONTACT_INFO",
-      id: editingContactInfo._id,
-      data: myData,
-    }).then(
-      () => storeStatus("Saved."),
-      (err) => storeStatus(`Error: failed to save: ${err}`)
-    );
+    updateContactInfo(myData);
   };
   const handleDelete = (event) => {
     if (event) event.preventDefault();
     setWarning({
       text: "Are you sure you want to delete this item?",
       fn: () => {
-        storeContactInfo(editingContactInfo, { del: true });
-        resetPopups();
-        // Propagate priority updates
-        for (let item of getContactInfo()) {
-          if (item.priority > editingContactInfo.priority) {
-            const newPriority = item.priority - 1;
-            storeContactInfo({ ...item, priority: newPriority }, {});
-          }
-        }
-
-        fauna({
-          type: "DELETE_CONTACT_INFO",
-          id: editingContactInfo._id,
-        }).then(
-          () => storeStatus("Saved."),
-          (err) => storeStatus(`Error: failed to save: ${err}`)
-        );
+        deleteContactInfo(editingContactInfo);
       },
     });
   };
@@ -131,9 +88,7 @@ const ContactPopup = () => {
     }
   };
   useEffect(() => {
-    if (editingContactInfo.name && !filled) {
-      setFilled(true);
-
+    if (editingContactInfo.name) {
       setName(editingContactInfo.name);
       if (CONTACTPICKER_OPTIONS[value]) {
         setValue(editingContactInfo.value);
@@ -142,7 +97,7 @@ const ContactPopup = () => {
         setCustomValue(editingContactInfo.value);
       }
     }
-  });
+  }, []);
   return (
     <ReactModal
       className="popup"
@@ -151,18 +106,17 @@ const ContactPopup = () => {
       onRequestClose={handleCancel}
     >
       <div className="popup__header">
-        <h4 className="popup__header--title">Update info</h4>
-        <i
-          onClick={handleCancel}
-          className={`fa fa-close popup__header--close`}
-        ></i>
+        <h4 className="popup__header--title">
+          {editingContactInfo.name ? "Update item" : "Create item"}
+        </h4>
+        <CloseButton fn={handleCancel} />
       </div>
       <form>
         <div>
           <label>Type</label>
           <Contactpicker val={value} fn={handleChangeValue} />
 
-          {value == "" && (
+          {value === "" && (
             <>
               <label>Contact type</label>
               <input

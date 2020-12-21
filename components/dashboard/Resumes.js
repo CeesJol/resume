@@ -19,16 +19,16 @@ const Resumes = () => {
   const drawResumePreviews = () => {
     const resumes = getResumes();
 
-    if (resumes.length > 0) {
-      return sortByPriority(resumes).map((resume, index) => (
-        <ResumePreview
-          resume={resume}
-          key={`resume-${resume._id}`}
-          index={index}
-        />
-      ));
+    if (resumes.length === 0) {
+      return <p>Get started by creating your resume</p>;
     }
-    return <p>Get started by creating your resume</p>;
+    return sortByPriority(resumes).map((resume, index) => (
+      <ResumePreview
+        resume={resume}
+        key={`resume-${resume._id}`}
+        index={index}
+      />
+    ));
   };
 
   return (

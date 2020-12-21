@@ -14,9 +14,16 @@ const Template = ({ template }) => {
     // Used to give a color to the selected template
     return template.id === selectedTemplateId;
   };
+  const getTemplateClassName = () => {
+    let className = "box";
+    if (isSelected()) {
+      className += " box--selected";
+    }
+    return className;
+  };
   return (
     <div
-      className={"box " + (isSelected() ? "box--selected" : "")}
+      className={getTemplateClassName()}
       onClick={(e) => handleClick(e, template.id)}
     >
       <Resume

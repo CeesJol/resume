@@ -13,6 +13,13 @@ const Feedback = () => {
   const handleChangeFeedbackText = (event) => {
     setFeedbackText(event.target.value);
   };
+  const getFeedbackClassName = (grade) => {
+    let className = "feedback__grade";
+    if (grade === feedbackGrade) {
+      className += " feedback__grade--selected";
+    }
+    return className;
+  };
   const drawGrade = (grade) => {
     let gradeText = "";
     switch (grade) {
@@ -27,12 +34,9 @@ const Feedback = () => {
         break;
     }
     return (
-      <div className="feedback__grade-container">
+      <div className="feedback__grade-container" key={`grade-${grade}`}>
         <div
-          className={
-            `feedback__grade ` +
-            (grade === feedbackGrade ? "feedback__grade--selected" : "")
-          }
+          className={getFeedbackClassName(grade)}
           onClick={() => setFeedbackGrade(grade)}
         >
           {grade}
@@ -87,7 +91,10 @@ const Feedback = () => {
       setHidden(true);
     }
   }, []);
+  // User already gave feedback or doesn't want to, hide the button
+  // to open the Feedback form
   if (hidden) return <></>;
+  // Form is not visible (yet), show the button to open the Feedback form
   if (!visible)
     return (
       <div className="feedback--button" onClick={() => setVisible(true)}>
@@ -97,6 +104,7 @@ const Feedback = () => {
         </a>
       </div>
     );
+  // Form is visible, show the form
   return (
     <div className="feedback">
       <div className="feedback__header">

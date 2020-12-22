@@ -22,6 +22,17 @@ const ContactItem = ({ template, item, text, dummy, primaryColor }) => {
   const getContactInfoClassName = () => {
     return appendHoverToClassName("resume__contact-info--item");
   };
+  const getContactInfoBody = () => {
+    const body = item.name ? item.name : text;
+    if (item.link) {
+      return (
+        <a href={item.link} target="_blank" rel="noreferrer">
+          {body}
+        </a>
+      );
+    }
+    return body;
+  };
   return (
     <div
       onClick={() => handleChangeContactInfo(item)}
@@ -38,9 +49,7 @@ const ContactItem = ({ template, item, text, dummy, primaryColor }) => {
         // Draw text
         <h4 className="resume__contact-info--title">{item.value}</h4>
       )}
-      <p className="resume__contact-info--body">
-        {item.name ? item.name : text}
-      </p>
+      <p className="resume__contact-info--body">{getContactInfoBody()}</p>
     </div>
   );
 };

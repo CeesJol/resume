@@ -88,12 +88,11 @@ const ItemPopup = () => {
     }
 
     // Get relevant data
-    const tempId = randomId();
     let myData = {
       ...editingItem,
       ...fields,
       categoryId: category.id,
-      id: tempId,
+      id: randomId(),
     };
     Object.keys(myData).forEach(
       (key) => myData[key] === "" && delete myData[key]

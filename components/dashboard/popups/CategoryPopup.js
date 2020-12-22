@@ -64,14 +64,12 @@ const CategoryPopup = () => {
       return;
     }
 
-    const tempId = randomId();
-
     let myData = {
       ...editingCategory,
       title: getRealTitle(),
       type: getType(),
       sidebar: editingCategory.sidebar,
-      id: tempId,
+      id: randomId(),
       items: [],
     };
 
@@ -181,10 +179,10 @@ const CategoryPopup = () => {
 
           {(type === "Title and value" || type === "Title without value") && (
             <>
-              <label htmlFor="isGoing">
+              <label htmlFor="showValue">
                 <input
-                  name="isGoing"
-                  id="isGoing"
+                  name="showValue"
+                  id="showValue"
                   type="checkbox"
                   checked={showValue}
                   onChange={handleChangeShowValue}

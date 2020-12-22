@@ -23,7 +23,13 @@ const ContactPopup = () => {
   const [name, setName] = useState("");
   const [customValue, setCustomValue] = useState("");
   const [value, setValue] = useState("Email");
+  const [link, setLink] = useState("");
+  const [useLink, setUseLink] = useState(true);
   const handleChangeName = (event) => {
+    if (useLink && name === link) {
+      // Set link equal to name
+      setLink(event.target.value);
+    }
     setName(event.target.value);
     setUserMadeChanges(true);
   };
@@ -33,8 +39,39 @@ const ContactPopup = () => {
   const handleChangeValue = (event) => {
     setValue(event.target.value);
   };
+  const handleChangeLink = (event) => {
+    setLink(event.target.value);
+  };
+  const handleChangeUseLink = () => {
+    setUseLink(!useLink);
+  };
   const validateInput = () => {
     if (!name) return "Please provide a contact details";
+
+    // Validate link, if applicable
+    if (useLink) {
+      if (link === "") {
+        return "Please provide a link, or disable it";
+      }
+      // Email
+      if (value === "Email") {
+        if (!link.startsWith("mailto:")) {
+          return "Email links should start with mailto:";
+        }
+        return false;
+      }
+      if (value === "Phone number") {
+        if (!link.startsWith("tel:")) {
+          return "Phone number links should start with tel:";
+        }
+        return false;
+      }
+      // URL
+      if (!(link.startsWith("http://") || link.startsWith("https://"))) {
+        return "Links should start with http:// or https://";
+      }
+    }
+
     return false;
   };
   const handleCreate = () => {
@@ -44,11 +81,11 @@ const ContactPopup = () => {
       return;
     }
 
-    const tempId = randomId();
     const myData = {
-      id: tempId,
+      id: randomId(),
       name,
       value: value ? value : customValue,
+      link: useLink ? link : "",
     };
 
     createContactInfo(myData);
@@ -64,6 +101,7 @@ const ContactPopup = () => {
       ...editingContactInfo,
       name,
       value: value ? value : customValue,
+      link: useLink ? link : "",
     };
 
     updateContactInfo(myData);
@@ -90,6 +128,8 @@ const ContactPopup = () => {
   useEffect(() => {
     if (editingContactInfo.name) {
       setName(editingContactInfo.name);
+      setLink(editingContactInfo.link);
+      setUseLink(editingContactInfo.link !== "");
       if (CONTACTPICKER_OPTIONS[value]) {
         setValue(editingContactInfo.value);
       } else {
@@ -137,6 +177,30 @@ const ContactPopup = () => {
             value={name}
             onChange={handleChangeName}
           />
+
+          <label>
+            <input
+              name="useLink"
+              id="useLink"
+              type="checkbox"
+              checked={useLink}
+              onChange={handleChangeUseLink}
+            />
+            Use link
+          </label>
+
+          {useLink && (
+            <>
+              <label>Link</label>
+              <input
+                type="text"
+                id="link"
+                name="link"
+                value={link}
+                onChange={handleChangeLink}
+              />
+            </>
+          )}
 
           {editingContactInfo.name ? (
             <>

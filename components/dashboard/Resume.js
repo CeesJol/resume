@@ -160,7 +160,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
       <ContactItem
         template={templateCSS}
         item={item}
-        key={`contactItem-${item.name}-${item.value}`}
+        key={`contactItem-${item.value}-${item.name}`}
         primaryColor={curResume.primaryColor}
       />
     ));

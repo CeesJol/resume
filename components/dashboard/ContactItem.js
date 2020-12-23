@@ -23,7 +23,7 @@ const ContactItem = ({ template, item, text, dummy, primaryColor }) => {
     return appendHoverToClassName("resume__contact-info--item");
   };
   const getContactInfoBody = () => {
-    const body = item.name ? item.name : text;
+    const body = item.value ? item.value : text;
     if (item.link) {
       return (
         <a href={item.link} target="_blank" rel="noreferrer">
@@ -40,14 +40,14 @@ const ContactItem = ({ template, item, text, dummy, primaryColor }) => {
     >
       {template.contactInfo === "TOP" ? (
         // Draw icon
-        item.value ? (
-          drawIcon(getContactIcon(item.value))
+        item.name ? (
+          drawIcon(getContactIcon(item.name))
         ) : (
           drawIcon("plus-square")
         )
       ) : (
         // Draw text
-        <h4 className="resume__contact-info--title">{item.value}</h4>
+        <h4 className="resume__contact-info--title">{item.name}</h4>
       )}
       <p className="resume__contact-info--body">{getContactInfoBody()}</p>
     </div>

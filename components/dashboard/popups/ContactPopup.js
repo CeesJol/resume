@@ -20,24 +20,24 @@ const ContactPopup = () => {
     resetPopups,
     editingContactInfo,
   } = useContext(UserContext);
-  const [name, setName] = useState("");
-  const [customValue, setCustomValue] = useState("");
-  const [value, setValue] = useState("Email");
+  const [name, setName] = useState("Email");
+  const [customName, setCustomName] = useState("");
+  const [value, setValue] = useState("");
   const [link, setLink] = useState("");
   const [useLink, setUseLink] = useState(true);
-  const handleChangeName = (event) => {
-    if (useLink && name === link) {
-      // Set link equal to name
+  const handleChangeValue = (event) => {
+    if (useLink && value === link) {
+      // Set link equal to value
       setLink(event.target.value);
     }
-    setName(event.target.value);
+    setValue(event.target.value);
     setUserMadeChanges(true);
   };
-  const handleChangeCustomValue = (event) => {
-    setCustomValue(event.target.value);
+  const handleChangeCustomName = (event) => {
+    setCustomName(event.target.value);
   };
-  const handleChangeValue = (event) => {
-    setValue(event.target.value);
+  const handleChangeName = (event) => {
+    setName(event.target.value);
   };
   const handleChangeLink = (event) => {
     setLink(event.target.value);
@@ -46,7 +46,7 @@ const ContactPopup = () => {
     setUseLink(!useLink);
   };
   const validateInput = () => {
-    if (!name) return "Please provide a contact details";
+    if (!value) return "Please provide contact information";
 
     // Validate link, if applicable
     if (useLink) {
@@ -54,13 +54,13 @@ const ContactPopup = () => {
         return "Please provide a link, or disable it";
       }
       // Email
-      if (value === "Email") {
+      if (name === "Email") {
         if (!link.startsWith("mailto:")) {
           return "Email links should start with mailto:";
         }
         return false;
       }
-      if (value === "Phone number") {
+      if (name === "Phone number") {
         if (!link.startsWith("tel:")) {
           return "Phone number links should start with tel:";
         }
@@ -83,8 +83,8 @@ const ContactPopup = () => {
 
     const myData = {
       id: randomId(),
-      name,
-      value: value ? value : customValue,
+      name: name ? name : customName,
+      value,
       link: useLink ? link : "",
     };
 
@@ -99,8 +99,8 @@ const ContactPopup = () => {
 
     const myData = {
       ...editingContactInfo,
-      name,
-      value: value ? value : customValue,
+      name: name ? name : customName,
+      value,
       link: useLink ? link : "",
     };
 
@@ -154,17 +154,17 @@ const ContactPopup = () => {
       <form>
         <div>
           <label>Type</label>
-          <Contactpicker val={value} fn={handleChangeValue} />
+          <Contactpicker val={name} fn={handleChangeName} />
 
-          {value === "" && (
+          {name === "" && (
             <>
               <label>Contact type</label>
               <input
                 type="text"
-                id="customValue"
-                name="customValue"
-                value={customValue}
-                onChange={handleChangeCustomValue}
+                id="customName"
+                name="customName"
+                name={customName}
+                onChange={handleChangeCustomName}
               />
             </>
           )}
@@ -172,10 +172,10 @@ const ContactPopup = () => {
           <label>Contact information</label>
           <input
             type="text"
-            id="name"
-            name="name"
-            value={name}
-            onChange={handleChangeName}
+            id="value"
+            name="value"
+            value={value}
+            onChange={handleChangeValue}
           />
 
           <label>
@@ -202,7 +202,7 @@ const ContactPopup = () => {
             </>
           )}
 
-          {editingContactInfo.name ? (
+          {editingContactInfo.value ? (
             <>
               <Button text="Update" altText="Updating..." fn={handleUpdate} />
               <Button

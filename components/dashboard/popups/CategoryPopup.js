@@ -135,11 +135,11 @@ const CategoryPopup = () => {
         // The category is a custom category
         setTitle("Other");
         setCustomTitle(title);
+      }
 
-        if (ty === "Title and value" || ty === "Title without value") {
-          setShowValue(ty === "Title and value");
-          setType("Title and value");
-        }
+      if (ty === "Title and value" || ty === "Title without value") {
+        setShowValue(ty === "Title and value");
+        setType("Title and value");
       }
     }
   }, []);

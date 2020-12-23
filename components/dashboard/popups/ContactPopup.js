@@ -163,7 +163,7 @@ const ContactPopup = () => {
                 type="text"
                 id="customName"
                 name="customName"
-                name={customName}
+                value={customName}
                 onChange={handleChangeCustomName}
               />
             </>

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import { toast } from "react-toastify";
-import { fauna } from "../../../lib/api";
 import ReactModal from "react-modal";
 import CloseButton from "../CloseButton";
 ReactModal.setAppElement("#__next");
@@ -15,7 +14,6 @@ const UserPopup = () => {
     setUserMadeChanges,
     updateResume,
     resetPopups,
-    storeStatus,
   } = useContext(UserContext);
   const [filled, setFilled] = useState(false);
   const [jobTitle, setJobTitle] = useState("");

@@ -84,7 +84,14 @@ const UserContextProvider = (props) => {
     resetPopups();
   };
   const updateResume = (resumeData) => {
-    setEditingResume({ ...editingResume, ...resumeData });
+    const newResume = { ...editingResume, ...resumeData };
+    setEditingResume(newResume);
+    user.resumes.data = user.resumes.data.map((r) => {
+      if (r._id === newResume._id) {
+        return newResume;
+      }
+      return r;
+    });
     resetPopups();
     storeResume(resumeData);
   };

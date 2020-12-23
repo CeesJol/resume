@@ -1,0 +1,106 @@
+CreateRole({
+  // To update, Replace the first line with 
+	// Update(Role("User"), {
+  name: "User",
+  membership: [
+    {
+      // This role will be assigned to all users
+      resource: Collection("User")
+    }
+  ],
+  privileges: [
+    {
+      resource: Collection("User"),
+      actions: {
+        // CRUD rights on all your own data but not other people's data
+        create: Query(Lambda("ref", Equals(Identity(), Var("ref")))),
+        read: Query(Lambda("ref", Equals(Identity(), Var("ref")))),
+        write: Query(Lambda(["oldData", "newData", "ref"], Equals(Identity(), Var("ref")))),
+        delete: Query(Lambda("ref", Equals(Identity(), Var("ref"))))
+      }
+    },
+    {
+      resource: Collection("Resume"),
+      actions: {
+        // CRUD rights on all your own resumes but not other people's resume
+        create: true,
+        read: Query(
+          Lambda("resume", Let(
+            {
+              resume: Get(Var("resume")),
+              userRef: Select(["data", "user"], Var("resume"))
+            },
+              Equals(Var("userRef"), Identity()),
+            )
+          )
+        ),
+        write: Query(
+          Lambda(["oldData", "newData", "resume"], Let(
+            {
+              resume: Get(Var("resume")),
+              userRef: Select(["data", "user"], Var("resume"))
+            },
+              Equals(Var("userRef"), Identity()),
+            )
+          )
+        ),
+        delete: Query(
+          Lambda("resume", Let(
+            {
+              resume: Get(Var("resume")),
+              userRef: Select(["data", "user"], Var("resume"))
+            },
+              Equals(Var("userRef"), Identity()),
+            )
+          )
+        )
+      }
+    },
+    {
+      resource: Collection("Feedback"),
+      actions: {
+        // User can create feedback, but not modify it or even read it afterwards
+        create: true,
+        read: false,
+        write: false,
+        delete: false
+      }
+    },
+    {
+      resource: Index("resume_user_by_user"),
+      actions: {
+        // Indexes are accessible
+        create: true,
+        read: true,
+        write: true,
+        delete: true
+      }
+    },
+    {
+      resource: Index("resumesByUser"),
+      actions: {
+        // Indexes are accessible
+        create: true,
+        read: true,
+        write: true,
+        delete: true
+      }
+    },
+    {
+      resource: Function("cascadeDeleteResume"),
+      actions: { call: true }
+    },
+    {
+      resource: Function("moveResume"),
+      actions: { call: true }
+    },
+    {
+      resource: Function("logoutUser"),
+      actions: { call: true }
+    },
+    {
+      resource: Function("updateUserPassword"),
+      actions: { call: true }
+    }
+  ]
+})

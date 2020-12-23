@@ -42,7 +42,7 @@ const UserPopup = () => {
     return false;
   };
   const handleUpdate = () => {
-    if (checkInvalidInput()) return false;
+    if (checkInvalidInput()) return;
 
     const myData = {
       _id: editingResume._id,
@@ -51,15 +51,6 @@ const UserPopup = () => {
     };
 
     updateResume(myData);
-
-    fauna({
-      type: "UPDATE_RESUME",
-      id: editingResume._id,
-      data: myData,
-    }).then(
-      () => storeStatus("Saved."),
-      (err) => storeStatus("Error: failed to save", err)
-    );
   };
   const handleCancel = () => {
     if (userMadeChanges) {

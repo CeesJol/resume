@@ -71,24 +71,22 @@ const UserContextProvider = (props) => {
   const getBio = (resume) => {
     return (resume || editingResume).bio || "Bio";
   };
-  const postResumeAction = () => {
-    resetPopups();
-    storeResume();
-  };
   const createResume = (resumeData) => {
     user.resumes.data.push(resumeData);
-    postResumeAction();
+    resetPopups();
+    storeResume(resumeData);
   };
   const deleteResume = (resumeData) => {
     user.resumes.data = user.resumes.data.filter(
       (x) => x._id !== resumeData._id
     );
     reset();
-    postResumeAction();
+    resetPopups();
   };
   const updateResume = (resumeData) => {
     setEditingResume({ ...editingResume, ...resumeData });
-    postResumeAction();
+    resetPopups();
+    storeResume(resumeData);
   };
   const updateSpecificResume = (resumeData) => {
     // Update a resume which is not per se editingResume
@@ -98,14 +96,16 @@ const UserContextProvider = (props) => {
         user.resumes.data[r] = newResume;
       }
     });
-    postResumeAction();
+    resetPopups();
+    storeResume(resumeData);
   };
-  const storeResume = () => {
+  const storeResume = (resumeData) => {
+    if (!resumeData) resumeData = { data: editingResume.data };
     storeStatus("Saving...");
     fauna({
       type: "UPDATE_RESUME",
       id: editingResume._id,
-      data: editingResume,
+      data: resumeData,
     }).then(
       () => storeStatus("Saved."),
       (err) => storeStatus("Error: failed to save", err)
@@ -113,13 +113,15 @@ const UserContextProvider = (props) => {
   };
   const createCategory = (categoryData) => {
     editingResume.data.categories.push(categoryData);
-    postResumeAction();
+    resetPopups();
+    storeResume();
   };
   const deleteCategory = (categoryData) => {
     editingResume.data.categories = editingResume.data.categories.filter(
       (cat) => cat.id !== categoryData.id
     );
-    postResumeAction();
+    resetPopups();
+    storeResume();
   };
   const updateCategory = (categoryData) => {
     editingResume.data.categories = editingResume.data.categories.map((cat) => {
@@ -128,16 +130,19 @@ const UserContextProvider = (props) => {
       }
       return cat;
     });
-    postResumeAction();
+    resetPopups();
+    storeResume();
   };
   const createItem = (itemData) => {
     getCategory(itemData.categoryId).items.push(itemData);
-    postResumeAction();
+    resetPopups();
+    storeResume();
   };
   const deleteItem = (itemData) => {
     const category = getCategory(itemData.categoryId);
     category.items = category.items.filter((item) => item.id !== itemData.id);
-    postResumeAction();
+    resetPopups();
+    storeResume();
   };
   const updateItem = (itemData) => {
     const category = getCategory(itemData.categoryId);
@@ -147,17 +152,20 @@ const UserContextProvider = (props) => {
       }
       return item;
     });
-    postResumeAction();
+    resetPopups();
+    storeResume();
   };
   const createContactInfo = (contactInfoData) => {
     editingResume.data.contactInfo.push(contactInfoData);
-    postResumeAction();
+    resetPopups();
+    storeResume();
   };
   const deleteContactInfo = (contactInfoData) => {
     editingResume.data.contactInfo = editingResume.data.contactInfo.filter(
       (cat) => cat.id !== contactInfoData.id
     );
-    postResumeAction();
+    resetPopups();
+    storeResume();
   };
   const updateContactInfo = (contactInfoData) => {
     editingResume.data.contactInfo = editingResume.data.contactInfo.map(
@@ -168,7 +176,8 @@ const UserContextProvider = (props) => {
         return cat;
       }
     );
-    postResumeAction();
+    resetPopups();
+    storeResume();
   };
   const clearUser = () => {
     console.info("clearUser");

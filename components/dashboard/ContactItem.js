@@ -41,7 +41,7 @@ const ContactItem = ({ template, item, text, dummy, primaryColor }) => {
       {template.contactInfo === "TOP" ? (
         // Draw icon
         item.value ? (
-          drawIcon(getContactIcon(item.name))
+          drawIcon(getContactIcon(item.value))
         ) : (
           drawIcon("plus-square")
         )

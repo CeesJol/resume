@@ -14,7 +14,6 @@ const Options = () => {
     setPreview,
     storeStatus,
   } = useContext(UserContext);
-  const [filled, setFilled] = useState(false);
   const [title, setTitle] = useState("");
   const handleChangeTitle = (event) => {
     setTitle(event.target.value);
@@ -65,8 +64,7 @@ const Options = () => {
     });
   };
   useEffect(() => {
-    if (!filled && editingResume) {
-      setFilled(true);
+    if (editingResume) {
       setTitle(editingResume.title);
     }
   });

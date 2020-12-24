@@ -28,7 +28,6 @@ const ItemPopup = () => {
     resetPopups,
     getCategory,
   } = useContext(UserContext);
-  const [filled, setFilled] = useState(false);
   const [isGoing, setIsGoing] = useState(true); // Separated from fields, because DB doesn't take this value.
   const [fields, setFields] = useState({
     title: "",
@@ -97,7 +96,6 @@ const ItemPopup = () => {
     Object.keys(myData).forEach(
       (key) => myData[key] === "" && delete myData[key]
     );
-    createItem(myData);
   };
   const handleUpdate = () => {
     const validationError = validateInput();
@@ -133,30 +131,23 @@ const ItemPopup = () => {
     }
   };
   useEffect(() => {
-    if (!filled) {
-      // Updating item
-      setFilled(true);
-
+    // Updating item
+    if (editingItem.title) {
       setFields({
+        ...fields,
+        title: editingItem.title,
+        month1: editingItem.month1 || "",
+        year1: editingItem.year1 || "",
+        month2: editingItem.month2 || "",
+        year2: editingItem.year2 || "",
+        location: editingItem.location || "",
         description: editingItem.description || "",
+        value: editingItem.value || "3",
       });
 
-      if (editingItem.title) {
-        setFields({
-          title: editingItem.title,
-          month1: editingItem.month1 || "",
-          year1: editingItem.year1 || "",
-          month2: editingItem.month2 || "",
-          year2: editingItem.year2 || "",
-          location: editingItem.location || "",
-          description: editingItem.description || "",
-          value: editingItem.value || "3",
-        });
-
-        setIsGoing(!editingItem.year2);
-      }
+      setIsGoing(!editingItem.year2);
     }
-  });
+  }, []);
   return (
     <ReactModal
       className="popup"

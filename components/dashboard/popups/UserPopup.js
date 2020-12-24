@@ -15,7 +15,6 @@ const UserPopup = () => {
     updateResume,
     resetPopups,
   } = useContext(UserContext);
-  const [filled, setFilled] = useState(false);
   const [jobTitle, setJobTitle] = useState("");
   const [bio, setBio] = useState("");
   const handleChangeJobTitle = (event) => {
@@ -61,13 +60,9 @@ const UserPopup = () => {
     }
   };
   useEffect(() => {
-    if (!filled) {
-      setFilled(true);
-
-      setJobTitle(editingResume.jobTitle);
-      setBio(editingResume.bio);
-    }
-  });
+    setJobTitle(editingResume.jobTitle);
+    setBio(editingResume.bio);
+  }, []);
   return (
     <ReactModal
       className="popup"

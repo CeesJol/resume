@@ -4,7 +4,7 @@ import Button from "../../general/Button";
 import Monthpicker from "../pickers/Monthpicker";
 import Yearpicker from "../pickers/Yearpicker";
 import Valuepicker from "../pickers/Valuepicker";
-import { toast } from "react-toastify";
+import { toastError } from "../../../lib/error";
 import {
   getCategoryItems,
   getCategoryIsGoingText,
@@ -82,7 +82,7 @@ const ItemPopup = () => {
   const handleCreate = () => {
     const validationError = validateInput();
     if (validationError) {
-      toast.error(`⚠️ ${validationError}`);
+      toastError(validationError);
       return;
     }
 
@@ -101,7 +101,7 @@ const ItemPopup = () => {
   const handleUpdate = () => {
     const validationError = validateInput();
     if (validationError) {
-      toast.error(`⚠️ ${validationError}`);
+      toastError(validationError);
       return;
     }
 

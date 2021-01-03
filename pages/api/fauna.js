@@ -39,7 +39,7 @@ export const loginUser = ({ email, password }) => {
   console.info("loginUser request");
   email = email.toLowerCase();
   const validationError = validateLogin(email, password);
-  if (validationError) return [{ message: validationError }];
+  if (validationError) return [{ validationError }];
   return executeQuery(
     `mutation LoginUser {
 			loginUser(email:"${email}", password: "${password}") {
@@ -67,7 +67,7 @@ export const createUser = ({ email, username, password }) => {
   console.info("createUser request");
   email = email.toLowerCase();
   const validationError = validateSignup(email, username, password);
-  if (validationError) return [{ message: validationError }];
+  if (validationError) return [{ validationError }];
   return executeQuery(
     `mutation CreateUser {
 			createUser(email: "${email}", username: "${username}", password: "${password}") {
@@ -86,7 +86,7 @@ export const createUser = ({ email, username, password }) => {
 export const updateUserPassword = ({ id, password }, secret) => {
   console.info("updateUserPassword request");
   const validationError = validatePassword(password);
-  if (validationError) return [{ message: validationError }];
+  if (validationError) return [{ validationError }];
   return executeQuery(
     `mutation UpdateUserPassword {
 			updateUserPassword(id: "${id}", password: "${password}") {
@@ -106,7 +106,7 @@ export const updateUserPasswordNoSecret = ({ token, password }) => {
   console.info("updateUserPasswordNoSecret request");
   try {
     const validationError = validatePassword(password);
-    if (validationError) return [{ message: validationError }];
+    if (validationError) return [{ validationError }];
     const decoded = jwt.verify(token, process.env.EMAIL_SECRET);
     const id = decoded.id;
     return executeQuery(
@@ -367,7 +367,7 @@ const fauna = async (req, res) => {
       return;
     }
   }
-  const { type } = req.body;
+  const { type, ...body } = req.body;
 
   try {
     switch (type) {
@@ -375,7 +375,7 @@ const fauna = async (req, res) => {
       // USERS
       // ----------
       case "LOGIN_USER":
-        result = await loginUser(req.body);
+        result = await loginUser(body);
         // If no validation error, set cookie
         if (!result[0]) {
           // Set secret cookie
@@ -397,55 +397,55 @@ const fauna = async (req, res) => {
         deleteCookie();
         break;
       case "CREATE_USER":
-        result = await createUser(req.body);
+        result = await createUser(body);
         break;
       case "UPDATE_USER_PASSWORD":
-        result = await updateUserPassword(req.body, userSecret);
+        result = await updateUserPassword(body, userSecret);
         break;
       case "UPDATE_USER_PASSWORD_NO_SECRET":
-        result = await updateUserPasswordNoSecret(req.body);
+        result = await updateUserPasswordNoSecret(body);
         break;
       case "UPDATE_USER":
-        result = await updateUser(req.body, userSecret);
+        result = await updateUser(body, userSecret);
         break;
       case "READ_USER":
-        result = await readUser(req.body, userSecret);
+        result = await readUser(body, userSecret);
         break;
       case "GET_USER_BY_EMAIL":
-        result = await getUserByEmail(req.body, userSecret);
+        result = await getUserByEmail(body, userSecret);
         break;
       case "CONFIRM_USER":
-        result = await confirmUser(req.body, userSecret);
+        result = await confirmUser(body, userSecret);
         break;
       case "CHECK_USER_EMAIL":
-        result = await checkUserEmail(req.body);
+        result = await checkUserEmail(body);
         break;
       // ----------
       // RESUMES
       // ----------
       case "GET_RESUME":
-        result = await getResume(req.body, userSecret);
+        result = await getResume(body, userSecret);
         break;
       case "DELETE_RESUME":
-        result = await deleteResume(req.body, userSecret);
+        result = await deleteResume(body, userSecret);
         break;
       case "CREATE_RESUME":
-        result = await createResume(req.body, userSecret);
+        result = await createResume(body, userSecret);
         break;
       case "DUPLICATE_RESUME":
-        result = await duplicateResume(req.body, userSecret);
+        result = await duplicateResume(body, userSecret);
         break;
       case "UPDATE_RESUME":
-        result = await updateResume(req.body, userSecret);
+        result = await updateResume(body, userSecret);
         break;
       case "MOVE_RESUME":
-        result = await moveResume(req.body, userSecret);
+        result = await moveResume(body, userSecret);
         break;
       // ----------
       // FEEDBACK
       // ----------
       case "SEND_FEEDBACK":
-        result = await sendFeedback(req.body, userSecret);
+        result = await sendFeedback(body, userSecret);
         break;
       // ----------
       // MISC
@@ -457,6 +457,24 @@ const fauna = async (req, res) => {
         result = [{ message: "Error: No such type in /api/fauna: " + type }];
     }
   } catch (e) {
+    // Stringify error message
+    // Source: https://stackoverflow.com/questions/18391212/is-it-not-possible-to-stringify-an-error-using-json-stringify
+    if (!("toJSON" in Error.prototype))
+      Object.defineProperty(Error.prototype, "toJSON", {
+        value: function () {
+          var alt = {};
+
+          Object.getOwnPropertyNames(this).forEach(function (key) {
+            alt[key] = this[key];
+          }, this);
+
+          return alt;
+        },
+        configurable: true,
+        writable: true,
+      });
+
+    console.error("API err:", e);
     result = [{ message: e }];
   }
   res.end(JSON.stringify(result));

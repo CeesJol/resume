@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
-import { toast } from "react-toastify";
+import { toastError } from "../../../lib/error";
 import ReactModal from "react-modal";
 import CloseButton from "../CloseButton";
 ReactModal.setAppElement("#__next");
@@ -33,7 +33,7 @@ const UserPopup = () => {
   const checkInvalidInput = () => {
     const validationError = validateInput();
     if (validationError) {
-      toast.error(`⚠️ ${validationError}`);
+      toastError(validationError);
       return true;
     }
     return false;

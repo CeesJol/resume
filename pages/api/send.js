@@ -73,21 +73,42 @@ export const sendResetLink = async ({ id, email }) => {
 };
 
 const send = async (req, res) => {
-  const { type } = req.body;
+  const { type, ...body } = req.body;
   let result;
-  switch (type) {
-    case "SEND_CONFIRMATION_EMAIL":
-      result = await sendConfirmationEmail(req.body);
-      break;
-    case "SEND_RESET_LINK":
-      result = await sendResetLink(req.body);
-      break;
-    default:
-      result = "Error: No such type in /api/send: " + type;
-      console.error(result);
+  try {
+    switch (type) {
+      case "SEND_CONFIRMATION_EMAIL":
+        result = await sendConfirmationEmail(body);
+        break;
+      case "SEND_RESET_LINK":
+        result = await sendResetLink(body);
+        break;
+      default:
+        result = [{ message: "Error: No such type in /api/send: " + type }];
+        console.error(result);
+    }
+  } catch (e) {
+    // Stringify error message
+    // Source: https://stackoverflow.com/questions/18391212/is-it-not-possible-to-stringify-an-error-using-json-stringify
+    if (!("toJSON" in Error.prototype))
+      Object.defineProperty(Error.prototype, "toJSON", {
+        value: function () {
+          var alt = {};
+
+          Object.getOwnPropertyNames(this).forEach(function (key) {
+            alt[key] = this[key];
+          }, this);
+
+          return alt;
+        },
+        configurable: true,
+        writable: true,
+      });
+
+    console.error("API err:", e);
+    result = [{ message: e }];
   }
-  const json = JSON.stringify(result);
-  res.end(json);
+  res.end(JSON.stringify(result));
 };
 
 export default send;

@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import Button from "../general/Button";
 import { fauna } from "../../lib/api";
+import { toastError } from "../../lib/error";
 import { UserContext } from "../../contexts/userContext";
 import { toast } from "react-toastify";
 
@@ -56,7 +57,7 @@ const Feedback = () => {
   const handleSend = async () => {
     // Force grade but not text
     if (!feedbackGrade) {
-      return toast.error("⚠️ Please provide a grade");
+      return toastError("Please provide a grade");
     }
 
     await fauna({
@@ -70,7 +71,7 @@ const Feedback = () => {
         hideForAWhile();
       },
       (err) => {
-        toast.error(`⚠️ ${err}`);
+        toastError(`${err}`);
         console.error("sendFeedback err:", err);
       }
     );

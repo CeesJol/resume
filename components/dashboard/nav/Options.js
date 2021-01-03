@@ -1,8 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
+import { toastError } from "../../../lib/error";
 import { fauna } from "../../../lib/api";
-import { toast } from "react-toastify";
 
 const Options = () => {
   const {
@@ -56,8 +56,8 @@ const Options = () => {
             }
           },
           (err) => {
-            toast.error(`⚠️ ${err}`);
-            console.error("deleteCategory err:", err);
+            toastError(err);
+            console.error("deleteResume err:", err);
           }
         );
       },
@@ -67,7 +67,7 @@ const Options = () => {
     if (editingResume) {
       setTitle(editingResume.title);
     }
-  });
+  }, []);
   return (
     <>
       <div className="dashboard__item">

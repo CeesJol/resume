@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import Template from "../Template";
-import { toast } from "react-toastify";
+import { toastError } from "../../../lib/error";
 import { fauna } from "../../../lib/api";
 import { TEMPLATES, getTemplate } from "../../../templates/templates";
 import { DEFAULT_CATEGORIES, convertToTemplate } from "../../../lib/constants";
@@ -38,7 +38,7 @@ const ResumePopup = () => {
   const checkInvalidInput = () => {
     const validationError = validateInput();
     if (validationError) {
-      toast.error(`⚠️ ${validationError}`);
+      toastError(validationError);
       return true;
     }
     return false;
@@ -78,7 +78,7 @@ const ResumePopup = () => {
       },
       (err) => {
         console.error("err", err);
-        toast.error(`⚠️ ${err}`);
+        toastError(err);
       }
     );
   };

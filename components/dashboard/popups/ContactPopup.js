@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import Contactpicker from "../../dashboard/pickers/Contactpicker";
-import { toast } from "react-toastify";
+import { toastError } from "../../../lib/error";
 import randomId from "../../../lib/randomId";
 import { CONTACTPICKER_OPTIONS } from "../../../lib/constants";
 import ReactModal from "react-modal";
@@ -77,7 +77,7 @@ const ContactPopup = () => {
   const handleCreate = () => {
     const validationError = validateInput();
     if (validationError) {
-      toast.error(`⚠️ ${validationError}`);
+      toastError(validationError);
       return;
     }
 
@@ -93,7 +93,7 @@ const ContactPopup = () => {
   const handleUpdate = () => {
     const validationError = validateInput();
     if (validationError) {
-      toast.error(`⚠️ ${validationError}`);
+      toastError(validationError);
       return;
     }
 

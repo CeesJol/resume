@@ -4,6 +4,7 @@ import Link from "next/link";
 import Button from "../../components/general/Button";
 import { UserContext } from "../../contexts/userContext";
 import { toast } from "react-toastify";
+import { toastError } from "../../lib/error";
 import { fauna } from "../../lib/api";
 
 const Token = () => {
@@ -22,8 +23,8 @@ const Token = () => {
         Router.push("/login");
       },
       (err) => {
-        toast.error(`⚠️ ${err}`);
-        console.error("login err", err);
+        toastError(err);
+        console.error("reset password err", err);
       }
     );
   };

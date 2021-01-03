@@ -3,7 +3,7 @@ import Router from "next/router";
 import Link from "next/link";
 import Button from "../components/general/Button";
 import { UserContext } from "../contexts/userContext";
-import { toast } from "react-toastify";
+import { toastError } from "../lib/error";
 import { fauna, send } from "../lib/api";
 
 const ForgotPassword = () => {
@@ -30,7 +30,7 @@ const ForgotPassword = () => {
     await send({ type: "SEND_RESET_LINK", id, email }).then(
       () => {},
       (err) => {
-        toast.error(`⚠️ ${err}`);
+        toastError(err);
         console.error("sendResetLink err", err);
       }
     );

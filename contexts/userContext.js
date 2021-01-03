@@ -1,8 +1,8 @@
 import React, { createContext, useState, useEffect } from "react";
-import { toast } from "react-toastify";
 import Router from "next/router";
 import { DUMMY_RESUME } from "../lib/constants";
 import { fauna, send } from "../lib/api";
+import { toastError } from "../lib/error";
 import { isMobile } from "react-device-detect";
 
 export const UserContext = createContext();
@@ -317,6 +317,7 @@ const UserContextProvider = (props) => {
     // Set auth
     setAuth(true);
   };
+
   const handleLogin = async (email, password) => {
     await fauna({ type: "LOGIN_USER", email, password }).then(
       async (data) => {
@@ -325,7 +326,7 @@ const UserContextProvider = (props) => {
         Router.push("/dashboard");
       },
       (err) => {
-        toast.error(`⚠️ ${err}`);
+        toastError(err);
         console.error("login err", err);
       }
     );
@@ -338,7 +339,7 @@ const UserContextProvider = (props) => {
         await handleLogin(email, password);
       },
       (err) => {
-        toast.error(`⚠️ ${err}`);
+        toastError(err);
         console.error("signup err", err);
       }
     );
@@ -360,7 +361,7 @@ const UserContextProvider = (props) => {
         // Check result
         if (!data.findUserByID) {
           console.error("Unauthenticated. Data:", data);
-          toast.error(`⚠️ Unauthenticated`);
+          toastError("Unauthenticated");
           clearUser();
           return;
         }
@@ -369,7 +370,7 @@ const UserContextProvider = (props) => {
         storeData(data.findUserByID);
       },
       (err) => {
-        toast.error(`⚠️ ${err}`);
+        toastError(err);
         console.error("Failed getting the user data:", err);
         clearUser();
       }

@@ -4,6 +4,7 @@ import { UserContext } from "../../../contexts/userContext";
 import { validateUpdate, validatePassword } from "../../../lib/validate";
 import { toast } from "react-toastify";
 import { send, fauna } from "../../../lib/api";
+import { toastError } from "../../../lib/error";
 
 const Settings = () => {
   const { storeUser, user } = useContext(UserContext);
@@ -23,7 +24,7 @@ const Settings = () => {
   const checkInvalidInput = () => {
     const validationError = validateUpdate(fields.username, fields.email);
     if (validationError) {
-      toast.error(`⚠️ ${validationError}`);
+      toastError(validationError);
       return true;
     }
     return false;
@@ -31,7 +32,7 @@ const Settings = () => {
   const checkInvalidInputPassword = () => {
     const validationError = validatePassword(fields.password);
     if (validationError) {
-      toast.error(`⚠️ ${validationError}`);
+      toastError(validationError);
       return true;
     }
     return false;
@@ -46,7 +47,7 @@ const Settings = () => {
     }).then(
       (data) => {
         if (data === -1) {
-          toast.error("⚠️ That email is already taken");
+          toastError("That email is already taken");
           return;
         }
 
@@ -74,7 +75,7 @@ const Settings = () => {
         toast.success("💾 Updated successfully!");
       },
       (err) => {
-        toast.error(`⚠️ ${err}`);
+        toastError(err);
         console.error("err", err);
       }
     );
@@ -90,9 +91,7 @@ const Settings = () => {
         toast.success("💾 Updated successfully!");
       },
       (err) => {
-        toast.error(
-          "⚠️ Something went wrong at our side. Please try again later!"
-        );
+        toastError("Something went wrong at our side. Please try again later!");
         console.error("err", err);
       }
     );
@@ -107,8 +106,7 @@ const Settings = () => {
         bio: user.bio,
       });
     }
-  });
-
+  }, []);
   return (
     <>
       <div className="dashboard__item">
@@ -118,7 +116,7 @@ const Settings = () => {
           <input
             type="text"
             id="username"
-            name="name"
+            name="username"
             value={fields.username}
             onChange={handleChange}
           />

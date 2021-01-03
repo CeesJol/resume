@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
-import { toast } from "react-toastify";
+import { toastError } from "../../../lib/error";
 import { ALL_CATEGORIES, getCategoryType } from "../../../lib/constants";
 import Categorypicker from "../pickers/Categorypicker";
 import Typepicker from "../pickers/Typepicker";
@@ -60,7 +60,7 @@ const CategoryPopup = () => {
   const handleCreate = () => {
     const validationError = validateInput();
     if (validationError) {
-      toast.error(`⚠️ ${validationError}`);
+      toastError(validationError);
       return;
     }
 
@@ -78,7 +78,7 @@ const CategoryPopup = () => {
   const handleUpdate = () => {
     const validationError = validateInput();
     if (validationError) {
-      toast.error(`⚠️ ${validationError}`);
+      toastError(validationError);
       return;
     }
 

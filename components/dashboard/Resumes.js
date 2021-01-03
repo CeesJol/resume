@@ -2,7 +2,8 @@ import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import Button from "../general/Button";
 import ResumePreview from "./ResumePreview";
-import { MAX_NUMBER_OF_RESUMES, sortByPriority } from "../../lib/constants";
+import { MAX_NUMBER_OF_RESUMES } from "../../lib/constants";
+import { sortByPriority } from "../../lib/util";
 
 /**
  * List of resume previews on the main page of the dashboard.

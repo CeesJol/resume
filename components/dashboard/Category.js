@@ -1,11 +1,8 @@
 import React, { useContext, useState } from "react";
 import { UserContext } from "../../contexts/userContext";
 import Item from "./Item";
-import {
-  getDummyItem,
-  sortByPriority,
-  getTypeClassName,
-} from "../../lib/constants";
+import { getDummyItem } from "../../lib/constants";
+import { getTypeClassName, sortByPriority } from "../../lib/util";
 import Button from "../general/Button";
 import Separator from "./Separator";
 import { isMobile } from "react-device-detect";

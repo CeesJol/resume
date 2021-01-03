@@ -5,7 +5,8 @@ import ContactItem from "./ContactItem";
 import { PDFExport } from "@progress/kendo-react-pdf";
 import { getTemplate } from "../../templates/templates";
 import Button from "../general/Button";
-import { getDummyItem, sortByPriority } from "../../lib/constants";
+import { getDummyItem } from "../../lib/constants";
+import { sortByPriority } from "../../lib/util";
 
 // PDF Export source
 // https://blog.usejournal.com/lets-make-a-resume-in-react-2c9c5540f51a

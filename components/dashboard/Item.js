@@ -1,10 +1,7 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
-import {
-  getCategoryItems,
-  getValueDescription,
-  getTypeClassName,
-} from "../../lib/constants";
+import { getCategoryItems, getValueDescription } from "../../lib/constants";
+import { getTypeClassName } from "../../lib/util";
 import Button from "../general/Button";
 import Separator from "./Separator";
 import ReactMarkdown from "react-markdown";

@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import Router from "next/router";
 import { DUMMY_RESUME } from "../lib/constants";
-import { fauna } from "../lib/api";
+import { fauna, send } from "../lib/api";
 import { isMobile } from "react-device-detect";
 
 export const UserContext = createContext();
@@ -14,6 +14,7 @@ const UserContextProvider = (props) => {
   const [loggingOut, setLoggingOut] = useState(null);
 
   // Resume
+  const [resumes, setResumes] = useState([]);
   const [dummy, setDummy] = useState(false);
   const [editingItem, setEditingItem] = useState(false);
   const [editingCategory, setEditingCategory] = useState(false);
@@ -50,9 +51,6 @@ const UserContextProvider = (props) => {
       (category) => category.id === categoryId
     );
   };
-  const getResumes = () => {
-    return userExists() && user.resumes.data;
-  };
   const getContactInfo = (resume) => {
     return (resume || editingResume).data.contactInfo || [];
   };
@@ -72,35 +70,35 @@ const UserContextProvider = (props) => {
     return (resume || editingResume).bio || "Bio";
   };
   const createResume = (resumeData) => {
-    user.resumes.data.push(resumeData);
+    resumes.push(resumeData);
     resetPopups();
     storeResume(resumeData);
   };
   const deleteResume = (resumeData) => {
-    user.resumes.data = user.resumes.data.filter(
-      (x) => x._id !== resumeData._id
-    );
+    setResumes(resumes.filter((x) => x._id !== resumeData._id));
     reset();
     resetPopups();
   };
   const updateResume = (resumeData) => {
     const newResume = { ...editingResume, ...resumeData };
     setEditingResume(newResume);
-    user.resumes.data = user.resumes.data.map((r) => {
-      if (r._id === newResume._id) {
-        return newResume;
-      }
-      return r;
-    });
+    setResumes(
+      resumes.map((r) => {
+        if (r._id === newResume._id) {
+          return newResume;
+        }
+        return r;
+      })
+    );
     resetPopups();
     storeResume(resumeData);
   };
   const updateSpecificResume = (resumeData) => {
     // Update a resume which is not per se editingResume
-    user.resumes.data.forEach((resume, r) => {
+    resumes.forEach((resume, r) => {
       if (resume._id === resumeData._id) {
         const newResume = { ...resume, ...resumeData };
-        user.resumes.data[r] = newResume;
+        resumes[r] = newResume;
       }
     });
     resetPopups();
@@ -257,9 +255,7 @@ const UserContextProvider = (props) => {
       () => {
         // Find item with priority p
         const p = resume.priority + amount;
-        let otherResume = user.resumes.data.find(
-          (resume) => resume.priority === p
-        );
+        let otherResume = resumes.find((resume) => resume.priority === p);
 
         // Update priority
         otherResume.priority -= amount;
@@ -288,7 +284,7 @@ const UserContextProvider = (props) => {
   const reset = () => {
     setChangingResume(false);
     // setEditingResume(false);
-    if (user && user.resumes.data.length === 0) setEditingResume(DUMMY_RESUME);
+    if (resumes.length === 0) setEditingResume(DUMMY_RESUME);
     setNav(0);
     storeStatus("");
     resetPopups();
@@ -299,6 +295,53 @@ const UserContextProvider = (props) => {
   const appendHoverToClassName = (className) => {
     if (isHoverable()) return className + " resume--hoverable";
     return className;
+  };
+  const storeData = (data) => {
+    // Convert resume data
+    let { resumes: userResumes, ...userData } = data;
+    userResumes = userResumes.data.map((res) => ({
+      ...res,
+      data: JSON.parse(res.data),
+    }));
+
+    // Store data
+    storeUser(userData);
+    setResumes(userResumes);
+
+    // Log data
+    console.info("userData");
+    console.table(userData);
+    console.info("Resumes");
+    console.table(userResumes);
+
+    // Set auth
+    setAuth(true);
+  };
+  const handleLogin = async (email, password) => {
+    await fauna({ type: "LOGIN_USER", email, password }).then(
+      async (data) => {
+        storeData(data);
+        localStorage.setItem("userId", JSON.stringify(data._id));
+        Router.push("/dashboard");
+      },
+      (err) => {
+        toast.error(`⚠️ ${err}`);
+        console.error("login err", err);
+      }
+    );
+  };
+  const handleSignUp = async (email, username, password) => {
+    await fauna({ type: "CREATE_USER", email, username, password }).then(
+      async (data) => {
+        const id = data.createUser._id;
+        send({ type: "SEND_CONFIRMATION_EMAIL", id, email });
+        await handleLogin(email, password);
+      },
+      (err) => {
+        toast.error(`⚠️ ${err}`);
+        console.error("signup err", err);
+      }
+    );
   };
   useEffect(() => {
     if (!!user) {
@@ -314,21 +357,16 @@ const UserContextProvider = (props) => {
     }
     fauna({ type: "READ_USER", id: userId }).then(
       (data) => {
+        // Check result
         if (!data.findUserByID) {
           console.error("Unauthenticated. Data:", data);
           toast.error(`⚠️ Unauthenticated`);
           clearUser();
           return;
         }
-        setEditingResume(data.findUserByID.resumes.data[0] || DUMMY_RESUME);
-        // Convert resume data
-        data.findUserByID.resumes.data = data.findUserByID.resumes.data.map(
-          (res) => ({ ...res, data: JSON.parse(res.data) })
-        );
-        storeUser(data.findUserByID);
-        console.info("readUser");
-        console.table(data.findUserByID);
-        setAuth(true);
+
+        // Store data
+        storeData(data.findUserByID);
       },
       (err) => {
         toast.error(`⚠️ ${err}`);
@@ -389,7 +427,6 @@ const UserContextProvider = (props) => {
         setSelectedTemplateId,
         getCategories,
         getItems,
-        getResumes,
         getContactInfo,
         getJobTitle,
         getBio,
@@ -408,6 +445,10 @@ const UserContextProvider = (props) => {
         setMoving,
         isHoverable,
         appendHoverToClassName,
+        resumes,
+        storeData,
+        handleLogin,
+        handleSignUp,
       }}
     >
       {props.children}

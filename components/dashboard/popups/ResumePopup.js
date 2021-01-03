@@ -5,11 +5,7 @@ import Template from "../Template";
 import { toast } from "react-toastify";
 import { fauna } from "../../../lib/api";
 import { TEMPLATES, getTemplate } from "../../../templates/templates";
-import {
-  DEFAULT_CATEGORIES,
-  RESUME_SKELETON,
-  convertToTemplate,
-} from "../../../lib/constants";
+import { DEFAULT_CATEGORIES, convertToTemplate } from "../../../lib/constants";
 import ReactModal from "react-modal";
 import CloseButton from "../CloseButton";
 ReactModal.setAppElement("#__next");
@@ -27,7 +23,7 @@ const ResumePopup = () => {
     setTemplates,
     setEditingResume,
     setChangingResume,
-    getResumes,
+    resumes,
   } = useContext(UserContext);
   const [title, setTitle] = useState("");
   const handleChangeTitle = (event) => {
@@ -59,13 +55,12 @@ const ResumePopup = () => {
       type: "CREATE_RESUME",
       userId: user._id,
       data: {
-        ...RESUME_SKELETON,
         title,
         jobTitle: user.jobTitle ? user.jobTitle : "",
         bio: user.bio ? user.bio : "",
         templateId: selectedTemplateId,
         ...styles,
-        priority: getResumes().length + 1,
+        priority: resumes.length + 1,
         data: {
           categories,
           contactInfo: [],

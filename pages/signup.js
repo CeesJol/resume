@@ -3,51 +3,12 @@ import Router from "next/router";
 import Link from "next/link";
 import Button from "../components/general/Button";
 import { UserContext } from "../contexts/userContext";
-import { toast } from "react-toastify";
-import { send, fauna } from "../lib/api";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { userExists, storeUser, setAuth } = useContext(UserContext);
-  const handleLogin = async (event) => {
-    if (event) event.preventDefault();
-    await fauna({ type: "LOGIN_USER", email, password }).then(
-      async (data) => {
-        setAuth(true);
-        // Convert resume data
-        data.resumes.data = data.resumes.data.map((res) => ({
-          ...res,
-          data: JSON.parse(res.data),
-        }));
-        console.info("getUserByEmail", data);
-        storeUser(data);
-        const id = data._id;
-        localStorage.setItem("userId", JSON.stringify(id));
-        storeUser({ id });
-        Router.push("/dashboard");
-      },
-      (err) => {
-        toast.error(`⚠️ ${err}`);
-        console.error("(Signup) login err", err);
-      }
-    );
-  };
-  const handleSignUp = async (event) => {
-    if (event) event.preventDefault();
-    await fauna({ type: "CREATE_USER", email, username, password }).then(
-      async (data) => {
-        const id = data.createUser._id;
-        send({ type: "SEND_CONFIRMATION_EMAIL", id, email });
-        await handleLogin();
-      },
-      (err) => {
-        toast.error(`⚠️ ${err}`);
-        console.error("signup err", err);
-      }
-    );
-  };
+  const { userExists, handleSignUp } = useContext(UserContext);
   const handleChangeEmail = (event) => {
     setEmail(event.target.value.toLowerCase());
   };
@@ -105,7 +66,11 @@ const Signup = () => {
               onChange={handleChangePassword}
             />
 
-            <Button fn={handleSignUp} text="Sign up" altText="Signing up..." />
+            <Button
+              fn={() => handleSignUp(email, username, password)}
+              text="Sign up"
+              altText="Signing up..."
+            />
           </form>
         </div>
       </div>

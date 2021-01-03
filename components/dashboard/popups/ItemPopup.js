@@ -96,6 +96,7 @@ const ItemPopup = () => {
     Object.keys(myData).forEach(
       (key) => myData[key] === "" && delete myData[key]
     );
+    createItem(myData);
   };
   const handleUpdate = () => {
     const validationError = validateInput();

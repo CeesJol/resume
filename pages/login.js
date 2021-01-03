@@ -3,38 +3,11 @@ import Router from "next/router";
 import Link from "next/link";
 import Button from "../components/general/Button";
 import { UserContext } from "../contexts/userContext";
-import { toast } from "react-toastify";
-import { fauna } from "../lib/api";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { userExists, storeUser, setAuth, setLoggingOut } = useContext(
-    UserContext
-  );
-  const handleLogin = async (event) => {
-    if (event) event.preventDefault();
-    await fauna({ type: "LOGIN_USER", email, password }).then(
-      async (data) => {
-        setAuth(true);
-        // Convert resume data
-        data.resumes.data = data.resumes.data.map((res) => ({
-          ...res,
-          data: JSON.parse(res.data),
-        }));
-        console.info("loginUser", data);
-        storeUser(data);
-        const id = data._id;
-        storeUser({ id });
-        localStorage.setItem("userId", JSON.stringify(id));
-        Router.push("/dashboard");
-      },
-      (err) => {
-        toast.error(`⚠️ ${err}`);
-        console.error("login err", err);
-      }
-    );
-  };
+  const { userExists, setLoggingOut, handleLogin } = useContext(UserContext);
   const handleChangeEmail = (event) => {
     setEmail(event.target.value.toLowerCase());
   };
@@ -87,7 +60,11 @@ const Login = () => {
               </Link>
             </p>
 
-            <Button fn={handleLogin} text="Log in" altText="Logging in..." />
+            <Button
+              fn={() => handleLogin(email, password)}
+              text="Log in"
+              altText="Logging in..."
+            />
           </form>
         </div>
       </div>

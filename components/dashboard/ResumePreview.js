@@ -20,7 +20,7 @@ const ResumePreview = ({ resume, index }) => {
   const {
     user,
     setEditingResume,
-    getResumes,
+    resumes,
     setChangingResume,
     moveResume,
     forceRender,
@@ -33,7 +33,7 @@ const ResumePreview = ({ resume, index }) => {
   };
   const handleDuplicate = async (resume) => {
     const title = resume.title + " Duplicate";
-    const priority = getResumes().length + 1;
+    const priority = resumes.length + 1;
     await fauna({
       type: "DUPLICATE_RESUME",
       userId: user._id,
@@ -84,7 +84,7 @@ const ResumePreview = ({ resume, index }) => {
             textual={true}
           />
           {index > 0 && drawMoveUp()}
-          {index < getResumes().length - 1 && drawMoveDown()}
+          {index < resumes.length - 1 && drawMoveDown()}
         </span>
       </footer>
     );

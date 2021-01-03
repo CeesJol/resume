@@ -10,7 +10,7 @@ const Options = () => {
     deleteResume,
     setWarning,
     editingResume,
-    getResumes,
+    resumes,
     setPreview,
     storeStatus,
   } = useContext(UserContext);
@@ -48,7 +48,7 @@ const Options = () => {
             deleteResume(editingResume);
             setPreview(true);
             // Propagate priority updates
-            for (let resume of getResumes()) {
+            for (let resume of resumes) {
               if (resume.priority > editingResume.priority) {
                 const newPriority = resume.priority - 1;
                 updateResume({ ...resume, priority: newPriority });

@@ -32,14 +32,16 @@ const ResumePreview = ({ resume, index }) => {
     setChangingResume(true);
   };
   const handleDuplicate = async (resume) => {
-    const title = resume.title + " Duplicate";
-    const priority = resumes.length + 1;
+    const data = {
+      ...resume,
+      title: resume.title + " Duplicate",
+      priority: resumes.length + 1,
+    };
+    console.log("resume", resume);
     await fauna({
       type: "DUPLICATE_RESUME",
       userId: user._id,
-      resumeData: resume,
-      title,
-      priority,
+      data,
     }).then((data) => {
       // Convert resume data
       data.createResume.data = JSON.parse(data.createResume.data);

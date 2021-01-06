@@ -16,6 +16,7 @@ priority
 templateId
 primaryColor
 backgroundColor
+fontSize
 data`;
 
 // User data request data used by getUserByEmail and readUser
@@ -231,7 +232,6 @@ export const deleteResume = async ({ id }, secret) => {
 export const createResume = async ({ userId, data }, secret) => {
   console.info("createResume request");
   const { pairs } = stringifyObject(data);
-
   const query = `mutation CreateResume {
 		createResume(data: {
 			${pairs}
@@ -243,21 +243,12 @@ export const createResume = async ({ userId, data }, secret) => {
   return executeQuery(query, secret);
 };
 
-export const duplicateResume = async (
-  { userId, resumeData, title, priority },
-  secret
-) => {
+export const duplicateResume = async ({ userId, data }, secret) => {
   console.info("duplicateResume request");
+  const { pairs } = stringifyObject(data);
   const query = `mutation DuplicateResume {
 		createResume(data: {
-			title: "${title}"
-			jobTitle: "${resumeData.jobTitle ? resumeData.jobTitle : ``}"
-			bio: "${resumeData.bio ? resumeData.bio : ``}"
-			templateId: "${resumeData.templateId}"
-			priority: ${priority}
-			primaryColor: "${resumeData.primaryColor}"
-			backgroundColor: "${resumeData.backgroundColor}"
-			data: """${JSON.stringify(resumeData.data)}"""
+			${pairs}
 			user: { connect: "${userId}" }
 		}) {
 			${RESUME_DATA}

@@ -76,8 +76,12 @@
   i,
   a,
   li {
-    font-size: calc(0.8rem * #{$resume-scale});
+    // font-size: calc(0.8rem * #{$resume-scale});
     margin: 0;
+  }
+
+  &--action {
+    font-size: calc(0.8rem * #{$resume-scale});
   }
 
   * {

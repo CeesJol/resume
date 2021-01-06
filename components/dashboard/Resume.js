@@ -75,7 +75,14 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
           {userExists() && user.username}
         </h1>
         <h3 className="resume__header--job-title">{getJobTitle(curResume)}</h3>
-        <p className="resume__header--bio multiline">{getBio(curResume)}</p>
+        <p
+          className="resume__header--bio multiline"
+          style={{
+            fontSize: editingResume.fontSize,
+          }}
+        >
+          {getBio(curResume)}
+        </p>
       </div>
     );
   };
@@ -90,6 +97,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
       };
       const getCategoryNameStyle = () => ({
         color: curResume.primaryColor,
+        fontSize: editingResume.fontSize,
       });
       // Draw as category
       return (

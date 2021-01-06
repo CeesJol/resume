@@ -17,6 +17,7 @@ type Resume {
   templateId: String
   primaryColor: String
   backgroundColor: String
+  fontSize: String
   data: String
 }
 

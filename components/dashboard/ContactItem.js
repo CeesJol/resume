@@ -3,9 +3,12 @@ import { UserContext } from "../../contexts/userContext";
 import { getContactIcon } from "../../lib/constants";
 
 const ContactItem = ({ template, item, text, dummy, primaryColor }) => {
-  const { setEditingContactInfo, preview, appendHoverToClassName } = useContext(
-    UserContext
-  );
+  const {
+    editingResume,
+    setEditingContactInfo,
+    preview,
+    appendHoverToClassName,
+  } = useContext(UserContext);
   const handleChangeContactInfo = (item) => {
     if (preview) return false;
     if (dummy) setEditingContactInfo({});
@@ -47,9 +50,23 @@ const ContactItem = ({ template, item, text, dummy, primaryColor }) => {
         )
       ) : (
         // Draw text
-        <h4 className="resume__contact-info--title">{item.name}</h4>
+        <h4
+          className="resume__contact-info--title"
+          style={{
+            fontSize: editingResume.fontSize,
+          }}
+        >
+          {item.name}
+        </h4>
       )}
-      <p className="resume__contact-info--body">{getContactInfoBody()}</p>
+      <p
+        className="resume__contact-info--body"
+        style={{
+          fontSize: editingResume.fontSize,
+        }}
+      >
+        {getContactInfoBody()}
+      </p>
     </div>
   );
 };

@@ -15,6 +15,7 @@ const Item = ({ category, item, index, dummy, hovering, primaryColor }) => {
     getItems,
     isHoverable,
     appendHoverToClassName,
+    editingResume,
   } = useContext(UserContext);
   const categoryItems = getCategoryItems(category.type);
   const handleClick = (e, item) => {
@@ -70,7 +71,16 @@ const Item = ({ category, item, index, dummy, hovering, primaryColor }) => {
     return {};
   };
   const drawItemTitle = () => {
-    return <h4 className="resume__item--title">{item.title}</h4>;
+    return (
+      <h4
+        className="resume__item--title"
+        style={{
+          fontSize: editingResume.fontSize,
+        }}
+      >
+        {item.title}
+      </h4>
+    );
   };
   const drawItemActions = () => {
     if (
@@ -111,12 +121,26 @@ const Item = ({ category, item, index, dummy, hovering, primaryColor }) => {
     );
   };
   const drawItemLocation = () => {
-    return <h4 className="resume__item--location">{item.location}</h4>;
+    return (
+      <h4
+        className="resume__item--location"
+        style={{
+          fontSize: editingResume.fontSize,
+        }}
+      >
+        {item.location}
+      </h4>
+    );
   };
   const drawItemDate = () => {
     if (!item.year1) return;
     return (
-      <p className="resume__item--date">
+      <p
+        className="resume__item--date"
+        style={{
+          fontSize: editingResume.fontSize,
+        }}
+      >
         {item.month1 ? item.month1 + "/" : ""}
         {item.year1}
         {item.year2 &&
@@ -130,7 +154,12 @@ const Item = ({ category, item, index, dummy, hovering, primaryColor }) => {
     return (
       <div className="resume__item--value">
         {drawValue()}
-        <p className="resume__item--value--title">
+        <p
+          className="resume__item--value--title"
+          style={{
+            fontSize: editingResume.fontSize,
+          }}
+        >
           {getValueDescription(item.value)}
         </p>
       </div>
@@ -139,11 +168,17 @@ const Item = ({ category, item, index, dummy, hovering, primaryColor }) => {
   const drawItemDescription = () => {
     if (!item.description) return;
     return (
-      <ReactMarkdown
-        source={item.description}
-        className="resume__item--description multiline"
-        escapeHtml={false}
-      />
+      <div
+        style={{
+          fontSize: editingResume.fontSize,
+        }}
+      >
+        <ReactMarkdown
+          source={item.description}
+          className="resume__item--description multiline"
+          escapeHtml={false}
+        />
+      </div>
     );
   };
   return (

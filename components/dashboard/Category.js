@@ -125,6 +125,7 @@ const Category = ({ category, index, primaryColor, backgroundColor }) => {
           onClick={(e) => handleClick(e, category)}
           style={{
             color: primaryColor,
+            fontSize: editingResume.fontSize,
           }}
         >
           {category.title}

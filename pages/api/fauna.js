@@ -137,7 +137,6 @@ export const updateUser = async ({ id, data }, secret) => {
 			updateUser(id: "${id}", data: {
 				${pairs}
 			}) {
-				_id
 				${keys}
 			}
 		}`,
@@ -260,17 +259,14 @@ export const duplicateResume = async ({ userId, data }, secret) => {
 export const updateResume = async ({ id, data }, secret) => {
   console.info("updateResume request");
   const { pairs, keys } = stringifyObject(data);
-  return executeQuery(
-    `mutation UpdateResume {
-			updateResume(id: "${id}", data: {
-				${pairs}
-			}) {
-				_id
-				${keys}
-			}
-		}`,
-    secret
-  );
+  const query = `mutation UpdateResume {
+		updateResume(id: "${id}", data: {
+			${pairs}
+		}) {
+			${keys}
+		}
+	}`;
+  return executeQuery(query, secret);
 };
 
 export const moveResume = async ({ id, amount }, secret) => {

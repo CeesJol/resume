@@ -24,7 +24,7 @@ const ResumePreview = ({ resume, index }) => {
     setChangingResume,
     moveResume,
     forceRender,
-    resetPopups,
+    createResume,
   } = useContext(UserContext);
   const handleClick = (e, resume) => {
     e.preventDefault();
@@ -37,7 +37,6 @@ const ResumePreview = ({ resume, index }) => {
       title: resume.title + " Duplicate",
       priority: resumes.length + 1,
     };
-    console.log("resume", resume);
     await fauna({
       type: "DUPLICATE_RESUME",
       userId: user._id,
@@ -45,8 +44,7 @@ const ResumePreview = ({ resume, index }) => {
     }).then((data) => {
       // Convert resume data
       data.createResume.data = JSON.parse(data.createResume.data);
-      resumes.push(data.createResume);
-      resetPopups();
+      createResume(data.createResume);
       forceRender();
     });
   };

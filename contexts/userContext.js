@@ -72,7 +72,6 @@ const UserContextProvider = (props) => {
   const createResume = (resumeData) => {
     resumes.push(resumeData);
     resetPopups();
-    storeResume(resumeData);
   };
   const deleteResume = (resumeData) => {
     setResumes(resumes.filter((x) => x._id !== resumeData._id));
@@ -81,7 +80,9 @@ const UserContextProvider = (props) => {
   };
   const updateResume = (resumeData) => {
     const newResume = { ...editingResume, ...resumeData };
-    setEditingResume(newResume);
+    if (editingResume._id === resumeData._id) {
+      setEditingResume(newResume);
+    }
     setResumes(
       resumes.map((r) => {
         if (r._id === newResume._id) {
@@ -109,7 +110,7 @@ const UserContextProvider = (props) => {
     storeStatus("Saving...");
     fauna({
       type: "UPDATE_RESUME",
-      id: editingResume._id,
+      id: resumeData._id || editingResume._id,
       data: resumeData,
     }).then(
       () => storeStatus("Saved."),

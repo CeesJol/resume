@@ -30,6 +30,13 @@ const DashboardHeader = () => {
     setChangingResume(false);
     setNav(1000);
   };
+  const getStatusClassName = () => {
+    const className = "header--status";
+    if (status.startsWith("Error")) {
+      return `${className} ${className}--error`;
+    }
+    return className;
+  };
   return (
     <header className="header">
       <div className="header__content header__content--dashboard">
@@ -43,7 +50,9 @@ const DashboardHeader = () => {
                 </span>
               </a>
             </h3>
-            {changingResume && <span className="header--status">{status}</span>}
+            {changingResume && (
+              <span className={getStatusClassName()}>{status}</span>
+            )}
           </div>
         </div>
         <div className="header__right">

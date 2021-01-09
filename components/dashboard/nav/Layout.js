@@ -63,15 +63,6 @@ const Layout = () => {
     myData[key] = value;
 
     updateResume(myData);
-
-    await fauna({
-      type: "UPDATE_RESUME",
-      id: editingResume._id,
-      data: myData,
-    }).then(
-      () => storeStatus("Saved."),
-      (err) => storeStatus("Error: failed to save", err)
-    );
   };
   const handleUpdateTemplate = async () => {
     setWarning({
@@ -84,21 +75,8 @@ const Layout = () => {
           _id: editingResume._id,
           ...styles,
         };
-
         updateResume(myData);
-
-        await fauna({
-          type: "UPDATE_RESUME",
-          id: editingResume._id,
-          data: myData,
-        }).then(
-          () => {
-            storeStatus("Saved.");
-            // Store in textfields
-            storeFields(styles);
-          },
-          (err) => storeStatus("Error: failed to save", err)
-        );
+        storeFields(styles);
       },
     });
   };
@@ -110,7 +88,7 @@ const Layout = () => {
           {templates.map((template) => (
             <Template template={template} key={`template-${template.id}`} />
           ))}
-          {/* <br > to force button on new line */}
+          {/* <br /> to force button on new line */}
           <br />
           <Button
             text="Update"

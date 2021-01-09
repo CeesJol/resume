@@ -27,15 +27,6 @@ const Options = () => {
     };
 
     updateResume(myData);
-
-    await fauna({
-      type: "UPDATE_RESUME",
-      id: myData._id,
-      data: myData,
-    }).then(
-      () => storeStatus("Saved."),
-      (err) => storeStatus("Error: failed to save", err)
-    );
   };
   const handleDelete = async (event) => {
     if (event) event.preventDefault();
@@ -45,15 +36,15 @@ const Options = () => {
       fn: async () => {
         await fauna({ type: "DELETE_RESUME", id: editingResume._id }).then(
           async () => {
-            deleteResume(editingResume);
-            setPreview(true);
             // Propagate priority updates
             for (let resume of resumes) {
               if (resume.priority > editingResume.priority) {
                 const newPriority = resume.priority - 1;
-                updateResume({ ...resume, priority: newPriority });
+                updateResume({ _id: resume._id, priority: newPriority });
               }
             }
+            deleteResume(editingResume);
+            setPreview(true);
           },
           (err) => {
             toastError(err);

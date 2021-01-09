@@ -19,6 +19,7 @@ const ContactItem = ({ template, item, text, dummy, primaryColor }) => {
       className={`fa fa-${name} resume__contact-info--icon`}
       style={{
         color: primaryColor,
+        fontSize: editingResume.fontSize,
       }}
     ></i>
   );

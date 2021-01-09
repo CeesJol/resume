@@ -55,7 +55,7 @@ const ResumePreview = ({ resume, index }) => {
   const drawResumePreviewFooter = () => {
     const drawMoveUp = () => (
       <>
-        <Separator />
+        <Separator large={true} />
         <Button
           fn={() => handleMove(resume, -1)}
           text="Move up"
@@ -66,7 +66,7 @@ const ResumePreview = ({ resume, index }) => {
     );
     const drawMoveDown = () => (
       <>
-        <Separator />
+        <Separator large={true} />
         <Button
           fn={() => handleMove(resume, 1)}
           text="Move down"

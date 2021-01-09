@@ -15,7 +15,6 @@ const Layout = () => {
     setPreview,
     selectedTemplateId,
     setSelectedTemplateId,
-    storeStatus,
     setWarning,
   } = useContext(UserContext);
   const [fields, setFields] = useState({

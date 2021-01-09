@@ -12,7 +12,6 @@ const Options = () => {
     editingResume,
     resumes,
     setPreview,
-    storeStatus,
   } = useContext(UserContext);
   const [title, setTitle] = useState("");
   const handleChangeTitle = (event) => {

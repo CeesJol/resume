@@ -60,7 +60,7 @@ const ResumePreview = ({ resume, index }) => {
           fn={() => handleMove(resume, -1)}
           text="Move up"
           altText="Moving..."
-          textual={true}
+          textual={"large"}
         />
       </>
     );
@@ -71,7 +71,7 @@ const ResumePreview = ({ resume, index }) => {
           fn={() => handleMove(resume, 1)}
           text="Move down"
           altText="Moving..."
-          textual={true}
+          textual={"large"}
         />
       </>
     );
@@ -82,7 +82,7 @@ const ResumePreview = ({ resume, index }) => {
             fn={() => handleDuplicate(resume)}
             text="Create variation"
             altText="Creating..."
-            textual={true}
+            textual={"large"}
           />
           {index > 0 && drawMoveUp()}
           {index < resumes.length - 1 && drawMoveDown()}

@@ -24,10 +24,11 @@ const ContactPopup = () => {
   const [customName, setCustomName] = useState("");
   const [value, setValue] = useState("");
   const [link, setLink] = useState("");
-  const [useLink, setUseLink] = useState(true);
+  const [useLink, setUseLink] = useState(false);
   const handleChangeValue = (event) => {
     if (useLink && value === link) {
       // Set link equal to value
+      // TODO replace with a function that adds https:// or mailto: or whatever
       setLink(event.target.value);
     }
     setValue(event.target.value);
@@ -43,6 +44,11 @@ const ContactPopup = () => {
     setLink(event.target.value);
   };
   const handleChangeUseLink = () => {
+    if (!useLink) {
+      // Set link equal to value
+      // TODO replace with a function that adds https:// or mailto: or whatever
+      setLink(value);
+    }
     setUseLink(!useLink);
   };
   const validateInput = () => {

@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect } from "react";
-import { fauna } from "../../../lib/api";
 import { RESUME_DEFAULTS } from "../../../lib/constants";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";

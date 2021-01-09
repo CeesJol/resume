@@ -86,6 +86,11 @@ const ItemPopup = () => {
       return;
     }
 
+    if (isGoing) {
+      fields.month2 = "";
+      fields.year2 = "";
+    }
+
     // Get relevant data
     let myData = {
       ...editingItem,
@@ -103,6 +108,11 @@ const ItemPopup = () => {
     if (validationError) {
       toastError(validationError);
       return;
+    }
+
+    if (isGoing) {
+      fields.month2 = "";
+      fields.year2 = "";
     }
 
     // Get relevant data

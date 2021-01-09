@@ -12,21 +12,34 @@ const Button = ({ text, altText, fn, color, textual }) => {
       setDisabled(false);
     }
   };
+  const getText = () => {
+    if (disabled && altText) {
+      // If there is altText and the button is disabled (waiting for response),
+      // show altText
+      return altText;
+    }
+    return text;
+  };
+  const getTextualClassName = () => {
+    const className = "resume--hoverable resume--action";
+    if (textual === "large") return className + " resume--action--large";
+    return className;
+  };
   if (textual)
     return (
       <p
         disabled={disabled}
         onClick={handleClick}
-        className="resume--hoverable resume--action"
+        className={getTextualClassName()}
       >
-        {disabled && altText ? altText : text}
+        {getText()}
       </p>
     );
   return (
     <div className="button-container">
       {fn ? (
         <button onClick={handleClick} disabled={disabled} className={className}>
-          {disabled && altText ? altText : text}
+          {getText()}
         </button>
       ) : (
         <Link href="/signup">

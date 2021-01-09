@@ -5,7 +5,11 @@ import Template from "../Template";
 import { toastError } from "../../../lib/error";
 import { fauna } from "../../../lib/api";
 import { TEMPLATES, getTemplate } from "../../../templates/templates";
-import { DEFAULT_CATEGORIES, convertToTemplate } from "../../../lib/constants";
+import {
+  DEFAULT_CATEGORIES,
+  convertToTemplate,
+  RESUME_DEFAULTS,
+} from "../../../lib/constants";
 import ReactModal from "react-modal";
 import CloseButton from "../CloseButton";
 ReactModal.setAppElement("#__next");
@@ -55,6 +59,7 @@ const ResumePopup = () => {
       type: "CREATE_RESUME",
       userId: user._id,
       data: {
+        ...RESUME_DEFAULTS,
         title,
         jobTitle: user.jobTitle ? user.jobTitle : "",
         bio: user.bio ? user.bio : "",

@@ -80,10 +80,6 @@
     margin: 0;
   }
 
-  &--action {
-    font-size: calc(0.8rem * #{$resume-scale});
-  }
-
   * {
     line-height: 1.2 !important;
   }
@@ -98,6 +94,7 @@
   line-height: 0px;
 
   &--action {
+    font-size: calc(0.8rem * #{$resume-scale});
     cursor: pointer;
     display: inline-flex;
     line-height: 1 !important;
@@ -105,6 +102,10 @@
     padding: 0;
     font-style: italic;
     color: blue;
+
+    &--large {
+      font-size: $font-size-default;
+    }
   }
 
   &--action[disabled] > i {

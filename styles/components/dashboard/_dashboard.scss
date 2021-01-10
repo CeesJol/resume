@@ -86,10 +86,6 @@
     margin-left: auto;
     margin-right: auto;
 
-    &--noscale {
-      transform: none !important;
-    }
-
     @media (max-width: 912px) {
       transform: scale(1.25 / $resume-scale);
     }
@@ -108,6 +104,10 @@
 
     @media (max-width: 464px) {
       transform: scale(0.55 / $resume-scale);
+    }
+
+    &--noscale {
+      transform: none;
     }
   }
 }

@@ -5,8 +5,8 @@
 
   &__header {
     background-color: $primary;
-    color: white !important;
-    z-index: 1 !important; // Prevents PDF rendering bug
+    color: white;
+    z-index: 1; // Prevents PDF rendering bug
   }
 
   &__item--title-without-value {

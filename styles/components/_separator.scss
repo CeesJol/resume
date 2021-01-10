@@ -1,9 +1,5 @@
 // Actions separator
 .separator {
   display: inline;
-  margin: 0 $xs-size !important;
-
-  &--large {
-    font-size: $font-size-default !important;
-  }
+  margin: 0 $xs-size;
 }

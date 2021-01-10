@@ -3,18 +3,15 @@ import { UserContext } from "../../contexts/userContext";
 
 const Separator = ({ large }) => {
   const { editingResume } = useContext(UserContext);
-  const getClassName = () => {
-    return `separator ${large ? "separator--large" : ""}`;
-  };
   return (
-    <p
-      className={getClassName()}
+    <span
+      className="separator"
       style={{
-        fontSize: editingResume.fontSize,
+        fontSize: large ? "16px" : editingResume.fontSize,
       }}
     >
       -
-    </p>
+    </span>
   );
 };
 

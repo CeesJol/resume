@@ -4,10 +4,10 @@ import Head from "next/head";
 import UserContextProvider from "../contexts/userContext";
 import { ToastContainer } from "react-toastify";
 
-import "../styles/index.scss";
 import "font-awesome/css/font-awesome.min.css";
 import "react-image-crop/lib/ReactCrop.scss";
 import "react-toastify/dist/ReactToastify.css";
+import "../styles/index.scss";
 
 class MyApp extends App {
   render() {

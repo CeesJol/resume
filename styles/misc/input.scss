@@ -28,6 +28,9 @@ select {
 }
 
 textarea {
+  // Using !important so the user cannot make textarea input wider/smaller,
+  // as this quickly becomes ugly and provides no extra readability.
+  // Changing height is allowed
   width: 100% !important;
   height: 10rem;
 }

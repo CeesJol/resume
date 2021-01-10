@@ -27,6 +27,7 @@
   }
 
   &__category--name {
+    // Using !important to overwrite the user custom font size (inline style)
     font-size: 1.1rem !important;
     letter-spacing: 0.1rem;
     text-transform: uppercase;

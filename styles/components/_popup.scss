@@ -29,6 +29,7 @@
     justify-content: space-between;
 
     &--close {
+      // Using !important to overwrite font awesome font size
       font-size: 2rem !important;
       cursor: pointer;
       color: grey;

@@ -64,10 +64,10 @@
     }
 
     &--icon {
-      padding-right: calc(#{$s-size} * #{$resume-scale}) !important;
+      padding-right: calc(#{$s-size} * #{$resume-scale});
       margin-top: calc(
         -0.15rem * #{$resume-scale}
-      ) !important; // beun solution to get the icon aligned with the text
+      ); // beun solution to get the icon aligned with the text
     }
   }
 }

@@ -10,7 +10,6 @@ const Options = () => {
     deleteResume,
     setWarning,
     editingResume,
-    resumes,
     setPreview,
   } = useContext(UserContext);
   const [title, setTitle] = useState("");

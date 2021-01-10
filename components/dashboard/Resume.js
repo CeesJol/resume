@@ -103,7 +103,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
             <span className="resume__actions">
               <Button
                 fn={() => setEditingContactInfo({})}
-                text={"Add contact info"}
+                text="Add contact info"
                 textual={true}
               />
             </span>
@@ -148,7 +148,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
               <ContactItem
                 template={templateCSS}
                 item={{}}
-                text={"Add contact info"}
+                text="Add contact info"
                 primaryColor={curResume.primaryColor}
               />
             )}
@@ -316,7 +316,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
   );
   return exportpdf ? (
     <PDFExport
-      paperSize={"A4"}
+      paperSize="A4"
       fileName={editingResume.title + ".pdf"}
       title={editingResume.title}
       subject=""

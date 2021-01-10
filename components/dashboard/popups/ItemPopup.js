@@ -224,14 +224,10 @@ const ItemPopup = () => {
                 </label>
                 <Monthpicker
                   val={fields.month1}
-                  name={"month1"}
+                  name="month1"
                   fn={handleChange}
                 />
-                <Yearpicker
-                  val={fields.year1}
-                  name={"year1"}
-                  fn={handleChange}
-                />
+                <Yearpicker val={fields.year1} name="year1" fn={handleChange} />
               </div>
             </>
           )}
@@ -242,14 +238,10 @@ const ItemPopup = () => {
                 <label>End date</label>
                 <Monthpicker
                   val={fields.month2}
-                  name={"month2"}
+                  name="month2"
                   fn={handleChange}
                 />
-                <Yearpicker
-                  val={fields.year2}
-                  name={"year2"}
-                  fn={handleChange}
-                />
+                <Yearpicker val={fields.year2} name="year2" fn={handleChange} />
               </div>
             </>
           )}
@@ -281,7 +273,7 @@ const ItemPopup = () => {
               <label>Value</label>
               <Valuepicker
                 val={fields.value || "3"}
-                name={"value"}
+                name="value"
                 fn={handleChange}
               />
             </>

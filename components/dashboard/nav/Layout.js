@@ -60,7 +60,7 @@ const Layout = () => {
     };
     myData[key] = value;
 
-    updateResume(myData);
+    await updateResume(myData);
   };
   const handleUpdateTemplate = async () => {
     setWarning({

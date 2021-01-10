@@ -25,7 +25,7 @@ const Options = () => {
       title,
     };
 
-    updateResume(myData);
+    await updateResume(myData);
   };
   const handleDelete = async (event) => {
     if (event) event.preventDefault();

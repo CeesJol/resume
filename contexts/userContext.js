@@ -94,7 +94,7 @@ const UserContextProvider = (props) => {
     reset();
     resetPopups();
   };
-  const updateResume = (resumeData) => {
+  const updateResume = async (resumeData) => {
     const newResume = {
       ...resumes.find((r) => r._id === resumeData._id),
       ...resumeData,
@@ -110,7 +110,7 @@ const UserContextProvider = (props) => {
     });
     setResumes(res);
     resetPopups();
-    storeResume(resumeData);
+    await storeResume(resumeData);
   };
   const updateSpecificResume = (resumeData) => {
     // Update a resume which is not per se editingResume
@@ -123,10 +123,10 @@ const UserContextProvider = (props) => {
     resetPopups();
     storeResume(resumeData);
   };
-  const storeResume = (resumeData) => {
+  const storeResume = async (resumeData) => {
     if (!resumeData) resumeData = { data: editingResume.data };
     storeStatus("Saving...");
-    fauna({
+    await fauna({
       type: "UPDATE_RESUME",
       id: resumeData._id || editingResume._id,
       data: resumeData,

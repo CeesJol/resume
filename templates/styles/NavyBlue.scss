@@ -2,7 +2,6 @@
   $primary: rgb(46, 49, 69);
   $secondary: rgb(239, 241, 245);
   $tertiary: rgb(204, 205, 209);
-  $sidebar: 33%;
 
   &__header {
     background-color: $primary;
@@ -33,12 +32,10 @@
   &__container {
     &--left {
       background-color: white;
-      width: calc(100% - #{$sidebar});
       height: 100%;
     }
 
     &--right {
-      width: $sidebar;
       background-color: $secondary;
       height: 100%;
     }

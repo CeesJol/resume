@@ -81,7 +81,7 @@
   }
 
   * {
-    line-height: 1.2 !important;
+    line-height: 1.2;
   }
 
   &__category--name,
@@ -142,6 +142,7 @@
     &--hoverable:hover {
       border: 1px solid $light-grey-2;
       background-color: inherit;
+      // Create extra space, except at the bottom
       margin: -#{$hover-margin} -#{$hover-margin} 0 -#{$hover-margin};
       padding: $hover-margin $hover-margin 0 $hover-margin;
       border-radius: 0;
@@ -200,7 +201,7 @@
       margin-left: 0.25rem;
       width: 0.8rem;
       height: 0.8rem;
-      background-color: navy;
+      background-color: $dark-grey;
       border-radius: 0.8rem;
 
       &--colored {
@@ -210,7 +211,7 @@
 
     // Specific items
     &--title-without-value {
-      background-color: navy;
+      background-color: $dark-grey;
       color: white;
       display: inline-flex;
       padding: calc(#{$xs-size} * #{$resume-scale});

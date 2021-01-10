@@ -52,13 +52,10 @@ const ResumePopup = () => {
 
     // Set whether to show value depending on resume property
     const template = getTemplate(selectedTemplateId);
-    const categories = convertToTemplate(DEFAULT_CATEGORIES, template);
-
     const styles = getTemplate(selectedTemplateId).styles;
-    await fauna({
-      type: "CREATE_RESUME",
-      userId: user._id,
-      data: {
+
+    const resumeData = convertToTemplate(
+      {
         ...RESUME_DEFAULTS,
         title,
         jobTitle: user.jobTitle ? user.jobTitle : "",
@@ -67,10 +64,17 @@ const ResumePopup = () => {
         ...styles,
         priority: resumes.length + 1,
         data: {
-          categories,
+          categories: DEFAULT_CATEGORIES,
           contactInfo: [],
         },
       },
+      template
+    );
+
+    await fauna({
+      type: "CREATE_RESUME",
+      userId: user._id,
+      data: resumeData,
     }).then(
       (data) => {
         // Convert resume data

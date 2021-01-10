@@ -75,19 +75,12 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
           {userExists() && user.username}
         </h1>
         <h3 className="resume__header--job-title">{getJobTitle(curResume)}</h3>
-        <p
-          className="resume__header--bio multiline"
-          style={{
-            fontSize: editingResume.fontSize,
-          }}
-        >
-          {getBio(curResume)}
-        </p>
+        {!templateCSS.header.bioBelowContactInfo && drawBio()}
       </div>
     );
   };
   const drawContactInfo = () => {
-    if (templateCSS.contactInfo === "SIDEBAR") {
+    if (templateCSS.contactInfo.place === "SIDEBAR") {
       const getClassName = () => {
         let className = "resume__category";
         if (isHoverable()) {
@@ -139,7 +132,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
         onMouseLeave={() => setHovering(false)}
       >
         <div className="resume__contact-info__content">
-          {templateCSS.contactInfo === "SIDEBAR" && (
+          {templateCSS.contactInfo.place === "SIDEBAR" && (
             <h3
               className="resume__category--name"
               style={{
@@ -198,48 +191,89 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
       </>
     );
   };
+  const drawBio = () => (
+    <p
+      className="resume__header--bio multiline"
+      style={{
+        fontSize: editingResume.fontSize,
+      }}
+    >
+      {getBio(curResume)}
+    </p>
+  );
   const drawCategories = () => {
     // TODO now you can't create a category...
     // if (!getCategories(curResume)) return <p>Nothing here yet</p>;
 
     const categories = sortByPriority(getCategories(curResume));
 
-    const mainCategories = categories.filter((category) => !category.sidebar);
-    const sidebarCategories = categories.filter((category) => category.sidebar);
-    const userCanAddSidebar =
-      sidebarCategories.length === 0 &&
-      getTemplate(editingResume.templateId).sidebar;
+    let mainCategories, sidebarCategories, userCanAddSidebar;
+
+    // If the template has no sidebar, put all items in mainCategories
+    if (!templateCSS.sidebar) {
+      mainCategories = categories;
+      sidebarCategories = [];
+      userCanAddSidebar = false;
+    } else {
+      mainCategories = categories.filter((category) => !category.sidebar);
+      sidebarCategories = categories.filter((category) => category.sidebar);
+      userCanAddSidebar =
+        sidebarCategories.length === 0 &&
+        getTemplate(editingResume.templateId).sidebar;
+    }
 
     // If the template draws contact info at the top (so not in the sidebar)
     // If the template has no sidebar or there are no items in the sidebar,
     // don't draw it
-    if (
-      templateCSS.contactInfo === "TOP" &&
-      (!templateCSS.sidebar || sidebarCategories.length === 0)
-    ) {
-      return (
-        <div className="resume__container">
-          {categories.map((category, index) => drawCategory(category, index))}
-          {drawResumeActions(userCanAddSidebar, false)}
-        </div>
-      );
-    }
+    // if (
+    //   templateCSS.contactInfo.place === "TOP" &&
+    //   (!templateCSS.sidebar || sidebarCategories.length === 0)
+    // ) {
+    //   return (
+    //     <div className="resume__container">
+    //       {categories.map((category, index) => drawCategory(category, index))}
+    //       {drawResumeActions(userCanAddSidebar, false)}
+    //     </div>
+    //   );
+    // }
 
     return (
       <>
-        <div className={getResumeContainerClassName("left")}>
+        <div
+          className={getResumeContainerClassName("left")}
+          style={{
+            width: `${100 - templateCSS.sidebar}%`,
+          }}
+        >
+          {templateCSS.header.bioBelowContactInfo && (
+            <p
+              className="resume__header--bio multiline"
+              style={{
+                fontSize: editingResume.fontSize,
+              }}
+            >
+              {getBio(curResume)}
+            </p>
+          )}
           {mainCategories.map((category, index) =>
             drawCategory(category, index)
           )}
           {drawResumeActions(userCanAddSidebar, false)}
         </div>
-        <div className={getResumeContainerClassName("right")}>
-          {templateCSS.contactInfo === "SIDEBAR" && drawContactInfo()}
-          {sidebarCategories.map((category, index) =>
-            drawCategory(category, index)
-          )}
-          {drawResumeActions(userCanAddSidebar, true)}
-        </div>
+        {!!templateCSS.sidebar && (
+          <div
+            className={getResumeContainerClassName("right")}
+            style={{
+              width: `${templateCSS.sidebar}%`,
+            }}
+          >
+            {templateCSS.contactInfo.place === "SIDEBAR" && drawContactInfo()}
+            {sidebarCategories.map((category, index) =>
+              drawCategory(category, index)
+            )}
+            {drawResumeActions(userCanAddSidebar, true)}
+          </div>
+        )}
       </>
     );
   };
@@ -275,7 +309,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
     <div className={getResumeParentClassName()}>
       <div className={getResumeClassName()}>
         {drawHeader()}
-        {templateCSS.contactInfo === "TOP" && drawContactInfo()}
+        {templateCSS.contactInfo.place === "TOP" && drawContactInfo()}
         <div className="resume__body">{drawCategories()}</div>
       </div>
     </div>

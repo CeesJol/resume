@@ -42,15 +42,11 @@ const ContactItem = ({ template, item, text, dummy, primaryColor }) => {
       onClick={() => handleChangeContactInfo(item)}
       className={getContactInfoClassName()}
     >
-      {template.contactInfo === "TOP" ? (
-        // Draw icon
-        item.name ? (
-          drawIcon(getContactIcon(item.name))
-        ) : (
-          drawIcon("plus-square")
-        )
-      ) : (
-        // Draw text
+      {/* Draw icon */}
+      {template.contactInfo.drawIcons &&
+        drawIcon(item.name ? getContactIcon(item.name) : "plus-square")}
+      {/* Draw text */}
+      {template.contactInfo.drawName && (
         <h4
           className="resume__contact-info--title"
           style={{

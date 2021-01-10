@@ -8,11 +8,40 @@ export const TEMPLATES = [
   //   styles: customizable layout styles (Object)
   // },
   {
+    id: "Classic",
+    name: "Classic",
+    sidebar: 0,
+    skills: {
+      type: "Description only",
+    },
+    header: {
+      bioBelowContactInfo: true,
+    },
+    contactInfo: {
+      place: "TOP",
+      drawName: false,
+      drawIcons: false,
+    },
+    styles: {
+      primaryColor: "black",
+      backgroundColor: "white",
+    },
+  },
+  {
     id: "SimpleGreen",
     name: "Simple Green",
     sidebar: 50,
-    skillsWithValue: false,
-    contactInfo: "TOP",
+    skills: {
+      type: "Title without value",
+    },
+    header: {
+      headerBelowContactInfo: false,
+    },
+    contactInfo: {
+      place: "TOP",
+      drawName: false,
+      drawIcons: true,
+    },
     styles: {
       primaryColor: "rgb(62, 207, 142)",
       backgroundColor: "white",
@@ -22,8 +51,17 @@ export const TEMPLATES = [
     id: "NavyBlue",
     name: "Navy Blue",
     sidebar: 33,
-    skillsWithValue: true,
-    contactInfo: "SIDEBAR",
+    skills: {
+      type: "Title and value",
+    },
+    header: {
+      headerBelowContactInfo: false,
+    },
+    contactInfo: {
+      place: "SIDEBAR",
+      drawName: true,
+      drawIcons: false,
+    },
     styles: {
       primaryColor: "rgb(46, 49, 69)",
       backgroundColor: "rgb(46, 49, 69)",

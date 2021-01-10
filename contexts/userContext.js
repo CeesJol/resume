@@ -55,10 +55,12 @@ const UserContextProvider = (props) => {
     return (resume || editingResume).data.contactInfo || [];
   };
   const getCategories = (resume, sidebar) => {
-    const cur = (resume || editingResume).data.categories;
-    if (sidebar !== undefined)
-      return cur.filter((cat) => cat.sidebar === sidebar);
-    return cur;
+    const curResume = resume || editingResume;
+    const categories = curResume.data.categories;
+    if (sidebar !== undefined && curResume.sidebar) {
+      return categories.filter((cat) => cat.sidebar === sidebar);
+    }
+    return categories;
   };
   const getItems = (category) => {
     return category && category.items;

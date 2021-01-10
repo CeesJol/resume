@@ -75,7 +75,8 @@ const ItemPopup = () => {
     setIsGoing(!isGoing);
   };
   const validateInput = () => {
-    if (!fields.title) return "Please provide a title";
+    if (!fields.title && categoryItems.includes("title"))
+      return "Please provide a title";
 
     return false;
   };
@@ -143,7 +144,7 @@ const ItemPopup = () => {
   };
   useEffect(() => {
     // Updating item
-    if (editingItem.title) {
+    if (editingItem.id) {
       setFields({
         ...fields,
         title: editingItem.title,
@@ -168,20 +169,24 @@ const ItemPopup = () => {
     >
       <div className="popup__header">
         <h4 className="popup__header--title">
-          {editingItem.title ? "Edit item" : "Create item"}
+          {editingItem.id ? "Edit item" : "Create item"}
         </h4>
         <CloseButton fn={handleCancel} />
       </div>
       <form>
         <div>
-          <label>Title</label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            value={fields.title}
-            onChange={handleChange}
-          />
+          {categoryItems.includes("title") && (
+            <>
+              <label>Title</label>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                value={fields.title}
+                onChange={handleChange}
+              />
+            </>
+          )}
           {categoryItems.includes("location") && (
             <>
               <label>Location</label>
@@ -282,7 +287,7 @@ const ItemPopup = () => {
             </>
           )}
 
-          {editingItem.title ? (
+          {editingItem.id ? (
             <>
               <Button text="Save" altText="Saving..." fn={handleUpdate} />
               <Button

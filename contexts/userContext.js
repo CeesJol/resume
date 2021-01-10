@@ -76,23 +76,39 @@ const UserContextProvider = (props) => {
     resetPopups();
   };
   const deleteResume = (resumeData) => {
-    setResumes(resumes.filter((x) => x._id !== resumeData._id));
+    const newResumes = resumes.reduce((result, curResume) => {
+      // Delete the resume
+      if (curResume._id === resumeData._id) return result;
+
+      // Propagate priority updates
+      if (curResume.priority > editingResume.priority) {
+        return result.concat({
+          ...curResume,
+          priority: curResume.priority - 1,
+        });
+      }
+
+      return result.concat(curResume);
+    }, []);
+    setResumes(newResumes);
     reset();
     resetPopups();
   };
   const updateResume = (resumeData) => {
-    const newResume = { ...editingResume, ...resumeData };
+    const newResume = {
+      ...resumes.find((r) => r._id === resumeData._id),
+      ...resumeData,
+    };
     if (editingResume._id === resumeData._id) {
       setEditingResume(newResume);
     }
-    setResumes(
-      resumes.map((r) => {
-        if (r._id === newResume._id) {
-          return newResume;
-        }
-        return r;
-      })
-    );
+    const res = resumes.map((r) => {
+      if (r._id === newResume._id) {
+        return newResume;
+      }
+      return r;
+    });
+    setResumes(res);
     resetPopups();
     storeResume(resumeData);
   };

@@ -35,13 +35,6 @@ const Options = () => {
       fn: async () => {
         await fauna({ type: "DELETE_RESUME", id: editingResume._id }).then(
           async () => {
-            // Propagate priority updates
-            for (let resume of resumes) {
-              if (resume.priority > editingResume.priority) {
-                const newPriority = resume.priority - 1;
-                updateResume({ _id: resume._id, priority: newPriority });
-              }
-            }
             deleteResume(editingResume);
             setPreview(true);
           },

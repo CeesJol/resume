@@ -26,11 +26,19 @@ const ContactItem = ({ template, item, text, dummy, primaryColor }) => {
   const getContactInfoClassName = () => {
     return appendHoverToClassName("resume__contact-info--item");
   };
+  const preventUrlClick = (e) => {
+    if (!preview) e.preventDefault();
+  };
   const getContactInfoBody = () => {
     const body = item.value ? item.value : text;
     if (item.link) {
       return (
-        <a href={item.link} target="_blank" rel="noreferrer">
+        <a
+          href={item.link}
+          onClick={preventUrlClick}
+          target="_blank"
+          rel="noreferrer"
+        >
           {body}
         </a>
       );

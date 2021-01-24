@@ -28,7 +28,6 @@ const ContactPopup = () => {
   const handleChangeValue = (event) => {
     if (useLink && value === link) {
       // Set link equal to value
-      // TODO replace with a function that adds https:// or mailto: or whatever
       setLink(event.target.value);
     }
     setValue(event.target.value);
@@ -54,32 +53,40 @@ const ContactPopup = () => {
   const validateInput = () => {
     if (!value) return "Please provide contact information";
 
-    // Validate link, if applicable
-    if (useLink) {
-      if (link === "") {
-        return "Please provide a link, or disable it";
-      }
-      // Email
-      if (name === "Email") {
-        if (!link.startsWith("mailto:")) {
-          return "Email links should start with mailto:";
-        }
-        return false;
-      }
-      if (name === "Phone number") {
-        if (!link.startsWith("tel:")) {
-          return "Phone number links should start with tel:";
-        }
-        return false;
-      }
-      // URL
-      if (!(link.startsWith("http://") || link.startsWith("https://"))) {
-        return "Links should start with http:// or https://";
-      }
-    }
-
     return false;
   };
+  const convertToAbsoluteUrl = (url) => {
+    if (name === "Email" && !url.startsWith("mailto:")) {
+      return `mailto:${url}`;
+    }
+    if (name === "Phone number" && !url.startsWith("tel:")) {
+      return `tel:${url}`;
+    }
+    if (!(url.startsWith("http://") || url.startsWith("https://"))) {
+      return `http://${url}`;
+    }
+    return url;
+  };
+  const convertToRelativeUrl = (url) => {
+    if (url.startsWith("mailto:")) {
+      return url.substring(7);
+    }
+    if (url.startsWith("tel:")) {
+      return url.substring(4);
+    }
+    if (url.startsWith("http:")) {
+      return url.substring(5);
+    }
+    if (url.startsWith("https:")) {
+      return url.substring(6);
+    }
+    return url;
+  };
+  const getData = () => ({
+    name: name ? name : customName,
+    value,
+    link: useLink ? convertToAbsoluteUrl(link) : "",
+  });
   const handleCreate = () => {
     const validationError = validateInput();
     if (validationError) {
@@ -89,9 +96,7 @@ const ContactPopup = () => {
 
     const myData = {
       id: randomId(),
-      name: name ? name : customName,
-      value,
-      link: useLink ? link : "",
+      ...getData(),
     };
 
     createContactInfo(myData);
@@ -105,9 +110,7 @@ const ContactPopup = () => {
 
     const myData = {
       ...editingContactInfo,
-      name: name ? name : customName,
-      value,
-      link: useLink ? link : "",
+      ...getData(),
     };
 
     updateContactInfo(myData);
@@ -133,14 +136,14 @@ const ContactPopup = () => {
   };
   useEffect(() => {
     if (editingContactInfo.name) {
-      setName(editingContactInfo.name);
-      setLink(editingContactInfo.link);
+      setValue(editingContactInfo.value);
+      setLink(convertToRelativeUrl(editingContactInfo.link));
       setUseLink(editingContactInfo.link !== "");
-      if (CONTACTPICKER_OPTIONS[value]) {
-        setValue(editingContactInfo.value);
+      if (CONTACTPICKER_OPTIONS[name]) {
+        setName(editingContactInfo.name);
       } else {
-        setValue("");
-        setCustomValue(editingContactInfo.value);
+        setName("");
+        setCustomName(editingContactInfo.name);
       }
     }
   }, []);

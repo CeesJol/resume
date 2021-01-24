@@ -47,6 +47,9 @@
       max-height: 20rem;
     }
 
+    display: flex;
+    align-items: center;
+
     &--job-title {
       font-weight: 300;
     }

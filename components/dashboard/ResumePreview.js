@@ -105,12 +105,14 @@ const ResumePreview = ({ resume, index }) => {
         />
       </div>
       <div className="resume-preview__body">
-        <h3 className="resume-preview__body--title">{resume.title}</h3>
-        <h3 className="resume-preview__body--job-title">
-          {resume.jobTitle || "Job Title"}
-        </h3>
+        <div className="resume-preview--content">
+          <h3 className="resume-preview__body--title">{resume.title}</h3>
+          <h3 className="resume-preview__body--job-title">
+            {resume.jobTitle || "Job Title"}
+          </h3>
 
-        {drawResumePreviewFooter()}
+          {drawResumePreviewFooter()}
+        </div>
       </div>
     </div>
   );

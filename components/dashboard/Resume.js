@@ -75,7 +75,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
           {userExists() && user.username}
         </h1>
         <h3 className="resume__header--job-title">{getJobTitle(curResume)}</h3>
-        {!templateCSS.header.bioBelowContactInfo && drawBio()}
+        {!templateCSS.header.bioBelowContactInfo && drawBio(false)}
       </div>
     );
   };
@@ -191,9 +191,12 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
       </>
     );
   };
-  const drawBio = () => (
+  const drawBio = (clickable) => (
     <p
-      className="resume__header--bio multiline"
+      className={`resume__header--bio ${
+        clickable ? "resume--hoverable" : ""
+      } multiline`}
+      onClick={clickable ? handleChangeInfo : null}
       style={{
         fontSize: editingResume.fontSize,
       }}
@@ -245,16 +248,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
             width: `${100 - templateCSS.sidebar}%`,
           }}
         >
-          {templateCSS.header.bioBelowContactInfo && (
-            <p
-              className="resume__header--bio multiline"
-              style={{
-                fontSize: editingResume.fontSize,
-              }}
-            >
-              {getBio(curResume)}
-            </p>
-          )}
+          {templateCSS.header.bioBelowContactInfo && drawBio(true)}
           {mainCategories.map((category, index) =>
             drawCategory(category, index)
           )}

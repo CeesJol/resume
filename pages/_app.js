@@ -31,6 +31,7 @@ class MyApp extends App {
 								`,
               }}
             />
+            <link rel="shortcut icon" href="/images/icons/cur_icon.png" />
             <meta
               name="viewport"
               content="width=device-width, initial-scale=1"

@@ -3,6 +3,10 @@ label {
   display: block;
 }
 
+.upper {
+  text-transform: capitalize;
+}
+
 input,
 textarea,
 select {

@@ -29,18 +29,9 @@ const ItemPopup = () => {
     getCategory,
   } = useContext(UserContext);
   const [isGoing, setIsGoing] = useState(true); // Separated from fields, because DB doesn't take this value.
-  const [fields, setFields] = useState({
-    title: "",
-    month1: "",
-    year1: "",
-    month2: "",
-    year2: "",
-    location: "",
-    description: "",
-    value: "3",
-  });
+  const [fields, setFields] = useState({});
   const category = getCategory(editingItem.categoryId);
-  const categoryItems = getCategoryItems(category.type);
+  const categoryItems = getCategoryItems(category);
   const handleChange = (event) => {
     setFields({
       ...fields,
@@ -143,23 +134,113 @@ const ItemPopup = () => {
     }
   };
   useEffect(() => {
-    // Updating item
-    if (editingItem.id) {
-      setFields({
-        ...fields,
-        title: editingItem.title,
-        month1: editingItem.month1 || "",
-        year1: editingItem.year1 || "",
-        month2: editingItem.month2 || "",
-        year2: editingItem.year2 || "",
-        location: editingItem.location || "",
-        description: editingItem.description || "",
-        value: editingItem.value || "3",
-      });
-
-      setIsGoing(!editingItem.year2);
+    const newFields = {};
+    for (let item of categoryItems) {
+      if (["id", "categoryId", "items"].includes(item)) {
+        continue;
+      }
+      newFields[item] = editingItem[item] || "";
     }
+    setFields(newFields);
+    setIsGoing(!editingItem.year2);
   }, []);
+  const drawField = (key, value) => {
+    const getDateText = (lastChar) => {
+      if (!categoryItems.includes("month2")) return "Date";
+      if (lastChar === 1) return "Start Date";
+      return "End Date";
+    };
+    switch (key) {
+      case "month1":
+      case "month2":
+        const lastChar = key.substr(key.length - 1);
+        return (
+          <>
+            {/* Draw checkbox above month1, year1 */}
+            {lastChar === "1" && categoryItems.includes("month2") && (
+              <>
+                <label htmlFor="isGoing">
+                  <input
+                    name="isGoing"
+                    id="isGoing"
+                    type="checkbox"
+                    checked={isGoing}
+                    onChange={handleChangeIsGoing}
+                  />
+                  {getCategoryIsGoingText(category.title)}
+                </label>
+              </>
+            )}
+            {/* Don't draw month2, year2 if job is ongoing */}
+            {!(isGoing && lastChar === "2") && (
+              <div>
+                <label>{getDateText(lastChar)}</label>
+                <Monthpicker
+                  val={fields[`month${lastChar}`]}
+                  name={`month${lastChar}`}
+                  fn={handleChange}
+                />
+                <Yearpicker
+                  val={fields[`year${lastChar}`]}
+                  name={`year${lastChar}`}
+                  fn={handleChange}
+                />
+              </div>
+            )}
+          </>
+        );
+      case "year1":
+      case "year2":
+        return null;
+      case "description":
+        return (
+          <>
+            <label>
+              Description -{" "}
+              <a style={{ color: "blue" }} onClick={insertList}>
+                Insert list
+              </a>{" "}
+              -{" "}
+              <a style={{ color: "blue" }} onClick={insertBoldText}>
+                Insert bold text
+              </a>
+            </label>
+            <textarea
+              type="text"
+              id={key}
+              name={key}
+              value={value}
+              onChange={handleChange}
+              ref={textareaRef}
+            />
+          </>
+        );
+      case "value":
+        return (
+          <>
+            <label>Value</label>
+            <Valuepicker
+              val={fields.value || "3"}
+              name="value"
+              fn={handleChange}
+            />
+          </>
+        );
+      default:
+        return (
+          <>
+            <label className="upper">{key}</label>
+            <input
+              type="text"
+              id={key}
+              name={key}
+              value={value}
+              onChange={handleChange}
+            />
+          </>
+        );
+    }
+  };
   return (
     <ReactModal
       className="popup"
@@ -169,115 +250,13 @@ const ItemPopup = () => {
     >
       <div className="popup__header">
         <h4 className="popup__header--title">
-          {editingItem.id ? "Edit item" : "Create item"}
+          {editingItem.id ? "Edit" : "Create"} item
         </h4>
         <CloseButton fn={handleCancel} />
       </div>
       <form>
         <div>
-          {categoryItems.includes("title") && (
-            <>
-              <label>Title</label>
-              <input
-                type="text"
-                id="title"
-                name="title"
-                value={fields.title}
-                onChange={handleChange}
-              />
-            </>
-          )}
-          {categoryItems.includes("location") && (
-            <>
-              <label>Location</label>
-              <input
-                type="text"
-                id="location"
-                name="location"
-                value={fields.location}
-                onChange={handleChange}
-              />
-            </>
-          )}
-          {categoryItems.includes("year2") && (
-            <>
-              <label htmlFor="isGoing">
-                <input
-                  name="isGoing"
-                  id="isGoing"
-                  type="checkbox"
-                  checked={isGoing}
-                  onChange={handleChangeIsGoing}
-                />
-                {getCategoryIsGoingText(category.title)}
-              </label>
-            </>
-          )}
-
-          {categoryItems.includes("year1") && (
-            <>
-              <div>
-                <label>
-                  {category.type === "Title and date"
-                    ? "Achieved on"
-                    : "Start date"}
-                </label>
-                <Monthpicker
-                  val={fields.month1}
-                  name="month1"
-                  fn={handleChange}
-                />
-                <Yearpicker val={fields.year1} name="year1" fn={handleChange} />
-              </div>
-            </>
-          )}
-
-          {categoryItems.includes("year1") && !isGoing && (
-            <>
-              <div>
-                <label>End date</label>
-                <Monthpicker
-                  val={fields.month2}
-                  name="month2"
-                  fn={handleChange}
-                />
-                <Yearpicker val={fields.year2} name="year2" fn={handleChange} />
-              </div>
-            </>
-          )}
-
-          {categoryItems.includes("description") && (
-            <>
-              <label>
-                Description -{" "}
-                <a style={{ color: "blue" }} onClick={insertList}>
-                  Insert list
-                </a>{" "}
-                -{" "}
-                <a style={{ color: "blue" }} onClick={insertBoldText}>
-                  Insert bold text
-                </a>
-              </label>
-              <textarea
-                type="text"
-                id="description"
-                name="description"
-                value={fields.description}
-                onChange={handleChange}
-                ref={textareaRef}
-              />
-            </>
-          )}
-          {categoryItems.includes("value") && (
-            <>
-              <label>Value</label>
-              <Valuepicker
-                val={fields.value || "3"}
-                name="value"
-                fn={handleChange}
-              />
-            </>
-          )}
+          {Object.keys(fields).map((key) => drawField(key, fields[key]))}
 
           {editingItem.id ? (
             <>

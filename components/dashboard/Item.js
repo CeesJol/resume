@@ -17,7 +17,7 @@ const Item = ({ category, item, index, dummy, hovering, primaryColor }) => {
     appendHoverToClassName,
     editingResume,
   } = useContext(UserContext);
-  const categoryItems = getCategoryItems(category.type);
+  const categoryItems = getCategoryItems(category);
   const handleClick = (e, item) => {
     e.preventDefault();
     if (preview) return false;
@@ -70,18 +70,6 @@ const Item = ({ category, item, index, dummy, hovering, primaryColor }) => {
     }
     return {};
   };
-  const drawItemTitle = () => {
-    return (
-      <h4
-        className="resume__item--title"
-        style={{
-          fontSize: editingResume.fontSize,
-        }}
-      >
-        {item.title}
-      </h4>
-    );
-  };
   const drawItemActions = () => {
     if (
       !hovering ||
@@ -120,6 +108,32 @@ const Item = ({ category, item, index, dummy, hovering, primaryColor }) => {
       </>
     );
   };
+  const drawItemTitle = () => {
+    return (
+      <h4
+        className="resume__item--title"
+        style={{
+          fontSize: editingResume.fontSize,
+        }}
+      >
+        {item.degree
+          ? item.degree + (item.GPA ? ` (GPA: ${item.GPA})` : "")
+          : item.title}
+      </h4>
+    );
+  };
+  const drawItemCompany = () => {
+    return (
+      <h4
+        className="resume__item--company"
+        style={{
+          fontSize: editingResume.fontSize,
+        }}
+      >
+        {item.company}
+      </h4>
+    );
+  };
   const drawItemLocation = () => {
     return (
       <h4
@@ -128,7 +142,7 @@ const Item = ({ category, item, index, dummy, hovering, primaryColor }) => {
           fontSize: editingResume.fontSize,
         }}
       >
-        {item.location}
+        {item.organization || item.location}
       </h4>
     );
   };
@@ -189,6 +203,7 @@ const Item = ({ category, item, index, dummy, hovering, primaryColor }) => {
       key={item.id}
     >
       {drawItemTitle()}
+      {drawItemCompany()}
       {drawItemActions()}
       {drawItemLocation()}
       {drawItemDate()}

@@ -139,7 +139,7 @@ const Settings = () => {
             onChange={handleChange}
           />
 
-          <label>Bio</label>
+          <label>Professional summary</label>
           <textarea
             type="text"
             id="bio"

@@ -15,7 +15,10 @@ const Header = ({ transparentHeader = false }) => {
           <div className="icon-container">
             <Link href="/">
               <a className="header__title">
-                <img className="icon--large" src="../images/icon-small.png" />
+                <img
+                  className="icon--large"
+                  src="../images/icons/cur_icon.png"
+                />
                 <h3>{process.env.APP_NAME} Beta</h3>
               </a>
             </Link>

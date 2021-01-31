@@ -1,4 +1,4 @@
-# Affilas
+# Luna
 
 A resume builder, made with Next.js and FaunaDB.
 

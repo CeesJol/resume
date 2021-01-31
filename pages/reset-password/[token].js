@@ -45,7 +45,7 @@ const Token = () => {
         <div className="login__box__content">
           <form>
             <div className="icon-container">
-              <img className="icon--large" src="../images/icon-small.png" />
+              <img className="icon--large" src="../images/icons/cur_icon.png" />
               <h3 className="login__box--title">{process.env.APP_NAME}</h3>
             </div>
             <>

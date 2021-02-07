@@ -130,7 +130,7 @@ const Category = ({ category, index, primaryColor, backgroundColor }) => {
         >
           {category.title}
         </h3>
-        <div className="resume__category--items-container">{drawItems()}</div>
+        {drawItems()}
       </div>
     </div>
   );

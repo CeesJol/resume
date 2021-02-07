@@ -2,6 +2,19 @@
   display: none;
   background-color: red;
 
+  &__item {
+    // Put values item boxes left
+    &--value {
+      text-align: left;
+    }
+
+    // Fix margin on value item boxes
+    &--value-box {
+      margin-left: 0;
+      margin-right: 0.25rem;
+    }
+  }
+
   &__container {
     padding: 2rem 3rem;
     background-color: white;

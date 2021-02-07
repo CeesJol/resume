@@ -55,6 +55,11 @@
       justify-content: space-evenly;
     }
 
+    &--body > a {
+      color: $dark-grey;
+      text-decoration: underline;
+    }
+
     &--item {
       position: relative;
       padding: 0 calc(#{$s-size} * #{$resume-scale});

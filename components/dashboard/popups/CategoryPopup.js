@@ -68,7 +68,6 @@ const CategoryPopup = () => {
       ...editingCategory,
       title: getRealTitle(),
       type: getType(),
-      sidebar: editingCategory.sidebar,
       id: randomId(),
       items: [],
     };
@@ -87,7 +86,6 @@ const CategoryPopup = () => {
       id: editingCategory.id,
       title: getRealTitle(),
       type: getType(),
-      sidebar: editingCategory.sidebar,
     };
 
     updateCategory(myData);

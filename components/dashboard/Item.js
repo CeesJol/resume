@@ -80,7 +80,10 @@ const Item = ({ category, item, index, dummy, hovering, primaryColor }) => {
       return;
     }
     const drawMoveUp = () => (
-      <span onClick={(e) => e.stopPropagation()}>
+      <span
+        className="resume__item--action-container"
+        onClick={(e) => e.stopPropagation()}
+      >
         <Separator />
         <Button
           fn={() => handleMove(item, -1)}
@@ -91,7 +94,10 @@ const Item = ({ category, item, index, dummy, hovering, primaryColor }) => {
       </span>
     );
     const drawMoveDown = () => (
-      <span onClick={(e) => e.stopPropagation()}>
+      <span
+        className="resume__item--action-container"
+        onClick={(e) => e.stopPropagation()}
+      >
         <Separator />
         <Button
           fn={() => handleMove(item, 1)}
@@ -119,18 +125,7 @@ const Item = ({ category, item, index, dummy, hovering, primaryColor }) => {
         {item.degree
           ? item.degree + (item.GPA ? ` (GPA: ${item.GPA})` : "")
           : item.title}
-      </h4>
-    );
-  };
-  const drawItemCompany = () => {
-    return (
-      <h4
-        className="resume__item--company"
-        style={{
-          fontSize: editingResume.fontSize,
-        }}
-      >
-        {item.company}
+        {item.company ? `, ${item.company}` : ""}
       </h4>
     );
   };
@@ -203,7 +198,6 @@ const Item = ({ category, item, index, dummy, hovering, primaryColor }) => {
       key={item.id}
     >
       {drawItemTitle()}
-      {drawItemCompany()}
       {drawItemActions()}
       {drawItemLocation()}
       {drawItemDate()}

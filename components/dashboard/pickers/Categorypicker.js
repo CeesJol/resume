@@ -10,7 +10,7 @@ const Categorypicker = ({ val, fn }) => (
         </option>
       );
     })}
-    <option value="Other">Other...</option>
+    <option value="Other">Other... (custom type)</option>
   </select>
 );
 

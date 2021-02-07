@@ -144,7 +144,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
           )}
           {drawContactInfoItems()}
           <span>
-            {true && isHoverable() && (
+            {isHoverable() && (
               <ContactItem
                 template={templateCSS}
                 item={{}}

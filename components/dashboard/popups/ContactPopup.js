@@ -62,25 +62,24 @@ const ContactPopup = () => {
     if (name === "Phone number" && !url.startsWith("tel:")) {
       return `tel:${url}`;
     }
-    if (!(url.startsWith("http://") || url.startsWith("https://"))) {
+    if (!(url.startsWith("http:") || url.startsWith("https:"))) {
       return `http://${url}`;
     }
     return url;
   };
   const convertToRelativeUrl = (url) => {
+    let result = url;
     if (url.startsWith("mailto:")) {
-      return url.substring(7);
+      result = url.substring(7);
+    } else if (url.startsWith("tel:")) {
+      result = url.substring(4);
+    } else if (url.startsWith("http:")) {
+      result = url.substring(5);
+    } else if (url.startsWith("https:")) {
+      result = url.substring(6);
     }
-    if (url.startsWith("tel:")) {
-      return url.substring(4);
-    }
-    if (url.startsWith("http:")) {
-      return url.substring(5);
-    }
-    if (url.startsWith("https:")) {
-      return url.substring(6);
-    }
-    return url;
+    if (result.startsWith("//")) result = result.substring(2);
+    return result;
   };
   const getData = () => ({
     name: name ? name : customName,

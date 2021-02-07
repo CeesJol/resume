@@ -147,7 +147,8 @@ const ItemPopup = () => {
   const drawField = (key, value) => {
     const getDateText = (lastChar) => {
       if (!categoryItems.includes("month2")) return "Date";
-      if (lastChar === 1) return "Start Date";
+      console.log("lastChar:", lastChar);
+      if (lastChar === "1") return "Start Date";
       return "End Date";
     };
     switch (key) {

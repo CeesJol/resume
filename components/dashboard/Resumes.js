@@ -19,7 +19,7 @@ const Resumes = () => {
   };
   const drawResumePreviews = () => {
     if (resumes.length === 0) {
-      return <p>Get started by creating your resume</p>;
+      return <p>Get started by creating a resume.</p>;
     }
     return sortByPriority(resumes).map((resume, index) => (
       <ResumePreview

@@ -16,7 +16,7 @@ import { sortByPriority } from "../../lib/util";
  * Functionality:
  * - Draws each item of the resume
  * - "tiny": a smaller version, used in Template and ResumePreview
- * - "template": specifies which template the resume uses (eg. SimpleGreen)
+ * - "template": specifies which template the resume uses (eg. NavyBlue)
  * - "exportpdf": add ExportPDF element if true
  * Styling:
  * - Sets width and height of the resume

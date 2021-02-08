@@ -1,5 +1,5 @@
 .resume-parent {
-  height: calc(84.2rem * #{$resume-scale});
+  min-height: calc(84.2rem * #{$resume-scale});
   width: calc(59.5rem * #{$resume-scale});
   background-color: white;
 
@@ -10,6 +10,8 @@
     overflow: hidden;
 
     @media (min-width: 56rem) {
+      min-height: 20rem;
+      max-height: 20rem !important;
       height: 20rem;
     }
   }

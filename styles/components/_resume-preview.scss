@@ -5,6 +5,10 @@
   display: flex;
   overflow: hidden;
   background-color: $light-grey;
+  max-height: 15rem;
+  @media (min-width: 56rem) {
+    max-height: 20rem;
+  }
 
   @media (max-width: $desktop-breakpoint) {
     background-color: white;
@@ -15,6 +19,7 @@
     overflow: hidden;
     display: inline-block;
     border-right: 1px solid $light-grey-2;
+    height: 20rem !important;
 
     // Don't show preview on mobile
     @media (max-width: $desktop-breakpoint) {
@@ -41,11 +46,7 @@
   &__body {
     padding: $m-size;
     flex-grow: 1;
-    max-height: 15rem;
     overflow-y: scroll; // Scroll if too much content
-    @media (min-width: 56rem) {
-      max-height: 20rem;
-    }
 
     display: flex;
     align-items: center;

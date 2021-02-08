@@ -1,5 +1,6 @@
 .resume-parent {
   min-height: calc(84.2rem * #{$resume-scale});
+  height: calc(84.2rem * #{$resume-scale});
   width: calc(59.5rem * #{$resume-scale});
   background-color: white;
 
@@ -21,11 +22,11 @@
   @include bullet;
   background-color: white;
   font-family: Helvetica, Arial, sans-serif;
-  height: 100%;
   display: flex;
   flex-direction: column;
   flex-flow: column;
   width: 100%;
+  height: 100%;
 
   &__header {
     &--name {

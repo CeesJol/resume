@@ -1,6 +1,7 @@
 .Classic .resume {
   display: none;
   background-color: red;
+  $custom-hover-margin: 4rem;
 
   &__item {
     // Put values item boxes left
@@ -36,6 +37,16 @@
 
     &--item {
       padding-bottom: 0;
+    }
+  }
+
+  &__category {
+    &--hoverable:hover {
+      // Create extra space, except at the bottom
+      margin-left: -#{$custom-hover-margin};
+      margin-right: -#{$custom-hover-margin};
+      padding-left: $custom-hover-margin;
+      padding-right: $custom-hover-margin;
     }
   }
 

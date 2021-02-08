@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { UserContext } from "../../../contexts/userContext";
 
@@ -13,8 +13,25 @@ const Nav = () => {
     }
     return className;
   };
+  const [scroll, setScroll] = useState(0);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.onscroll = function () {
+        setScroll(window.pageYOffset);
+      };
+    }
+  }, []);
+
   return (
-    <div className="dashboard__nav">
+    <div
+      className="dashboard__nav"
+      style={{
+        boxShadow: `0px -10px
+          ${Math.min((20 * scroll) / 200, 20)}px
+          ${Math.min((10 * scroll) / 200, 10)}px
+          rgba(0,0,0,0.15)`,
+      }}
+    >
       <div className="dashboard__nav__content">
         {navItems.map((navItem, i) => (
           <div

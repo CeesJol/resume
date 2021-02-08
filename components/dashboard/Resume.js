@@ -6,7 +6,6 @@ import { PDFExport } from "@progress/kendo-react-pdf";
 import { getTemplate } from "../../templates/templates";
 import Button from "../general/Button";
 import { getDummyItem } from "../../lib/constants";
-import { sortByPriority } from "../../lib/util";
 
 // PDF Export source
 // https://blog.usejournal.com/lets-make-a-resume-in-react-2c9c5540f51a
@@ -158,7 +157,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
     );
   };
   const drawContactInfoItems = () => {
-    return sortByPriority(getContactInfo(curResume)).map((item) => (
+    return getContactInfo(curResume).map((item) => (
       <ContactItem
         template={templateCSS}
         item={item}
@@ -208,7 +207,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
     // TODO now you can't create a category...
     // if (!getCategories(curResume)) return <p>Nothing here yet</p>;
 
-    const categories = sortByPriority(getCategories(curResume));
+    const categories = getCategories(curResume);
 
     let mainCategories, sidebarCategories, userCanAddSidebar;
 

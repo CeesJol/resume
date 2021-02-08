@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { UserContext } from "../../contexts/userContext";
 import Item from "./Item";
 import { getDummyItem } from "../../lib/constants";
-import { getTypeClassName, sortByPriority } from "../../lib/util";
+import { getTypeClassName } from "../../lib/util";
 import Button from "../general/Button";
 import Separator from "./Separator";
 import { isMobile } from "react-device-detect";
@@ -44,9 +44,7 @@ const Category = ({ category, index, primaryColor, backgroundColor }) => {
       return drawItem(category, getDummyItem(category.title), 0, true);
     }
 
-    return sortByPriority(items).map((item, index) =>
-      drawItem(category, item, index, false)
-    );
+    return items.map((item, index) => drawItem(category, item, index, false));
   };
   const drawItem = (category, item, index, dummy) => (
     <Item

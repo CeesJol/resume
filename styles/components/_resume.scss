@@ -144,9 +144,6 @@
     // Specific categories
     &--title-without-value {
       flex-direction: column;
-      margin-bottom: calc(
-        (#{$font-size-default} - #{$xs-size}) * #{$resume-scale}
-      );
     }
   }
 

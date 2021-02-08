@@ -9,7 +9,7 @@
     margin: auto;
     overflow: hidden;
 
-    @media (min-width: 56rem) {
+    @media (min-width: $desktop-breakpoint) {
       min-height: 20rem;
       max-height: 20rem !important;
       height: 20rem;
@@ -48,7 +48,7 @@
 
   &--tiny {
     transform: scale(0.51 / $resume-scale);
-    @media (min-width: 56rem) {
+    @media (min-width: $desktop-breakpoint) {
       transform: scale(0.68 / $resume-scale);
     }
     transform-origin: top left;

@@ -6,7 +6,7 @@ svg {
   display: block;
   width: 100%;
 
-  @media (max-width: $desktop-breakpoint) {
+  @media (max-width: $tablet-breakpoint) {
     top: -$wave-height-mobile;
     margin-bottom: -$wave-height-mobile;
     height: $wave-height-mobile;

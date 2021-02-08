@@ -1,5 +1,5 @@
 @mixin responsive {
-  @media (min-width: $desktop-breakpoint) {
+  @media (min-width: $tablet-breakpoint) {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -14,7 +14,7 @@
     }
   }
 
-  @media (max-width: calc(#{$desktop-breakpoint})) {
+  @media (max-width: calc(#{$tablet-breakpoint})) {
     & > div:not(:last-child) {
       margin-bottom: 3rem;
     }

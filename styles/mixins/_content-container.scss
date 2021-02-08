@@ -2,7 +2,7 @@
   max-width: $max-width-landing;
   margin: 0 auto;
   padding: 0 $xl-size;
-  @media (max-width: $desktop-breakpoint) {
+  @media (max-width: $tablet-breakpoint) {
     padding: 0 $m-size;
   }
   height: auto;

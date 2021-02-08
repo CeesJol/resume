@@ -18,7 +18,7 @@ select {
 }
 
 .select-narrow {
-  @media (min-width: $desktop-breakpoint) {
+  @media (min-width: $tablet-breakpoint) {
     width: calc(50% - 10px);
     display: inline;
   }
@@ -40,7 +40,7 @@ textarea {
 }
 
 .select-narrow:nth-child(2n + 1) {
-  @media (min-width: $desktop-breakpoint) {
+  @media (min-width: $tablet-breakpoint) {
     margin-left: 20px;
   }
 }

@@ -9,7 +9,7 @@
     height: calc(100% - 7rem / 2);
     // outline: 1px solid red;
 
-    @media (min-width: $desktop-breakpoint) {
+    @media (min-width: $tablet-breakpoint) {
       height: calc(100% - 5rem / 2);
     }
   }
@@ -40,7 +40,7 @@
     margin-right: 5rem;
     height: auto;
 
-    @media (max-width: $desktop-breakpoint) {
+    @media (max-width: $tablet-breakpoint) {
       width: 100%;
       min-width: auto;
       max-width: 50rem;
@@ -54,7 +54,7 @@
     width: 40rem;
     height: auto;
 
-    @media (max-width: $desktop-breakpoint) {
+    @media (max-width: $tablet-breakpoint) {
       display: none;
     }
 

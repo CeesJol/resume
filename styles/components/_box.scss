@@ -8,7 +8,7 @@
   width: 100%;
   margin-bottom: $m-size;
 
-  // @media (min-width: 25rem) and (max-width: calc(#{$desktop-breakpoint} - .1rem)) {
+  // @media (min-width: 25rem) and (max-width: calc(#{$tablet-breakpoint} - .1rem)) {
   // 	width: calc(50% - #{$m-size} / 2);
 
   // 	&:not(:nth-child(2n+1)) {
@@ -24,7 +24,7 @@
     margin-right: $m-size;
   }
 
-  @media (min-width: 56rem) {
+  @media (min-width: $desktop-breakpoint) {
     width: 40.5rem;
 
     &:not(:nth-child(2n + 1)) {
@@ -32,7 +32,7 @@
     }
   }
 
-  // @media (min-width: $desktop-breakpoint) {
+  // @media (min-width: $tablet-breakpoint) {
   // 	width: calc(100%/3 - #{$m-size} * 2/3);
 
   // 	&:not(:nth-child(3n)) {

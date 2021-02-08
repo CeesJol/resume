@@ -6,11 +6,11 @@
   overflow: hidden;
   background-color: $light-grey;
   max-height: 15rem;
-  @media (min-width: 56rem) {
+  @media (min-width: $desktop-breakpoint) {
     max-height: 20rem;
   }
 
-  @media (max-width: $desktop-breakpoint) {
+  @media (max-width: $tablet-breakpoint) {
     background-color: white;
   }
 
@@ -22,7 +22,7 @@
     height: 20rem !important;
 
     // Don't show preview on mobile
-    @media (max-width: $desktop-breakpoint) {
+    @media (max-width: $tablet-breakpoint) {
       display: none;
     }
 
@@ -31,7 +31,7 @@
     max-width: 30.375rem;
 
     // Large size
-    @media (min-width: 56rem) {
+    @media (min-width: $desktop-breakpoint) {
       min-width: 40.5rem;
       max-width: 40.5rem;
     }

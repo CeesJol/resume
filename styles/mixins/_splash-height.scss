@@ -1,5 +1,5 @@
 @mixin splash-height {
-  @media (max-width: $desktop-breakpoint) {
+  @media (max-width: $tablet-breakpoint) {
     height: 60rem;
   }
   height: 60rem;

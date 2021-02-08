@@ -64,7 +64,7 @@
 
     &:not(:last-child) {
       margin-right: 2rem;
-      @media (max-width: $desktop-breakpoint) {
+      @media (max-width: $tablet-breakpoint) {
         margin-right: 1rem;
       }
     }

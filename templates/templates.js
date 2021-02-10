@@ -29,7 +29,7 @@ export const TEMPLATES = [
   },
   {
     id: "FireRed",
-    name: "FireRed",
+    name: "Fire Red",
     sidebar: 50,
     skills: {
       type: "Title without value",

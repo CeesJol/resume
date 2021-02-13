@@ -28,8 +28,8 @@ export const TEMPLATES = [
     },
   },
   {
-    id: "FireRed",
-    name: "Fire Red",
+    id: "Coral",
+    name: "Coral",
     sidebar: 50,
     skills: {
       type: "Title without value",
@@ -43,7 +43,7 @@ export const TEMPLATES = [
       drawIcons: true,
     },
     styles: {
-      primaryColor: "rgb(200, 20, 50)",
+      primaryColor: "rgb(245, 95, 95)",
       backgroundColor: "white",
     },
   },

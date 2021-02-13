@@ -1,19 +1,22 @@
-import React from "react";
-import { CONTACTPICKER_OPTIONS } from "../../../lib/constants";
+import React, { useContext } from "react";
+import { UserContext } from "../../../contexts/userContext";
 
-const Contactpicker = ({ val, fn }) => (
-  <select name={val} id={val} value={val} onChange={fn}>
-    {Object.keys(CONTACTPICKER_OPTIONS).map((key) => {
-      // Remove default icon
-      if (key !== "")
-        return (
-          <option key={`contactpicker-${key}`} value={key}>
-            {key}
-          </option>
-        );
-    })}
-    <option value="">Other</option>
-  </select>
-);
+const Contactpicker = ({ val, fn }) => {
+  const { getUnusedContactOptions } = useContext(UserContext);
+  return (
+    <select name={val} id={val} value={val} onChange={fn}>
+      {getUnusedContactOptions().map((key) => {
+        // Remove default icon
+        if (key !== "")
+          return (
+            <option key={`contactpicker-${key}`} value={key}>
+              {key}
+            </option>
+          );
+      })}
+      <option value="">Other</option>
+    </select>
+  );
+};
 
 export default Contactpicker;

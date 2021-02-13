@@ -150,7 +150,8 @@ const Settings = () => {
 
           <label>
             <i>
-              Your job title and bio will be used when creating a new resume.
+              Your job title and professional summary will be used when creating
+              a new resume.
             </i>
           </label>
 

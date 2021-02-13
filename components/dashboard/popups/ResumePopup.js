@@ -116,13 +116,14 @@ const ResumePopup = () => {
       </div>
       <form>
         <div>
-          <label>Title</label>
+          <label>Resume Title</label>
           <input
             type="text"
             id="title"
             name="title"
             value={title}
             onChange={handleChangeTitle}
+            placeholder={`${user.username}'s Resume`}
           />
 
           <label>Template</label>

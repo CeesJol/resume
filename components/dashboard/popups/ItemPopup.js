@@ -196,14 +196,19 @@ const ItemPopup = () => {
         return (
           <>
             <label>
-              Description -{" "}
+              Description
+              <br />
+              Use "- " to insert a list, or click
               <a style={{ color: "blue" }} onClick={insertList}>
-                Insert list
-              </a>{" "}
-              -{" "}
-              <a style={{ color: "blue" }} onClick={insertBoldText}>
-                Insert bold text
+                {" "}
+                here to generate one
               </a>
+              .
+              <br />
+              Use **two stars** to create <b>bold text</b>
+              {/* <a style={{ color: "blue" }} onClick={insertBoldText}>
+                Insert bold text
+              </a> */}
             </label>
             <textarea
               type="text"
@@ -256,7 +261,9 @@ const ItemPopup = () => {
       </div>
       <form>
         <div>
-          {Object.keys(fields).map((key) => drawField(key, fields[key]))}
+          {Object.keys(fields).map((key) => (
+            <div key={`field-${key}`}>{drawField(key, fields[key])}</div>
+          ))}
 
           {editingItem.id ? (
             <>

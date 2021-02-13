@@ -2,7 +2,11 @@ import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import { toastError } from "../../../lib/error";
-import { ALL_CATEGORIES, getCategoryType } from "../../../lib/constants";
+import {
+  ALL_CATEGORIES,
+  getCategoryType,
+  OTHER_CATEGORY_TEXT,
+} from "../../../lib/constants";
 import Categorypicker from "../pickers/Categorypicker";
 import Typepicker from "../pickers/Typepicker";
 import randomId from "../../../lib/randomId";
@@ -20,13 +24,14 @@ const CategoryPopup = () => {
     setUserMadeChanges,
     resetPopups,
     editingCategory,
+    getUnusedCategories,
   } = useContext(UserContext);
   const [title, setTitle] = useState("");
   const [customTitle, setCustomTitle] = useState("");
   const [type, setType] = useState("");
   const [showValue, setShowValue] = useState(true); // Should value be shown for title/value types?
   const getRealTitle = () => {
-    return title === "Other" ? customTitle : title;
+    return title === OTHER_CATEGORY_TEXT ? customTitle : title;
   };
   const handleChangeTitle = (event) => {
     setTitle(event.target.value);
@@ -44,7 +49,7 @@ const CategoryPopup = () => {
   };
   const validateInput = () => {
     if (!title) return "Please provide a title";
-    if (title === "Other" && !customTitle)
+    if (title === OTHER_CATEGORY_TEXT && !customTitle)
       return "Please provide a custom category title";
     return false;
   };
@@ -83,7 +88,6 @@ const CategoryPopup = () => {
 
     let myData = {
       ...editingCategory,
-      id: editingCategory.id,
       title: getRealTitle(),
       type: getType(),
     };
@@ -111,6 +115,7 @@ const CategoryPopup = () => {
     }
   };
   const isDefaultCategory = (title) => {
+    if (title === OTHER_CATEGORY_TEXT) return false;
     return !!ALL_CATEGORIES.find(
       (cat) => cat.title.toLowerCase() === title.toLowerCase()
     );
@@ -119,8 +124,16 @@ const CategoryPopup = () => {
     const title = editingCategory.title;
     if (!title) {
       // The category is being created
-      setTitle(ALL_CATEGORIES[0].title);
-      setType(ALL_CATEGORIES[0].type);
+      // Set name to first contact option thats unused
+      const cat = getUnusedCategories()[0];
+      if (cat === OTHER_CATEGORY_TEXT) {
+        // Only unused category left is Other (unlikely)
+        setTitle(OTHER_CATEGORY_TEXT);
+        setCustomTitle(title);
+      } else {
+        setTitle(cat.title);
+        setType(cat.type);
+      }
     } else {
       // If category already exists (it's being updated)
       const ty = editingCategory.type;
@@ -131,7 +144,7 @@ const CategoryPopup = () => {
         setTitle(title);
       } else {
         // The category is a custom category
-        setTitle("Other");
+        setTitle(OTHER_CATEGORY_TEXT);
         setCustomTitle(title);
       }
 
@@ -159,7 +172,7 @@ const CategoryPopup = () => {
           <label>Category title</label>
           <Categorypicker val={title} fn={handleChangeTitle} />
 
-          {title === "Other" && (
+          {title === OTHER_CATEGORY_TEXT && (
             <>
               <label>Custom type</label>
               <Typepicker val={type} fn={handleChangeType} />

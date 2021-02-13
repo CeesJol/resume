@@ -1,17 +1,19 @@
-import React from "react";
-import { ALL_CATEGORIES } from "../../../lib/constants";
+import React, { useContext } from "react";
+import { UserContext } from "../../../contexts/userContext";
 
-const Categorypicker = ({ val, fn }) => (
-  <select name={val} id={val} value={val} onChange={fn}>
-    {ALL_CATEGORIES.map((cat) => {
-      return (
-        <option key={`categorypicker-${cat.title}`} value={cat.title}>
-          {cat.title}
-        </option>
-      );
-    })}
-    <option value="Other">Other... (custom type)</option>
-  </select>
-);
+const Categorypicker = ({ val, fn }) => {
+  const { getUnusedCategories } = useContext(UserContext);
+  return (
+    <select name={val} id={val} value={val} onChange={fn}>
+      {getUnusedCategories().map((cat) => {
+        return (
+          <option key={`categorypicker-${cat.title}`} value={cat.title}>
+            {cat.title}
+          </option>
+        );
+      })}
+    </select>
+  );
+};
 
 export default Categorypicker;

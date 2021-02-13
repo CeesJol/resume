@@ -1,6 +1,10 @@
 import React, { createContext, useState, useEffect } from "react";
 import Router from "next/router";
-import { DUMMY_RESUME } from "../lib/constants";
+import {
+  DUMMY_RESUME,
+  CONTACTPICKER_OPTIONS,
+  ALL_CATEGORIES,
+} from "../lib/constants";
 import { fauna, send } from "../lib/api";
 import { toastError } from "../lib/error";
 import { isMobile } from "react-device-detect";
@@ -69,7 +73,7 @@ const UserContextProvider = (props) => {
     return (resume || editingResume).jobTitle || "Job Title";
   };
   const getBio = (resume) => {
-    return (resume || editingResume).bio || "Bio";
+    return (resume || editingResume).bio || "Professional Summary";
   };
   const createResume = (resumeData) => {
     resumes.push(resumeData);
@@ -363,6 +367,30 @@ const UserContextProvider = (props) => {
       }
     );
   };
+  const getUnusedContactOptions = () => {
+    return Object.keys(CONTACTPICKER_OPTIONS).filter((item) => {
+      let used = true;
+      editingResume.data.contactInfo.map((item2) => {
+        if (item === item2.name) {
+          used = false;
+          return;
+        }
+      });
+      return used;
+    });
+  };
+  const getUnusedCategories = () => {
+    return ALL_CATEGORIES.filter((cat) => {
+      let used = true;
+      editingResume.data.categories.map((cat2) => {
+        if (cat.title === cat2.title) {
+          used = false;
+          return;
+        }
+      });
+      return used;
+    });
+  };
   useEffect(() => {
     if (!!user) {
       // User value is already read
@@ -469,6 +497,8 @@ const UserContextProvider = (props) => {
         storeData,
         handleLogin,
         handleSignUp,
+        getUnusedContactOptions,
+        getUnusedCategories,
       }}
     >
       {props.children}

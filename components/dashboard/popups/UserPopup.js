@@ -26,8 +26,8 @@ const UserPopup = () => {
     setUserMadeChanges(true);
   };
   const validateInput = () => {
+    // Job title is mandatory, bio is not
     if (!jobTitle) return "Please provide a job title";
-    if (!bio) return "Please provide a bio";
     return false;
   };
   const checkInvalidInput = () => {

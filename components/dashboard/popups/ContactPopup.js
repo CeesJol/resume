@@ -19,8 +19,9 @@ const ContactPopup = () => {
     updateContactInfo,
     resetPopups,
     editingContactInfo,
+    getUnusedContactOptions,
   } = useContext(UserContext);
-  const [name, setName] = useState("Email");
+  const [name, setName] = useState("");
   const [customName, setCustomName] = useState("");
   const [value, setValue] = useState("");
   const [link, setLink] = useState("");
@@ -144,6 +145,9 @@ const ContactPopup = () => {
         setName("");
         setCustomName(editingContactInfo.name);
       }
+    } else {
+      // Set name to first contact option thats unused
+      setName(getUnusedContactOptions()[0]);
     }
   }, []);
   return (

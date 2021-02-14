@@ -9,6 +9,7 @@ import {
   getCategoryItems,
   getCategoryIsGoingText,
 } from "../../../lib/constants";
+import PLACEHOLDER from "../../../lib/placeholder";
 import randomId from "../../../lib/randomId";
 import ReactModal from "react-modal";
 import markdownActions from "../../../lib/markdownActions";
@@ -133,6 +134,14 @@ const ItemPopup = () => {
       resetPopups();
     }
   };
+  const getPlaceholder = (name) => {
+    const cat = getCategory(editingItem.categoryId);
+    const placeholderObject = PLACEHOLDER.item[cat.title.toLowerCase()];
+    if (!placeholderObject) return "";
+    const placeholder = placeholderObject[name];
+    if (!placeholder) return "";
+    return placeholder;
+  };
   useEffect(() => {
     const newFields = {};
     for (let item of categoryItems) {
@@ -217,6 +226,7 @@ const ItemPopup = () => {
               value={value}
               onChange={handleChange}
               ref={textareaRef}
+              placeholder={getPlaceholder(key)}
             />
           </>
         );
@@ -241,6 +251,7 @@ const ItemPopup = () => {
               name={key}
               value={value}
               onChange={handleChange}
+              placeholder={getPlaceholder(key)}
             />
           </>
         );

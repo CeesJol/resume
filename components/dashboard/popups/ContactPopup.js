@@ -5,6 +5,7 @@ import Contactpicker from "../../dashboard/pickers/Contactpicker";
 import { toastError } from "../../../lib/error";
 import randomId from "../../../lib/randomId";
 import { CONTACTPICKER_OPTIONS } from "../../../lib/constants";
+import PLACEHOLDER from "../../../lib/placeholder";
 import ReactModal from "react-modal";
 import CloseButton from "../CloseButton";
 ReactModal.setAppElement("#__next");
@@ -134,6 +135,11 @@ const ContactPopup = () => {
       resetPopups();
     }
   };
+  const getValuePlaceholder = () => {
+    const placeholder = PLACEHOLDER.contactInfo.value[name.toLowerCase()];
+    if (!placeholder) return {};
+    return placeholder;
+  };
   useEffect(() => {
     if (editingContactInfo.name) {
       setValue(editingContactInfo.value);
@@ -177,6 +183,7 @@ const ContactPopup = () => {
                 name="customName"
                 value={customName}
                 onChange={handleChangeCustomName}
+                placeholder={PLACEHOLDER.contactInfo.name}
               />
             </>
           )}
@@ -188,6 +195,7 @@ const ContactPopup = () => {
             name="value"
             value={value}
             onChange={handleChangeValue}
+            placeholder={getValuePlaceholder().value}
           />
 
           <label>
@@ -210,6 +218,7 @@ const ContactPopup = () => {
                 name="link"
                 value={link}
                 onChange={handleChangeLink}
+                placeholder={getValuePlaceholder().link}
               />
             </>
           )}

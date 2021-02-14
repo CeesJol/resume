@@ -7,6 +7,7 @@ import {
   getCategoryType,
   OTHER_CATEGORY_TEXT,
 } from "../../../lib/constants";
+import PLACEHOLDER from "../../../lib/placeholder";
 import Categorypicker from "../pickers/Categorypicker";
 import Typepicker from "../pickers/Typepicker";
 import randomId from "../../../lib/randomId";
@@ -184,6 +185,7 @@ const CategoryPopup = () => {
                 name="customTitle"
                 value={customTitle}
                 onChange={handleChangeCustomTitle}
+                placeholder={PLACEHOLDER.category.title}
               />
             </>
           )}

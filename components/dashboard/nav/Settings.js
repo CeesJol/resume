@@ -5,6 +5,7 @@ import { validateUpdate, validatePassword } from "../../../lib/validate";
 import { toast } from "react-toastify";
 import { send, fauna } from "../../../lib/api";
 import { toastError } from "../../../lib/error";
+import PLACEHOLDER from "../../../lib/placeholder";
 
 const Settings = () => {
   const { storeUser, user } = useContext(UserContext);
@@ -119,33 +120,37 @@ const Settings = () => {
             name="username"
             value={fields.username}
             onChange={handleChange}
+            placeholder={PLACEHOLDER.name}
           />
 
-          <label>E-mail address</label>
+          <label>E-mail Address</label>
           <input
             type="text"
             id="email"
             name="email"
             value={fields.email}
             onChange={handleChange}
+            placeholder={PLACEHOLDER.email}
           />
 
-          <label>Job title</label>
+          <label>Job Title</label>
           <input
             type="text"
             id="jobTitle"
             name="jobTitle"
             value={fields.jobTitle}
             onChange={handleChange}
+            placeholder={PLACEHOLDER.jobTitle}
           />
 
-          <label>Professional summary</label>
+          <label>Professional Summary</label>
           <textarea
             type="text"
             id="bio"
             name="bio"
             value={fields.bio}
             onChange={handleChange}
+            placeholder={PLACEHOLDER.bio}
           />
 
           <label>

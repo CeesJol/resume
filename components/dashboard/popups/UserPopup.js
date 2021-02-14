@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../../contexts/userContext";
 import Button from "../../general/Button";
 import { toastError } from "../../../lib/error";
+import PLACEHOLDER from "../../../lib/placeholder";
 import ReactModal from "react-modal";
 import CloseButton from "../CloseButton";
 ReactModal.setAppElement("#__next");
@@ -91,6 +92,7 @@ const UserPopup = () => {
             name="username"
             value={username}
             onChange={handleChangeUsername}
+            placeholder={PLACEHOLDER.name}
           />
 
           <label>Job Title</label>
@@ -100,6 +102,7 @@ const UserPopup = () => {
             name="jobTitle"
             value={jobTitle}
             onChange={handleChangeJobTitle}
+            placeholder={PLACEHOLDER.jobTitle}
           />
 
           <label>Professional Summary</label>
@@ -109,6 +112,7 @@ const UserPopup = () => {
             name="bio"
             value={bio}
             onChange={handleChangeBio}
+            placeholder={PLACEHOLDER.bio}
           />
 
           <Button text="Update" altText="Updating..." fn={handleUpdate} />

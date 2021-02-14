@@ -40,6 +40,8 @@
   }
 
   &--status {
+    display: flex;
+    align-items: center;
     margin-left: 2rem;
     @media (max-width: $mobile-breakpoint) {
       margin-left: 0;

@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import { fauna } from "../../lib/api";
+import LoadingSpinner from "../misc/LoadingSpinner";
 
 const DashboardHeader = () => {
   const {
@@ -54,7 +55,10 @@ const DashboardHeader = () => {
               </a>
             </h3>
             {changingResume && (
-              <span className={getStatusClassName()}>{status}</span>
+              <span className={getStatusClassName()}>
+                <LoadingSpinner />
+                {status}
+              </span>
             )}
           </div>
         </div>

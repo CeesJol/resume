@@ -36,14 +36,6 @@ const UserContextProvider = (props) => {
   const [templates, setTemplates] = useState([]);
   const [status, setStatus] = useState(""); // Save status (saved / error)
   const [moving, setMoving] = useState(false);
-
-  const storeStatus = (data, err) => {
-    if (err) {
-      console.error("storeStatus err report:", err);
-    }
-
-    setStatus(data);
-  };
   const forceRender = () => {
     setDummy(!dummy);
   };
@@ -127,16 +119,26 @@ const UserContextProvider = (props) => {
     resetPopups();
     storeResume(resumeData);
   };
+  const storeStatusSuccess = () => {
+    setStatus("✅ Saved.");
+  };
+  const storeStatusSaving = () => {
+    setStatus("💾 Saving...");
+  };
+  const storeStatusError = (err) => {
+    setStatus("⚠️ Error: failed to save");
+    console.error("err", err);
+  };
   const storeResume = async (resumeData) => {
     if (!resumeData) resumeData = { data: editingResume.data };
-    storeStatus("Saving...");
+    storeStatusSaving();
     await fauna({
       type: "UPDATE_RESUME",
       id: resumeData._id || editingResume._id,
       data: resumeData,
     }).then(
-      () => storeStatus("Saved."),
-      (err) => storeStatus("Error: failed to save", err)
+      () => storeStatusSuccess(),
+      (err) => storeStatusError(err)
     );
   };
   const createCategory = (categoryData) => {
@@ -287,9 +289,9 @@ const UserContextProvider = (props) => {
         updateSpecificResume(resume);
 
         resetPopups();
-        storeStatus("Saved.");
+        storeStatusSuccess();
       },
-      (err) => storeStatus("Error: failed to save", err)
+      (err) => storeStatusError(err)
     );
 
     setMoving(false);
@@ -309,7 +311,7 @@ const UserContextProvider = (props) => {
     // setEditingResume(false);
     if (resumes.length === 0) setEditingResume(DUMMY_RESUME);
     setNav(0);
-    storeStatus("");
+    setStatus("");
     resetPopups();
   };
   const isHoverable = () => {
@@ -368,13 +370,11 @@ const UserContextProvider = (props) => {
     );
   };
   const getUnusedContactOptions = () => {
-    console.log(
-      "Object.keys(CONTACTPICKER_OPTIONS):",
-      Object.keys(CONTACTPICKER_OPTIONS)
-    );
     return Object.keys(CONTACTPICKER_OPTIONS).filter((item) => {
       for (let item2 of editingResume.data.contactInfo) {
+        // Do show the name of the contact item that's being edited
         if (editingContactInfo.name === item2.name) continue;
+        // Don't show contact item types that have been used already
         if (item === item2.name) {
           return false;
         }
@@ -385,7 +385,9 @@ const UserContextProvider = (props) => {
   const getUnusedCategories = () => {
     return ALL_CATEGORIES.filter((cat) => {
       for (let cat2 of editingResume.data.categories) {
+        // Do show the title of the category that's being edited
         if (editingCategory.title === cat2.title) continue;
+        // Don't show category types that have been used already
         if (cat.title === cat2.title) {
           return false;
         }
@@ -490,7 +492,6 @@ const UserContextProvider = (props) => {
         setTemplates,
         reset,
         status,
-        storeStatus,
         moving,
         setMoving,
         isHoverable,

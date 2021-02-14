@@ -368,27 +368,29 @@ const UserContextProvider = (props) => {
     );
   };
   const getUnusedContactOptions = () => {
+    console.log(
+      "Object.keys(CONTACTPICKER_OPTIONS):",
+      Object.keys(CONTACTPICKER_OPTIONS)
+    );
     return Object.keys(CONTACTPICKER_OPTIONS).filter((item) => {
-      let used = true;
-      editingResume.data.contactInfo.map((item2) => {
+      for (let item2 of editingResume.data.contactInfo) {
+        if (editingContactInfo.name === item2.name) continue;
         if (item === item2.name) {
-          used = false;
-          return;
+          return false;
         }
-      });
-      return used;
+      }
+      return true;
     });
   };
   const getUnusedCategories = () => {
     return ALL_CATEGORIES.filter((cat) => {
-      let used = true;
-      editingResume.data.categories.map((cat2) => {
+      for (let cat2 of editingResume.data.categories) {
+        if (editingCategory.title === cat2.title) continue;
         if (cat.title === cat2.title) {
-          used = false;
-          return;
+          return false;
         }
-      });
-      return used;
+      }
+      return true;
     });
   };
   useEffect(() => {

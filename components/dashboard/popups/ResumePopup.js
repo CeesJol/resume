@@ -58,6 +58,7 @@ const ResumePopup = () => {
       {
         ...RESUME_DEFAULTS,
         title,
+        username: user.username,
         jobTitle: user.jobTitle ? user.jobTitle : "",
         bio: user.bio ? user.bio : "",
         templateId: selectedTemplateId,

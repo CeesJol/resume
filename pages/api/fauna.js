@@ -17,7 +17,8 @@ templateId
 primaryColor
 backgroundColor
 fontSize
-data`;
+data
+username`;
 
 // User data request data used by getUserByEmail and readUser
 const USER_DATA = `_id

@@ -15,6 +15,7 @@ const UserPopup = () => {
     updateResume,
     resetPopups,
   } = useContext(UserContext);
+  const [username, setUsername] = useState("");
   const [jobTitle, setJobTitle] = useState("");
   const [bio, setBio] = useState("");
   const handleChangeJobTitle = (event) => {
@@ -25,7 +26,12 @@ const UserPopup = () => {
     setBio(event.target.value);
     setUserMadeChanges(true);
   };
+  const handleChangeUsername = (event) => {
+    setUsername(event.target.value);
+    setUserMadeChanges(true);
+  };
   const validateInput = () => {
+    if (!username) return "Please provide your name";
     // Job title is mandatory, bio is not
     if (!jobTitle) return "Please provide a job title";
     return false;
@@ -43,6 +49,7 @@ const UserPopup = () => {
 
     const myData = {
       _id: editingResume._id,
+      username,
       jobTitle,
       bio,
     };
@@ -60,6 +67,7 @@ const UserPopup = () => {
     }
   };
   useEffect(() => {
+    setUsername(editingResume.username);
     setJobTitle(editingResume.jobTitle);
     setBio(editingResume.bio);
   }, []);
@@ -76,6 +84,15 @@ const UserPopup = () => {
       </div>
       <form>
         <div>
+          <label>Full Name</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            value={username}
+            onChange={handleChangeUsername}
+          />
+
           <label>Job Title</label>
           <input
             type="text"
@@ -85,7 +102,7 @@ const UserPopup = () => {
             onChange={handleChangeJobTitle}
           />
 
-          <label>Professional summary</label>
+          <label>Professional Summary</label>
           <textarea
             type="text"
             id="bio"

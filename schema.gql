@@ -10,6 +10,7 @@ type User {
 
 type Resume {
   user: User
+  username: String
   jobTitle: String
   bio: String
   title: String

@@ -119,8 +119,8 @@ const ItemPopup = () => {
     if (event) event.preventDefault();
     setWarning({
       text: "Are you sure you want to delete this item?",
-      fn: () => {
-        deleteItem(editingItem);
+      fn: async () => {
+        await deleteItem(editingItem);
       },
     });
   };

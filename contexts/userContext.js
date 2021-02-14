@@ -146,12 +146,12 @@ const UserContextProvider = (props) => {
     resetPopups();
     storeResume();
   };
-  const deleteCategory = (categoryData) => {
+  const deleteCategory = async (categoryData) => {
     editingResume.data.categories = editingResume.data.categories.filter(
       (cat) => cat.id !== categoryData.id
     );
     resetPopups();
-    storeResume();
+    await storeResume();
   };
   const updateCategory = (categoryData) => {
     editingResume.data.categories = editingResume.data.categories.map((cat) => {
@@ -168,11 +168,11 @@ const UserContextProvider = (props) => {
     resetPopups();
     storeResume();
   };
-  const deleteItem = (itemData) => {
+  const deleteItem = async (itemData) => {
     const category = getCategory(itemData.categoryId);
     category.items = category.items.filter((item) => item.id !== itemData.id);
     resetPopups();
-    storeResume();
+    await storeResume();
   };
   const updateItem = (itemData) => {
     const category = getCategory(itemData.categoryId);
@@ -190,12 +190,12 @@ const UserContextProvider = (props) => {
     resetPopups();
     storeResume();
   };
-  const deleteContactInfo = (contactInfoData) => {
+  const deleteContactInfo = async (contactInfoData) => {
     editingResume.data.contactInfo = editingResume.data.contactInfo.filter(
       (cat) => cat.id !== contactInfoData.id
     );
     resetPopups();
-    storeResume();
+    await storeResume();
   };
   const updateContactInfo = (contactInfoData) => {
     editingResume.data.contactInfo = editingResume.data.contactInfo.map(
@@ -502,6 +502,9 @@ const UserContextProvider = (props) => {
         handleSignUp,
         getUnusedContactOptions,
         getUnusedCategories,
+        storeStatusError,
+        storeStatusSuccess,
+        storeStatusSaving,
       }}
     >
       {props.children}

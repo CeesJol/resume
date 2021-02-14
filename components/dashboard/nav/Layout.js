@@ -73,7 +73,7 @@ const Layout = () => {
           _id: editingResume._id,
           ...styles,
         };
-        updateResume(myData);
+        await updateResume(myData);
         storeFields(styles);
       },
     });

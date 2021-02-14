@@ -120,8 +120,8 @@ const ContactPopup = () => {
     if (event) event.preventDefault();
     setWarning({
       text: "Are you sure you want to delete this item?",
-      fn: () => {
-        deleteContactInfo(editingContactInfo);
+      fn: async () => {
+        await deleteContactInfo(editingContactInfo);
       },
     });
   };

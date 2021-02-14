@@ -5,7 +5,7 @@ const LoadingSpinner = () => {
   const { status } = useContext(UserContext);
   return (
     <div
-      class="lds-dual-ring"
+      className="lds-dual-ring"
       style={{ visibility: status.endsWith("...") ? "visible" : "hidden" }}
     ></div>
   );

@@ -100,8 +100,8 @@ const CategoryPopup = () => {
     setWarning({
       text:
         "Are you sure you want to delete this category? All the items in it will be lost.",
-      fn: () => {
-        deleteCategory(editingCategory);
+      fn: async () => {
+        await deleteCategory(editingCategory);
       },
     });
   };

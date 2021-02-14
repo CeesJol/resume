@@ -5,13 +5,27 @@ import ReactModal from "react-modal";
 ReactModal.setAppElement("#__next");
 
 const Warning = () => {
-  const { warning, setWarning, resetPopups, storeStatusSuccess } = useContext(
-    UserContext
-  );
+  const {
+    warning,
+    setWarning,
+    resetPopups,
+    storeStatusSuccess,
+    storeStatusSaving,
+  } = useContext(UserContext);
   const handleYes = async () => {
-    if (warning.fn) await warning.fn();
-    resetPopups();
-    storeStatusSuccess();
+    if (warning.fn) {
+      try {
+        storeStatusSaving();
+        await warning.fn();
+        storeStatusSuccess();
+      } catch (e) {
+        storeStatusError(e);
+      }
+      resetPopups();
+    } else {
+      storeStatusSuccess();
+      resetPopups();
+    }
   };
   const handleCancel = () => {
     setWarning(false);

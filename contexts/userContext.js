@@ -65,7 +65,7 @@ const UserContextProvider = (props) => {
     return (resume || editingResume).jobTitle || "Job Title";
   };
   const getBio = (resume) => {
-    return (resume || editingResume).bio || "Professional Summary";
+    return (resume || editingResume).bio || "";
   };
   const createResume = (resumeData) => {
     resumes.push(resumeData);

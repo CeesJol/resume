@@ -23,7 +23,6 @@ import { getDummyItem } from "../../lib/constants";
 const Resume = ({ resume, tiny, template, exportpdf }) => {
   const {
     user,
-    userExists,
     setEditingCategory,
     editingResume,
     setChangingInfo,
@@ -71,7 +70,7 @@ const Resume = ({ resume, tiny, template, exportpdf }) => {
         }}
       >
         <h1 className="resume__header--name">
-          {userExists() && curResume.username}
+          {curResume.username || user.username}
         </h1>
         <h3 className="resume__header--job-title">{getJobTitle(curResume)}</h3>
         {!templateCSS.header.bioBelowContactInfo && drawBio(false)}

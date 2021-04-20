@@ -178,7 +178,7 @@ const CategoryPopup = () => {
               <label>Custom type</label>
               <Typepicker val={type} fn={handleChangeType} />
 
-              <label>Custom title</label>
+              <label>Title</label>
               <input
                 type="text"
                 id="customTitle"
